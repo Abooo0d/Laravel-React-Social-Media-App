@@ -10,11 +10,15 @@ return new class extends Migration {
    */
   public function up(): void
   {
-    Schema::create('post_reactions', function (Blueprint $table) {
+    Schema::create('post_attachments', function (Blueprint $table) {
       $table->id();
       $table->foreignId('post_id')->constrained('posts');
-      $table->string('type');
-      $table->foreignId('user_id')->constrained('users');
+      $table->string('mime', 25);
+      $table->integer('size');
+      $table->string('name', 255);
+      $table->string('path', 255);
+      $table->string('url', 1024);
+      $table->foreignId('created_by')->constrained('users');
       $table->timestamp('created_at')->nullable();
     });
   }
@@ -24,6 +28,6 @@ return new class extends Migration {
    */
   public function down(): void
   {
-    Schema::dropIfExists('post_reactions');
+    Schema::dropIfExists('post_attachemtns');
   }
 };
