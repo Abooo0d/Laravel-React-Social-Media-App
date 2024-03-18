@@ -1,6 +1,6 @@
 import React from "react";
 import GroupeCard from "../Shared/GroupeCard";
-const GroupsBarContainer = ({ groups }) => {
+const GroupsContainer = ({ groups }) => {
   return (
     <div className="py-8">
       {false ? (
@@ -18,4 +18,4 @@ const GroupsBarContainer = ({ groups }) => {
   );
 };
 
-export default GroupsBarContainer;
+export default GroupsContainer;
