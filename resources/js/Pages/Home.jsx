@@ -49,6 +49,27 @@ const posts = [
     caption:
       "khasd asdihad asdija asidjad i jauh aihd asd adjasdhkhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdhakhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdhakhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdha khasd asdihad asdija asidjad i jauh aihd asd adjasdhkhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdhakhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdhakhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdha khasd asdihad asdija asidjad i jauh aihd asd adjasdhkhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdhakhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdhakhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdha khasd asdihad asdija asidjad i jauh aihd asd adjasdhkhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdhakhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdhakhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdha khasd asdihad asdija asidjad i jauh aihd asd adjasdhkhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdhakhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdhakhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdha",
     createdAt: "20/7/2001",
+    groupe: "Abood Groupe",
+    attachments: [
+      {
+        id: "1",
+        name: "test.png",
+        url: "https://picsum.photos/501",
+        mime: "image/jpg",
+      },
+      {
+        id: "1",
+        name: "test.png",
+        url: "https://picsum.photos/500",
+        mime: "image/jpg",
+      },
+      {
+        id: "1",
+        name: "test.png",
+        url: "https://picsum.photos/500",
+        mime: "image/jpg",
+      },
+    ],
   },
   {
     ownerName: "Ahmad",
@@ -57,6 +78,21 @@ const posts = [
     caption:
       "khasd asdihad asdija asidjad i jauh aihd asd adjasdhkhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdhakhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdhakhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdha",
     createdAt: "20/7/2001",
+    groupe: "",
+    attachments: [
+      {
+        id: "2",
+        name: "test2.png",
+        url: "https://picsum.photos/500",
+        mime: "image/jpg",
+      },
+      {
+        id: "2",
+        name: "test2.png",
+        url: "https://picsum.photos/502",
+        mime: "image/jpg",
+      },
+    ],
   },
   {
     ownerName: "Mohamad",
@@ -65,6 +101,15 @@ const posts = [
     caption:
       "khasd asdihad asdija asidjad i jauh aihd asd adjasdhkhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdhakhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdhakhasd asdihad asdija asidjad i jauh aihd asd adjasdh asdha",
     createdAt: "20/7/2001",
+    groupe: "Abood Groupe",
+    attachments: [
+      {
+        id: "3",
+        name: "test3.png",
+        url: "https://picsum.photos/500",
+        mime: "image/jpg",
+      },
+    ],
   },
 ];
 export default function Home() {

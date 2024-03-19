@@ -18,6 +18,9 @@ export default {
       colors: {
         homeFeed: "#050b1c",
       },
+      maxHeight: {
+        homeFeed: "calc(100vh - 95px)",
+      },
     },
   },
 
