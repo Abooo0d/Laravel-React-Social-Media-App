@@ -14,7 +14,7 @@ const FullPostCard = ({ post, show, setShow }) => {
         show ? `flex` : "hidden"
       }`}
     >
-      <div className="max-w-[700px] w-full bg-gray-900 rounded-lg py-4 px-6 flex gap-6 flex-col duration-200 shadow-md">
+      <div className="max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg py-4 px-6 flex gap-6 flex-col duration-200 shadow-md">
         {/* User Info */}
         <div className="flex justify-between">
           <div className="flex gap-4 flex-row items-center">
@@ -27,7 +27,7 @@ const FullPostCard = ({ post, show, setShow }) => {
               <h2 className=" text-lg ">
                 <a
                   href="/"
-                  className="text-gray-400 hover:underline duration-200"
+                  className="dark:text-gray-400 text-gray-900 hover:underline duration-200"
                 >
                   {post.ownerName}
                 </a>{" "}
@@ -42,7 +42,7 @@ const FullPostCard = ({ post, show, setShow }) => {
                   </>
                 )}
               </h2>
-              <p className="text-gray-600 text-sm cursor-default">
+              <p className="text-gray-500 text-sm cursor-default">
                 {post.createdAt}
               </p>
             </div>
@@ -61,16 +61,19 @@ const FullPostCard = ({ post, show, setShow }) => {
               <>
                 {!open ? (
                   <>
-                    <div className="text-gray-400 text-xl">
+                    <div className="dark:text-gray-400 text-gray-800 text-xl">
                       {post.caption.substring(0, 200) + ".."}
                     </div>
+                    {/* <hr className="border-[1px] border-gray-800 my-2" /> */}
                   </>
                 ) : (
                   <Disclosure.Panel>
-                    <div className="text-gray-400 text-xl">{post.caption}</div>
+                    <div className="dark:text-gray-400 text-gray-700 text-xl">
+                      {post.caption}
+                    </div>
                   </Disclosure.Panel>
                 )}
-                <Disclosure.Button className="text-indigo-600 text-lg w-full flex justify-end">
+                <Disclosure.Button className="text-indigo-600 text-lg w-full flex justify-end mt-2">
                   {open ? "Read Less" : "Read more"}
                 </Disclosure.Button>
               </>

@@ -15,6 +15,7 @@ const PostCard = ({ post }) => {
   return (
     <>
       <div className="max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg py-4 px-6 flex gap-6 flex-col duration-200 shadow-md">
+        {/* User Info */}
         <div className="flex gap-4 flex-row items-center">
           <img
             src={post.ownerImage}
@@ -46,6 +47,7 @@ const PostCard = ({ post }) => {
             </p>
           </div>
         </div>
+        {/* Post Caption  */}
         <div>
           <Disclosure>
             {({ open }) => (
@@ -59,7 +61,9 @@ const PostCard = ({ post }) => {
                   </>
                 ) : (
                   <Disclosure.Panel>
-                    <div className="text-gray-400 text-xl">{post.caption}</div>
+                    <div className="dark:text-gray-400 text-gray-700 text-xl">
+                      {post.caption}
+                    </div>
                   </Disclosure.Panel>
                 )}
                 <Disclosure.Button className="text-indigo-600 text-lg w-full flex justify-end mt-2">
@@ -69,6 +73,7 @@ const PostCard = ({ post }) => {
             )}
           </Disclosure>
         </div>
+        {/* Post Attachments */}
         {post.attachments && (
           <>
             <div
