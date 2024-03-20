@@ -17,6 +17,7 @@ export default {
       },
       colors: {
         homeFeed: "#050b1c",
+        overlayBackground: "rgba(17,17,26,0.50)",
       },
       maxHeight: {
         homeFeed: "calc(100vh - 95px)",
