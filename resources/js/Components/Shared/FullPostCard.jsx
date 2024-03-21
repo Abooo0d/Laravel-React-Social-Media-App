@@ -5,19 +5,15 @@ import { CiCirclePlus } from "react-icons/ci";
 import { FaRegCommentDots } from "react-icons/fa";
 import { PiThumbsUpBold } from "react-icons/pi";
 import { TiArrowBack } from "react-icons/ti";
-const FullPostCard = ({ post, show, setShow }) => {
+const FullPostCard = ({ post, show, setShow, setImage, setShowImage }) => {
   const isImage = (attachment) => {
     const mime = attachment.mime.split("/");
     if (mime[0] === "image") return true;
     return false;
   };
   return (
-    <div
-      className={`bg-overlayBackground absolute top-0 left-0 w-full h-full z-20 flex justify-center items-start p-20 ${
-        show ? `flex` : "hidden"
-      }`}
-    >
-      <div className="animate__fadeInDown  max-w-[700px] max-h-[800px] overflow-auto w-full dark:bg-gray-900 bg-gray-200 rounded-lg py-4 px-6 flex gap-6 flex-col duration-200 shadow-md">
+    <div className={`overlay items-start ${show ? `flex` : "hidden"}`}>
+      <div className="animate-scaleUp  max-w-[700px] max-h-[800px] overflow-auto w-full dark:bg-gray-900 bg-gray-200 rounded-lg py-4 px-6 flex gap-6 flex-col duration-200 shadow-md">
         {/* User Info */}
         <div className="flex justify-between">
           <div className="flex gap-4 flex-row items-center">
@@ -52,7 +48,7 @@ const FullPostCard = ({ post, show, setShow }) => {
           </div>
           <div>
             <TiArrowBack
-              className="text-gray-600 hover:text-indigo-600 w-[30px] h-[30px] cursor-pointer duration-200"
+              className="back-button"
               onClick={() => setShow(false)}
             />
           </div>
@@ -92,6 +88,10 @@ const FullPostCard = ({ post, show, setShow }) => {
                   key={index}
                   src={attachment.url}
                   className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer "
+                  onClick={() => {
+                    setImage(attachment.url);
+                    setShowImage(true);
+                  }}
                 />
               ))}
             </div>

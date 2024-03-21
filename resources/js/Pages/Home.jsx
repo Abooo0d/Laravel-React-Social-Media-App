@@ -182,7 +182,7 @@ const posts = [
       {
         id: "1",
         name: "test.png",
-        url: "https://picsum.photos/501",
+        url: "https://picsum.photos/1024",
         mime: "image/jpg",
       },
       {

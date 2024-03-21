@@ -3,10 +3,13 @@ import { Disclosure } from "@headlessui/react";
 import { CiCirclePlus } from "react-icons/ci";
 import FullPostCard from "./FullPostCard";
 import { PiThumbsUpBold } from "react-icons/pi";
-import { FaComments, FaRegCommentDots } from "react-icons/fa";
+import { FaRegCommentDots } from "react-icons/fa";
+import ImageFullView from "./ImageFullView";
 
 const PostCard = ({ post }) => {
   const [showPost, setShowPost] = useState(false);
+  const [image, setImage] = useState("");
+  const [showImage, setShowImage] = useState("");
   const isImage = (attachment) => {
     const mime = attachment.mime.split("/");
     if (mime[0] === "image") return true;
@@ -101,6 +104,10 @@ const PostCard = ({ post }) => {
                               key={index}
                               src={attachment.url}
                               className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer"
+                              onClick={() => {
+                                setImage(attachment.url);
+                                setShowImage(true);
+                              }}
                             />
                           )}
                         </>
@@ -116,6 +123,7 @@ const PostCard = ({ post }) => {
                                   key={index}
                                   src={attachment.url}
                                   className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer"
+                                  // onClick={() => setImage(attachment.url)}
                                 />
                                 <div
                                   className="absolute top-0 left-0 w-full h-full bg-white opacity-40 z-10 flex justify-center items-center rounded-lg cursor-pointer"
@@ -141,6 +149,10 @@ const PostCard = ({ post }) => {
                           key={index}
                           src={attachment.url}
                           className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer"
+                          onClick={() => {
+                            setImage(attachment.url);
+                            setShowImage(true);
+                          }}
                         />
                       )}
                     </>
@@ -162,7 +174,18 @@ const PostCard = ({ post }) => {
           </div>
         </div>
       </div>
-      <FullPostCard show={showPost} post={post} setShow={setShowPost} />
+      <FullPostCard
+        show={showPost}
+        post={post}
+        setShow={setShowPost}
+        setImage={setImage}
+        setShowImage={setShowImage}
+      />
+      <ImageFullView
+        image={image}
+        show={showImage}
+        setShowImage={setShowImage}
+      />
     </>
   );
 };
