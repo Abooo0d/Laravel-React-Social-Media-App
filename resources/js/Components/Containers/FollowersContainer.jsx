@@ -3,13 +3,13 @@ import FollowerCard from "../Shared/FollowerCard";
 
 const FollowersContainer = ({ followers }) => {
   return (
-    <div className="py-8">
+    <div className="mt-4 max-h-full flex">
       {false ? (
         <div className="text-gray-600 text-center">
           You Don`t Have Followers Yet.
         </div>
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 max-h-full overflow-scroll flex-1">
           {followers.map((follower, index) => (
             <FollowerCard data={follower} key={index} />
           ))}

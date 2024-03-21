@@ -23,8 +23,136 @@ const groups = [
     image: "https://picsum.photos/50",
     info: "ahsd asdjh asdjh asdia  aisdj iasd",
   },
+  {
+    name: "React Native groupe ",
+    members: ["Alice", "Bob"],
+    image: "https://picsum.photos/50",
+    info: "ahsd asdjh asdjh asdia  aisdj iasd",
+  },
+  {
+    name: "React Native groupe ",
+    members: ["Alice", "Bob"],
+    image: "https://picsum.photos/50",
+    info: "ahsd asdjh asdjh asdia  aisdj iasd",
+  },
+  {
+    name: "React Native groupe ",
+    members: ["Alice", "Bob"],
+    image: "https://picsum.photos/50",
+    info: "ahsd asdjh asdjh asdia  aisdj iasd",
+  },
+  {
+    name: "React Native groupe ",
+    members: ["Alice", "Bob"],
+    image: "https://picsum.photos/50",
+    info: "ahsd asdjh asdjh asdia  aisdj iasd",
+  },
+  {
+    name: "React Native groupe ",
+    members: ["Alice", "Bob"],
+    image: "https://picsum.photos/50",
+    info: "ahsd asdjh asdjh asdia  aisdj iasd",
+  },
+  {
+    name: "React Native groupe ",
+    members: ["Alice", "Bob"],
+    image: "https://picsum.photos/50",
+    info: "ahsd asdjh asdjh asdia  aisdj iasd",
+  },
+  {
+    name: "React Native groupe ",
+    members: ["Alice", "Bob"],
+    image: "https://picsum.photos/50",
+    info: "ahsd asdjh asdjh asdia  aisdj iasd",
+  },
+  {
+    name: "React Native groupe ",
+    members: ["Alice", "Bob"],
+    image: "https://picsum.photos/50",
+    info: "ahsd asdjh asdjh asdia  aisdj iasd",
+  },
+  {
+    name: "React Native groupe ",
+    members: ["Alice", "Bob"],
+    image: "https://picsum.photos/50",
+    info: "ahsd asdjh asdjh asdia  aisdj iasd",
+  },
+  {
+    name: "React Native groupe ",
+    members: ["Alice", "Bob"],
+    image: "https://picsum.photos/50",
+    info: "ahsd asdjh asdjh asdia  aisdj iasd",
+  },
+  {
+    name: "React Native groupe ",
+    members: ["Alice", "Bob"],
+    image: "https://picsum.photos/50",
+    info: "ahsd asdjh asdjh asdia  aisdj iasd",
+  },
+  {
+    name: "React Native groupe ",
+    members: ["Alice", "Bob"],
+    image: "https://picsum.photos/50",
+    info: "ahsd asdjh asdjh asdia  aisdj iasd",
+  },
+  {
+    name: "React Native groupe ",
+    members: ["Alice", "Bob"],
+    image: "https://picsum.photos/50",
+    info: "ahsd asdjh asdjh asdia  aisdj iasd",
+  },
 ];
 const followers = [
+  {
+    name: "Laravel Dev",
+    username: "Laravel Dev",
+    image: "https://picsum.photos/51",
+  },
+  {
+    name: "Laravel Dev",
+    username: "Laravel Dev",
+    image: "https://picsum.photos/51",
+  },
+  {
+    name: "Laravel Dev",
+    username: "Laravel Dev",
+    image: "https://picsum.photos/51",
+  },
+  {
+    name: "Laravel Dev",
+    username: "Laravel Dev",
+    image: "https://picsum.photos/51",
+  },
+  {
+    name: "Laravel Dev",
+    username: "Laravel Dev",
+    image: "https://picsum.photos/51",
+  },
+  {
+    name: "Laravel Dev",
+    username: "Laravel Dev",
+    image: "https://picsum.photos/51",
+  },
+  {
+    name: "Laravel Dev",
+    username: "Laravel Dev",
+    image: "https://picsum.photos/51",
+  },
+  {
+    name: "Laravel Dev",
+    username: "Laravel Dev",
+    image: "https://picsum.photos/51",
+  },
+  {
+    name: "Laravel Dev",
+    username: "Laravel Dev",
+    image: "https://picsum.photos/51",
+  },
+  {
+    name: "Laravel Dev",
+    username: "Laravel Dev",
+    image: "https://picsum.photos/51",
+  },
   {
     name: "Laravel Dev",
     username: "Laravel Dev",

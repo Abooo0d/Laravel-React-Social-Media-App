@@ -21,6 +21,23 @@ export default {
       },
       maxHeight: {
         homeFeed: "calc(100vh - 95px)",
+        100: "100vh",
+      },
+      minHeight: {
+        100: "100vh",
+      },
+      animation: {
+        scaleUp: "scale-up-hor-center 0.4s ease-in-out both",
+      },
+      keyframes: {
+        "scale-up-hor-center": {
+          "0% ": {
+            transform: "scaleX(0.4);",
+          },
+          "100%": {
+            transform: "scaleX(1)",
+          },
+        },
       },
     },
   },

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Disclosure } from "@headlessui/react";
 import { CiCirclePlus } from "react-icons/ci";
 import FullPostCard from "./FullPostCard";
+import { PiThumbsUpBold } from "react-icons/pi";
+import { FaComments, FaRegCommentDots } from "react-icons/fa";
+
 const PostCard = ({ post }) => {
   const [showPost, setShowPost] = useState(false);
   const isImage = (attachment) => {
@@ -97,7 +100,7 @@ const PostCard = ({ post }) => {
                             <img
                               key={index}
                               src={attachment.url}
-                              className="w-full h-full max-h-[500px] object-cover rounded-lg "
+                              className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer"
                             />
                           )}
                         </>
@@ -105,15 +108,19 @@ const PostCard = ({ post }) => {
                         index === 1 && (
                           <>
                             {isImage(attachment) && (
-                              <div className="relative w-full h-full">
+                              <div
+                                className="relative w-full h-full"
+                                key={index}
+                              >
                                 <img
                                   key={index}
                                   src={attachment.url}
-                                  className="w-full h-full max-h-[500px] object-cover rounded-lg "
+                                  className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer"
                                 />
                                 <div
                                   className="absolute top-0 left-0 w-full h-full bg-white opacity-40 z-10 flex justify-center items-center rounded-lg cursor-pointer"
                                   onClick={() => setShowPost(true)}
+                                  key={index + "div"}
                                 >
                                   <CiCirclePlus className="absolute text-7xl text-gray-800 duration-200 font-extrabold cursor-pointer" />
                                 </div>
@@ -133,7 +140,7 @@ const PostCard = ({ post }) => {
                         <img
                           key={index}
                           src={attachment.url}
-                          className="w-full h-full max-h-[500px] object-cover rounded-lg "
+                          className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer"
                         />
                       )}
                     </>
@@ -143,11 +150,17 @@ const PostCard = ({ post }) => {
             </div>
           </>
         )}
-        <div className="flex justify-between items-center">
-          <div>Like</div>
-          <div>Comments</div>
+        <div className="flex justify-between items-center gap-3">
+          <div className="flex-1 group flex justify-center items-center dark:bg-gray-800 hover:dark:bg-gray-700 hover:bg-gray-400 dark:text-gray-300 text-gray-700 gray-300 rounded-lg cursor-pointer duration-200 h-[40px]">
+            <PiThumbsUpBold className="group-hover:text-indigo-500 text-xl mr-2 duration-200" />
+            Like
+          </div>
+          <div className="flex-1 group flex justify-center items-center dark:bg-gray-800 hover:dark:bg-gray-700 hover:bg-gray-400 dark:text-gray-300 text-gray-700 gray-300 rounded-lg cursor-pointer duration-200 h-[40px]">
+            {/* <FaComments className="group-hover:text-indigo-500 text-xl mr-2 duration-200" /> */}
+            <FaRegCommentDots className="group-hover:text-indigo-500 text-xl mr-2 duration-200" />
+            Comment
+          </div>
         </div>
-        {/* {post.caption} */}
       </div>
       <FullPostCard show={showPost} post={post} setShow={setShowPost} />
     </>
