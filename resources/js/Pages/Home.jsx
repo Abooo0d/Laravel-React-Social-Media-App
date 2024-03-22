@@ -242,14 +242,13 @@ const posts = [
   },
 ];
 export default function Home({ auth }) {
-  console.log(auth);
   return (
     <>
       <Head title="Social media Laravel + React" />
       <Authenticated user={auth.user}>
-        <div className=" grid grid-cols-12 min-h-[100vh]">
+        <div className="flex flex-col gap-3 p-2 lg:p-0 lg:grid lg:grid-cols-12 min-h-[100vh] lg:max-h-100 overflow-scroll bg-gray-800">
           <GroupsBar groups={groups} />
-          <HomeFeed posts={posts} />
+          {/* <HomeFeed posts={posts} /> */}
           <FollowersBar followers={followers} />
         </div>
       </Authenticated>
