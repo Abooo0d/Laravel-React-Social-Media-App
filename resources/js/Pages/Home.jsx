@@ -3,6 +3,7 @@ import GroupsBar from "@/Components/Containers/GroupsBar";
 import GroupsContainer from "@/Components/Containers/GroupsContainer";
 import HomeFeed from "@/Components/Containers/HomeFeed";
 import TextInput from "@/Components/TextInput";
+import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 const groups = [
   {
@@ -240,15 +241,18 @@ const posts = [
     ],
   },
 ];
-export default function Home() {
+export default function Home({ auth }) {
+  console.log(auth);
   return (
     <>
       <Head title="Social media Laravel + React" />
-      <div className=" grid grid-cols-12 min-h-[100vh]">
-        <GroupsBar groups={groups} />
-        <HomeFeed posts={posts} />
-        <FollowersBar followers={followers} />
-      </div>
+      <Authenticated user={auth.user}>
+        <div className=" grid grid-cols-12 min-h-[100vh]">
+          <GroupsBar groups={groups} />
+          <HomeFeed posts={posts} />
+          <FollowersBar followers={followers} />
+        </div>
+      </Authenticated>
     </>
   );
 }

@@ -9,6 +9,8 @@ class HomeController extends Controller
 {
   public function index(Request $request)
   {
-    return Inertia::render('Home');
+    return Inertia::render('Home',[
+      'user'=> $request->user()
+    ]);
   }
 }

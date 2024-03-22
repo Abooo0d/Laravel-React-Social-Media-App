@@ -20,11 +20,13 @@ export default {
         overlayBackground: "rgba(17,17,26,0.50)",
       },
       maxHeight: {
-        homeFeed: "calc(100vh - 95px)",
+        homeFeed: "calc(100vh - 160px)",
         100: "100vh",
+        barHeight: "calc(100vh - 66px)",
       },
       minHeight: {
         100: "100vh",
+        barHeight: "calc(100vh - 66px)",
       },
       animation: {
         scaleUp: "scale-up-hor-center 0.4s ease-in-out both",
