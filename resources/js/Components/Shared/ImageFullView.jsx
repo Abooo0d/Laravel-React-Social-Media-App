@@ -1,7 +1,7 @@
 import React from "react";
 import { TiArrowBack } from "react-icons/ti";
-import { IoDownloadOutline } from "react-icons/io5";
 import { ImDownload3 } from "react-icons/im";
+import { GoDownload } from "react-icons/go";
 const ImageFullView = ({ image, show, setShowImage }) => {
   return (
     <div className={`overlay items-center ${show ? `flex` : `hidden`}`}>
@@ -10,7 +10,7 @@ const ImageFullView = ({ image, show, setShowImage }) => {
           className="back-button"
           onClick={() => setShowImage(false)}
         />
-        <ImDownload3
+        <GoDownload
           className="download-button"
           onClick={() => setShowImage(false)}
         />

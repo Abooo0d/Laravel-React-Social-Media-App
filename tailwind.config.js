@@ -18,11 +18,18 @@ export default {
       colors: {
         homeFeed: "#050b1c",
         overlayBackground: "rgba(17,17,26,0.50)",
+        buttonBackColor: "rgba(201 201 201 / 0.2);",
+      },
+      height: {
+        barHeight: "calc(100vh - 66px)",
       },
       maxHeight: {
         homeFeed: "calc(100vh - 160px)",
         100: "100vh",
         barHeight: "calc(100vh - 66px)",
+        barContainerHeight: "calc(100vh - 170px)",
+        homeFeedM_H: "calc(100vh - 210px)",
+        postContainerM_H: "calc(100vh - 285px)",
       },
       minHeight: {
         100: "100vh",

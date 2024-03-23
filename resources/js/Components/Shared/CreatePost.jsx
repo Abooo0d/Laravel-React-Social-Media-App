@@ -3,9 +3,9 @@ import React, { useState } from "react";
 const CreatePost = () => {
   const [showForm, setShowForm] = useState(false);
   return (
-    <div className="w-full bg-gray-200 dark:bg-gray-900 p-6 flex flex-col gap-3 border-b-[2px] dark:border-gray-900 border-gray-300">
+    <div className="w-full bg-gray-200 dark:bg-gray-900 lg:px-6 lg:py-6 px-2 py-3 flex flex-col gap-4 border-b-[2px] dark:border-gray-900 border-gray-300">
       <div
-        className="w-full text-gray-800 dark:text-gray-500 text-xl py-2 px-8 border-[2px] border-solid dark:border-gray-800 border-gray-300 rounded-lg cursor-pointer"
+        className="w-full text-gray-800 dark:text-gray-500 lg:text-xl text-lg py-2 px-8 border-[2px] border-solid dark:border-gray-800 border-gray-300 rounded-lg cursor-pointer"
         onClick={() => setShowForm(true)}
       >
         Click here To Create post

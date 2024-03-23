@@ -1,14 +1,15 @@
 import React from "react";
 import GroupeCard from "../Shared/GroupeCard";
+import { Disclosure } from "@headlessui/react";
 const GroupsContainer = ({ groups }) => {
   return (
-    <div className="pt-4 pb-9 max-h-full flex h-[400px]">
+    <div className="lg:pt-4 lg:pb-9 py-4 max-h-barContainerHeight h-[400px] lg:h-barHeight ">
       {false ? (
         <div className="text-gray-600 text-center">
           You Ar Not Joined To Any Group
         </div>
       ) : (
-        <div className="flex flex-col gap-3 max-h-full h-[400px] overflow-scroll flex-1">
+        <div className="flex flex-col gap-3 max-h-barHeight h-full overflow-scroll flex-1">
           {groups.map((groupe, index) => (
             <GroupeCard data={groupe} key={index} />
           ))}

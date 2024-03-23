@@ -246,9 +246,9 @@ export default function Home({ auth }) {
     <>
       <Head title="Social media Laravel + React" />
       <Authenticated user={auth.user}>
-        <div className="flex flex-col gap-3 p-2 lg:p-0 lg:grid lg:grid-cols-12 min-h-[100vh] lg:max-h-100 overflow-scroll bg-gray-800">
+        <div className="flex flex-col lg:gap-3 gap-2 p-2 lg:p-0 lg:grid lg:grid-cols-12 min-h-barHeight lg:max-h-barHeight overflow-scroll bg-gray-800">
           <GroupsBar groups={groups} />
-          {/* <HomeFeed posts={posts} /> */}
+          <HomeFeed posts={posts} />
           <FollowersBar followers={followers} />
         </div>
       </Authenticated>

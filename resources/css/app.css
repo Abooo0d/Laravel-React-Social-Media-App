@@ -10,13 +10,13 @@
   background-color: #262272;
 }
 .overlay {
-  @apply bg-overlayBackground absolute top-0 left-0 w-full h-full z-20 justify-center p-20;
+  @apply bg-overlayBackground absolute top-0 left-0 w-full h-full z-20 justify-center lg:p-20 p-2;
 }
 .back-button {
-  @apply text-gray-500 rounded-full  w-[40px] h-[40px] text-2xl hover:text-indigo-600 cursor-pointer duration-200 absolute top-[20px] right-[20px];
+  @apply text-gray-500 rounded-full w-[40px] h-[40px] text-2xl hover:text-indigo-600 cursor-pointer duration-200 absolute top-[20px] right-[20px] p-[2px] bg-buttonBackColor;
 }
 .download-button {
-  @apply text-gray-500   w-[40px] h-[40px] text-2xl hover:text-indigo-600 cursor-pointer duration-200 absolute top-[65px] right-[20px];
+  @apply text-gray-500 w-[40px] h-[40px] text-2xl hover:text-indigo-600 cursor-pointer duration-200 absolute top-[65px] right-[20px] bg-buttonBackColor rounded-full p-[4px];
 }
 main {
   @apply max-h-barHeight overflow-auto;

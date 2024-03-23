@@ -13,7 +13,7 @@ const FullPostCard = ({ post, show, setShow, setImage, setShowImage }) => {
   };
   return (
     <div className={`overlay items-start ${show ? `flex` : "hidden"}`}>
-      <div className="animate-scaleUp  max-w-[700px] max-h-[800px] overflow-auto w-full dark:bg-gray-900 bg-gray-200 rounded-lg py-4 px-6 flex gap-6 flex-col duration-200 shadow-md">
+      <div className="animate-scaleUp  max-w-[700px] lg:max-h-[800px] max-h-full overflow-auto w-full dark:bg-gray-900 bg-gray-200 rounded-lg lg:py-4 lg:px-6 px-2 py-3 flex lg:gap-6 gap-2 flex-col duration-200 shadow-md">
         {/* User Info */}
         <div className="flex justify-between">
           <div className="flex gap-4 flex-row items-center">
@@ -60,14 +60,14 @@ const FullPostCard = ({ post, show, setShow, setImage, setShowImage }) => {
               <>
                 {!open ? (
                   <>
-                    <div className="dark:text-gray-400 text-gray-800 text-xl">
+                    <div className="dark:text-gray-400 text-gray-800 lg:text-xl text-lg">
                       {post.caption.substring(0, 200) + ".."}
                     </div>
                     {/* <hr className="border-[1px] border-gray-800 my-2" /> */}
                   </>
                 ) : (
                   <Disclosure.Panel>
-                    <div className="dark:text-gray-400 text-gray-700 text-xl">
+                    <div className="dark:text-gray-400 text-gray-700 lg:text-xl text-lg">
                       {post.caption}
                     </div>
                   </Disclosure.Panel>
