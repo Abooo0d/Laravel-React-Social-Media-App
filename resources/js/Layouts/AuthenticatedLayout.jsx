@@ -50,7 +50,7 @@ export default function Authenticated({ user, header, children }) {
                   </Dropdown.Trigger>
 
                   <Dropdown.Content>
-                    <Dropdown.Link href={route("profile.edit")}>
+                    <Dropdown.Link href={route("profile.view")}>
                       Profile
                     </Dropdown.Link>
                     <Dropdown.Link
@@ -120,9 +120,9 @@ export default function Authenticated({ user, header, children }) {
             </div>
 
             <div className="mt-3 space-y-1">
-              <ResponsiveNavLink href={route("profile.edit")}>
+              {/* <ResponsiveNavLink href={route("Profile.View")}>
                 Profile
-              </ResponsiveNavLink>
+              </ResponsiveNavLink> */}
               <ResponsiveNavLink
                 method="post"
                 href={route("logout")}
