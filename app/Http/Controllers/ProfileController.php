@@ -16,7 +16,7 @@ class ProfileController extends Controller
 {
   public function index(User $user)
   {
-    dd($user);
+    return Inertia::render('Profile/View', array('user' => $user));
   }
   /**
    * Display the user's profile form.
