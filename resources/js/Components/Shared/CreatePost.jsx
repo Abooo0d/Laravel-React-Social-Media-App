@@ -18,7 +18,7 @@ const CreatePost = () => {
         <button className="py-2 px-8 rounded-lg bg-indigo-500 duration-200 cursor-pointer hover:bg-indigo-700 text-gray-300">
           Submit
         </button>
-        <button className="py-2 px-8 rounded-lg bg-gray-500 duration-200 cursor-pointer hover:bg-gray-600 text-gray-300">
+        <button className="py-2 px-8 rounded-lg bg-gray-500 duration-200 cursor-pointer hover:bg-gray-600 text-gray-300" onClick={() => setShowForm(false)}>
           Cancel
         </button>
       </div>

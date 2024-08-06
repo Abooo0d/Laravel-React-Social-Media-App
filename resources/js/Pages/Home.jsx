@@ -242,6 +242,7 @@ const posts = [
   },
 ];
 export default function Home({ auth }) {
+  auth.user === null || (undefined && route("/login"));
   return (
     <>
       <Head title="Social media Laravel + React" />
