@@ -5,6 +5,7 @@ import HomeFeed from "@/Components/Containers/HomeFeed";
 import TextInput from "@/Components/TextInput";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
+import { Navigate } from "react-router-dom";
 const groups = [
   {
     name: "Laravel Dev",
@@ -242,7 +243,9 @@ const posts = [
   },
 ];
 export default function Home({ auth }) {
-  auth.user === null || (undefined && route("/login"));
+  if (auth.user === null) {
+    window.location.href = "/login";
+  }
   return (
     <>
       <Head title="Social media Laravel + React" />
