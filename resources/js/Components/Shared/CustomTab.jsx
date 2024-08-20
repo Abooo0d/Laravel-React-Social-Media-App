@@ -9,7 +9,7 @@ const CustomTab = ({ text, key }) => {
       key={key}
       className={({ selected }) =>
         classNames(
-          "duration-200 border-2 border-transparent py-2 px-4 border-b-2 outline-none text-gray-800 dark:text-gray-300 ",
+          "duration-200 border-2 border-transparent py-2 lg:px-4 md:px-2 border-b-2 outline-none text-gray-800 dark:text-gray-300 ",
           selected
             ? "border-b-indigo-500 dark:text-indigo-300 text-indigo-500"
             : "border-b-transparent"

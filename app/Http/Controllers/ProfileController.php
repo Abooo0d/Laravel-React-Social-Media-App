@@ -3,20 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ProfileController extends Controller
 {
-  public function index(User $user)
+  public function index(Request $request,User $user)
   {
-    return Inertia::render('Profile/View', array('user' => $user));
+    return Inertia::render('Profile/View', ['user' => new UserResource($request->user())]);
   }
   /**
    * Display the user's profile form.
@@ -64,5 +67,36 @@ class ProfileController extends Controller
     $request->session()->regenerateToken();
 
     return Redirect::to('/');
+  }
+  public function changeImages(Request $request,User $user)
+  {
+    $data = $request->validate([
+      'coverImage' => ['nullable','file','mimes:jpg,png'] ,
+      'avatarImage' =>  ['nullable','file','mimes:jpg,png']
+    ]);
+    /**
+     * @var UploadedFile $cover
+     */
+    $cover = $data['coverImage'] ?? null;
+      /**
+     * @var UploadedFile $avatar
+     */
+    $avatar = $data['avatarImage'] ?? null;
+    $user = $request->user();
+    if($cover) {
+      if ($user->cover_path) {
+        Storage::disk('public')->delete($user->cover_path);
+    }
+      $coverPath = $cover->store("user-{$user->id}",'public');
+      $user->update(['cover_path' => $coverPath]);
+    }
+    if($avatar) {
+      if ($user->avatar_path) {
+        Storage::disk('public')->delete($user->avatar_path);
+    }
+      $avatarPath = $avatar->store("user-{$user->id}",'public');
+      $user->update(['avatar_path' => $avatarPath]);
+    }
+    return Redirect::to('/profile');
   }
 }

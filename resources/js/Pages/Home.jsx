@@ -5,7 +5,7 @@ import HomeFeed from "@/Components/Containers/HomeFeed";
 import TextInput from "@/Components/TextInput";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
-import { Navigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 const groups = [
   {
     name: "Laravel Dev",
@@ -243,6 +243,7 @@ const posts = [
   },
 ];
 export default function Home({ auth }) {
+  // const navigate = useNavigate();
   if (auth.user === null) {
     window.location.href = "/login";
   }
