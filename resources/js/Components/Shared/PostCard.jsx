@@ -5,6 +5,9 @@ import FullPostCard from "./FullPostCard";
 import { PiThumbsUpBold } from "react-icons/pi";
 import { FaRegCommentDots } from "react-icons/fa";
 import ImageFullView from "./ImageFullView";
+import Dropdown from "../Dropdown";
+import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
+import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 
 const PostCard = ({ post }) => {
   const [showPost, setShowPost] = useState(false);
@@ -15,6 +18,7 @@ const PostCard = ({ post }) => {
     if (mime[0] === "image") return true;
     return false;
   };
+
   const ShowFullPost = (e) => {
     e.preventDefault();
   };
@@ -22,35 +26,62 @@ const PostCard = ({ post }) => {
     <>
       <div className="max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg py-4 lg:px-6 px-4 flex lg:gap-6 gap-2 flex-col duration-200 shadow-md">
         {/* User Info */}
-        <div className="flex lg:gap-4 gap-2 flex-row items-center">
-          <img
-            src={post.ownerImage}
-            alt=""
-            className="w-[60px] h-[60px] rounded-full border-[3px] border-transparent hover:border-indigo-500 duration-200"
-          />
-          <div className="flex flex-col ">
-            <h2 className=" text-lg ">
-              <a
-                href="/"
-                className="dark:text-gray-400 text-gray-900  hover:underline duration-200"
-              >
-                {post.ownerName}
-              </a>{" "}
-              {post?.groupe !== "" && (
-                <>
-                  :{" "}
-                  <a
-                    href="/"
-                    className="dark:text-gray-500 text-gray-400 hover:underline duration-200"
+        <div className="flex justify-between items-center">
+          <div className="flex lg:gap-4 gap-2 flex-row items-center">
+            <img
+              src={post.user.avatar_url}
+              alt=""
+              className="w-[60px] h-[60px] rounded-full border-[3px] border-transparent hover:border-indigo-500 duration-200"
+            />
+            <div className="flex flex-col ">
+              <h2 className=" text-lg ">
+                <a
+                  href="/"
+                  className="dark:text-gray-400 text-gray-900  hover:underline duration-200"
+                >
+                  {post.user.name}
+                </a>{" "}
+                {post?.groupe !== "" && (
+                  <>
+                    :{" "}
+                    <a
+                      href="/"
+                      className="dark:text-gray-500 text-gray-400 hover:underline duration-200"
+                    >
+                      {post.groupe}
+                    </a>
+                  </>
+                )}
+              </h2>
+              <p className="text-gray-600 text-sm cursor-default">
+                {post.created_at}
+              </p>
+            </div>
+          </div>
+          <div>
+            <Dropdown>
+              <Dropdown.Trigger>
+                <span className="inline-flex rounded-md">
+                  <button
+                    type="button"
+                    className="inline-flex items-center text-sm rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
                   >
-                    {post.groupe}
-                  </a>
-                </>
-              )}
-            </h2>
-            <p className="text-gray-600 text-sm cursor-default">
-              {post.createdAt}
-            </p>
+                    <PiDotsThreeOutlineVerticalFill className="w-5 h-5 text-xl" />
+                  </button>
+                </span>
+              </Dropdown.Trigger>
+
+              <Dropdown.Content>
+                <Dropdown.Link className="flex justify-start items-center gap-4">
+                  <FaEdit className="w-4 h-4" />
+                  Edit
+                </Dropdown.Link>
+                <Dropdown.Link className="flex justify-start items-center gap-4">
+                  <FaRegTrashAlt className="w-4 h-4" />
+                  Delete
+                </Dropdown.Link>
+              </Dropdown.Content>
+            </Dropdown>
           </div>
         </div>
         {/* Post Caption  */}
@@ -58,29 +89,37 @@ const PostCard = ({ post }) => {
           <Disclosure>
             {({ open }) => (
               <>
-                {!open ? (
+                {post.body.length > 200 ? (
                   <>
-                    <div className="dark:text-gray-400 text-gray-700 lg:text-xl text-lg">
-                      {post.caption.substring(0, 200) + ".."}
-                    </div>
-                    {/* <hr className="border-[1px] border-gray-800 my-2" /> */}
+                    {!open ? (
+                      <>
+                        <div className="dark:text-gray-400 text-gray-700 lg:text-xl text-lg">
+                          {post.body.substring(0, 200) + ".."}
+                        </div>
+                        {/* <hr className="border-[1px] border-gray-800 my-2" /> */}
+                      </>
+                    ) : (
+                      <Disclosure.Panel>
+                        <div className="dark:text-gray-400 text-gray-700 lg:text-xl text-lg">
+                          {post.body}
+                        </div>
+                      </Disclosure.Panel>
+                    )}
+                    <Disclosure.Button className="text-indigo-600 text-lg w-full flex justify-end mt-2">
+                      {open ? "Read Less" : "Read more"}
+                    </Disclosure.Button>
                   </>
                 ) : (
-                  <Disclosure.Panel>
-                    <div className="dark:text-gray-400 text-gray-700 lg:text-xl text-lg">
-                      {post.caption}
-                    </div>
-                  </Disclosure.Panel>
+                  <div className="dark:text-gray-400 text-gray-700 lg:text-xl text-lg">
+                    {post.body}
+                  </div>
                 )}
-                <Disclosure.Button className="text-indigo-600 text-lg w-full flex justify-end mt-2">
-                  {open ? "Read Less" : "Read more"}
-                </Disclosure.Button>
               </>
             )}
           </Disclosure>
         </div>
         {/* Post Attachments */}
-        {post.attachments && (
+        {post.attachments && post.attachments.length > 0 ? (
           <>
             <div
               className={`w-full lg:min-h-[300px] min-h-[200px] overflow-hidden grid gap-3
@@ -96,7 +135,7 @@ const PostCard = ({ post }) => {
               {post.attachments.length > 2 ? (
                 <>
                   {post.attachments.map((attachment, index) => (
-                    <>
+                    <React.Fragment key={index}>
                       {index === 0 ? (
                         <>
                           {isImage(attachment) && (
@@ -137,13 +176,13 @@ const PostCard = ({ post }) => {
                           </>
                         )
                       )}
-                    </>
+                    </React.Fragment>
                   ))}
                 </>
               ) : (
                 <>
                   {post.attachments.map((attachment, index) => (
-                    <>
+                    <React.Fragment key={index}>
                       {isImage(attachment) && (
                         <img
                           key={index}
@@ -155,12 +194,14 @@ const PostCard = ({ post }) => {
                           }}
                         />
                       )}
-                    </>
+                    </React.Fragment>
                   ))}
                 </>
               )}
             </div>
           </>
+        ) : (
+          <></>
         )}
         <div className="flex justify-between items-center gap-3">
           <div className="flex-1 group flex justify-center items-center dark:bg-gray-800 hover:dark:bg-gray-700 hover:bg-gray-400 dark:text-gray-300 text-gray-700 gray-300 rounded-lg cursor-pointer duration-200 h-[40px]">

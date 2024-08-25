@@ -11,7 +11,7 @@ export default function Authenticated({ user, header, children }) {
 
   return (
     <div className="min-h-screen bg-gray-300/80 dark:bg-gray-900">
-      <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+      <nav className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex">
@@ -29,7 +29,7 @@ export default function Authenticated({ user, header, children }) {
                     <span className="inline-flex rounded-md">
                       <button
                         type="button"
-                        className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
+                        className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
                       >
                         {user.name}
 

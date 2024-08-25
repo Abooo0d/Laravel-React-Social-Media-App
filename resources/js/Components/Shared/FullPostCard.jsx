@@ -18,7 +18,7 @@ const FullPostCard = ({ post, show, setShow, setImage, setShowImage }) => {
         <div className="flex justify-between">
           <div className="flex gap-4 flex-row items-center">
             <img
-              src={post.ownerImage}
+              src={post.user.name}
               alt=""
               className="w-[60px] h-[60px] rounded-full border-[3px] border-transparent hover:border-indigo-500 duration-200"
             />
@@ -28,7 +28,7 @@ const FullPostCard = ({ post, show, setShow, setImage, setShowImage }) => {
                   href="/"
                   className="dark:text-gray-400 text-gray-900 hover:underline duration-200"
                 >
-                  {post.ownerName}
+                  {post.user.name}
                 </a>{" "}
                 {post?.groupe !== "" && (
                   <>
@@ -42,7 +42,7 @@ const FullPostCard = ({ post, show, setShow, setImage, setShowImage }) => {
                 )}
               </h2>
               <p className="text-gray-500 text-sm cursor-default">
-                {post.createdAt}
+                {post.created_at}
               </p>
             </div>
           </div>
@@ -61,14 +61,14 @@ const FullPostCard = ({ post, show, setShow, setImage, setShowImage }) => {
                 {!open ? (
                   <>
                     <div className="dark:text-gray-400 text-gray-800 lg:text-xl text-lg">
-                      {post.caption.substring(0, 200) + ".."}
+                      {post.body.substring(0, 200) + ".."}
                     </div>
                     {/* <hr className="border-[1px] border-gray-800 my-2" /> */}
                   </>
                 ) : (
                   <Disclosure.Panel>
                     <div className="dark:text-gray-400 text-gray-700 lg:text-xl text-lg">
-                      {post.caption}
+                      {post.body}
                     </div>
                   </Disclosure.Panel>
                 )}
