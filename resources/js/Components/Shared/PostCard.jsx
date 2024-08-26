@@ -8,8 +8,10 @@ import ImageFullView from "./ImageFullView";
 import Dropdown from "../Dropdown";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
+import UpdatePostForm from "./UpdatePostForm";
 
 const PostCard = ({ post }) => {
+  const [openMenu, setOpenMenu] = useState(false);
   const [showPost, setShowPost] = useState(false);
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState("");
@@ -19,9 +21,6 @@ const PostCard = ({ post }) => {
     return false;
   };
 
-  const ShowFullPost = (e) => {
-    e.preventDefault();
-  };
   return (
     <>
       <div className="max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg py-4 lg:px-6 px-4 flex lg:gap-6 gap-2 flex-col duration-200 shadow-md">
@@ -58,30 +57,25 @@ const PostCard = ({ post }) => {
               </p>
             </div>
           </div>
-          <div>
-            <Dropdown>
-              <Dropdown.Trigger>
-                <span className="inline-flex rounded-md">
-                  <button
-                    type="button"
-                    className="inline-flex items-center text-sm rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
-                  >
-                    <PiDotsThreeOutlineVerticalFill className="w-5 h-5 text-xl" />
-                  </button>
-                </span>
-              </Dropdown.Trigger>
-
-              <Dropdown.Content>
-                <Dropdown.Link className="flex justify-start items-center gap-4">
-                  <FaEdit className="w-4 h-4" />
-                  Edit
-                </Dropdown.Link>
-                <Dropdown.Link className="flex justify-start items-center gap-4">
-                  <FaRegTrashAlt className="w-4 h-4" />
-                  Delete
-                </Dropdown.Link>
-              </Dropdown.Content>
-            </Dropdown>
+          <div className="relative">
+            <button
+              className="w-10 h-10 rounded-md cursor-pointer flex justify-center items-center bg-gray-900  duration-300 p-1"
+              onClick={() => {
+                openMenu ? setOpenMenu(false) : setOpenMenu(true);
+              }}
+            >
+              <PiDotsThreeOutlineVerticalFill className="w-5 h-5  text-gray-200" />
+            </button>
+            <div
+              className={`absolute top-[30px] left-[-140px] bg-gray-800 w-fit  duration-300 cursor-pointer shadow-2xl rounded-md flex flex-col justify-start items-center overflow-hidden ${
+                openMenu ? "opacity-100 visible" : " opacity-0 invisible"
+              }`}
+            >
+              <UpdatePostForm post={post} />
+              <button className="bg-gray-800 duration-300 hover:bg-gray-700 py-2 px-4 pr-16 text-sm font-medium text-white focus:outline-none text-left w-full">
+                Delete
+              </button>
+            </div>
           </div>
         </div>
         {/* Post Caption  */}

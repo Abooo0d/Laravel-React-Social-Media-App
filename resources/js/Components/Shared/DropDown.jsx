@@ -1,6 +1,6 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
-export default function Example() {
+export default function DropDown() {
   return (
     <div className="fixed top-24 w-52 text-right">
       <Menu __demoMode>

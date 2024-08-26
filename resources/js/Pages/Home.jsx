@@ -247,7 +247,6 @@ export default function Home({ auth, posts }) {
   if (auth.user === null) {
     window.location.href = "/login";
   }
-  console.log(posts.data);
   return (
     <>
       <Head title="Social media Laravel + React" />
