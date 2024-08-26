@@ -16,7 +16,6 @@ export default function UpdatePostForm({ post }) {
     setIsOpen(false);
   }
   const handelSubmit = () => {
-    console.log(postData);
     router.put(route("post.update", postData), postData, {
       onSuccess: () => {
         close();
@@ -52,19 +51,11 @@ export default function UpdatePostForm({ post }) {
               </button>
               <DialogTitle
                 as="h3"
-                className="text-base/7 font-medium text-white"
+                className="text-base/7 font-medium text-white mb-4"
               >
                 Edit Post
               </DialogTitle>
-              {/* <FullPostCard post={post} show={true} /> */}
               <PostOwnerInfo post={post} />
-              {/* <input
-                type="text"
-                className="w-full text-gray-800 bg-gray-800 duration-300 dark:text-gray-500 lg:text-xl text-lg py-2 px-8 border-[1px] border-solid dark:border-gray-800 border-gray-300 rounded-lg cursor-pointer"
-                placeholder=" Click here To Create post"
-                value={post.body}
-                // onChange={(e) => setPost({ ...post, body: e.target.value })}
-              /> */}
               <textarea
                 className="mt-3 block w-full resize-none rounded-lg border-none bg-white/5 py-1.5 px-3 text-lg text-white
                   focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 "

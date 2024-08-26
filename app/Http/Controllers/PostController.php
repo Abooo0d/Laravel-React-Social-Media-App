@@ -7,6 +7,7 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Models\post;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -34,8 +35,12 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(post $post)
+    public function destroy(Post $post)
     {
-        //
+      $id = Auth::id();
+      if($id !== $post->user_id){
+        return response(['message'=> 'You Don`t have Permission To Delete This Post']);
+      }
+      $post->delete();
     }
 }

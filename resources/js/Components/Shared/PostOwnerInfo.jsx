@@ -1,6 +1,5 @@
 import React from "react";
-import { TiArrowBack } from "react-icons/ti";
-
+import { formatRelativeTime } from "../../Functions";
 const PostOwnerInfo = ({ post }) => {
   return (
     <div className="flex justify-between">
@@ -31,7 +30,7 @@ const PostOwnerInfo = ({ post }) => {
               ))}
           </h2>
           <p className="text-gray-500 text-sm cursor-default">
-            {post.created_at}
+            {formatRelativeTime(post.updated_at)}
           </p>
         </div>
       </div>

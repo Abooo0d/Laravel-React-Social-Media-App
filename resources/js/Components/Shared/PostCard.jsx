@@ -9,6 +9,8 @@ import Dropdown from "../Dropdown";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 import UpdatePostForm from "./UpdatePostForm";
+import PostOwnerInfo from "./PostOwnerInfo";
+import { router } from "@inertiajs/react";
 
 const PostCard = ({ post }) => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -20,46 +22,28 @@ const PostCard = ({ post }) => {
     if (mime[0] === "image") return true;
     return false;
   };
-
+  const onDelete = () => {
+    if (window.confirm("Are You Sure To Delete This Post")) {
+      router.delete(route("post.delete", post), post, {
+        onSuccess: () => {
+          console.log("Deleted Successfully");
+        },
+      });
+    }
+  };
   return (
     <>
       <div className="max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg py-4 lg:px-6 px-4 flex lg:gap-6 gap-2 flex-col duration-200 shadow-md">
         {/* User Info */}
         <div className="flex justify-between items-center">
-          <div className="flex lg:gap-4 gap-2 flex-row items-center">
-            <img
-              src={post.user.avatar_url}
-              alt=""
-              className="w-[60px] h-[60px] rounded-full border-[3px] border-transparent hover:border-indigo-500 duration-200"
-            />
-            <div className="flex flex-col ">
-              <h2 className=" text-lg ">
-                <a
-                  href="/"
-                  className="dark:text-gray-400 text-gray-900  hover:underline duration-200"
-                >
-                  {post.user.name}
-                </a>{" "}
-                {post?.groupe !== "" && (
-                  <>
-                    :{" "}
-                    <a
-                      href="/"
-                      className="dark:text-gray-500 text-gray-400 hover:underline duration-200"
-                    >
-                      {post.groupe}
-                    </a>
-                  </>
-                )}
-              </h2>
-              <p className="text-gray-600 text-sm cursor-default">
-                {post.created_at}
-              </p>
-            </div>
-          </div>
+          <PostOwnerInfo post={post} />
           <div className="relative">
             <button
-              className="w-10 h-10 rounded-md cursor-pointer flex justify-center items-center bg-gray-900  duration-300 p-1"
+              className={`w-10 h-10 rounded-md cursor-pointer flex justify-center items-center border-[1px] border-solid  p-1 duration-200 ${
+                openMenu
+                  ? "bg-gray-800 border-gray-700"
+                  : "bg-gray-900 border-transparent"
+              }`}
               onClick={() => {
                 openMenu ? setOpenMenu(false) : setOpenMenu(true);
               }}
@@ -67,12 +51,15 @@ const PostCard = ({ post }) => {
               <PiDotsThreeOutlineVerticalFill className="w-5 h-5  text-gray-200" />
             </button>
             <div
-              className={`absolute top-[30px] left-[-140px] bg-gray-800 w-fit  duration-300 cursor-pointer shadow-2xl rounded-md flex flex-col justify-start items-center overflow-hidden ${
+              className={`absolute border-gray-700 border-[1px] border-solid top-[45px] left-[-100px] bg-gray-800 w-fit  duration-300 cursor-pointer shadow-2xl rounded-md flex flex-col justify-start items-center overflow-hidden ${
                 openMenu ? "opacity-100 visible" : " opacity-0 invisible"
               }`}
             >
               <UpdatePostForm post={post} />
-              <button className="bg-gray-800 duration-300 hover:bg-gray-700 py-2 px-4 pr-16 text-sm font-medium text-white focus:outline-none text-left w-full">
+              <button
+                className="bg-gray-800 duration-300 hover:bg-gray-700 py-2 px-4 pr-16 text-sm font-medium text-white focus:outline-none text-left w-full"
+                onClick={() => onDelete()}
+              >
                 Delete
               </button>
             </div>
