@@ -11,7 +11,7 @@ import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 import UpdatePostForm from "./UpdatePostForm";
 import PostOwnerInfo from "./PostOwnerInfo";
 import { router } from "@inertiajs/react";
-
+import DOMPurify from "dompurify";
 const PostCard = ({ post }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [showPost, setShowPost] = useState(false);
@@ -69,20 +69,32 @@ const PostCard = ({ post }) => {
         <div>
           <Disclosure>
             {({ open }) => (
-              <>
+              <div className="post-content">
                 {post.body.length > 200 ? (
                   <>
                     {!open ? (
                       <>
-                        <div className="dark:text-gray-400 text-gray-700 lg:text-xl text-lg">
-                          {post.body.substring(0, 200) + ".."}
+                        <div
+                          className="ch-content-output dark:text-gray-400 text-gray-700 lg:text-xl text-lg"
+                          dangerouslySetInnerHTML={{
+                            __html: DOMPurify.sanitize(
+                              post.body.substring(0, 200) + ".."
+                            ),
+                          }}
+                        >
+                          {/* {post.body.substring(0, 200) + ".."} */}
                         </div>
                         {/* <hr className="border-[1px] border-gray-800 my-2" /> */}
                       </>
                     ) : (
                       <Disclosure.Panel>
-                        <div className="dark:text-gray-400 text-gray-700 lg:text-xl text-lg">
-                          {post.body}
+                        <div
+                          className="ch-content-output dark:text-gray-400 text-gray-700 lg:text-xl text-lg"
+                          dangerouslySetInnerHTML={{
+                            __html: DOMPurify.sanitize(post.body),
+                          }}
+                        >
+                          {/* {post.body} */}
                         </div>
                       </Disclosure.Panel>
                     )}
@@ -91,11 +103,16 @@ const PostCard = ({ post }) => {
                     </Disclosure.Button>
                   </>
                 ) : (
-                  <div className="dark:text-gray-400 text-gray-700 lg:text-xl text-lg">
-                    {post.body}
+                  <div
+                    className="dark:text-gray-400 text-gray-700 lg:text-xl text-lg"
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(post.body),
+                    }}
+                  >
+                    {/* {post.body} */}
                   </div>
                 )}
-              </>
+              </div>
             )}
           </Disclosure>
         </div>

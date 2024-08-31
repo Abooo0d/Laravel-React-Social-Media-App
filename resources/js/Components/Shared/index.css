@@ -98,3 +98,99 @@
   /* Link package colors */
   --ck-color-link-default: hsl(190, 100%, 75%);
 }
+
+.ck-content > blockquote,
+.ck-content > dl,
+.ck-content > dd,
+.ck-content > h1,
+.ck-content > h2,
+.ck-content > h3,
+.ck-content > h4,
+.ck-content > h5,
+.ck-content > h6,
+.ck-content > hr,
+.ck-content > figure,
+.ck-content > p,
+.ck-content > li,
+.ck-content > pre {
+  margin: revert;
+  color: white;
+}
+
+.ck-content > ol,
+.ck-content > ul {
+  list-style: revert;
+  margin: revert;
+  padding: revert;
+  color: white;
+}
+
+.ck-content > li,
+.ck-content > h1,
+.ck-content > h2,
+.ck-content > h3,
+.ck-content > h4,
+.ck-content > h5,
+.ck-content > h6 {
+  font-size: revert;
+  font-weight: revert;
+  color: white;
+}
+
+.ck-content-output > blockquote,
+.ck-content-output > dl,
+.ck-content-output > dd,
+.ck-content-output > h1,
+.ck-content-output > h2,
+.ck-content-output > h3,
+.ck-content-output > h4,
+.ck-content-output > h5,
+.ck-content-output > h6,
+.ck-content-output > hr,
+.ck-content-output > figure,
+.ck-content-output > li,
+.ck-content-output > p,
+.ck-content-output > pre {
+  /* margin: revert; */
+  color: white;
+}
+
+.ck-content-output > ol,
+.ck-content-output > ul {
+  list-style: revert;
+  margin: revert;
+  padding: revert;
+  color: white;
+}
+
+.ck-content-output > li,
+.ck-content-output > h1,
+.ck-content-output > h2,
+.ck-content-output > h3,
+.ck-content-output > h4,
+.ck-content-output > h5,
+.ck-content-output > h6 {
+  font-size: revert;
+  font-weight: revert;
+  color: white;
+}
+.post-content li,
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6,
+.post-content p {
+  font-size: revert;
+  font-weight: revert;
+  color: white;
+  margin: revert;
+}
+.post-content ol,
+.post-content ul {
+  list-style: revert;
+  margin: revert;
+  padding: revert;
+  color: white;
+}

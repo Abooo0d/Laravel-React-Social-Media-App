@@ -1,55 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { router } from "@inertiajs/react";
+import PostModel from "./PostModel";
 const CreatePost = () => {
   const [showForm, setShowForm] = useState(false);
   const [post, setPost] = useState({
     body: "",
   });
-  const handelSubmit = () => {
-    console.log(post);
-    router.post(route("post.create"), post, {
-      onSuccess: () => {
-        setPost({ body: "" });
-      },
-    });
-  };
+
+  useEffect(() => {
+    console.log(showForm);
+  }, [showForm]);
 
   return (
-    <div
-      className={`w-full bg-gray-200 dark:bg-gray-900 px-3 py-3 flex flex-col gap-4 border-b-[2px] dark:border-gray-900 border-gray-300 duration-300 overflow-hidden  ${
-        showForm ? "h-[230px]" : "h-[65px]"
-      }`}
-    >
-      <textarea
-        className={`w-full resize-none rounded-lg border-none bg-white/5 py-1.5  px-3 text-lg text-white
-                  focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 duration-200 min-h-[40px] ${
-                    showForm ? "h-[150px]" : "h-[40px]"
-                  }`}
-        placeholder=" Click here To Create post"
+    <div className="w-full bg-gray-200 dark:bg-gray-900 px-3 py-3 flex flex-col gap-4 border-b-[2px] dark:border-gray-900 border-gray-300 duration-300 h-[65px]">
+      <div
+        className="w-full resize-none rounded-lg bg-white/5 py-1.5  px-3 text-lg focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 duration-200 min-h-[40px] cursor-pointer text-gray-400 hover:border-sky-600 border-[1px] border-solid border-transparent"
         onClick={() => setShowForm(true)}
-        value={post.body}
-        onChange={(e) => setPost({ ...post, body: e.target.value })}
-      ></textarea>
-
-      <div className={`flex justify-between items-center duration-100`}>
-        <button
-          className="py-2 px-8 rounded-lg bg-indigo-500 duration-200 cursor-pointer hover:bg-indigo-700 text-gray-300"
-          onClick={() => {
-            handelSubmit();
-          }}
-        >
-          Submit
-        </button>
-        <button
-          className="py-2 px-8 rounded-lg bg-gray-500 duration-200 cursor-pointer hover:bg-gray-600 text-gray-300"
-          onClick={() => {
-            setShowForm(false);
-            setPost({ body: "" });
-          }}
-        >
-          Cancel
-        </button>
+      >
+        What`s On Your Mind
       </div>
+      <PostModel showForm={showForm} setShowForm={setShowForm} />
     </div>
   );
 };

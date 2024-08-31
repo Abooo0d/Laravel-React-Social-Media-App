@@ -3,6 +3,8 @@ import { useState } from "react";
 import { HiMiniXMark } from "react-icons/hi2";
 import PostOwnerInfo from "./PostOwnerInfo";
 import { router } from "@inertiajs/react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 export default function UpdatePostForm({ post }) {
   let [isOpen, setIsOpen] = useState(false);
   const [postData, setPostData] = useState({
@@ -56,23 +58,29 @@ export default function UpdatePostForm({ post }) {
                 Edit Post
               </DialogTitle>
               <PostOwnerInfo post={post} />
-              <textarea
-                className="mt-3 block w-full resize-none rounded-lg border-none bg-white/5 py-1.5 px-3 text-lg text-white
-                  focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 "
-                rows={10}
-                value={postData.body}
-                onChange={(e) =>
-                  setPostData({ ...postData, body: e.target.value })
-                }
-              ></textarea>
-              <div className="mt-4">
+              <CKEditor
+                editor={ClassicEditor}
+                data={post.body}
+                onChange={(event, editor) => {
+                  setPostData({ ...postData, body: editor.getData() });
+                }}
+              />
+              <div className="mt-4 gap-2 flex justify-end items-center">
                 <Button
-                  className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
+                  className="inline-flex items-center gap-2 rounded-md bg-gray-700/50 hover:bg-gray-700 duration-200 py-1.5 px-3 text-sm/6 font-semibold text-white focus:outline-none"
                   onClick={() => {
                     handelSubmit();
                   }}
                 >
                   Submit
+                </Button>
+                <Button
+                  className="inline-flex items-center gap-2 rounded-md bg-gray-800/50 hover:bg-gray-800 duration-200 py-1.5 px-3 border-[1px] border-gray-600 border-solid text-sm/6 font-semibold text-white  focus:outline-none "
+                  onClick={() => {
+                    close();
+                  }}
+                >
+                  Cancel
                 </Button>
               </div>
             </DialogPanel>
