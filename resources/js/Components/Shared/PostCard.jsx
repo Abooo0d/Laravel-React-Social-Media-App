@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Disclosure } from "@headlessui/react";
 import { CiCirclePlus } from "react-icons/ci";
 import FullPostCard from "./FullPostCard";
@@ -31,6 +31,10 @@ const PostCard = ({ post }) => {
       });
     }
   };
+  useEffect(() => {
+    setOpenMenu(false);
+  }, []);
+
   return (
     <>
       <div className="max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg py-4 lg:px-6 px-4 flex lg:gap-6 gap-2 flex-col duration-200 shadow-md">
@@ -70,15 +74,15 @@ const PostCard = ({ post }) => {
           <Disclosure>
             {({ open }) => (
               <div className="post-content">
-                {post.body.length > 200 ? (
+                {post.body.length > 150 ? (
                   <>
                     {!open ? (
                       <>
                         <div
-                          className="ch-content-output dark:text-gray-400 text-gray-700 lg:text-xl text-lg"
+                          className="ch-content-output dark:text-gray-300 text-gray-700 lg:text-xl text-lg"
                           dangerouslySetInnerHTML={{
                             __html: DOMPurify.sanitize(
-                              post.body.substring(0, 200) + ".."
+                              post.body.substring(0, 150) + ".."
                             ),
                           }}
                         >
@@ -89,7 +93,7 @@ const PostCard = ({ post }) => {
                     ) : (
                       <Disclosure.Panel>
                         <div
-                          className="ch-content-output dark:text-gray-400 text-gray-700 lg:text-xl text-lg"
+                          className="ch-content-output dark:text-gray-300 text-gray-700 lg:text-xl text-lg"
                           dangerouslySetInnerHTML={{
                             __html: DOMPurify.sanitize(post.body),
                           }}
@@ -104,7 +108,7 @@ const PostCard = ({ post }) => {
                   </>
                 ) : (
                   <div
-                    className="dark:text-gray-400 text-gray-700 lg:text-xl text-lg"
+                    className="dark:text-gray-300 text-gray-700 lg:text-xl text-lg"
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(post.body),
                     }}

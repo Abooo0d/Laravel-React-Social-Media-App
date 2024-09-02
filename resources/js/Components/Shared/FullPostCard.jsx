@@ -9,51 +9,12 @@ import PostOwnerInfo from "./PostOwnerInfo";
 const FullPostCard = ({ post, show, setShow, setImage, setShowImage }) => {
   const isImage = (attachment) => {
     const mime = attachment.mime.split("/");
-    if (mime[0] === "image") return true;
-    return false;
+    return mime[0] === "image";
   };
   return (
     <div className={`overlay items-start ${show ? `flex` : "hidden"}`}>
       <div className="animate-scaleUp  max-w-[700px] lg:max-h-[800px] max-h-full overflow-auto w-full dark:bg-gray-900 bg-gray-200 rounded-lg lg:py-4 lg:px-6 px-2 py-3 flex lg:gap-6 gap-2 flex-col duration-200 shadow-md">
         {/* User Info */}
-        {/* <div className="flex justify-between">
-          <div className="flex gap-4 flex-row items-center">
-            <img
-              src={post.user.name}
-              alt=""
-              className="w-[60px] h-[60px] rounded-full border-[3px] border-transparent hover:border-indigo-500 duration-200"
-            />
-            <div className="flex flex-col ">
-              <h2 className=" text-lg ">
-                <a
-                  href="/"
-                  className="dark:text-gray-400 text-gray-900 hover:underline duration-200"
-                >
-                  {post.user.name}
-                </a>{" "}
-                {post?.groupe !== "" && (
-                  <>
-                    <a
-                      href="/"
-                      className="text-gray-500 hover:underline duration-200"
-                    >
-                      : {post.groupe}
-                    </a>
-                  </>
-                )}
-              </h2>
-              <p className="text-gray-500 text-sm cursor-default">
-                {post.created_at}
-              </p>
-            </div>
-          </div>
-          <div>
-            <TiArrowBack
-              className="back-button"
-              onClick={() => setShow(false)}
-            />
-          </div>
-        </div> */}
         <PostOwnerInfo post={post} />
         {/* Post Caption */}
         <div>

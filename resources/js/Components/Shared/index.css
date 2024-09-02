@@ -114,7 +114,7 @@
 .ck-content > li,
 .ck-content > pre {
   margin: revert;
-  color: white;
+  color: rgb(209 213 219);
 }
 
 .ck-content > ol,
@@ -122,7 +122,7 @@
   list-style: revert;
   margin: revert;
   padding: revert;
-  color: white;
+  color: rgb(209 213 219);
 }
 
 .ck-content > li,
@@ -134,7 +134,7 @@
 .ck-content > h6 {
   font-size: revert;
   font-weight: revert;
-  color: white;
+  color: rgb(209 213 219);
 }
 
 .ck-content-output > blockquote,
@@ -151,8 +151,8 @@
 .ck-content-output > li,
 .ck-content-output > p,
 .ck-content-output > pre {
-  /* margin: revert; */
-  color: white;
+  margin: revert;
+  color: rgb(209 213 219);
 }
 
 .ck-content-output > ol,
@@ -160,7 +160,6 @@
   list-style: revert;
   margin: revert;
   padding: revert;
-  color: white;
 }
 
 .ck-content-output > li,
@@ -172,7 +171,6 @@
 .ck-content-output > h6 {
   font-size: revert;
   font-weight: revert;
-  color: white;
 }
 .post-content li,
 .post-content h1,
@@ -184,7 +182,6 @@
 .post-content p {
   font-size: revert;
   font-weight: revert;
-  color: white;
   margin: revert;
 }
 .post-content ol,
@@ -192,5 +189,8 @@
   list-style: revert;
   margin: revert;
   padding: revert;
-  color: white;
+}
+.ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable,
+.ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
+  max-height: 500px;
 }

@@ -21,5 +21,10 @@ function formatRelativeTime(dateString) {
   const diffInDays = Math.floor(diffInHours / 24);
   return `${diffInDays} days ago`;
 }
+function isImage(file) {
+  let mime = file.mime || file.type;
+  mime = mime.split("/");
+  return mime[0].toLowerCase() === "image";
+}
 
-export { formatRelativeTime };
+export { formatRelativeTime, isImage };
