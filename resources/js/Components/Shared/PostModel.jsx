@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
@@ -6,8 +6,6 @@ import { HiMiniXMark } from "react-icons/hi2";
 import "./index.css";
 import { router } from "@inertiajs/react";
 import { isImage } from "@/Functions";
-import { CiCirclePlus } from "react-icons/ci";
-import FullPostCard from "./FullPostCard";
 import ImageFullView from "./ImageFullView";
 import PostPreview from "./PostPreview";
 import PostAttachments from "./PostAttachments";
@@ -16,16 +14,28 @@ const PostModel = ({ showForm, setShowForm }) => {
   const [showImage, setShowImage] = useState("");
   const [showPost, setShowPost] = useState(false);
   const [post, setPost] = useState({ body: "", attachments: [] });
+  const [_post, set_Post] = useState({ body: "", attachments: [] });
+  // useEffect(() => {
+  //   let files = post.attachments.map((attachment, index) => {
+  //     return attachment.file;
+  //   });
+  //   set_Post({ body: post.body, attachments: files });
+  // }, [post]);
+
   function open() {
     setIsOpen(true);
   }
   function close() {
+    setPost({ body: "", attachments: [] });
+    set_Post({ body: "", attachments: [] });
     setShowForm(false);
   }
   const handelSubmit = () => {
-    router.post(route("post.create"), post, {
+    router.post(route("post.create"), _post, {
+      forceFormData: true,
       onSuccess: () => {
         setPost({ body: "", attachment: [] });
+        set_Post({ body: "", attachments: [] });
         setShowForm(false);
       },
     });
@@ -39,6 +49,10 @@ const PostModel = ({ showForm, setShowForm }) => {
       setPost((prev) => ({
         ...prev,
         attachments: [...prev.attachments, myFile],
+      }));
+      set_Post((prevPost) => ({
+        ...prevPost,
+        attachments: [...prevPost.attachments, myFile.file],
       }));
     }
     e.target.value = null;

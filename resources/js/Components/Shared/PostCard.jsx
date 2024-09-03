@@ -71,54 +71,56 @@ const PostCard = ({ post }) => {
         </div>
         {/* Post Caption  */}
         <div>
-          <Disclosure>
-            {({ open }) => (
-              <div className="post-content">
-                {post.body.length > 150 ? (
-                  <>
-                    {!open ? (
-                      <>
-                        <div
-                          className="ch-content-output dark:text-gray-300 text-gray-700 lg:text-xl text-lg"
-                          dangerouslySetInnerHTML={{
-                            __html: DOMPurify.sanitize(
-                              post.body.substring(0, 150) + ".."
-                            ),
-                          }}
-                        >
-                          {/* {post.body.substring(0, 200) + ".."} */}
-                        </div>
-                        {/* <hr className="border-[1px] border-gray-800 my-2" /> */}
-                      </>
-                    ) : (
-                      <Disclosure.Panel>
-                        <div
-                          className="ch-content-output dark:text-gray-300 text-gray-700 lg:text-xl text-lg"
-                          dangerouslySetInnerHTML={{
-                            __html: DOMPurify.sanitize(post.body),
-                          }}
-                        >
-                          {/* {post.body} */}
-                        </div>
-                      </Disclosure.Panel>
-                    )}
-                    <Disclosure.Button className="text-indigo-600 text-lg w-full flex justify-end mt-2">
-                      {open ? "Read Less" : "Read more"}
-                    </Disclosure.Button>
-                  </>
-                ) : (
-                  <div
-                    className="dark:text-gray-300 text-gray-700 lg:text-xl text-lg"
-                    dangerouslySetInnerHTML={{
-                      __html: DOMPurify.sanitize(post.body),
-                    }}
-                  >
-                    {/* {post.body} */}
-                  </div>
-                )}
-              </div>
-            )}
-          </Disclosure>
+          {post.body && (
+            <Disclosure>
+              {({ open }) => (
+                <div className="post-content">
+                  {post.body.length > 150 ? (
+                    <>
+                      {!open ? (
+                        <>
+                          <div
+                            className="ch-content-output dark:text-gray-300 text-gray-700 lg:text-xl text-lg"
+                            dangerouslySetInnerHTML={{
+                              __html: DOMPurify.sanitize(
+                                post.body.substring(0, 150) + ".."
+                              ),
+                            }}
+                          >
+                            {/* {post.body.substring(0, 200) + ".."} */}
+                          </div>
+                          {/* <hr className="border-[1px] border-gray-800 my-2" /> */}
+                        </>
+                      ) : (
+                        <Disclosure.Panel>
+                          <div
+                            className="ch-content-output dark:text-gray-300 text-gray-700 lg:text-xl text-lg"
+                            dangerouslySetInnerHTML={{
+                              __html: DOMPurify.sanitize(post.body),
+                            }}
+                          >
+                            {/* {post.body} */}
+                          </div>
+                        </Disclosure.Panel>
+                      )}
+                      <Disclosure.Button className="text-indigo-600 text-lg w-full flex justify-end mt-2">
+                        {open ? "Read Less" : "Read more"}
+                      </Disclosure.Button>
+                    </>
+                  ) : (
+                    <div
+                      className="dark:text-gray-300 text-gray-700 lg:text-xl text-lg"
+                      dangerouslySetInnerHTML={{
+                        __html: DOMPurify.sanitize(post.body),
+                      }}
+                    >
+                      {/* {post.body} */}
+                    </div>
+                  )}
+                </div>
+              )}
+            </Disclosure>
+          )}
         </div>
         {/* Post Attachments */}
         {post.attachments && post.attachments.length > 0 ? (
@@ -147,6 +149,7 @@ const PostCard = ({ post }) => {
                               className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer"
                               onClick={() => {
                                 setImage(attachment.url);
+                                console.log("Abood");
                                 setShowImage(true);
                               }}
                             />
@@ -164,7 +167,7 @@ const PostCard = ({ post }) => {
                                   key={index}
                                   src={attachment.url}
                                   className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer"
-                                  // onClick={() => setImage(attachment.url)}
+                                  onClick={() => setImage(attachment.url)}
                                 />
                                 <div
                                   className="absolute top-0 left-0 w-full h-full bg-white opacity-40 z-10 flex justify-center items-center rounded-lg cursor-pointer"
