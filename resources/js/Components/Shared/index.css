@@ -113,15 +113,12 @@
 .ck-content > p,
 .ck-content > li,
 .ck-content > pre {
-  margin: revert;
   color: rgb(209 213 219);
 }
 
 .ck-content > ol,
 .ck-content > ul {
   list-style: revert;
-  margin: revert;
-  padding: revert;
   color: rgb(209 213 219);
 }
 
@@ -151,15 +148,12 @@
 .ck-content-output > li,
 .ck-content-output > p,
 .ck-content-output > pre {
-  margin: revert;
   color: rgb(209 213 219);
 }
 
 .ck-content-output > ol,
 .ck-content-output > ul {
   list-style: revert;
-  margin: revert;
-  padding: revert;
 }
 
 .ck-content-output > li,
@@ -182,13 +176,10 @@
 .post-content p {
   font-size: revert;
   font-weight: revert;
-  margin: revert;
 }
 .post-content ol,
 .post-content ul {
   list-style: revert;
-  margin: revert;
-  padding: revert;
 }
 .ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable,
 .ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {

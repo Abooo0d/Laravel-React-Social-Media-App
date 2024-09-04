@@ -7,7 +7,14 @@ import { PiThumbsUpBold } from "react-icons/pi";
 import { TiArrowBack } from "react-icons/ti";
 import PostOwnerInfo from "./PostOwnerInfo";
 import { HiMiniXMark } from "react-icons/hi2";
-const FullPostCard = ({ post, show, setShow, setImage, setShowImage }) => {
+const FullPostCard = ({
+  post,
+  show,
+  setShow,
+  setImage,
+  setShowImage,
+  user,
+}) => {
   const isImage = (attachment) => {
     const mime = attachment.mime.split("/");
     return mime[0] === "image";
@@ -19,13 +26,13 @@ const FullPostCard = ({ post, show, setShow, setImage, setShowImage }) => {
       }`}
     >
       <div
-        className={`relative  animate-scaleUp  max-w-[700px] lg:max-h-[800px] max-h-full duration-200  w-full dark:bg-gray-900 bg-gray-200 rounded-lg lg:py-4 lg:px-6 px-2 py-3 flex lg:gap-6 gap-2 flex-col shadow-md ${
+        className={`relative animate-scaleUp  max-w-[700px] max-h-full h-[800px] duration-200  w-full dark:bg-gray-900/80 backdrop-blur-sm bg-gray-200 rounded-lg lg:py-4 lg:px-6 px-2 py-3 flex lg:gap-6 gap-2 flex-col shadow-md ${
           show ? "visible opacity-100 " : "invisible opacity-0 scale-[95%]"
         }`}
       >
         {/* User Info */}
         <div className="flex flex-1 justify-between items-center">
-          <PostOwnerInfo post={post} />
+          <PostOwnerInfo post={post} user={user} />
           <button
             className={`bg-gray-800/70 rounded-md flex justify-center items-center p-2 border-[1px] border-solid border-gray-700 hover:bg-gray-800 duration-200 ${
               show ? "visible opacity-100 " : "invisible opacity-0"

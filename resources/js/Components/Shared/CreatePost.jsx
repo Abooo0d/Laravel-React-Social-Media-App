@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { router } from "@inertiajs/react";
-import PostModel from "./PostModel";
-const CreatePost = () => {
+import React, { useState } from "react";
+import CreatePostForm from "./CreatePostForm";
+const CreatePost = ({ user }) => {
   const [showForm, setShowForm] = useState(false);
-  const [post, setPost] = useState({
-    body: "",
-  });
-
   return (
     <div className="w-full bg-gray-200 dark:bg-gray-900 px-3 py-3 flex flex-col gap-4  duration-300 h-[65px] border-b-[1px] border-solid border-gray-700">
       <div
@@ -15,7 +10,11 @@ const CreatePost = () => {
       >
         What`s On Your Mind
       </div>
-      <PostModel showForm={showForm} setShowForm={setShowForm} />
+      <CreatePostForm
+        showForm={showForm}
+        setShowForm={setShowForm}
+        user={user}
+      />
     </div>
   );
 };

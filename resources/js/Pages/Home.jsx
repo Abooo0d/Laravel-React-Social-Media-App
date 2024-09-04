@@ -242,7 +242,7 @@ const followers = [
 //     ],
 //   },
 // ];
-export default function Home({ auth, posts }) {
+export default function Home({ auth, posts, user }) {
   // const navigate = useNavigate();
   if (auth.user === null) {
     window.location.href = "/login";
@@ -253,7 +253,7 @@ export default function Home({ auth, posts }) {
       <Authenticated user={auth.user}>
         <div className="flex flex-col lg:gap-0 gap-2 p-2 lg:p-0 lg:grid lg:grid-cols-12 min-h-barHeight lg:max-h-barHeight overflow-scroll bg-gray-900">
           <GroupsBar groups={groups} />
-          <HomeFeed posts={posts.data} />
+          <HomeFeed posts={posts.data} user={user} />
           <FollowersBar followers={followers} />
         </div>
       </Authenticated>

@@ -3,20 +3,18 @@ import "animate.css";
 import { HiMiniXMark } from "react-icons/hi2";
 import DOMPurify from "dompurify";
 import { FaFile } from "react-icons/fa";
-const PostPreview = ({
+import PostOwnerInfo from "./PostOwnerInfo";
+import { isImage } from "@/Functions";
+const CreatePostPostPreview = ({
   post,
   setPost,
   show,
   setShow,
   setImage,
   setShowImage,
+  user,
 }) => {
-  const isImage = (attachment) => {
-    let mime = attachment.type || attachment.mime;
-    mime = mime.split("/");
-    return mime[0] === "image";
-  };
-
+  console.log("from CreatePostPostPreview", user);
   return (
     <div
       className={`overlay items-start flex duration-200 delay-150  ${
@@ -39,6 +37,7 @@ const PostPreview = ({
             show ? "visible opacity-100 " : "invisible opacity-0 scale-[95%]"
           }`}
         >
+          <PostOwnerInfo user={user} />
           {/* Post Caption */}
           <div
             className="post-content dark:text-gray-300 text-gray-700 lg:text-xl text-lg"
@@ -97,4 +96,4 @@ const PostPreview = ({
   );
 };
 
-export default PostPreview;
+export default CreatePostPostPreview;

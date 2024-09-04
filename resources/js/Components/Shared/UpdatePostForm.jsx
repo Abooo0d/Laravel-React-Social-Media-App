@@ -5,7 +5,7 @@ import PostOwnerInfo from "./PostOwnerInfo";
 import { router } from "@inertiajs/react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-export default function UpdatePostForm({ post }) {
+export default function UpdatePostForm({ post, setOpenMenu }) {
   let [isOpen, setIsOpen] = useState(false);
   const [postData, setPostData] = useState({
     body: post.body,
@@ -27,7 +27,10 @@ export default function UpdatePostForm({ post }) {
   return (
     <>
       <button
-        onClick={open}
+        onClick={() => {
+          open();
+          setOpenMenu(false);
+        }}
         className="bg-gray-800 duration-300 hover:bg-gray-700 py-2 px-4 pr-16 text-sm font-medium text-white focus:outline-none text-left"
       >
         Edit Post

@@ -1,30 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { HiMiniXMark } from "react-icons/hi2";
 import "./index.css";
 import { router } from "@inertiajs/react";
 import { isImage } from "@/Functions";
 import ImageFullView from "./ImageFullView";
-import PostPreview from "./PostPreview";
-import PostAttachments from "./PostAttachments";
-const PostModel = ({ showForm, setShowForm }) => {
+import CreatePostPostPreview from "./CreatePostPostPreview";
+import CreatePostPostAttachments from "./CreatePostPostAttachments";
+const CreatePostForm = ({ showForm, setShowForm, user }) => {
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState("");
   const [showPost, setShowPost] = useState(false);
   const [post, setPost] = useState({ body: "", attachments: [] });
   const [_post, set_Post] = useState({ body: "", attachments: [] });
-  // useEffect(() => {
-  //   let files = post.attachments.map((attachment, index) => {
-  //     return attachment.file;
-  //   });
-  //   set_Post({ body: post.body, attachments: files });
-  // }, [post]);
-
-  function open() {
-    setIsOpen(true);
-  }
   function close() {
     setPost({ body: "", attachments: [] });
     set_Post({ body: "", attachments: [] });
@@ -123,9 +112,10 @@ const PostModel = ({ showForm, setShowForm }) => {
                 }}
                 onChange={(event, editor) => {
                   setPost({ ...post, body: editor.getData() });
+                  set_Post({ ..._post, body: editor.getData() });
                 }}
               />
-              <PostAttachments
+              <CreatePostPostAttachments
                 setPost={setPost}
                 post={post}
                 setImage={setImage}
@@ -157,8 +147,9 @@ const PostModel = ({ showForm, setShowForm }) => {
             </div>
           </div>
         </div>
-        <PostPreview
+        <CreatePostPostPreview
           show={showPost}
+          user={user}
           post={post}
           setPost={setPost}
           setShow={setShowPost}
@@ -175,4 +166,4 @@ const PostModel = ({ showForm, setShowForm }) => {
   );
 };
 
-export default PostModel;
+export default CreatePostForm;

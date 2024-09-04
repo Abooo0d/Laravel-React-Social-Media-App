@@ -91,7 +91,7 @@ const PostAttachments = ({
                               </div>
                             )}
                             <div
-                              className="absolute top-0 left-0 w-full h-full bg-gray-800/20 backdrop-blur-sm z-10 flex justify-center items-center rounded-lg cursor-pointer"
+                              className="absolute top-0 left-0 w-full h-full bg-gray-800/20 backdrop-blur-sm flex justify-center items-center rounded-lg cursor-pointer z-[1]"
                               onClick={() => setShowPost(true)}
                               key={index + "div"}
                             >
