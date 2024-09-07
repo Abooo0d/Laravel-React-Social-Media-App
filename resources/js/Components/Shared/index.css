@@ -157,6 +157,7 @@
 }
 
 .ck-content-output > li,
+.ck-content-output > blockquote,
 .ck-content-output > h1,
 .ck-content-output > h2,
 .ck-content-output > h3,
@@ -167,6 +168,7 @@
   font-weight: revert;
 }
 .post-content li,
+.post-content blockquote,
 .post-content h1,
 .post-content h2,
 .post-content h3,
@@ -176,6 +178,15 @@
 .post-content p {
   font-size: revert;
   font-weight: revert;
+}
+.post-content blockquote {
+  border-left: 5px solid #ccc;
+  font-style: italic;
+  margin-left: 0;
+  margin-right: 0;
+  overflow: hidden;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
 }
 .post-content ol,
 .post-content ul {

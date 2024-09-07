@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { formatRelativeTime } from "../../Functions";
 const PostOwnerInfo = ({ post, user }) => {
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between mb-4">
       <div className="flex gap-4 flex-row items-center">
         <img
           src={user?.avatar_url}

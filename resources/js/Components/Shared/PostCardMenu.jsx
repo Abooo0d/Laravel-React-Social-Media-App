@@ -33,7 +33,11 @@ const PostCardMenu = ({ openMenu, setOpenMenu, post }) => {
           openMenu ? "opacity-100 visible" : " opacity-0 invisible"
         }`}
       >
-        <UpdatePostForm post={post} setOpenMenu={setOpenMenu} />
+        <UpdatePostForm
+          post={post}
+          setOpenMenu={setOpenMenu}
+          user={post.user}
+        />
         <button
           className="bg-gray-800 duration-300 hover:bg-gray-700 py-2 px-4 pr-16 text-sm font-medium text-white focus:outline-none text-left w-full"
           onClick={() => onDelete()}

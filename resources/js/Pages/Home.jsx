@@ -243,7 +243,6 @@ const followers = [
 //   },
 // ];
 export default function Home({ auth, posts, user }) {
-  // const navigate = useNavigate();
   if (auth.user === null) {
     window.location.href = "/login";
   }

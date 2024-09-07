@@ -5,7 +5,7 @@ import PostOwnerInfo from "./PostOwnerInfo";
 import { router } from "@inertiajs/react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-export default function UpdatePostForm({ post, setOpenMenu }) {
+export default function UpdatePostForm({ post, setOpenMenu, user }) {
   let [isOpen, setIsOpen] = useState(false);
   const [postData, setPostData] = useState({
     body: post.body,
@@ -60,7 +60,7 @@ export default function UpdatePostForm({ post, setOpenMenu }) {
               >
                 Edit Post
               </DialogTitle>
-              <PostOwnerInfo post={post} />
+              <PostOwnerInfo post={post} user={user} />
               <CKEditor
                 editor={ClassicEditor}
                 data={post.body}

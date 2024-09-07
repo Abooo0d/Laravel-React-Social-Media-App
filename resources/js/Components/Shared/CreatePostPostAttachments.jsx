@@ -3,7 +3,7 @@ import { CiCirclePlus } from "react-icons/ci";
 import { HiMiniXMark } from "react-icons/hi2";
 import { FaFile } from "react-icons/fa";
 
-const PostAttachments = ({
+const CreatePostPostAttachments = ({
   post,
   setPost,
   setImage,
@@ -95,7 +95,7 @@ const PostAttachments = ({
                               onClick={() => setShowPost(true)}
                               key={index + "div"}
                             >
-                              <CiCirclePlus className="absolute text-7xl text-gray-500 duration-200 font-extrabold cursor-pointer" />
+                              <CiCirclePlus className="absolute text-7xl text-gray-400 duration-200 font-extrabold cursor-pointer" />
                             </div>
                           </div>
                         </>
@@ -152,4 +152,4 @@ const PostAttachments = ({
   );
 };
 
-export default PostAttachments;
+export default CreatePostPostAttachments;

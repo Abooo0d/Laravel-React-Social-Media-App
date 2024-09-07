@@ -14,7 +14,6 @@ const CreatePostPostPreview = ({
   setShowImage,
   user,
 }) => {
-  console.log("from CreatePostPostPreview", user);
   return (
     <div
       className={`overlay items-start flex duration-200 delay-150  ${
@@ -22,22 +21,24 @@ const CreatePostPostPreview = ({
       }`}
     >
       <div className="max-w-[700px] lg:max-h-[500px] max-h-full relative">
-        <button
-          className={`bg-gray-800/70 absolute top-[-50px] right-0 rounded-md flex justify-center items-center p-2 border-[1px] border-solid border-gray-700 hover:bg-gray-800 duration-200 ${
-            show ? "visible opacity-100 " : "invisible opacity-0"
-          }`}
-          onClick={() => {
-            setShow(false);
-          }}
-        >
-          <HiMiniXMark className="w-5 h-5 text-gray-200" />
-        </button>
         <div
           className={`relative overflow-y-auto max-w-[700px] lg:max-h-[600px] max-h-full w-full bg-gray-900/50 border-[1px] border-solid border-gray-700 p-6 backdrop-blur-2xl bg-gray-200 rounded-lg lg:py-4 lg:px-6 px-2 py-3 flex lg:gap-6 gap-2 flex-col duration-200 shadow-md ${
             show ? "visible opacity-100 " : "invisible opacity-0 scale-[95%]"
           }`}
         >
-          <PostOwnerInfo user={user} />
+          <div className="flex justify-between items-center">
+            <PostOwnerInfo user={user} />
+            <button
+              className={`bg-gray-800/70  rounded-md flex justify-center items-center p-2 border-[1px] border-solid border-gray-700 hover:bg-gray-800 duration-200 ${
+                show ? "visible opacity-100 " : "invisible opacity-0"
+              }`}
+              onClick={() => {
+                setShow(false);
+              }}
+            >
+              <HiMiniXMark className="w-5 h-5 text-gray-200" />
+            </button>
+          </div>
           {/* Post Caption */}
           <div
             className="post-content dark:text-gray-300 text-gray-700 lg:text-xl text-lg"
