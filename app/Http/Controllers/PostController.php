@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Http\Resources\PostResource;
 use App\Models\post;
 use App\Models\PostAttachments;
 use Illuminate\Auth\Events\Validated;
@@ -22,11 +23,11 @@ class PostController extends Controller
   public function store(StorePostRequest $request)
   {
     DB::beginTransaction();
+    $files = [];
     try {
       $data = $request->validated();
       $user = $request->user();
       $post =  Post::create($data);
-      $files = [];
       /** @var UploadedFile[] $attachments */
       $attachments = $data['attachments'] ?? [];
       foreach ($attachments as $attachment) {
@@ -56,9 +57,46 @@ class PostController extends Controller
   /**
    * Update the specified resource in storage.
    */
-  public function update(UpdatePostRequest $request, post $post)
+  public function update(UpdatePostRequest $request, Post $post)
   {
-    $post->update($request->validated());
+    DB::beginTransaction();
+    $files = [];
+    try {
+      $data = $request->validated();
+      $user = $request->user();
+      $post->update($request->validated());
+
+      $deletedFilesIds = $data['deletedFilesIds'] ?? [];
+      $postAttachments = PostAttachments::query()
+        ->where('post_id', $post->id)
+        ->whereIn('id', $deletedFilesIds)
+        ->get();
+      foreach ($postAttachments as $file) {
+        $file->delete();
+      }
+
+      /** @var UploadedFile[] $attachments */
+      $attachments = $data['attachments'] ?? [];
+      foreach ($attachments as $attachment) {
+        $path = $attachment->store("attachments/{$user->id}", 'public');
+        $files[] = $attachment;
+        PostAttachments::create([
+          'post_id' => $post->id,
+          'name' => $attachment->getClientOriginalName(),
+          'path' => $path,
+          'mime' => $attachment->getMimeType(),
+          'size' => $attachment->getSize(),
+          'created_by' => $user->id
+        ]);
+      }
+      DB::commit();
+    } catch (\Throwable $e) {
+      foreach ($files as $file) {
+        Storage::disk('public')->delete($file);
+      }
+      DB::rollBack();
+      throw $e;
+    }
     return back();
   }
 

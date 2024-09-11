@@ -1,95 +1,157 @@
-import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { useState } from "react";
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { useEffect, useState } from "react";
 import { HiMiniXMark } from "react-icons/hi2";
 import PostOwnerInfo from "./PostOwnerInfo";
 import { router } from "@inertiajs/react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-export default function UpdatePostForm({ post, setOpenMenu, user }) {
-  let [isOpen, setIsOpen] = useState(false);
-  const [postData, setPostData] = useState({
-    body: post.body,
-    id: post.id,
+import CreatePostPostAttachments from "./CreatePostPostAttachments";
+import PostPreview from "./PostPreview";
+import ImageFullView from "./ImageFullView";
+import { isImage } from "@/Functions";
+import UpdatePostPostAttachments from "./UpdatePostPostAttachments";
+import { SecondaryButton } from "./Buttons";
+import PopupCard from "./PopupCard";
+export default function UpdatePostForm({
+  post,
+  setOpenMenu,
+  user,
+  showForm,
+  setShowForm,
+}) {
+  const [image, setImage] = useState("");
+  const [showImage, setShowImage] = useState(false);
+  const [showPost, setShowPost] = useState(false);
+  const [postData, setPostData] = useState(post);
+  const [finalPost, setFinalPost] = useState({
+    ...post,
+    attachments: [],
+    deletedFilesIds: [],
   });
-  function open() {
-    setIsOpen(true);
-  }
   function close() {
-    setIsOpen(false);
+    setShowForm(false);
   }
+  useEffect(() => {
+    setPostData(post);
+    setFinalPost({
+      ...post,
+      attachments: [],
+      deletedFilesIds: [],
+    });
+  }, [showForm]);
+
   const handelSubmit = () => {
-    router.put(route("post.update", postData), postData, {
+    router.post(route("post.update", finalPost), finalPost, {
+      forceFormData: true,
       onSuccess: () => {
         close();
       },
+      _method: "PUT",
+    });
+  };
+  const HandelTheFiles = async (e) => {
+    for (const file of e.target.files) {
+      const myFile = {
+        file,
+        url: await readFile(file),
+      };
+      setPostData((prev) => ({
+        ...prev,
+        attachments: [...prev.attachments, myFile],
+      }));
+      setFinalPost((prev) => ({
+        ...prev,
+        attachments: [...prev.attachments, myFile.file],
+      }));
+    }
+    e.target.value = null;
+  };
+  const readFile = async (file) => {
+    return new Promise((res, rej) => {
+      if (isImage(file)) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          res(reader.result);
+        };
+        reader.onerror = rej;
+        reader.readAsDataURL(file);
+      } else {
+        res(null);
+      }
     });
   };
   return (
     <>
-      <button
-        onClick={() => {
-          open();
-          setOpenMenu(false);
-        }}
-        className="bg-gray-800 duration-300 hover:bg-gray-700 py-2 px-4 pr-16 text-sm font-medium text-white focus:outline-none text-left"
-      >
-        Edit Post
-      </button>{" "}
-      <Dialog
-        open={isOpen}
-        as="div"
-        className="relative z-10 focus:outline-none"
-        onClose={close}
-        __demoMode
-      >
-        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4 bg-gray-900/30 backdrop-blur-sm">
-            <DialogPanel
-              transition
-              className="relative max-w-[80%] w-[600px] rounded-xl bg-gray-900/80 border-[1px] border-solid border-gray-700 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
-            >
-              <button
-                className="bg-gray-900 absolute top-[20px] right-[20px] w-6 h-6 rounded-md flex justify-center items-center "
-                onClick={close}
-              >
-                <HiMiniXMark className="w-5 h-5 text-gray-200" />
-              </button>
-              <DialogTitle
-                as="h3"
-                className="text-base/7 font-medium text-white mb-4"
-              >
-                Edit Post
-              </DialogTitle>
-              <PostOwnerInfo post={post} user={user} />
-              <CKEditor
-                editor={ClassicEditor}
-                data={post.body}
-                onChange={(event, editor) => {
-                  setPostData({ ...postData, body: editor.getData() });
+      <PopupCard showForm={showForm}>
+        <div>
+          <div className="flex justify-between items-center">
+            <h3 className="text-base/7 font-medium text-white mb-4">
+              Edit Post
+            </h3>
+            <SecondaryButton event={close} classes={" px-3 py-1.5"}>
+              <HiMiniXMark className="w-5 h-5 text-gray-200 " />
+            </SecondaryButton>
+          </div>
+          <PostOwnerInfo post={post} user={user} />
+          <div className="w-full max-h-[500px] flex flex-col gap-2 overflow-auto">
+            <CKEditor
+              editor={ClassicEditor}
+              data={postData.body}
+              onChange={(event, editor) => {
+                setPostData({ ...postData, body: editor.getData() });
+                setFinalPost({ ...finalPost, body: editor.getData() });
+              }}
+            />
+            <UpdatePostPostAttachments
+              finalPost={finalPost}
+              setFinalPost={setFinalPost}
+              setPost={setPostData}
+              post={postData}
+              setImage={setImage}
+              setShowImage={setShowImage}
+              setShowPost={setShowPost}
+            />
+          </div>
+          <div className="mt-4 gap-2 flex justify-end items-center">
+            <button className="cursor-pointer relative inline-flex items-center gap-2 rounded-md bg-gray-800/70 hover:bg-gray-800 duration-200 py-1.5 px-3 border-[1px] border-gray-700 border-solid text-sm/6 font-semibold text-white  focus:outline-none ">
+              Add Files
+              <input
+                type="file"
+                name="files"
+                className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer opacity-0"
+                multiple
+                onChange={(e) => {
+                  HandelTheFiles(e);
                 }}
               />
-              <div className="mt-4 gap-2 flex justify-end items-center">
-                <Button
-                  className="inline-flex items-center gap-2 rounded-md bg-gray-700/50 hover:bg-gray-700 duration-200 py-1.5 px-3 text-sm/6 font-semibold text-white focus:outline-none"
-                  onClick={() => {
-                    handelSubmit();
-                  }}
-                >
-                  Submit
-                </Button>
-                <Button
-                  className="inline-flex items-center gap-2 rounded-md bg-gray-800/50 hover:bg-gray-800 duration-200 py-1.5 px-3 border-[1px] border-gray-600 border-solid text-sm/6 font-semibold text-white  focus:outline-none "
-                  onClick={() => {
-                    close();
-                  }}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </DialogPanel>
+            </button>
+            <button
+              className="inline-flex items-center gap-2 rounded-md bg-gray-700/70 hover:bg-gray-700 duration-200 py-1.5 px-3 text-sm/6 font-semibold text-white focus:outline-none border-[1px] border-solid border-gray-700"
+              onClick={() => {
+                handelSubmit();
+              }}
+            >
+              Submit
+            </button>
           </div>
         </div>
-      </Dialog>
+      </PopupCard>
+      <PostPreview
+        finalPost={finalPost}
+        setFinalPost={setFinalPost}
+        show={showPost}
+        user={user}
+        post={postData}
+        setPost={setPostData}
+        setShow={setShowPost}
+        setImage={setImage}
+        setShowImage={setShowImage}
+      />
+      <ImageFullView
+        image={image}
+        show={showImage}
+        setShowImage={setShowImage}
+      />
     </>
   );
 }

@@ -6,14 +6,21 @@ import "./index.css";
 import { router } from "@inertiajs/react";
 import { isImage } from "@/Functions";
 import ImageFullView from "./ImageFullView";
-import CreatePostPostPreview from "./CreatePostPostPreview";
+import PostPreview from "./PostPreview";
 import CreatePostPostAttachments from "./CreatePostPostAttachments";
+import { SecondaryButton, PrimaryButton } from "./Buttons";
+import PopupCard from "./PopupCard";
 const CreatePostForm = ({ showForm, setShowForm, user }) => {
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState("");
   const [showPost, setShowPost] = useState(false);
   const [post, setPost] = useState({ body: "", attachments: [] });
   const [_post, set_Post] = useState({ body: "", attachments: [] });
+  useEffect(() => {
+    setPost({ body: "", attachments: [] });
+    set_Post({ body: "", attachments: [] });
+  }, [showForm]);
+
   function close() {
     setPost({ body: "", attachments: [] });
     set_Post({ body: "", attachments: [] });
@@ -66,102 +73,90 @@ const CreatePostForm = ({ showForm, setShowForm, user }) => {
         showForm ? "visible " : "invisible"
       }`}
     >
-      <div className={`fixed inset-0 z-10 w-screen overflow-y-auto `}>
-        <div className="flex min-h-full items-center justify-center p-4 bg-gray-900/30 backdrop-blur-sm">
-          <div
-            className={`relative max-w-[80%] w-[600px] rounded-xl bg-gray-900/90 border-[1px] border-solid border-gray-700 p-6 backdrop-blur-2xl duration-200 ${
-              showForm
-                ? "visible opacity-100"
-                : "invisible opacity-0 scale-[95%]"
-            } `}
-          >
-            <button
-              className="bg-gray-800/70 absolute top-[20px] right-[20px] rounded-md flex justify-center items-center p-2 border-[1px] border-solid border-gray-700 hover:bg-gray-800 duration-200"
-              onClick={() => {
-                close();
-              }}
-            >
-              <HiMiniXMark className="w-5 h-5 text-gray-200" />
-            </button>
-            <div as="h3" className="text-base/7 font-medium text-white mb-4">
-              Create Post
-            </div>
-            <div className="max-h-[600px] overflow-auto">
-              <CKEditor
-                editor={ClassicEditor}
-                data={post.body}
-                config={{
-                  toolbar: [
-                    "heading", // Heading dropdown
-                    "|", // Separator
-                    "bold", // Bold
-                    "italic", // Italic
-                    "|", // Separator
-                    "link", // Link
-                    "blockquote", // Block quote
-                    "|", // Separator
-                    "bulletedList", // Bulleted list
-                    "numberedList", // Numbered list
-                    "|", // Separator
-                    "outdent", // Outdent
-                    "indent", // Indent
-                    "|", // Separator
-                    "undo", // Undo
-                    "redo", // Redo
-                  ],
-                }}
-                onChange={(event, editor) => {
-                  setPost({ ...post, body: editor.getData() });
-                  set_Post({ ..._post, body: editor.getData() });
-                }}
-              />
-              <CreatePostPostAttachments
-                setPost={setPost}
-                post={post}
-                setImage={setImage}
-                setShowImage={setShowImage}
-                setShowPost={setShowPost}
-              />
-            </div>
-            <div className="mt-4 gap-2 flex justify-end items-center">
-              <button className="cursor-pointer relative inline-flex items-center gap-2 rounded-md bg-gray-800/70 hover:bg-gray-800 duration-200 py-1.5 px-3 border-[1px] border-gray-700 border-solid text-sm/6 font-semibold text-white  focus:outline-none ">
-                Add Files
-                <input
-                  type="file"
-                  name="files"
-                  className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer opacity-0"
-                  multiple
-                  onChange={(e) => {
-                    HandelTheFiles(e);
-                  }}
-                />
-              </button>
-              <button
-                className="inline-flex items-center gap-2 rounded-md bg-gray-700/70 hover:bg-gray-700 duration-200 py-1.5 px-3 text-sm/6 font-semibold text-white focus:outline-none border-[1px] border-solid border-gray-700"
-                onClick={() => {
-                  handelSubmit();
-                }}
-              >
-                Submit
-              </button>
-            </div>
-          </div>
+      <PopupCard showForm={showForm}>
+        <SecondaryButton
+          event={close}
+          classes={"absolute top-[20px] right-[20px] py-1.5 px-3"}
+        >
+          <HiMiniXMark className="w-5 h-5 text-gray-200" />
+        </SecondaryButton>
+        <div as="h3" className="text-base/7 font-medium text-white mb-4">
+          Create Post
         </div>
-        <CreatePostPostPreview
-          show={showPost}
-          user={user}
-          post={post}
-          setPost={setPost}
-          setShow={setShowPost}
-          setImage={setImage}
-          setShowImage={setShowImage}
-        />
-        <ImageFullView
-          image={image}
-          show={showImage}
-          setShowImage={setShowImage}
-        />
-      </div>
+        <div className="max-h-[600px] overflow-auto">
+          <CKEditor
+            editor={ClassicEditor}
+            data={post.body}
+            config={{
+              toolbar: [
+                "heading", // Heading dropdown
+                "|", // Separator
+                "bold", // Bold
+                "italic", // Italic
+                "|", // Separator
+                "link", // Link
+                "blockquote", // Block quote
+                "|", // Separator
+                "bulletedList", // Bulleted list
+                "numberedList", // Numbered list
+                "|", // Separator
+                "outdent", // Outdent
+                "indent", // Indent
+                "|", // Separator
+                "undo", // Undo
+                "redo", // Redo
+              ],
+            }}
+            onChange={(event, editor) => {
+              setPost({ ...post, body: editor.getData() });
+              set_Post({ ..._post, body: editor.getData() });
+            }}
+          />
+          <CreatePostPostAttachments
+            setPost={setPost}
+            post={post}
+            setImage={setImage}
+            setShowImage={setShowImage}
+            setShowPost={setShowPost}
+          />
+        </div>
+        <div className="mt-4 gap-2 flex justify-end items-center">
+          <SecondaryButton classes="relative py-1.5 px-3">
+            Add Files
+            <input
+              type="file"
+              name="files"
+              className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer opacity-0"
+              multiple
+              onChange={(e) => {
+                HandelTheFiles(e);
+              }}
+            />
+          </SecondaryButton>
+          <PrimaryButton
+            classes={"py-1.5 px-3"}
+            event={() => {
+              handelSubmit();
+            }}
+          >
+            Submit
+          </PrimaryButton>
+        </div>
+      </PopupCard>
+      <PostPreview
+        show={showPost}
+        user={user}
+        post={post}
+        setPost={setPost}
+        setShow={setShowPost}
+        setImage={setImage}
+        setShowImage={setShowImage}
+      />
+      <ImageFullView
+        image={image}
+        show={showImage}
+        setShowImage={setShowImage}
+      />
     </div>
   );
 };

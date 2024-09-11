@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import UpdatePostForm from "./UpdatePostForm";
 import { router } from "@inertiajs/react";
 
 const PostCardMenu = ({ openMenu, setOpenMenu, post }) => {
+  const [showForm, setShowForm] = useState(false);
+  useEffect(() => {}, [showForm]);
+
   const onDelete = () => {
     if (window.confirm("Are You Sure To Delete This Post")) {
       router.delete(route("post.delete", post), post, {
@@ -33,11 +36,15 @@ const PostCardMenu = ({ openMenu, setOpenMenu, post }) => {
           openMenu ? "opacity-100 visible" : " opacity-0 invisible"
         }`}
       >
-        <UpdatePostForm
-          post={post}
-          setOpenMenu={setOpenMenu}
-          user={post.user}
-        />
+        <button
+          onClick={() => {
+            setShowForm(true);
+            setOpenMenu(false);
+          }}
+          className="bg-gray-800 duration-300 hover:bg-gray-700 py-2 px-4 pr-16 text-sm font-medium text-white focus:outline-none text-left"
+        >
+          Edit Post
+        </button>
         <button
           className="bg-gray-800 duration-300 hover:bg-gray-700 py-2 px-4 pr-16 text-sm font-medium text-white focus:outline-none text-left w-full"
           onClick={() => onDelete()}
@@ -45,6 +52,13 @@ const PostCardMenu = ({ openMenu, setOpenMenu, post }) => {
           Delete
         </button>
       </div>
+      <UpdatePostForm
+        post={post}
+        setOpenMenu={setOpenMenu}
+        user={post.user}
+        showForm={showForm}
+        setShowForm={setShowForm}
+      />
     </div>
   );
 };

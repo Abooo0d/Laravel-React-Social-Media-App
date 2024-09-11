@@ -12,7 +12,7 @@ class Post extends Model
   use SoftDeletes;
   public $fillable = [
     'body',
-    'user_id'
+    'user_id',
   ];
   public function user()
   {
