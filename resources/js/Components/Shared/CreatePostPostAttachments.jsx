@@ -105,12 +105,12 @@ const CreatePostPostAttachments = ({
                               </div>
                             )}
                             <div
-                              className="absolute top-0 left-0 w-full h-full bg-gray-800/50 backdrop-blur-sm flex justify-center items-center rounded-lg cursor-pointer z-[1]"
+                              className="absolute top-0 left-0 w-full h-full bg-gray-800/50 backdrop-blur-sm flex justify-center items-center rounded-lg cursor-pointer z-[1] group"
                               onClick={() => setShowPost(true)}
                               key={index + "div"}
                             >
                               {/* <CiCirclePlus className="absolute text-xl text-gray-400 duration-200 font-extrabold cursor-pointer" /> */}
-                              <span className="text-3xl text-gray-200 rounded-full border-[1px] border-solid border-gray-200/50 p-2 h-[60px] w-[60px] flex justify-center items-center hover:bg-gray-800/20 duration-200 hover:scale-105">
+                              <span className="text-3xl text-gray-200 rounded-full border-[1px] border-solid border-gray-200/50 p-2 h-[60px] w-[60px] flex justify-center items-center group-hover:bg-gray-800/20 duration-200 group-hover:scale-105">
                                 +{post.attachments.length - 2}
                               </span>
                             </div>

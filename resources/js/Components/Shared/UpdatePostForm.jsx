@@ -5,20 +5,13 @@ import PostOwnerInfo from "./PostOwnerInfo";
 import { router } from "@inertiajs/react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import CreatePostPostAttachments from "./CreatePostPostAttachments";
 import PostPreview from "./PostPreview";
 import ImageFullView from "./ImageFullView";
 import { isImage } from "@/Functions";
 import UpdatePostPostAttachments from "./UpdatePostPostAttachments";
 import { SecondaryButton } from "./Buttons";
 import PopupCard from "./PopupCard";
-export default function UpdatePostForm({
-  post,
-  setOpenMenu,
-  user,
-  showForm,
-  setShowForm,
-}) {
+export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState(false);
   const [showPost, setShowPost] = useState(false);
