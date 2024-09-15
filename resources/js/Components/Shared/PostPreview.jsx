@@ -18,6 +18,9 @@ const PostPreview = ({
   setImage,
   setShowImage,
   user,
+  setAttachment,
+  imageIndex,
+  setImageIndex,
 }) => {
   const onDelete = (attachment) => {
     if (attachment.file) {
@@ -119,6 +122,9 @@ const PostPreview = ({
                     onClick={() => {
                       setImage(attachment.url);
                       setShowImage(true);
+                      setImageIndex(index);
+                      setAttachment(attachment.id);
+                      console.log("Abood");
                     }}
                   />
                 ) : (

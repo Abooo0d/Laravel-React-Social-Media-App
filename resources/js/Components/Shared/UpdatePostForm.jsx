@@ -16,6 +16,9 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
   const [showImage, setShowImage] = useState(false);
   const [showPost, setShowPost] = useState(false);
   const [postData, setPostData] = useState(post);
+  const [attachment, setAttachment] = useState();
+  const [imageIndex, setImageIndex] = useState();
+  const [attachmentId, setAttachmentId] = useState(0);
   const [finalPost, setFinalPost] = useState({
     ...post,
     attachments: [],
@@ -96,13 +99,16 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
               }}
             />
             <UpdatePostPostAttachments
-              finalPost={finalPost}
               setFinalPost={setFinalPost}
               setPost={setPostData}
               post={postData}
               setImage={setImage}
               setShowImage={setShowImage}
               setShowPost={setShowPost}
+              setAttachment={setAttachment}
+              setImageIndex={setImageIndex}
+              imageIndex={imageIndex}
+              setAttachmentId={setAttachmentId}
             />
           </div>
           <div className="mt-4 gap-2 flex justify-end items-center">
@@ -139,11 +145,19 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
         setShow={setShowPost}
         setImage={setImage}
         setShowImage={setShowImage}
+        setAttachment={setAttachmentId}
+        imageIndex={imageIndex}
+        setImageIndex={setImageIndex}
       />
       <ImageFullView
         image={image}
         show={showImage}
         setShowImage={setShowImage}
+        attachment={attachmentId}
+        setAttachment={setAttachmentId}
+        imageIndex={imageIndex}
+        setImageIndex={setImageIndex}
+        post={postData}
       />
     </>
   );

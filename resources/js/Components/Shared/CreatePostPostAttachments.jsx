@@ -10,6 +10,7 @@ const CreatePostPostAttachments = ({
   setImage,
   setShowImage,
   setShowPost,
+  setImageIndex,
 }) => {
   const isImage = (attachment) => {
     let mime = attachment.type || attachment.mime;
@@ -68,6 +69,7 @@ const CreatePostPostAttachments = ({
                             onClick={() => {
                               setImage(attachment.url);
                               setShowImage(true);
+                              setImageIndex(index);
                             }}
                           />
                         ) : (
@@ -92,8 +94,8 @@ const CreatePostPostAttachments = ({
                                 className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer"
                                 onClick={() => {
                                   setImage(attachment.url);
-                                  console.log("Abood", attachment.url);
                                   setShowImage(true);
+                                  setImageIndex(index);
                                 }}
                               />
                             ) : (
@@ -154,6 +156,7 @@ const CreatePostPostAttachments = ({
                         onClick={() => {
                           setImage(attachment.url);
                           setShowImage(true);
+                          setImageIndex(index);
                         }}
                       />
                     ) : (

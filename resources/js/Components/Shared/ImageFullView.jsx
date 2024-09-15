@@ -1,35 +1,106 @@
-import React from "react";
-import { TiArrowBack } from "react-icons/ti";
-import { ImDownload3 } from "react-icons/im";
+import React, { useEffect, useState } from "react";
 import { GoDownload } from "react-icons/go";
 import { RiArrowGoBackFill } from "react-icons/ri";
-const ImageFullView = ({ image, show, setShowImage }) => {
+import { SecondaryButton } from "./Buttons";
+import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
+const ImageFullView = ({
+  image,
+  show,
+  post,
+  attachment,
+  imageIndex,
+  setShowImage,
+  setImageIndex,
+  setAttachment,
+}) => {
+  const [attachmentId, setAttachmentId] = useState(attachment ?? undefined);
+  useEffect(() => {
+    setAttachmentId(attachment);
+  }, [attachment]);
+  useEffect(() => {
+    console.log("index from Image Full View", imageIndex);
+    console.log("Post From ImageFull View", post);
+  }, [imageIndex]);
+
+  const next = (index) => {
+    if (index < post?.attachments?.length - 1) {
+      setImageIndex(index + 1);
+      setAttachment(post?.attachments[index + 1]);
+    } else {
+      setImageIndex(0);
+      setAttachment(post?.attachments[0]);
+    }
+  };
+  const back = (index) => {
+    if (index > 0) {
+      setImageIndex(index - 1);
+      setAttachment(post?.attachments[index - 1]);
+    } else {
+      setImageIndex(post?.attachments?.length - 1);
+      setAttachment(post?.attachments[post?.attachments?.length - 1]);
+    }
+  };
   return (
     <div
-      className={`fixed inset-0 z-10 w-screen overflow-y-auto flex min-h-full items-center justify-center p-4 bg-gray-900/30 backdrop-blur-sm duration-200 ${
+      className={`fixed inset-0 z-10 w-screen overflow-y-auto flex min-h-full items-center justify-center p-4 bg-gray-950/60 backdrop-blur-sm duration-200 ${
         show ? `visible opacity-100` : `invisible opacity-0 scale-[95%]`
       }`}
     >
-      <div className="animate-scaleUp max-h-[700px] rounded-lg relative flex justify-center items-center">
-        <div className="absolute top-[-70px] right-[20px] w-20 h-20 flex justify-center items-center gap-2">
-          <button
-            className="cursor-pointer relative inline-flex items-center gap-2 rounded-md bg-gray-800/50 hover:bg-gray-800 duration-200 py-1.5 px-3 border-[1px] border-gray-700 border-solid text-sm/6 font-semibold text-white  focus:outline-none "
-            onClick={() => setShowImage(false)}
+      <div className="animate-scaleUp h-full  w-full rounded-lg relative flex justify-between items-center bg-gray-900/60 border-solid border-[1px] border-gray-700 backdrop-blur-md p-4">
+        <div className="absolute top-[30px] right-[12px] h-20 flex justify-center items-center gap-2 flex-col">
+          <SecondaryButton
+            classes="py-1.5 px-3 right-0"
+            event={() => setShowImage(false)}
           >
             <RiArrowGoBackFill className="w-5 h-5 text-gray-200" />
-          </button>
-          <button
-            className="cursor-pointer relative inline-flex items-center gap-2 rounded-md bg-gray-800/50 hover:bg-gray-800 duration-200 py-1.5 px-3 border-[1px] border-gray-700 border-solid text-sm/6 font-semibold text-white  focus:outline-none "
-            onClick={() => setShowImage(false)}
+          </SecondaryButton>
+          {attachmentId !== undefined && (
+            <a
+              href={route("post.download", attachmentId ?? 0)}
+              className="no-underline"
+            >
+              <SecondaryButton classes="relative py-1.5 px-3" event={() => {}}>
+                <GoDownload className="w-5 h-5 text-gray-200" />
+              </SecondaryButton>
+            </a>
+          )}
+          <SecondaryButton
+            classes=" py-1.5 px-3 right-0 w-[46px] cursor-default"
+            event={() => {}}
           >
-            <GoDownload className="w-5 h-5 text-gray-200" />
-          </button>
+            {imageIndex + 1}
+          </SecondaryButton>
         </div>
-        <img
-          src={image}
-          alt="Post Image"
-          className="max-w-[90%] max-h-[90%] object-contain rounded-[10px]"
-        />
+        <SecondaryButton
+          event={() => back(imageIndex)}
+          classes="h-[100px] w-[35px]"
+        >
+          <FaAngleLeft className="w-6 h-6 flex justify-center items-center" />
+        </SecondaryButton>
+        {show && (
+          <div className="relative w-full h-full flex ">
+            {post?.attachments?.map((attachment, index) => (
+              <img
+                src={attachment.url}
+                alt="Post Image"
+                key={index}
+                className={`max-w-[90%] max-h-[90%] object-contain rounded-[10px] absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] duration-200 ${
+                  index === imageIndex
+                    ? `visible opacity-100`
+                    : `invisible opacity-0 scale-75`
+                }`}
+              />
+            ))}
+          </div>
+        )}
+        <SecondaryButton
+          event={() => {
+            next(imageIndex);
+          }}
+          classes="h-[100px] w-[35px]"
+        >
+          <FaAngleRight className="w-6 h-6" />
+        </SecondaryButton>
       </div>
     </div>
   );

@@ -1,12 +1,13 @@
 import { isImage } from "@/Functions";
 import React from "react";
-import { CiCirclePlus } from "react-icons/ci";
 
 const PostCardPostAttachments = ({
   post,
   setImage,
   setShowImage,
   setShowPost,
+  setAttachmentId,
+  setImageIndex,
 }) => {
   return (
     <>
@@ -37,6 +38,8 @@ const PostCardPostAttachments = ({
                             onClick={() => {
                               setImage(attachment.url);
                               setShowImage(true);
+                              setAttachmentId(attachment.id);
+                              setImageIndex(index);
                             }}
                           />
                         )}
@@ -81,6 +84,8 @@ const PostCardPostAttachments = ({
                         onClick={() => {
                           setImage(attachment.url);
                           setShowImage(true);
+                          setAttachmentId(attachment.id);
+                          setImageIndex(index);
                         }}
                       />
                     )}

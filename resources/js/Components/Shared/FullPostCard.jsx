@@ -17,6 +17,9 @@ const FullPostCard = ({
   setImage,
   setShowImage,
   user,
+  setAttachment,
+  setImageIndex,
+  attachment,
 }) => {
   const isImage = (attachment) => {
     const mime = attachment.mime.split("/");
@@ -50,6 +53,8 @@ const FullPostCard = ({
                 onClick={() => {
                   setImage(attachment.url);
                   setShowImage(true);
+                  setAttachment(attachment.id);
+                  setImageIndex(index);
                 }}
               />
             ))}

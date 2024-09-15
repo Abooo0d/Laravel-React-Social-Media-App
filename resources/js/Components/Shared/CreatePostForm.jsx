@@ -14,6 +14,7 @@ const CreatePostForm = ({ showForm, setShowForm, user }) => {
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState("");
   const [showPost, setShowPost] = useState(false);
+  const [imageIndex, setImageIndex] = useState();
   const [post, setPost] = useState({ body: "", attachments: [] });
   const [_post, set_Post] = useState({ body: "", attachments: [] });
   useEffect(() => {
@@ -118,6 +119,7 @@ const CreatePostForm = ({ showForm, setShowForm, user }) => {
             setImage={setImage}
             setShowImage={setShowImage}
             setShowPost={setShowPost}
+            setImageIndex={setImageIndex}
           />
         </div>
         <div className="mt-4 gap-2 flex justify-end items-center">
@@ -151,11 +153,16 @@ const CreatePostForm = ({ showForm, setShowForm, user }) => {
         setShow={setShowPost}
         setImage={setImage}
         setShowImage={setShowImage}
+        setImageIndex={setImageIndex}
+        imageIndex={imageIndex}
       />
       <ImageFullView
         image={image}
         show={showImage}
         setShowImage={setShowImage}
+        setImageIndex={setImageIndex}
+        imageIndex={imageIndex}
+        post={post}
       />
     </div>
   );

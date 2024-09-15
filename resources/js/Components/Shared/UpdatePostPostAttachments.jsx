@@ -5,13 +5,16 @@ import { FaFile } from "react-icons/fa";
 import { CiUndo } from "react-icons/ci";
 import { SecondaryButton } from "./Buttons";
 const UpdatePostPostAttachments = ({
-  finalPost,
-  setFinalPost,
+  imageIndex,
   post,
+  setFinalPost,
   setPost,
   setImage,
   setShowImage,
   setShowPost,
+  setAttachment,
+  setImageIndex,
+  setAttachmentId,
 }) => {
   const isImage = (attachment) => {
     let mime = attachment.type || attachment.mime;
@@ -57,6 +60,10 @@ const UpdatePostPostAttachments = ({
       ],
     }));
   };
+  useEffect(() => {
+    console.log("imageIndex from UpdatePostPostAttachments", imageIndex);
+  }, [imageIndex]);
+
   return (
     <div>
       {post.attachments && post.attachments.length > 0 ? (
@@ -96,7 +103,7 @@ const UpdatePostPostAttachments = ({
                         </SecondaryButton>
                         {attachment.file && (
                           <SecondaryButton
-                            classes="absolute top-[10px] right-[60px] h-[40px] px-3 py-1.5"
+                            classes="absolute top-[10px] right-[10px] h-[40px] px-3 py-1.5"
                             event={() => {}}
                           >
                             new
@@ -122,6 +129,9 @@ const UpdatePostPostAttachments = ({
                             onClick={() => {
                               setImage(attachment.url);
                               setShowImage(true);
+                              setAttachment(attachment.id);
+                              setImageIndex(index);
+                              setAttachmentId(attachment.id);
                             }}
                           />
                         ) : (
@@ -146,8 +156,10 @@ const UpdatePostPostAttachments = ({
                                 className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer"
                                 onClick={() => {
                                   setImage(attachment.url);
-                                  console.log("Abood", attachment.url);
                                   setShowImage(true);
+                                  setAttachment(attachment.id);
+                                  setImageIndex(index);
+                                  setAttachmentId(attachment.id);
                                 }}
                               />
                             ) : (
@@ -196,7 +208,7 @@ const UpdatePostPostAttachments = ({
                     </SecondaryButton>
                     {attachment.file && (
                       <SecondaryButton
-                        classes="absolute top-[10px] right-[60px] h-[40px] px-3 py-1.5"
+                        classes="absolute top-[10px] right-[100px] h-[40px] px-3 py-1.5"
                         event={() => {}}
                       >
                         new
@@ -220,6 +232,9 @@ const UpdatePostPostAttachments = ({
                         onClick={() => {
                           setImage(attachment.url);
                           setShowImage(true);
+                          setAttachment(attachment.id);
+                          setImageIndex(index);
+                          setAttachmentId(attachment.id);
                         }}
                       />
                     ) : (
