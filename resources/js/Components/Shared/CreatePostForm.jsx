@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { HiMiniXMark } from "react-icons/hi2";
-import "./index.css";
 import { router } from "@inertiajs/react";
 import { isImage } from "@/Functions";
 import ImageFullView from "./ImageFullView";
@@ -10,21 +9,31 @@ import PostPreview from "./PostPreview";
 import CreatePostPostAttachments from "./CreatePostPostAttachments";
 import { SecondaryButton, PrimaryButton } from "./Buttons";
 import PopupCard from "./PopupCard";
+import "./index.css";
 const CreatePostForm = ({ showForm, setShowForm, user }) => {
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState("");
   const [showPost, setShowPost] = useState(false);
   const [imageIndex, setImageIndex] = useState();
+  const [attachmentsErrors, setAttachmentsErrors] = useState([]);
   const [post, setPost] = useState({ body: "", attachments: [] });
   const [_post, set_Post] = useState({ body: "", attachments: [] });
+  let myFile;
   useEffect(() => {
     setPost({ body: "", attachments: [] });
-    set_Post({ body: "", attachments: [] });
+    setAttachmentsErrors([]);
   }, [showForm]);
+  useEffect(() => {
+    if (post.body !== "" || post?.attachments?.length !== 0) {
+      set_Post(() => ({
+        ...post,
+        attachments: post?.attachments?.map((attachment) => attachment.file),
+      }));
+    }
+  }, [post]);
 
   function close() {
     setPost({ body: "", attachments: [] });
-    set_Post({ body: "", attachments: [] });
     setShowForm(false);
   }
   const handelSubmit = () => {
@@ -32,24 +41,31 @@ const CreatePostForm = ({ showForm, setShowForm, user }) => {
       forceFormData: true,
       onSuccess: () => {
         setPost({ body: "", attachment: [] });
-        set_Post({ body: "", attachments: [] });
         setShowForm(false);
+      },
+      onError: (errors) => {
+        setAttachmentsErrors([]);
+        for (const key in errors) {
+          setAttachmentsErrors((prevErrors) => [
+            ...prevErrors,
+            {
+              index: key.split(".")[1],
+              message: errors[key],
+            },
+          ]);
+        }
       },
     });
   };
   const HandelTheFiles = async (e) => {
     for (const file of e.target.files) {
-      const myFile = {
+      myFile = {
         file,
         url: await readFile(file),
       };
       setPost((prev) => ({
         ...prev,
         attachments: [...prev.attachments, myFile],
-      }));
-      set_Post((prevPost) => ({
-        ...prevPost,
-        attachments: [...prevPost.attachments, myFile.file],
       }));
     }
     e.target.value = null;
@@ -67,6 +83,54 @@ const CreatePostForm = ({ showForm, setShowForm, user }) => {
         res(null);
       }
     });
+  };
+  const onDelete = (attachment, index, update) => {
+    if (attachment.file) {
+      setPost((prevPost) => ({
+        ...prevPost,
+        attachments: prevPost.attachments.filter((f) => f !== attachment),
+      }));
+      if (update) {
+        setFinalPost((prevPost) => ({
+          ...prevPost,
+          attachments: prevPost.attachments.filter((f) => f !== attachment),
+        }));
+      }
+      setAttachmentsErrors((prevErrors) =>
+        prevErrors.filter((f) => f.index != index)
+      );
+    } else {
+      setPost((prevPost) => ({
+        ...prevPost,
+        attachments: prevPost.attachments.map((f) => ({
+          ...f,
+          isDeleted: f === attachment || f.isDeleted === true ? true : false,
+        })),
+      }));
+      if (update) {
+        setFinalPost((prevPost) => ({
+          ...prevPost,
+          deletedFilesIds: [...prevPost.deletedFilesIds, attachment.id],
+        }));
+      }
+    }
+  };
+  const undoDelete = (attachment, update) => {
+    setPost((prevPost) => ({
+      ...prevPost,
+      attachments: prevPost.attachments.map((f) => ({
+        ...f,
+        isDeleted: f === attachment ? false : f.isDeleted,
+      })),
+    }));
+    if (update) {
+      setFinalPost((prevPost) => ({
+        ...prevPost,
+        deletedFilesIds: [
+          ...prevPost.deletedFilesIds.filter((f) => f !== attachment.id),
+        ],
+      }));
+    }
   };
   return (
     <div
@@ -110,12 +174,14 @@ const CreatePostForm = ({ showForm, setShowForm, user }) => {
             }}
             onChange={(event, editor) => {
               setPost({ ...post, body: editor.getData() });
-              set_Post({ ..._post, body: editor.getData() });
             }}
           />
           <CreatePostPostAttachments
-            setPost={setPost}
             post={post}
+            attachmentsErrors={attachmentsErrors}
+            onDelete={onDelete}
+            undoDelete={undoDelete}
+            update={false}
             setImage={setImage}
             setShowImage={setShowImage}
             setShowPost={setShowPost}
@@ -149,20 +215,23 @@ const CreatePostForm = ({ showForm, setShowForm, user }) => {
         show={showPost}
         user={user}
         post={post}
-        setPost={setPost}
+        update={false}
+        attachmentsErrors={attachmentsErrors}
+        onDelete={onDelete}
+        undoDelete={undoDelete}
         setShow={setShowPost}
         setImage={setImage}
         setShowImage={setShowImage}
         setImageIndex={setImageIndex}
-        imageIndex={imageIndex}
       />
       <ImageFullView
         image={image}
         show={showImage}
-        setShowImage={setShowImage}
-        setImageIndex={setImageIndex}
         imageIndex={imageIndex}
         post={post}
+        setShowImage={setShowImage}
+        setImageIndex={setImageIndex}
+        update={false}
       />
     </div>
   );

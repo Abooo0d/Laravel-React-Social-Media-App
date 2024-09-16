@@ -22,6 +22,7 @@ function formatRelativeTime(dateString) {
   return `${diffInDays} days ago`;
 }
 function isImage(file) {
+  file = file.file ? file.file : file;
   let mime = file.mime || file.type;
   mime = mime.split("/");
   return mime[0].toLowerCase() === "image";

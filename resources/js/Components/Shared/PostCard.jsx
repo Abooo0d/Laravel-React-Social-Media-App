@@ -11,7 +11,6 @@ const PostCard = ({ post, user }) => {
   const [showPost, setShowPost] = useState(false);
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState("");
-  const [attachmentId, setAttachmentId] = useState(0);
   const [imageIndex, setImageIndex] = useState(0);
   useEffect(() => {
     setOpenMenu(false);
@@ -33,7 +32,6 @@ const PostCard = ({ post, user }) => {
           setImage={setImage}
           setShowImage={setShowImage}
           setShowPost={setShowPost}
-          setAttachmentId={setAttachmentId}
           setImageIndex={setImageIndex}
         />
         <PostCardPostActions />
@@ -45,19 +43,15 @@ const PostCard = ({ post, user }) => {
         setImage={setImage}
         setShowImage={setShowImage}
         user={user}
-        setAttachment={setAttachmentId}
-        attachment={attachmentId}
         setImageIndex={setImageIndex}
       />
       <ImageFullView
         post={post}
         imageIndex={imageIndex}
         setImageIndex={setImageIndex}
-        image={image}
         show={showImage}
         setShowImage={setShowImage}
-        attachment={attachmentId}
-        setAttachment={setAttachmentId}
+        update={true}
       />
     </>
   );

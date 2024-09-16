@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\File;
+use Pest\Bootstrappers\BootOverrides;
 
 class StorePostRequest extends FormRequest
 {
@@ -51,5 +52,11 @@ class StorePostRequest extends FormRequest
   protected function prepareForValidation()
   {
     $this->merge(['user_id' => auth()->user()->id]);
+  }
+  public function messages()
+  {
+    return [
+      'attachments.*' => 'Invalid File Type'
+    ];
   }
 }

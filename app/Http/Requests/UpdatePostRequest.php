@@ -31,4 +31,8 @@ class UpdatePostRequest extends StorePostRequest
       'deletedFilesIds.*' => ['numeric']
     ]);
   }
+  public function messages()
+  {
+    return parent::messages();
+  }
 }

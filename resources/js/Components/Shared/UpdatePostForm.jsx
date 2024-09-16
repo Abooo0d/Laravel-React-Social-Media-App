@@ -1,4 +1,3 @@
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import { HiMiniXMark } from "react-icons/hi2";
 import PostOwnerInfo from "./PostOwnerInfo";
@@ -18,7 +17,7 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
   const [postData, setPostData] = useState(post);
   const [attachment, setAttachment] = useState();
   const [imageIndex, setImageIndex] = useState();
-  const [attachmentId, setAttachmentId] = useState(0);
+  const [attachmentsErrors, setAttachmentsErrors] = useState([]);
   const [finalPost, setFinalPost] = useState({
     ...post,
     attachments: [],
@@ -34,6 +33,7 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
       attachments: [],
       deletedFilesIds: [],
     });
+    setAttachmentsErrors([]);
   }, [showForm]);
 
   const handelSubmit = () => {
@@ -43,6 +43,18 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
         close();
       },
       _method: "PUT",
+      onError: (errors) => {
+        setAttachmentsErrors([]);
+        for (const key in errors) {
+          setAttachmentsErrors((prevErrors) => [
+            ...prevErrors,
+            {
+              index: key.split(".")[1],
+              message: errors[key],
+            },
+          ]);
+        }
+      },
     });
   };
   const HandelTheFiles = async (e) => {
@@ -53,11 +65,11 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
       };
       setPostData((prev) => ({
         ...prev,
-        attachments: [...prev.attachments, myFile],
+        attachments: [myFile, ...prev.attachments],
       }));
       setFinalPost((prev) => ({
         ...prev,
-        attachments: [...prev.attachments, myFile.file],
+        attachments: [myFile.file, ...prev.attachments],
       }));
     }
     e.target.value = null;
@@ -75,6 +87,59 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
         res(null);
       }
     });
+  };
+  const onDelete = (attachment, index, update) => {
+    if (attachment.file) {
+      setPostData((prevPost) => ({
+        ...prevPost,
+        attachments: prevPost.attachments.filter((f) => f !== attachment),
+      }));
+      if (update) {
+        setFinalPost((prevPost) => ({
+          ...prevPost,
+          attachments: prevPost.attachments.filter(
+            (f) => f !== attachment.file
+          ),
+        }));
+      }
+      setAttachmentsErrors((prevErrors) =>
+        prevErrors.filter((f) => f.index != index)
+      );
+    } else {
+      setPostData((prevPost) => ({
+        ...prevPost,
+        attachments: prevPost.attachments.map((f) => ({
+          ...f,
+          isDeleted: f === attachment || f.isDeleted === true ? true : false,
+        })),
+      }));
+      if (update) {
+        setFinalPost((prevPost) => ({
+          ...prevPost,
+          deletedFilesIds: [...prevPost.deletedFilesIds, attachment.id],
+        }));
+      }
+      setAttachmentsErrors((prevErrors) =>
+        prevErrors.filter((f) => f.index != index)
+      );
+    }
+  };
+  const undoDelete = (attachment, update) => {
+    setPostData((prevPost) => ({
+      ...prevPost,
+      attachments: prevPost.attachments.map((f) => ({
+        ...f,
+        isDeleted: f === attachment ? false : f.isDeleted,
+      })),
+    }));
+    if (update) {
+      setFinalPost((prevPost) => ({
+        ...prevPost,
+        deletedFilesIds: [
+          ...prevPost.deletedFilesIds.filter((f) => f !== attachment.id),
+        ],
+      }));
+    }
   };
   return (
     <>
@@ -99,8 +164,6 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
               }}
             />
             <UpdatePostPostAttachments
-              setFinalPost={setFinalPost}
-              setPost={setPostData}
               post={postData}
               setImage={setImage}
               setShowImage={setShowImage}
@@ -108,7 +171,10 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
               setAttachment={setAttachment}
               setImageIndex={setImageIndex}
               imageIndex={imageIndex}
-              setAttachmentId={setAttachmentId}
+              onDelete={onDelete}
+              undoDelete={undoDelete}
+              update={true}
+              attachmentsErrors={attachmentsErrors}
             />
           </div>
           <div className="mt-4 gap-2 flex justify-end items-center">
@@ -136,28 +202,26 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
         </div>
       </PopupCard>
       <PostPreview
-        finalPost={finalPost}
-        setFinalPost={setFinalPost}
         show={showPost}
         user={user}
         post={postData}
-        setPost={setPostData}
         setShow={setShowPost}
         setImage={setImage}
         setShowImage={setShowImage}
-        setAttachment={setAttachmentId}
-        imageIndex={imageIndex}
         setImageIndex={setImageIndex}
+        update={true}
+        attachmentsErrors={attachmentsErrors}
+        onDelete={onDelete}
+        undoDelete={undoDelete}
       />
       <ImageFullView
         image={image}
         show={showImage}
         setShowImage={setShowImage}
-        attachment={attachmentId}
-        setAttachment={setAttachmentId}
         imageIndex={imageIndex}
         setImageIndex={setImageIndex}
         post={postData}
+        update={true}
       />
     </>
   );

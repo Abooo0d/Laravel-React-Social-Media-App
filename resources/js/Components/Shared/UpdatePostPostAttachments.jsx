@@ -1,69 +1,16 @@
-import React, { useEffect } from "react";
-import { CiCirclePlus } from "react-icons/ci";
-import { HiMiniXMark } from "react-icons/hi2";
-import { FaFile } from "react-icons/fa";
-import { CiUndo } from "react-icons/ci";
-import { SecondaryButton } from "./Buttons";
+import React, { useState } from "react";
+import PostAttachmentCard from "./PostAttachmentCard";
 const UpdatePostPostAttachments = ({
-  imageIndex,
   post,
-  setFinalPost,
-  setPost,
   setImage,
   setShowImage,
   setShowPost,
-  setAttachment,
   setImageIndex,
-  setAttachmentId,
+  onDelete,
+  undoDelete,
+  update,
+  attachmentsErrors,
 }) => {
-  const isImage = (attachment) => {
-    let mime = attachment.type || attachment.mime;
-    mime = mime.split("/");
-    return mime[0] === "image";
-  };
-  const onDelete = (attachment) => {
-    if (attachment.file) {
-      setPost((prevPost) => ({
-        ...prevPost,
-        attachments: prevPost.attachments.filter((f) => f !== attachment),
-      }));
-      setFinalPost((prevPost) => ({
-        ...prevPost,
-        attachments: prevPost.attachments.filter((f) => f !== attachment),
-      }));
-    } else {
-      setPost((prevPost) => ({
-        ...prevPost,
-        attachments: prevPost.attachments.map((f) => ({
-          ...f,
-          isDeleted: f === attachment || f.isDeleted === true ? true : false,
-        })),
-      }));
-      setFinalPost((prevPost) => ({
-        ...prevPost,
-        deletedFilesIds: [...prevPost.deletedFilesIds, attachment.id],
-      }));
-    }
-  };
-  const undoDelete = (attachment) => {
-    setPost((prevPost) => ({
-      ...prevPost,
-      attachments: prevPost.attachments.map((f) => ({
-        ...f,
-        isDeleted: f === attachment ? false : f.isDeleted,
-      })),
-    }));
-    setFinalPost((prevPost) => ({
-      ...prevPost,
-      deletedFilesIds: [
-        ...prevPost.deletedFilesIds.filter((f) => f !== attachment.id),
-      ],
-    }));
-  };
-  useEffect(() => {
-    console.log("imageIndex from UpdatePostPostAttachments", imageIndex);
-  }, [imageIndex]);
-
   return (
     <div>
       {post.attachments && post.attachments.length > 0 ? (
@@ -85,91 +32,33 @@ const UpdatePostPostAttachments = ({
                   <React.Fragment key={index}>
                     {index === 0 ? (
                       <div className="relative">
-                        <SecondaryButton
-                          classes="absolute top-[10px] right-[10px] h-[40px] px-3 py-1.5"
-                          event={() => {
-                            onDelete(attachment);
-                          }}
-                        >
-                          <HiMiniXMark className="w-5 h-5" />
-                        </SecondaryButton>
-                        <SecondaryButton
-                          event={() => {}}
-                          classes={
-                            "absolute right-[60px] top-[10px] px-3 py-1.5 h-[40px] cursor-default"
-                          }
-                        >
-                          {index + 1}
-                        </SecondaryButton>
-                        {attachment.file && (
-                          <SecondaryButton
-                            classes="absolute top-[10px] right-[10px] h-[40px] px-3 py-1.5"
-                            event={() => {}}
-                          >
-                            new
-                          </SecondaryButton>
-                        )}
-                        {attachment.isDeleted && (
-                          <SecondaryButton
-                            event={() => {
-                              undoDelete(attachment);
-                            }}
-                            classes="absolute top-[60px] right-[10px] h-[40px] gap-2 px-3 py-1.5"
-                          >
-                            Deleted <CiUndo className="w-4 h-4" />
-                          </SecondaryButton>
-                        )}
-                        {isImage(
-                          attachment.file ? attachment.file : attachment
-                        ) ? (
-                          <img
-                            key={index}
-                            src={attachment.url}
-                            className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer"
-                            onClick={() => {
-                              setImage(attachment.url);
-                              setShowImage(true);
-                              setAttachment(attachment.id);
-                              setImageIndex(index);
-                              setAttachmentId(attachment.id);
-                            }}
-                          />
-                        ) : (
-                          <div className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-default bg-gray-800 flex justify-center items-center flex-col gap-4">
-                            <FaFile className="w-20 h-20 text-gray-500" />
-                            <h3 className="text-gray-500 font-bold text-xl max-w-[80%] break-words text-center">
-                              {attachment.file.name}
-                            </h3>
-                          </div>
-                        )}
+                        <PostAttachmentCard
+                          attachment={attachment}
+                          index={index}
+                          attachmentsErrors={attachmentsErrors}
+                          onDelete={onDelete}
+                          undoDelete={undoDelete}
+                          update={update}
+                          setImage={setImage}
+                          setImageIndex={setImageIndex}
+                          setShowImage={setShowImage}
+                        />
                       </div>
                     ) : (
                       index === 1 && (
                         <>
                           <div className="relative w-full h-full" key={index}>
-                            {isImage(
-                              attachment.file ? attachment.file : attachment
-                            ) ? (
-                              <img
-                                key={index}
-                                src={attachment.url}
-                                className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer"
-                                onClick={() => {
-                                  setImage(attachment.url);
-                                  setShowImage(true);
-                                  setAttachment(attachment.id);
-                                  setImageIndex(index);
-                                  setAttachmentId(attachment.id);
-                                }}
-                              />
-                            ) : (
-                              <div className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-default bg-gray-800 flex justify-center items-center flex-col gap-4">
-                                <FaFile className="w-20 h-20 text-gray-500" />
-                                <h3 className="text-gray-500 font-bold text-xl max-w-[80%] break-words text-center">
-                                  {attachment.file.name}
-                                </h3>
-                              </div>
-                            )}
+                            <PostAttachmentCard
+                              attachment={attachment}
+                              index={index}
+                              attachmentsErrors={attachmentsErrors}
+                              onDelete={onDelete}
+                              undoDelete={undoDelete}
+                              update={update}
+                              setImage={setImage}
+                              setImageIndex={setImageIndex}
+                              setShowImage={setShowImage}
+                            />
                             <div
                               className="absolute top-0 left-0 w-full h-full bg-gray-800/50 backdrop-blur-sm flex justify-center items-center rounded-lg cursor-pointer z-[1] group"
                               onClick={() => setShowPost(true)}
@@ -190,63 +79,17 @@ const UpdatePostPostAttachments = ({
               <>
                 {post.attachments.map((attachment, index) => (
                   <div className="relative" key={index}>
-                    <SecondaryButton
-                      classes="absolute top-[10px] right-[10px] h-[40px] px-3 py-1.5"
-                      event={() => {
-                        onDelete(attachment);
-                      }}
-                    >
-                      <HiMiniXMark className="w-5 h-5" />
-                    </SecondaryButton>
-                    <SecondaryButton
-                      event={() => {}}
-                      classes={
-                        "absolute right-[60px] top-[10px] px-3 py-1.5 h-[40px] cursor-default"
-                      }
-                    >
-                      {index + 1}
-                    </SecondaryButton>
-                    {attachment.file && (
-                      <SecondaryButton
-                        classes="absolute top-[10px] right-[100px] h-[40px] px-3 py-1.5"
-                        event={() => {}}
-                      >
-                        new
-                      </SecondaryButton>
-                    )}
-                    {attachment.isDeleted && (
-                      <SecondaryButton
-                        event={() => {
-                          undoDelete(attachment);
-                        }}
-                        classes="absolute top-[60px] right-[10px] h-[40px] gap-2 px-3 py-1.5"
-                      >
-                        Deleted <CiUndo className="w-4 h-4" />
-                      </SecondaryButton>
-                    )}
-                    {isImage(attachment.file ? attachment.file : attachment) ? (
-                      <img
-                        key={index}
-                        src={attachment.url}
-                        className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer"
-                        onClick={() => {
-                          setImage(attachment.url);
-                          setShowImage(true);
-                          setAttachment(attachment.id);
-                          setImageIndex(index);
-                          setAttachmentId(attachment.id);
-                        }}
-                      />
-                    ) : (
-                      <div className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-default bg-gray-800 flex justify-center items-center flex-col gap-4">
-                        <FaFile className="w-20 h-20 text-gray-500" />
-                        <h3 className="text-gray-500 font-bold text-xl max-w-[80%] break-words text-center">
-                          {attachment.file
-                            ? attachment.file.name
-                            : attachment.name}
-                        </h3>
-                      </div>
-                    )}
+                    <PostAttachmentCard
+                      attachment={attachment}
+                      index={index}
+                      attachmentsErrors={attachmentsErrors}
+                      onDelete={onDelete}
+                      undoDelete={undoDelete}
+                      update={update}
+                      setImage={setImage}
+                      setImageIndex={setImageIndex}
+                      setShowImage={setShowImage}
+                    />
                   </div>
                 ))}
               </>
