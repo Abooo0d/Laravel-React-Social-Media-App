@@ -180,7 +180,6 @@ export default function Home({ auth, posts, user }) {
   }
   return (
     <>
-      <Head title="Social media Laravel + React" />
       <Head>
         <title>Social media Laravel + React</title>
         <meta

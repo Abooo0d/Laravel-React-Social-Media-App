@@ -2,16 +2,19 @@ import React, { useEffect, useState } from "react";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import UpdatePostForm from "./UpdatePostForm";
 import { router } from "@inertiajs/react";
+import { useMainContext } from "@/Contexts/MainContext";
 
 const PostCardMenu = ({ openMenu, setOpenMenu, post }) => {
   const [showForm, setShowForm] = useState(false);
-  useEffect(() => {}, [showForm]);
-
+  const { setSuccessMessage } = useMainContext();
   const onDelete = () => {
     if (window.confirm("Are You Sure To Delete This Post")) {
-      router.delete(route("post.delete", post), post, {
+      router.delete(route("post.delete", post), {
+        data: post,
         onSuccess: () => {
+          console.log("Abood From onSuccess");
           setOpenMenu(false);
+          setSuccessMessage("Post Deleted Successfully");
         },
       });
     }

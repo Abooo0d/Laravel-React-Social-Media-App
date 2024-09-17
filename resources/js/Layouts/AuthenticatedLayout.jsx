@@ -1,15 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
-import { MainContext } from "@/Contexts/MainContext";
+import { MainContext, useMainContext } from "@/Contexts/MainContext";
 
 export default function Authenticated({ user, header, children }) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
-
   return (
     <div className="min-h-screen bg-gray-300/80 dark:bg-gray-900">
       <nav className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">
@@ -143,9 +142,7 @@ export default function Authenticated({ user, header, children }) {
           </div>
         </header>
       )}
-      <MainContext>
-        <main>{children}</main>
-      </MainContext>
+      <main>{children}</main>
     </div>
   );
 }
