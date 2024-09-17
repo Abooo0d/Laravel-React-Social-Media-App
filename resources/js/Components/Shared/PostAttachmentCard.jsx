@@ -14,6 +14,7 @@ const PostAttachmentCard = ({
   setImage,
   setShowImage,
   setImageIndex,
+  showActions = true,
 }) => {
   const isImage = (attachment) => {
     let mime = attachment.type || attachment.mime;
@@ -23,37 +24,41 @@ const PostAttachmentCard = ({
 
   return (
     <>
-      <SecondaryButton
-        classes="absolute top-[10px] right-[10px] py-1.5 px-3 h-[40px]"
-        event={() => onDelete(attachment, index, update)}
-      >
-        <HiMiniXMark className="w-5 h-5 " />
-      </SecondaryButton>
-      <SecondaryButton
-        event={() => {}}
-        classes={
-          "absolute right-[60px] top-[10px] px-3 py-1.5 h-[40px] cursor-default"
-        }
-      >
-        {index + 1}
-      </SecondaryButton>
-      {attachment.file && (
-        <SecondaryButton
-          event={() => {}}
-          classes="px-3 py-1.5 absolute top-[10px] right-[100px] h-[40px]"
-        >
-          new
-        </SecondaryButton>
-      )}
-      {attachment.isDeleted && (
-        <SecondaryButton
-          event={() => {
-            undoDelete(attachment, update);
-          }}
-          classes="absolute top-[60px] right-[10px] px-3 py-1.5 gap-2"
-        >
-          Deleted <CiUndo className="w-4 h-4" />
-        </SecondaryButton>
+      {showActions && (
+        <>
+          <SecondaryButton
+            classes="absolute top-[10px] right-[10px] py-1.5 px-3 h-[40px]"
+            event={() => onDelete(attachment, index, update)}
+          >
+            <HiMiniXMark className="w-5 h-5 " />
+          </SecondaryButton>
+          <SecondaryButton
+            event={() => {}}
+            classes={
+              "absolute right-[60px] top-[10px] px-3 py-1.5 h-[40px] cursor-default"
+            }
+          >
+            {index + 1}
+          </SecondaryButton>
+          {attachment.file && (
+            <SecondaryButton
+              event={() => {}}
+              classes="px-3 py-1.5 absolute top-[10px] right-[100px] h-[40px]"
+            >
+              new
+            </SecondaryButton>
+          )}
+          {attachment.isDeleted && (
+            <SecondaryButton
+              event={() => {
+                undoDelete(attachment, update);
+              }}
+              classes="absolute top-[60px] right-[10px] px-3 py-1.5 gap-2"
+            >
+              Deleted <CiUndo className="w-4 h-4" />
+            </SecondaryButton>
+          )}
+        </>
       )}
       {attachmentsErrors?.map((error, index) => {
         index == parseInt(error.index) && (

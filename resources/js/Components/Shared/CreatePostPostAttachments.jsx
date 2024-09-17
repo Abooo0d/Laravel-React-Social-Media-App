@@ -63,6 +63,7 @@ const CreatePostPostAttachments = ({
                               setImage={setImage}
                               setImageIndex={setImageIndex}
                               setShowImage={setShowImage}
+                              showActions={false}
                             />
                             <div
                               className="absolute top-0 left-0 w-full h-full bg-gray-800/50 backdrop-blur-sm flex justify-center items-center rounded-lg cursor-pointer z-[1] group"

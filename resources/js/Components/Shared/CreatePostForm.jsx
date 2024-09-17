@@ -10,7 +10,11 @@ import CreatePostPostAttachments from "./CreatePostPostAttachments";
 import { SecondaryButton, PrimaryButton } from "./Buttons";
 import PopupCard from "./PopupCard";
 import "./index.css";
+import { useMainContext } from "@/Contexts/MainContext";
+import Notification from "./Notification";
 const CreatePostForm = ({ showForm, setShowForm, user }) => {
+  const { errors, setErrors, successMessage, setSuccessMessage } =
+    useMainContext();
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState("");
   const [showPost, setShowPost] = useState(false);
@@ -37,25 +41,32 @@ const CreatePostForm = ({ showForm, setShowForm, user }) => {
     setShowForm(false);
   }
   const handelSubmit = () => {
-    router.post(route("post.create"), _post, {
-      forceFormData: true,
-      onSuccess: () => {
-        setPost({ body: "", attachment: [] });
-        setShowForm(false);
-      },
-      onError: (errors) => {
-        setAttachmentsErrors([]);
-        for (const key in errors) {
-          setAttachmentsErrors((prevErrors) => [
-            ...prevErrors,
-            {
-              index: key.split(".")[1],
-              message: errors[key],
-            },
-          ]);
-        }
-      },
-    });
+    if (post.body !== "" || post.attachments.length !== 0) {
+      router.post(route("post.create"), _post, {
+        forceFormData: true,
+        onSuccess: () => {
+          setPost({ body: "", attachments: [] });
+          setShowForm(false);
+          console.log("AboodFrom The CreatePostForm");
+          setSuccessMessage("Post Created Successfully");
+        },
+        onError: (errors) => {
+          setAttachmentsErrors([]);
+          setSuccessMessage("");
+          setErrors([]);
+          for (const key in errors) {
+            setAttachmentsErrors((prevErrors) => [
+              ...prevErrors,
+              {
+                index: key.split(".")[1],
+                message: errors[key],
+              },
+            ]);
+            setErrors([...errors, errors[key]]);
+          }
+        },
+      });
+    }
   };
   const HandelTheFiles = async (e) => {
     for (const file of e.target.files) {

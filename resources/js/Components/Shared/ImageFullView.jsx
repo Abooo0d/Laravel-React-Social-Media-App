@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GoDownload } from "react-icons/go";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { SecondaryButton } from "./Buttons";
@@ -13,6 +13,10 @@ const ImageFullView = ({
   update,
 }) => {
   const [attachmentId, setAttachmentId] = useState(0);
+  useEffect(() => {
+    setAttachmentId(post?.attachments[imageIndex]);
+  }, [show]);
+
   const next = (index) => {
     if (index < post?.attachments?.length - 1) {
       setImageIndex(index + 1);
@@ -47,7 +51,7 @@ const ImageFullView = ({
           </SecondaryButton>
           {update && (
             <>
-              {attachmentId !== undefined && (
+              {attachmentId !== 0 && (
                 <a
                   href={route("post.download", attachmentId ?? 0)}
                   className="no-underline"

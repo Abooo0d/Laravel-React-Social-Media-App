@@ -10,7 +10,9 @@ import { isImage } from "@/Functions";
 import UpdatePostPostAttachments from "./UpdatePostPostAttachments";
 import { SecondaryButton } from "./Buttons";
 import PopupCard from "./PopupCard";
+import { useMainContext } from "@/Contexts/MainContext";
 export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
+  const { setSuccessMessage, setErrors } = useMainContext();
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState(false);
   const [showPost, setShowPost] = useState(false);
@@ -40,11 +42,15 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
     router.post(route("post.update", finalPost), finalPost, {
       forceFormData: true,
       onSuccess: () => {
+        console.log("Abood");
         close();
+        setSuccessMessage("Post Updated Successfully");
       },
       _method: "PUT",
       onError: (errors) => {
         setAttachmentsErrors([]);
+        setSuccessMessage("");
+        setErrors([]);
         for (const key in errors) {
           setAttachmentsErrors((prevErrors) => [
             ...prevErrors,
@@ -53,6 +59,7 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
               message: errors[key],
             },
           ]);
+          setErrors([...errors, errors[key]]);
         }
       },
     });
