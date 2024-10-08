@@ -13,8 +13,9 @@ class HomeController extends Controller
   public function index(Request $request)
   {
     $post = Post::query()->latest()->paginate(20);
+    $user = $request->user() !== null ? new UserResource($request->user()) : '';
     return Inertia::render('Home', [
-      'user' => new UserResource($request->user()),
+      'user' => $user,
       'posts' => PostResource::collection($post)
     ]);
   }

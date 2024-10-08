@@ -7,8 +7,11 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/react";
 import SecondaryButton from "@/Components/SecondaryButton";
+import { useUserContext } from "@/Contexts/UserContext";
 
 export default function Login({ status, canResetPassword }) {
+  const { setUser } = useUserContext();
+
   const { data, setData, post, processing, errors, reset } = useForm({
     email: "",
     password: "",
@@ -16,6 +19,7 @@ export default function Login({ status, canResetPassword }) {
   });
 
   useEffect(() => {
+    setUser({});
     return () => {
       reset("password");
     };

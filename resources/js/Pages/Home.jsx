@@ -5,9 +5,10 @@ import HomeFeed from "@/Components/Containers/HomeFeed";
 import Notification from "@/Components/Shared/Notification";
 import TextInput from "@/Components/TextInput";
 import { useMainContext } from "@/Contexts/MainContext";
+import { useUserContext } from "@/Contexts/UserContext";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
-// import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 const groups = [
   {
     name: "Laravel Dev",
@@ -173,11 +174,13 @@ const followers = [
     image: "https://picsum.photos/51",
   },
 ];
-
 export default function Home({ auth, posts, user }) {
-  if (auth.user === null) {
-    window.location.href = "/login";
-  }
+  const { setUser } = useUserContext();
+  useEffect(() => {
+    setUser(user);
+    console.log(user);
+  }, [user]);
+
   return (
     <>
       <Head>

@@ -9,11 +9,18 @@ import Edit from "./Edit";
 import { Head, usePage } from "@inertiajs/react";
 import { useForm } from "@inertiajs/react";
 import { useMainContext } from "@/Contexts/MainContext";
+import { useUserContext } from "@/Contexts/UserContext";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 const View = ({ auth, user }) => {
+  const { setUser } = useUserContext();
+  useEffect(() => {
+    setUser(user);
+  }, []);
+  console.log(user);
+
   const { data, setData, post, progress } = useForm({
     coverImage: null,
     avatarImage: null,
