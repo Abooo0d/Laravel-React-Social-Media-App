@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Enums\PostReactionEnum;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
-use App\Http\Resources\PostResource;
 use App\Models\post;
 use App\Models\PostAttachments;
-use Illuminate\Auth\Events\Validated;
+use App\Models\PostReactions;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
@@ -115,5 +116,30 @@ class PostController extends Controller
       return response(['message' => 'You Don`t have Permission To Delete This Post']);
     }
     $post->delete();
+  }
+  public function postReaction(Request $request, Post $post)
+  {
+    $data = $request->validate([
+      'reaction' => [Rule::enum(PostReactionEnum::class)]
+    ]);
+    $user = Auth::id();
+    $userReaction = false;
+    $reaction = PostReactions::where('user_id', $user)->where('post_id', $post->id)->first();
+    if ($reaction) {
+      $reaction->delete();
+      $userReaction = false;
+    } else {
+      PostReactions::create([
+        'post_id' => $post->id,
+        'user_id' =>  Auth::id(),
+        'type' => $data['reaction']
+      ]);
+      $userReaction = true;
+    }
+    $reactions = PostReactions::where('post_id', $post->id)->count();
+    return response([
+      'num_of_reactions' => $reactions,
+      'user_has_reaction' => $userReaction
+    ]);
   }
 }

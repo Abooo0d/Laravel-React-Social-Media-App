@@ -12,33 +12,38 @@ const PostCard = ({ post, user }) => {
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState("");
   const [imageIndex, setImageIndex] = useState(0);
+  const [localPost, setLocalPost] = useState(post);
   useEffect(() => {
     setOpenMenu(false);
   }, []);
+  useEffect(() => {
+    console.log("Abood");
+  }, [localPost]);
+
   return (
     <>
       <div className="max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg py-4 lg:px-6 px-4 flex lg:gap-6 gap-2 flex-col duration-200 shadow-md">
         <div className="flex justify-between items-center">
-          <PostOwnerInfo post={post} user={user} />
+          <PostOwnerInfo post={localPost} user={user} />
           <PostCardMenu
-            post={post}
+            post={localPost}
             openMenu={openMenu}
             setOpenMenu={setOpenMenu}
           />
         </div>
-        <PostCardPostBody post={post} />
+        <PostCardPostBody post={localPost} />
         <PostCardPostAttachments
-          post={post}
+          post={localPost}
           setImage={setImage}
           setShowImage={setShowImage}
           setShowPost={setShowPost}
           setImageIndex={setImageIndex}
         />
-        <PostCardPostActions />
+        <PostCardPostActions post={localPost} setPost={setLocalPost} />
       </div>
       <FullPostCard
         show={showPost}
-        post={post}
+        post={localPost}
         setShow={setShowPost}
         setImage={setImage}
         setShowImage={setShowImage}
@@ -46,7 +51,7 @@ const PostCard = ({ post, user }) => {
         setImageIndex={setImageIndex}
       />
       <ImageFullView
-        post={post}
+        post={localPost}
         imageIndex={imageIndex}
         setImageIndex={setImageIndex}
         show={showImage}

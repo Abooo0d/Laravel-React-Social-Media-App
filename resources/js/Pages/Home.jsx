@@ -178,7 +178,6 @@ export default function Home({ auth, posts, user }) {
   const { setUser } = useUserContext();
   useEffect(() => {
     setUser(user);
-    console.log(user);
   }, [user]);
 
   return (
