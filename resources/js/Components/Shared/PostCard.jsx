@@ -6,6 +6,7 @@ import PostCardMenu from "./PostCardMenu";
 import PostCardPostBody from "./PostCardPostBody";
 import PostCardPostAttachments from "./PostCardPostAttachments";
 import PostCardPostActions from "./PostCardPostActions";
+import PostCommentSection from "./PostCommentSection";
 const PostCard = ({ post, user }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [showPost, setShowPost] = useState(false);
@@ -13,16 +14,15 @@ const PostCard = ({ post, user }) => {
   const [showImage, setShowImage] = useState("");
   const [imageIndex, setImageIndex] = useState(0);
   const [localPost, setLocalPost] = useState(post);
+  const [showCommentSection, setShowCommentSection] = useState(false);
   useEffect(() => {
     setOpenMenu(false);
+    console.log(post);
   }, []);
-  useEffect(() => {
-    console.log("Abood");
-  }, [localPost]);
 
   return (
     <>
-      <div className="max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg py-4 lg:px-6 px-4 flex lg:gap-6 gap-2 flex-col duration-200 shadow-md">
+      <div className="max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg py-4 pb-0 lg:px-6 px-4 flex  flex-col duration-200 shadow-md">
         <div className="flex justify-between items-center">
           <PostOwnerInfo post={localPost} user={user} />
           <PostCardMenu
@@ -39,7 +39,12 @@ const PostCard = ({ post, user }) => {
           setShowPost={setShowPost}
           setImageIndex={setImageIndex}
         />
-        <PostCardPostActions post={localPost} setPost={setLocalPost} />
+        <PostCardPostActions
+          post={localPost}
+          setPost={setLocalPost}
+          setShowCommentSection={setShowCommentSection}
+        />
+        <PostCommentSection show={showCommentSection} post={post} />
       </div>
       <FullPostCard
         show={showPost}

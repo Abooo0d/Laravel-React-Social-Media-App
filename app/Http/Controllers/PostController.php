@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Enums\PostReactionEnum;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Http\Resources\CommentResource;
 use App\Models\post;
 use App\Models\PostAttachments;
+use App\Models\PostComments;
 use App\Models\PostReactions;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -141,5 +143,17 @@ class PostController extends Controller
       'num_of_reactions' => $reactions,
       'user_has_reaction' => $userReaction
     ]);
+  }
+  public function postCommentCreate(Request $request, Post $post)
+  {
+    $data = $request->validate([
+      'comment' => ['required', 'string']
+    ]);
+    $comment = PostComments::create([
+      'post_id' => $post->id,
+      'user_id' => Auth::id(),
+      'comment' => $data['comment']
+    ]);
+    return response([new CommentResource($comment), 201]);
   }
 }

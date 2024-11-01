@@ -16,7 +16,8 @@ class HomeController extends Controller
     $userId = Auth::id();
     $post = Post::query()
       ->withCount('reactions')
-      ->with(['reactions' => function ($query) use ($userId) {
+      ->withCount('comments')
+      ->with(['latest5Comments', 'reactions' => function ($query) use ($userId) {
         $query->where('user_id', $userId);
       }])
       ->latest()

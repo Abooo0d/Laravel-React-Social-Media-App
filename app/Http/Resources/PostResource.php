@@ -24,6 +24,9 @@ class PostResource extends JsonResource
       'group' => $this->group,
       'num_of_reactions' => $this->reactions_count,
       'user_has_reaction' => $this->reactions->count() > 0,
+      'comments' => CommentResource::collection($this->comments),
+      'num_of_comments' => $this->comments_count,
+      'latest5Comments' => CommentResource::collection($this->latest5Comments),
     ];
   }
 }
