@@ -44,7 +44,11 @@ const PostCard = ({ post, user }) => {
           setPost={setLocalPost}
           setShowCommentSection={setShowCommentSection}
         />
-        <PostCommentSection show={showCommentSection} post={post} />
+        <PostCommentSection
+          show={showCommentSection}
+          post={localPost}
+          setPost={setLocalPost}
+        />
       </div>
       <FullPostCard
         show={showPost}

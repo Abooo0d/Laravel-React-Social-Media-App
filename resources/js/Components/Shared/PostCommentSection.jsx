@@ -5,57 +5,40 @@ import { useUserContext } from "@/Contexts/UserContext";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import { FaRegCommentDots } from "react-icons/fa";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
-const PostCommentSection = ({ show, post }) => {
+import DOMPurify from "dompurify";
+import CommentMenu from "./CommentMenu";
+import CommentCard from "./CommentCard";
+const PostCommentSection = ({ show, post, setPost }) => {
   const { user } = useUserContext();
   const [comment, setComment] = useState("");
-  const [postData, setPostData] = useState(post);
+  const [showMenu, setShowMenu] = useState(false);
   const createComment = () => {
     axiosClient
       .post(route("post.comment.create", post), { comment: comment })
       .then((data) => {
         console.log(data.data[0]);
-        setPostData((prevPost) => ({
+        setPost((prevPost) => ({
           ...prevPost,
           comments: [...prevPost.comments, data.data[0]],
+          num_of_comments: prevPost.num_of_comments + 1,
         }));
+        setComment("");
       });
   };
-  console.log(post);
-
   return (
     <>
       <div
-        className={`flex justify-start items-start flex-col gap-4 max-h-[300px] overflow-auto ${
+        className={`flex justify-start items-start flex-col gap-4 max-h-[300px] overflow-auto border-gray-800 border-t-[2px] border-solid py-2 ${
           show ? "visible opacity-100 h-full" : "invisible opacity-0 h-[0px]"
         }`}
       >
-        {postData.comments.map((comment, index) => (
-          <div
-            className="flex justify-start items-start flex-col gap-2 w-full cursor-default p-1j"
+        {post.comments.map((comment, index) => (
+          <CommentCard
             key={index}
-          >
-            <div className="flex gap-4 justify-start items-start w-full">
-              <img
-                src={comment.user.avatar_url}
-                alt="user_image"
-                className=" rounded-full w-[40px] h-[40px] "
-              />
-              <div className="bg-gray-700/30 text-gray-300 w-fit max-w-[80%] rounded-md p-2">
-                {comment.comment}
-              </div>
-            </div>
-            <div className="flex justify-start items-center w-full gap-[30px]">
-              <div className="text-gray-700 pl-[50px] text-[12px]">
-                {comment.updated_at}
-              </div>
-              <button className="duration-200 w-[30px] h-[30px] flex justify-center items-center rounded-md hover:bg-gray-700/40 text-gray-300">
-                <AiOutlineLike />
-              </button>
-              <button className="duration-200 w-[30px] h-[30px] flex justify-center items-center rounded-md hover:bg-gray-700/40 text-gray-300">
-                <FaRegCommentDots />
-              </button>
-            </div>
-          </div>
+            comment={comment}
+            post={post}
+            setPost={setPost}
+          />
         ))}
       </div>
       <div

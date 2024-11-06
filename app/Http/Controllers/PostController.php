@@ -152,8 +152,17 @@ class PostController extends Controller
     $comment = PostComments::create([
       'post_id' => $post->id,
       'user_id' => Auth::id(),
-      'comment' => $data['comment']
+      'comment' => nl2br($data['comment'])
     ]);
     return response([new CommentResource($comment), 201]);
+  }
+  public function EditComment(Request $request, PostComments $comment) {}
+  public function DeleteComment(PostCOmments $comment)
+  {
+    if ($comment->user_id !==  Auth::id()) {
+      return response(['message' => 'You Don`t have Permission To Delete This Comment']);
+    }
+    $comment->delete();
+    return response('', 204);
   }
 }
