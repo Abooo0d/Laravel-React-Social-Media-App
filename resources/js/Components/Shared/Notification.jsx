@@ -7,7 +7,6 @@ const Notification = () => {
     useMainContext();
   useEffect(() => {
     if (successMessage !== "" || errors.length > 0) {
-      console.log("Abood From useEffect");
       setShowNotification(true);
       setTimeout(() => {
         setShowNotification(false);
@@ -20,7 +19,7 @@ const Notification = () => {
   return (
     <>
       <div
-        className={`bg-emerald-500 text-white absolute top-[100px] w-[400px] z-10 h-[60px] flex justify-start items-center pl-4 rounded-l-md duration-300 cursor-default  ${
+        className={`bg-emerald-500/40 backdrop-blur-sm border-[2px] border-solid border-emerald-500 border-r-[0px] text-white absolute top-[100px] w-[400px] z-10 h-[60px] flex justify-start items-center pl-4 rounded-l-md duration-300 cursor-default  ${
           ShowNotification && successMessage
             ? "opacity-100 right-0"
             : " opacity-0 right-[-100px]"
@@ -29,14 +28,16 @@ const Notification = () => {
         {successMessage}
       </div>
       <div
-        className={`bg-red-500 text-white absolute top-[200px] w-[400px] z-10 h-[60px] flex justify-center items-center pl-4 rounded-l-md duration-300 flex-col cursor-default ${
+        className={`bg-red-500/40 backdrop-blur-sm border-[2px] border-solid border-red-500 border-r-[0px] text-white absolute top-[200px] w-[400px] z-10 h-[60px] flex justify-center items-start pl-4 rounded-l-md duration-300 flex-col cursor-default ${
           ShowNotification && errors.length > 0
             ? "opacity-100 right-0"
             : " opacity-0 right-[-100px]"
         }`}
       >
-        {errors.map((error) => (
-          <span>{error}</span>
+        {errors.map((error, index) => (
+          <span className="" key={index}>
+            {error}
+          </span>
         ))}
       </div>
     </>

@@ -19,7 +19,6 @@ const View = ({ auth, user }) => {
   useEffect(() => {
     setUser(user);
   }, []);
-  console.log(user);
 
   const { data, setData, post, progress } = useForm({
     coverImage: null,
@@ -60,7 +59,6 @@ const View = ({ auth, user }) => {
         errorsArray = [];
       },
       onSuccess: () => {
-        console.log("Abood from Update Avatar Image");
         setSuccessMessage("Image Updated Successfully");
       },
     });
@@ -92,9 +90,7 @@ const View = ({ auth, user }) => {
       },
       onFinish: () => {},
       onSuccess: () => {
-        console.log("Abood From OnSuccess Int Profile Page");
         setSuccessMessage("Image Updated Successfully");
-        console.log("Abood");
       },
     });
     setIsTheCoverChanged(false);

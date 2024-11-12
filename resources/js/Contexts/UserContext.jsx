@@ -10,9 +10,6 @@ export const UserContext = ({ children }) => {
     if (user === "" || user === undefined || user === null) {
       window.location.href = "/login";
     }
-    // if (user === "" || user === undefined || user === null) {
-    //   console.log("Abood" + user);
-    // }
   }, [user]);
 
   return (

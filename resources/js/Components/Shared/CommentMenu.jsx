@@ -5,8 +5,15 @@ import { router } from "@inertiajs/react";
 import { useMainContext } from "@/Contexts/MainContext";
 import axiosClient from "@/AxiosClient/AxiosClient";
 
-const CommentMenu = ({ openMenu, setOpenMenu, post, comment, setPost }) => {
-  const [showForm, setShowForm] = useState(false);
+const CommentMenu = ({
+  openMenu,
+  setOpenMenu,
+  post,
+  comment,
+  setPost,
+  setEditing,
+}) => {
+  const [, setShowForm] = useState(false);
   const { setSuccessMessage } = useMainContext();
   const onDelete = () => {
     if (window.confirm("Are You Sure To Delete This Comment!?")) {
@@ -43,6 +50,7 @@ const CommentMenu = ({ openMenu, setOpenMenu, post, comment, setPost }) => {
           onClick={() => {
             setShowForm(true);
             setOpenMenu(false);
+            setEditing(true);
           }}
           className="bg-gray-800 duration-300 hover:bg-gray-700 py-2 px-4 pr-16 text-sm font-medium text-white focus:outline-none text-left w-full"
         >

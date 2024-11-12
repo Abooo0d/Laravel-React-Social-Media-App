@@ -179,7 +179,6 @@ export default function Home({ auth, posts, user }) {
   useEffect(() => {
     setUser(user);
   }, [user]);
-
   return (
     <>
       <Head>

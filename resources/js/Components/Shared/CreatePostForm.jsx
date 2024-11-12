@@ -47,7 +47,6 @@ const CreatePostForm = ({ showForm, setShowForm, user }) => {
         onSuccess: () => {
           setPost({ body: "", attachments: [] });
           setShowForm(false);
-          console.log("AboodFrom The CreatePostForm");
           setSuccessMessage("Post Created Successfully");
         },
         onError: (errors) => {

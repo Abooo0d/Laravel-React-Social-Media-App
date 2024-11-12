@@ -42,7 +42,6 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
     router.post(route("post.update", finalPost), finalPost, {
       forceFormData: true,
       onSuccess: () => {
-        console.log("Abood");
         close();
         setSuccessMessage("Post Updated Successfully");
       },

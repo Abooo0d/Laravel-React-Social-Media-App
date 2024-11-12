@@ -12,7 +12,6 @@ const PostCardMenu = ({ openMenu, setOpenMenu, post }) => {
       router.delete(route("post.delete", post), {
         data: post,
         onSuccess: () => {
-          console.log("Abood From onSuccess");
           setOpenMenu(false);
           setSuccessMessage("Post Deleted Successfully");
         },

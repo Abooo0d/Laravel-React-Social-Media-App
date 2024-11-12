@@ -17,7 +17,6 @@ const PostCard = ({ post, user }) => {
   const [showCommentSection, setShowCommentSection] = useState(false);
   useEffect(() => {
     setOpenMenu(false);
-    console.log(post);
   }, []);
 
   return (
