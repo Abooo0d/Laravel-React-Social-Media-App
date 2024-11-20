@@ -14,18 +14,25 @@ class HomeController extends Controller
   public function index(Request $request)
   {
     $userId = Auth::id();
-    $post = Post::query()
+    $posts = Post::query()
       ->withCount('reactions')
       ->withCount('comments')
-      ->with(['latest5Comments', 'reactions' => function ($query) use ($userId) {
-        $query->where('user_id', $userId);
-      }])
+      ->with([
+        'latest5Comments',
+        'reactions' => function ($query) use ($userId) {
+          $query->where('user_id', $userId);
+        },
+        'comments.postCommentsReactions' => function ($query) use ($userId) {
+          // Load reactions for each comment and filter by user
+          $query->where('user_id', $userId);
+        }
+      ])
       ->latest()
       ->paginate(20);
     $user = $request->user() !== null ? new UserResource($request->user()) : '';
     return Inertia::render('Home', [
       'user' => $user,
-      'posts' => PostResource::collection($post)
+      'posts' => PostResource::collection($posts)
     ]);
   }
 }

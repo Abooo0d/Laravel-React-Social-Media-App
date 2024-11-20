@@ -22,4 +22,8 @@ class PostComments extends Model
   {
     return $this->belongsTo(Post::class);
   }
+  public function postCommentsReactions()
+  {
+    return $this->hasMany(PostCommentsReactions::class);
+  }
 }

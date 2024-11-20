@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommentMenu from "./CommentMenu";
 import DOMPurify from "dompurify";
-import { AiOutlineLike } from "react-icons/ai";
+import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 import { FaRegCommentDots } from "react-icons/fa";
 import { useUserContext } from "@/Contexts/UserContext";
 import { PrimaryButton, SecondaryButton } from "./Buttons";
@@ -10,19 +10,20 @@ import { useMainContext } from "@/Contexts/MainContext";
 
 const CommentCard = ({ currentComment, post, setPost }) => {
   const [showMenu, setShowMenu] = useState(false);
-
   const [editing, setEditing] = useState(false);
   const [comment, setComment] = useState(currentComment);
-  const [editingComment, setEditingComment] = useState(currentComment);
+  const [editingComment, setEditingComment] = useState({
+    ...currentComment,
+    comment: currentComment.comment.replace(/<br\s*\/?>/gi, "\n"),
+  });
   const { user } = useUserContext();
-  const { setSuccessMessage, setErrors } = useMainContext();
+  const { setSuccessMessage } = useMainContext();
   const UpdateComment = () => {
     axiosClient
       .put(route("comment.edit", comment.id), {
         comment: editingComment.comment,
       })
       .then((data) => {
-        console.log(data);
         setShowMenu(false);
         setEditing(false);
         setComment(data.data);
@@ -37,6 +38,20 @@ const CommentCard = ({ currentComment, post, setPost }) => {
         setSuccessMessage("Comment Updated Successfully");
       });
   };
+  const sendCommentReaction = () => {
+    axiosClient
+      .post(route("comment.reaction", comment.id), {
+        reaction: "like",
+      })
+      .then(({ data }) => {
+        setComment((prevComment) => ({
+          ...prevComment,
+          user_has_reactions: data.user_has_reactions,
+          num_of_reactions: data.num_of_reactions,
+        }));
+      });
+  };
+
   return (
     <div className="flex justify-start items-start flex-col gap-2 w-full cursor-default duration-200">
       <div className="flex gap-4 justify-start items-start w-full flex-col">
@@ -66,7 +81,7 @@ const CommentCard = ({ currentComment, post, setPost }) => {
           )}
         </div>
         {!editing ? (
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-2 p-2">
             <div
               className={`bg-gray-700/30 text-gray-300 w-fit max-w-[80%] rounded-md p-2 ml-8 duration-200 ${
                 editing ? "h-0 opacity-0" : " h-full opacity-100"
@@ -77,17 +92,34 @@ const CommentCard = ({ currentComment, post, setPost }) => {
             />
 
             <div
-              className={`flex justify-start items-center w-full gap-[30px] pl-[50px] duration-200 ${
+              className={`flex justify-start items-center w-full gap-[30px] pl-[50px] duration-200  ${
                 editing
                   ? "invisible opacity-0 h-0"
                   : "visible opacity-100 h-full"
               }`}
             >
-              <button className="duration-200 w-[30px] h-[30px] flex justify-center items-center rounded-md hover:bg-gray-700/40 text-gray-300 gap-[4px]">
-                0 <AiOutlineLike />
+              <button
+                className="duration-200 relative w-[45px] h-[30px] flex justify-start pl-2 items-center rounded-md hover:bg-gray-700/40 text-gray-300 gap-[4px] px-1"
+                onClick={() => sendCommentReaction()}
+              >
+                {comment.num_of_reactions}{" "}
+                <AiFillLike
+                  className={`w-[18px] h-[18px] duration-200 absolute top-[50%] left-[22px] translate-y-[-50%] ${
+                    comment.user_has_reactions
+                      ? "opacity-100 scale-100 visible"
+                      : "opacity-50 scale-50 invisible"
+                  }`}
+                />
+                <AiOutlineLike
+                  className={`w-[18px] h-[18px] duration-200 absolute top-[50%] left-[22px] translate-y-[-50%] ${
+                    comment.user_has_reactions
+                      ? "opacity-50 scale-50 invisible"
+                      : "opacity-100 scale-100 visible"
+                  }`}
+                />
               </button>
-              <button className="duration-200 w-[30px] h-[30px] flex justify-center items-center rounded-md hover:bg-gray-700/40 text-gray-300 gap-[4px]">
-                0 <FaRegCommentDots />
+              <button className="duration-200 w-[40px] h-[30px] flex justify-center items-center rounded-md hover:bg-gray-700/40 text-gray-300 gap-[4px]">
+                0 <FaRegCommentDots className="w-[18px] h-[18px]" />
               </button>
             </div>
           </div>

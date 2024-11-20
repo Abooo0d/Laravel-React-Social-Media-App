@@ -7,9 +7,11 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\CommentResource;
+use App\Http\Resources\PostCommentReactionResource;
 use App\Models\post;
 use App\Models\PostAttachments;
 use App\Models\PostComments;
+use App\Models\PostCommentsReactions;
 use App\Models\PostReactions;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -172,5 +174,31 @@ class PostController extends Controller
     }
     $comment->delete();
     return response('', 204);
+  }
+  public function CommentReaction(Request $request, PostComments $comment)
+  {
+    $data = $request->validate([
+      'reaction' => [Rule::enum(PostReactionEnum::class)]
+    ]);
+    $user = Auth::id();
+    $userHasReaction = false;
+    $reaction = PostCommentsReactions::where('user_id', $user)->where('post_comments_id', $comment->id)->first();
+    if ($reaction) {
+      $reaction->delete();
+      $userHasReaction = false;
+    } else {
+      PostCommentsReactions::create([
+        'post_comments_id' => $comment->id,
+        'user_id' => $user,
+        'type' => $data['reaction']
+      ]);
+      $userHasReaction = true;
+    }
+    $numOfReactions = PostCommentsReactions::where('post_comments_id', $comment->id)->count();
+
+    return response([
+      'num_of_reactions' => $numOfReactions,
+      'user_has_reactions' => $userHasReaction
+    ]);
   }
 }

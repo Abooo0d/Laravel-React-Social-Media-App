@@ -18,6 +18,9 @@ const PostCard = ({ post, user }) => {
   useEffect(() => {
     setOpenMenu(false);
   }, []);
+  useEffect(() => {
+    console.log(post, "From UseEffect");
+  }, [post]);
 
   return (
     <>

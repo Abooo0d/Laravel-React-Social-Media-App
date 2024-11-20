@@ -2,12 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
-class CommentResource extends JsonResource
+class PostCommentReactionResource extends JsonResource
 {
   /**
    * Transform the resource into an array.
@@ -18,16 +17,13 @@ class CommentResource extends JsonResource
   {
     return [
       'id' => $this->id,
-      'comment' => $this->comment,
       'user' => [
         'id' => $this->user->id,
         'name' => $this->user->name,
         'username' => $this->user->username,
         'avatar_url' => Storage::url($this->user->avatar_path)
       ],
-      'num_of_reactions' => $this->postCommentsReactions->count(),
-      'user_has_reactions' => $this->postCommentsReactions->count() > 0,
-      'updated_at' => $this->updated_at->format('Y-m-d H:i')
+      'type' => $this->type
     ];
   }
 }
