@@ -7,7 +7,54 @@ import { useUserContext } from "@/Contexts/UserContext";
 import { PrimaryButton, SecondaryButton } from "./Buttons";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import { useMainContext } from "@/Contexts/MainContext";
-
+import SubCommentsSection from "./SubCommentsSection";
+const subComments = [
+  {
+    comment:
+      "Abood Abood 2 4 5 6<br /><br /><br /><br />\n<br /><br /><br /><br />\nasd<br /><br /><br />\n<br /><br />\nAbood<br /><br />\n Abood ajsdaksdhan aishudajsi dajsdi<br />\n<br />\nAbood",
+    id: 33,
+    num_of_reactions: 0,
+    updated_at: "2024-11-12 12:11",
+    user: {
+      id: 1,
+      name: "Aboood",
+      username: "aboood",
+      avatar_url:
+        "/storage/user-1/FlCCkswxysH5xbQpP1WSY2KWXxBdS6Y6p79r7weU.jpg",
+    },
+    user_has_reactions: false,
+  },
+  {
+    comment:
+      "Abood Abood 2 4 5 6<br /><br /><br /><br />\n<br /><br /><br /><br />\nasd<br /><br /><br />\n<br /><br />\nAbood<br /><br />\n Abood ajsdaksdhan aishudajsi dajsdi<br />\n<br />\nAbood",
+    id: 33,
+    num_of_reactions: 0,
+    updated_at: "2024-11-12 12:11",
+    user: {
+      id: 1,
+      name: "Aboood",
+      username: "aboood",
+      avatar_url:
+        "/storage/user-1/FlCCkswxysH5xbQpP1WSY2KWXxBdS6Y6p79r7weU.jpg",
+    },
+    user_has_reactions: false,
+  },
+  {
+    comment:
+      "Abood Abood 2 4 5 6<br /><br /><br /><br />\n<br /><br /><br /><br />\nasd<br /><br /><br />\n<br /><br />\nAbood<br /><br />\n Abood ajsdaksdhan aishudajsi dajsdi<br />\n<br />\nAbood",
+    id: 33,
+    num_of_reactions: 0,
+    updated_at: "2024-11-12 12:11",
+    user: {
+      id: 1,
+      name: "Aboood",
+      username: "aboood",
+      avatar_url:
+        "/storage/user-1/FlCCkswxysH5xbQpP1WSY2KWXxBdS6Y6p79r7weU.jpg",
+    },
+    user_has_reactions: false,
+  },
+];
 const CommentCard = ({ currentComment, post, setPost }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -18,6 +65,7 @@ const CommentCard = ({ currentComment, post, setPost }) => {
   });
   const { user } = useUserContext();
   const { setSuccessMessage } = useMainContext();
+  const [showSubComments, setShowSubComments] = useState(false);
   const UpdateComment = () => {
     axiosClient
       .put(route("comment.edit", comment.id), {
@@ -53,7 +101,15 @@ const CommentCard = ({ currentComment, post, setPost }) => {
   };
 
   return (
-    <div className="flex justify-start items-start flex-col gap-2 w-full cursor-default duration-200">
+    <div className="flex justify-start items-start flex-col gap-2 w-full cursor-default duration-200 relative">
+      <div
+        className={`absolute top-[70px] left-[37px] h-[calc(100%-107px)] w-[3px] bg-[#1d2533] duration-200
+        ${
+          showSubComments && comment.comments.length > 0
+            ? " opacity-100"
+            : " opacity-0"
+        }`}
+      />
       <div className="flex gap-4 justify-start items-start w-full flex-col">
         <div className="flex justify-between w-full px-4">
           <div className="flex gap-4 justify-center items-center">
@@ -83,7 +139,7 @@ const CommentCard = ({ currentComment, post, setPost }) => {
         {!editing ? (
           <div className="w-full flex flex-col gap-2 p-2">
             <div
-              className={`bg-gray-700/30 text-gray-300 w-fit max-w-[80%] rounded-md p-2 ml-8 duration-200 ${
+              className={`bg-gray-700/30 text-gray-300 w-fit max-w-[80%] rounded-md rounded-l-none p-2 ml-8 duration-200 ${
                 editing ? "h-0 opacity-0" : " h-full opacity-100"
               }`}
               dangerouslySetInnerHTML={{
@@ -118,8 +174,14 @@ const CommentCard = ({ currentComment, post, setPost }) => {
                   }`}
                 />
               </button>
-              <button className="duration-200 w-[40px] h-[30px] flex justify-center items-center rounded-md hover:bg-gray-700/40 text-gray-300 gap-[4px]">
-                0 <FaRegCommentDots className="w-[18px] h-[18px]" />
+              <button
+                className="duration-200 w-[40px] h-[30px] flex justify-center items-center rounded-md hover:bg-gray-700/40 text-gray-300 gap-[4px]"
+                onClick={() => {
+                  setShowSubComments((prev) => !prev);
+                }}
+              >
+                {comment.num_of_comments}{" "}
+                <FaRegCommentDots className="w-[18px] h-[18px]" />
               </button>
             </div>
           </div>
@@ -157,6 +219,15 @@ const CommentCard = ({ currentComment, post, setPost }) => {
           </div>
         )}
       </div>
+      {showSubComments && (
+        <SubCommentsSection
+          show={showSubComments}
+          comments={comment.comments}
+          post={post}
+          comment={comment}
+          setComment={setComment}
+        />
+      )}
     </div>
   );
 };

@@ -16,7 +16,10 @@ const PostCommentSection = ({ show, post, setPost }) => {
   const { setSuccessMessage } = useMainContext();
   const createComment = () => {
     axiosClient
-      .post(route("post.comment.create", post), { comment: comment })
+      .post(route("post.comment.create", post), {
+        comment: comment,
+        parent_id: null,
+      })
       .then((data) => {
         setPost((prevPost) => ({
           ...prevPost,
@@ -45,7 +48,7 @@ const PostCommentSection = ({ show, post, setPost }) => {
                 post={post}
                 setPost={setPost}
               />
-              {post.comments.length > 1 && index < post.comments.length && (
+              {post.comments.length > 1 && index < post.comments.length - 1 && (
                 <div className="w-[80%] h-[1px] bg-gray-700/20" />
               )}
             </div>
