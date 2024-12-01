@@ -54,7 +54,11 @@ const SubCommentsSection = ({ show, comments, post, comment, setComment }) => {
         }`}
       >
         {comments.map((comment, index) => (
-          <SubCommentCard comment={comment} key={index} />
+          <SubCommentCard
+            key={index}
+            comment={comment}
+            setMainComment={setComment}
+          />
         ))}
       </div>
     </>
