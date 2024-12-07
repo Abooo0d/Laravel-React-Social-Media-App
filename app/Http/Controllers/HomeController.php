@@ -31,11 +31,38 @@ class HomeController extends Controller
         }
       ])
       ->latest()
-      ->paginate(20);
+      ->paginate(3);
     $user = $request->user() !== null ? new UserResource($request->user()) : '';
-    return Inertia::render('Home', [
-      'user' => $user,
-      'posts' => PostResource::collection($posts)
-    ]);
+    $allPosts = PostResource::collection($posts);
+    if ($request->wantsJson()) {
+      return response([
+        'posts' => [
+          'posts' => $allPosts,
+          'meta' => [
+            'total' => $posts->total(),
+            'current_page' => $posts->currentPage(),
+            'per_page' => $posts->perPage(),
+            'last_page' => $posts->lastPage(),
+            'from' => $posts->firstItem(),
+            'to' => $posts->lastItem(),
+          ]
+        ]
+      ]);
+    } else {
+      return Inertia::render('Home', [
+        'user' => $user,
+        'posts' => [
+          'posts' => $allPosts,
+          'meta' => [
+            'total' => $posts->total(),
+            'current_page' => $posts->currentPage(),
+            'per_page' => $posts->perPage(),
+            'last_page' => $posts->lastPage(),
+            'from' => $posts->firstItem(),
+            'to' => $posts->lastItem(),
+          ]
+        ]
+      ]);
+    }
   }
 }

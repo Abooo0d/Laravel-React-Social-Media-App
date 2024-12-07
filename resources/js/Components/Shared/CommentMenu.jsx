@@ -8,7 +8,6 @@ import axiosClient from "@/AxiosClient/AxiosClient";
 const CommentMenu = ({
   openMenu,
   setOpenMenu,
-  post,
   comment,
   setPost,
   setEditing,
