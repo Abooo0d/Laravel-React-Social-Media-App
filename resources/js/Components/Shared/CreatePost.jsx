@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CreatePostForm from "./CreatePostForm";
-const CreatePost = ({ user }) => {
+const CreatePost = ({ user, setPosts, posts }) => {
   const [showForm, setShowForm] = useState(false);
   return (
     <div className="w-full bg-gray-200 dark:bg-gray-900 px-3 py-3 flex flex-col gap-4  duration-300 h-[65px] border-b-[1px] border-solid border-gray-700">
@@ -14,6 +14,8 @@ const CreatePost = ({ user }) => {
         showForm={showForm}
         setShowForm={setShowForm}
         user={user}
+        setPosts={setPosts}
+        posts={posts}
       />
     </div>
   );

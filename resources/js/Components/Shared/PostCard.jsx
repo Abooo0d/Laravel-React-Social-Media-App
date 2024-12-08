@@ -15,13 +15,25 @@ const PostCard = ({ post, user }) => {
   const [imageIndex, setImageIndex] = useState(0);
   const [localPost, setLocalPost] = useState(post);
   const [showCommentSection, setShowCommentSection] = useState(false);
+  const [visible, setVisible] = useState(false);
   useEffect(() => {
     setOpenMenu(false);
   }, []);
-
+  useEffect(() => {
+    setLocalPost(post);
+  }, [post]);
+  useEffect(() => {
+    setTimeout(() => {
+      setVisible(true);
+    }, 500);
+  }, [localPost]);
   return (
     <>
-      <div className="max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg py-4 pb-0 lg:px-6 px-4 flex  flex-col duration-200 shadow-md">
+      <div
+        className={`max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg py-4 pb-0 lg:px-6 px-4 flex flex-col duration-500 shadow-md ${
+          !visible ? "-translate-x-8 opacity-0" : "translate-x-0 opacity-100"
+        }`}
+      >
         <div className="flex justify-between items-center">
           <PostOwnerInfo post={localPost} user={user} />
           <PostCardMenu

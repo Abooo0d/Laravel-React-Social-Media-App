@@ -12,7 +12,7 @@ import PopupCard from "./PopupCard";
 import "./index.css";
 import { useMainContext } from "@/Contexts/MainContext";
 import Notification from "./Notification";
-const CreatePostForm = ({ showForm, setShowForm, user }) => {
+const CreatePostForm = ({ showForm, setShowForm, user, setPosts, posts }) => {
   const { errors, setErrors, successMessage, setSuccessMessage } =
     useMainContext();
   const [image, setImage] = useState("");
@@ -44,10 +44,17 @@ const CreatePostForm = ({ showForm, setShowForm, user }) => {
     if (post.body !== "" || post.attachments.length !== 0) {
       router.post(route("post.create"), _post, {
         forceFormData: true,
-        onSuccess: () => {
+        onSuccess: (data1) => {
           setPost({ body: "", attachments: [] });
           setShowForm(false);
           setSuccessMessage("Post Created Successfully");
+          setPosts((prevPosts) => ({
+            ...prevPosts,
+            posts: {
+              ...prevPosts.posts,
+              data: [data1.props.posts.posts.data[0], ...prevPosts.posts.data],
+            },
+          }));
         },
         onError: (errors) => {
           setAttachmentsErrors([]);

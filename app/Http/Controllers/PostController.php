@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateCommentRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostCommentReactionResource;
+use App\Http\Resources\PostResource;
 use App\Models\post;
 use App\Models\PostAttachments;
 use App\Models\PostComments;
