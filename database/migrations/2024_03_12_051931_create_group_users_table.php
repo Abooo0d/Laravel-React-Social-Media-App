@@ -16,7 +16,7 @@ return new class extends Migration {
       $table->foreignId('group_id')->constrained('groups');
       $table->foreignId('created_by')->constrained('users');
       $table->string('status', 25); // approved | pending
-      $table->string('rule'); // admin | user
+      $table->string('role'); // admin | user
       $table->string('token', 1024)->nullable();
       $table->timestamp('token_expire_date')->nullable();
       $table->timestamp('token_used')->nullable();

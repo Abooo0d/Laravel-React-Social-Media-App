@@ -8,105 +8,7 @@ import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
-import { useEffect } from "react";
-const groups = [
-  {
-    name: "Laravel Dev",
-    members: ["Alice", "Bob"],
-    image: "https://picsum.photos/50",
-    info: "ahsd asdjh asdjh asdia  aisdj iasd",
-  },
-  {
-    name: "React groupe",
-    members: ["Alice", "Bob"],
-    image: "https://picsum.photos/50",
-    info: "ahsd asdjh asdjh asdia  aisdj iasd",
-  },
-  {
-    name: "React Native groupe ",
-    members: ["Alice", "Bob"],
-    image: "https://picsum.photos/50",
-    info: "ahsd asdjh asdjh asdia  aisdj iasd",
-  },
-  {
-    name: "React Native groupe ",
-    members: ["Alice", "Bob"],
-    image: "https://picsum.photos/50",
-    info: "ahsd asdjh asdjh asdia  aisdj iasd",
-  },
-  {
-    name: "React Native groupe ",
-    members: ["Alice", "Bob"],
-    image: "https://picsum.photos/50",
-    info: "ahsd asdjh asdjh asdia  aisdj iasd",
-  },
-  {
-    name: "React Native groupe ",
-    members: ["Alice", "Bob"],
-    image: "https://picsum.photos/50",
-    info: "ahsd asdjh asdjh asdia  aisdj iasd",
-  },
-  {
-    name: "React Native groupe ",
-    members: ["Alice", "Bob"],
-    image: "https://picsum.photos/50",
-    info: "ahsd asdjh asdjh asdia  aisdj iasd",
-  },
-  {
-    name: "React Native groupe ",
-    members: ["Alice", "Bob"],
-    image: "https://picsum.photos/50",
-    info: "ahsd asdjh asdjh asdia  aisdj iasd",
-  },
-  {
-    name: "React Native groupe ",
-    members: ["Alice", "Bob"],
-    image: "https://picsum.photos/50",
-    info: "ahsd asdjh asdjh asdia  aisdj iasd",
-  },
-  {
-    name: "React Native groupe ",
-    members: ["Alice", "Bob"],
-    image: "https://picsum.photos/50",
-    info: "ahsd asdjh asdjh asdia  aisdj iasd",
-  },
-  {
-    name: "React Native groupe ",
-    members: ["Alice", "Bob"],
-    image: "https://picsum.photos/50",
-    info: "ahsd asdjh asdjh asdia  aisdj iasd",
-  },
-  {
-    name: "React Native groupe ",
-    members: ["Alice", "Bob"],
-    image: "https://picsum.photos/50",
-    info: "ahsd asdjh asdjh asdia  aisdj iasd",
-  },
-  {
-    name: "React Native groupe ",
-    members: ["Alice", "Bob"],
-    image: "https://picsum.photos/50",
-    info: "ahsd asdjh asdjh asdia  aisdj iasd",
-  },
-  {
-    name: "React Native groupe ",
-    members: ["Alice", "Bob"],
-    image: "https://picsum.photos/50",
-    info: "ahsd asdjh asdjh asdia  aisdj iasd",
-  },
-  {
-    name: "React Native groupe ",
-    members: ["Alice", "Bob"],
-    image: "https://picsum.photos/50",
-    info: "ahsd asdjh asdjh asdia  aisdj iasd",
-  },
-  {
-    name: "React Native groupe ",
-    members: ["Alice", "Bob"],
-    image: "https://picsum.photos/50",
-    info: "ahsd asdjh asdjh asdia  aisdj iasd",
-  },
-];
+import { useEffect, useState } from "react";
 const followers = [
   {
     name: "Laravel Dev",
@@ -174,11 +76,13 @@ const followers = [
     image: "https://picsum.photos/51",
   },
 ];
-export default function Home({ auth, posts, user }) {
+export default function Home({ auth, posts, user, groups }) {
   const { setUser } = useUserContext();
+  const [groupsData, setGroupsData] = useState(groups);
   useEffect(() => {
     setUser(user);
   }, [user]);
+  console.log(groups);
 
   return (
     <>
@@ -193,7 +97,7 @@ export default function Home({ auth, posts, user }) {
       </Head>
       <Authenticated user={auth.user}>
         <div className="flex flex-col lg:gap-0 gap-2 p-2 lg:p-0 lg:grid lg:grid-cols-12 min-h-barHeight lg:max-h-barHeight overflow-scroll bg-gray-900">
-          <GroupsBar groups={groups} />
+          <GroupsBar groups={groupsData} setGroups={setGroupsData} />
           <HomeFeed posts={posts} user={user} />
           <FollowersBar followers={followers} />
         </div>

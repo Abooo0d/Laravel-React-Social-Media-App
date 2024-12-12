@@ -13,6 +13,7 @@ import "./index.css";
 import { useMainContext } from "@/Contexts/MainContext";
 import Notification from "./Notification";
 const CreatePostForm = ({ showForm, setShowForm, user, setPosts, posts }) => {
+  const editorRef = useRef();
   const { errors, setErrors, successMessage, setSuccessMessage } =
     useMainContext();
   const [image, setImage] = useState("");

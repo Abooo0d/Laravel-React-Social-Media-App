@@ -4,15 +4,15 @@
   --ck-custom-foreground: #111827; /* Slightly lighter background for contrast */
   --ck-custom-border: hsl(255, 5%, 30%); /* Border color */
   --ck-custom-white: hsl(0, 0%, 100%); /* White text */
-
+  --ck-color-base-text: hsl(0, 0%, 90%) !important;
   /* Overrides generic colors */
   --ck-color-base-foreground: var(--ck-custom-background);
-  --ck-color-focus-border: hsl(208, 90%, 62%);
+  --ck-color-focus-border: red;
   --ck-color-text: hsl(0, 0%, 90%); /* Light gray text */
   --ck-color-shadow-drop: hsla(0, 0%, 0%, 0.2);
   --ck-color-shadow-inner: hsla(0, 0%, 0%, 0.1);
 
-  --ck-color-base-border: #374151;
+  --ck-color-base-border: #374151 !important;
 
   /* --ck-color-toolbar-background:''; */
   /* --ck-color-dropdown-panel-:''; */
@@ -21,7 +21,7 @@
   --ck-color-button-default-hover-background: hsl(255, 5%, 20%);
   --ck-color-button-default-active-background: hsl(255, 5%, 18%);
   --ck-color-button-default-active-shadow: hsl(255, 5%, 25%);
-  /* --ck-color-button-default-disabled-background: var(--ck-custom-foreground); */
+  --ck-color-button-default-disabled-background: var(--ck-custom-foreground);
   --ck-color-button-default-disabled-background: var(--ck-custom-foreground);
 
   --ck-color-button-on-background: var(--ck-custom-background);
@@ -84,7 +84,7 @@
   --ck-color-tooltip-background: hsl(252, 7%, 14%);
   --ck-color-tooltip-text: hsl(0, 0%, 93%);
 
-  --ck-color-base-background: #1d2432;
+  --ck-color-base-background: #1d2432 !important;
 
   /* Image package colors */
   --ck-color-image-caption-background: hsl(255, 5%, 20%);
@@ -114,6 +114,7 @@
 .ck-content > li,
 .ck-content > pre {
   color: rgb(209 213 219);
+  /* color: red; */
 }
 
 .ck-content > ol,

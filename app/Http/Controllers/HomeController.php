@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\GroupResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
+use App\Models\Group;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +33,20 @@ class HomeController extends Controller
         }
       ])
       ->latest()
-      ->paginate(3);
+      ->paginate(15);
+    // $groups = Group::query()
+    //   ->select(['groups.*', 'gu.role', 'gu.status'])
+    //   ->join('group_users AS gu', 'gu.group_id', 'groups.id')
+    //   ->where('gu.user_id', $userId)
+    //   ->orderBy('gu.role')
+    //   ->orderBy('name');
+    $groups = Group::query()
+      ->select(['groups.*', 'gu.role', 'gu.status'])
+      ->join('group_users AS gu', 'gu.group_id', 'groups.id')
+      ->where('gu.user_id', $userId)
+      ->orderBy('gu.role')
+      ->orderBy('name')
+      ->get();
     $user = $request->user() !== null ? new UserResource($request->user()) : '';
     $allPosts = PostResource::collection($posts);
     if ($request->wantsJson()) {
@@ -61,7 +76,8 @@ class HomeController extends Controller
             'from' => $posts->firstItem(),
             'to' => $posts->lastItem(),
           ]
-        ]
+        ],
+        'groups' => GroupResource::collection($groups)
       ]);
     }
   }
