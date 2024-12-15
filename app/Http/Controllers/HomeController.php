@@ -34,14 +34,9 @@ class HomeController extends Controller
       ])
       ->latest()
       ->paginate(15);
-    // $groups = Group::query()
-    //   ->select(['groups.*', 'gu.role', 'gu.status'])
-    //   ->join('group_users AS gu', 'gu.group_id', 'groups.id')
-    //   ->where('gu.user_id', $userId)
-    //   ->orderBy('gu.role')
-    //   ->orderBy('name');
     $groups = Group::query()
-      ->select(['groups.*', 'gu.role', 'gu.status'])
+      ->with('currentUserGroups')
+      ->select(['groups.*'])
       ->join('group_users AS gu', 'gu.group_id', 'groups.id')
       ->where('gu.user_id', $userId)
       ->orderBy('gu.role')

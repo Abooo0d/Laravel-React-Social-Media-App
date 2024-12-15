@@ -10,15 +10,18 @@ use App\Http\Requests\UpdateGroupRequest;
 use App\Http\Resources\GroupResource;
 use App\Http\Resources\GroupUserResource;
 use App\Models\GroupUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class GroupController extends Controller
 {
-  public function index()
+  public function index(Group $group)
   {
-    //
+    return Inertia::render('Group/View', ['group' => new GroupResource($group)]);
   }
-
   public function store(StoreGroupRequest $request)
   {
     $data = $request->validated();
@@ -52,5 +55,37 @@ class GroupController extends Controller
   public function destroy(Group $group)
   {
     //
+  }
+  public function changeImages(Request $request, Group $group)
+  {
+    $data = $request->validate([
+      'coverImage' => ['nullable', 'file', 'mimes:jpg,png'],
+      'avatarImage' =>  ['nullable', 'file', 'mimes:jpg,png'],
+      'group_id' => ['required']
+    ]);
+    $group = Group::where('id', $data['group_id'])->first();
+    /**
+     * @var UploadedFile $cover
+     */
+    $cover = $data['coverImage'] ?? null;
+    /**
+     * @var UploadedFile $thumbnail
+     */
+    $thumbnail = $data['avatarImage'] ?? null;
+    if ($cover) {
+      if ($group->cover_path) {
+        Storage::disk('public')->delete($group->cover_path);
+      }
+      $coverPath = $cover->store("group-{$group->id}", 'public');
+      $group->update(['cover_path' => $coverPath]);
+    }
+    if ($thumbnail) {
+      if ($group->thumbnail_path) {
+        Storage::disk('public')->delete($group->thumbnail_path);
+      }
+      $thumbnail_path = $thumbnail->store("group-{$group->id}", 'public');
+      $group->update(['thumbnail_path' => $thumbnail_path]);
+    }
+    return back();
   }
 }

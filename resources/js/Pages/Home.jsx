@@ -82,7 +82,6 @@ export default function Home({ auth, posts, user, groups }) {
   useEffect(() => {
     setUser(user);
   }, [user]);
-  console.log(groups);
 
   return (
     <>

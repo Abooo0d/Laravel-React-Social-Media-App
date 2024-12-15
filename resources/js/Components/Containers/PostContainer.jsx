@@ -17,7 +17,6 @@ const PostContainer = ({ posts, currentUser }) => {
             meta: data.data.posts.meta,
           }));
           setAllPosts((prevPosts) => [...prevPosts, ...data.data.posts.posts]);
-          console.log(data.data.posts.posts);
         });
     }
   }, [inView]);

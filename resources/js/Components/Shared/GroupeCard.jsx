@@ -1,10 +1,30 @@
 import React from "react";
-
+import { capitalizeFirstLetter } from "@/Hooks/Functions";
+import { Link } from "@inertiajs/react";
 const GroupeCard = ({ data }) => {
   return (
-    <div className="flex items-center relative gap-3 duration-200 hover:bg-gray-300 dark:hover:bg-gray-700 cursor-pointer bg-gray-100 dark:bg-gray-800 py-2 px-4 rounded-md rounded-tr-none">
-      <div className="absolute top-[5px] right-0 bg-gray-900 backdrop-blur-md border-[1px] border-solid border-gray-600 border-r-0 pl-[6px] pr-[10px] py-[2px] rounded-l-md text-gray-300 text-[10px]">
-        {data.status === "approved" ? data.role : data.status}
+    <Link
+      className="flex items-center relative gap-3 duration-200 hover:bg-gray-300 dark:hover:bg-gray-700 cursor-pointer bg-gray-100 dark:bg-gray-800 py-2 px-4 rounded-md rounded-tr-none group"
+      href={route("group.profile", data.slug)}
+    >
+      {/* <
+
+        className="flex items-center "
+      > */}
+      <div
+        className={`absolute top-[5px] right-[5px] backdrop-blur-md border-[1px] border-solid pl-[6px] px-[5px] py-[2px] rounded-sm text-gray-300 text-[10px] group-hover:opacity-100 opacity-0 duration-200
+        ${
+          data.status === "approved"
+            ? data.role === "admin"
+              ? "bg-emerald-600/70 border-emerald-300"
+              : "bg-blue-600/70 border-blue-300"
+            : "bg-yellow-600/70 border-yellow-300"
+        }
+        `}
+      >
+        {data.status === "approved"
+          ? capitalizeFirstLetter(data.role)
+          : capitalizeFirstLetter(data.status)}
       </div>
       <img
         src={data.thumbnail_url || ""}
@@ -17,7 +37,8 @@ const GroupeCard = ({ data }) => {
           {data.description}
         </p>
       </div>
-    </div>
+      {/* </> */}
+    </Link>
   );
 };
 

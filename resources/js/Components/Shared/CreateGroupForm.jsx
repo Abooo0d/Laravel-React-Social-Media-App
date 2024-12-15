@@ -21,7 +21,6 @@ const CreateGroupForm = ({ showForm, setShowForm, setGroups }) => {
         about: groupAbout,
       })
       .then(({ data }) => {
-        console.log(data.group);
         setGroups((prevData) => [data.group, ...prevData]);
         setShowForm(false);
       });
