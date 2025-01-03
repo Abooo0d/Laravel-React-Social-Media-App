@@ -29,7 +29,7 @@ class GroupResource extends JsonResource
       'created_at' => $this->created_at,
       'owner' => $this->user_id,
       'role' => $this->currentUserGroups->role,
-      'status' => $this->currentUserGroups->status
+      'status' => $this->currentUserGroups->status,
     ];
   }
 }

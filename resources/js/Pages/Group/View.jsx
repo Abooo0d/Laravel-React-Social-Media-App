@@ -11,7 +11,6 @@ import { PrimaryButton } from "@/Components/Shared/Buttons";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
-
 const View = ({ auth, group }) => {
   console.log(group);
 
@@ -21,6 +20,7 @@ const View = ({ auth, group }) => {
     group_id: group.id,
   });
   const { errors } = usePage().props;
+  console.log(errors);
   let errorsArray = [];
   Object.keys(errors).map((key) => errorsArray.push(errors[key]));
   const { setSuccessMessage } = useMainContext();
@@ -85,7 +85,9 @@ const View = ({ auth, group }) => {
         errorsArray = [];
       },
       onFinish: () => {},
-      onSuccess: () => {
+      onSuccess: (data) => {
+        console.log(data);
+
         setSuccessMessage("Image Updated Successfully");
       },
     });

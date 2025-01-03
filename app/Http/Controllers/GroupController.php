@@ -63,11 +63,16 @@ class GroupController extends Controller
       'avatarImage' =>  ['nullable', 'file', 'mimes:jpg,png'],
       'group_id' => ['required']
     ]);
-    $group = Group::where('id', $data['group_id'])->first();
+    $group = Group::query()
+      ->with('currentUserGroups')
+      ->where('id', $data['group_id'])->first();
+    if ($group->currentUserGroups['role'] !== 'admin') {
+      return back()->withErrors(['message' => 'You do not have permission to change images.']);
+    }
     /**
      * @var UploadedFile $cover
      */
-    $cover = $data['coverImage'] ?? null;
+    $cover = $data['coverImage'] ?? null; 
     /**
      * @var UploadedFile $thumbnail
      */

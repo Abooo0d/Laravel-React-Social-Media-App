@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Checkbox from "@/Components/Checkbox";
 import GuestLayout from "@/Layouts/GuestLayout";
 import InputError from "@/Components/InputError";
@@ -17,7 +17,8 @@ export default function Login({ status, canResetPassword }) {
     password: "",
     remember: false,
   });
-
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   useEffect(() => {
     setUser({});
     return () => {
@@ -31,6 +32,12 @@ export default function Login({ status, canResetPassword }) {
     post(route("login"));
   };
 
+  useEffect(() => {
+    data.email = email;
+  }, [email]);
+  useEffect(() => {
+    data.password = password;
+  }, [password]);
   return (
     <GuestLayout>
       <Head title="Log in" />
@@ -47,8 +54,9 @@ export default function Login({ status, canResetPassword }) {
             id="email"
             type="email"
             name="email"
-            value={data.email}
-            className="mt-1 block w-full"
+            value={email}
+            setValue={setEmail}
+            classes="mt-1 block w-full"
             autoComplete="username"
             isFocused={true}
             onChange={(e) => setData("email", e.target.value)}
@@ -64,8 +72,9 @@ export default function Login({ status, canResetPassword }) {
             id="password"
             type="password"
             name="password"
-            value={data.password}
-            className="mt-1 block w-full"
+            value={password}
+            setValue={setPassword}
+            classes="mt-1 block w-full"
             autoComplete="current-password"
             onChange={(e) => setData("password", e.target.value)}
           />
