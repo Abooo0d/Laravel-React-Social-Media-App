@@ -4,16 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Enums\GroupUserRuleEnum;
 use App\Http\Enums\GroupUserStatusEnum;
+use App\Http\Requests\InviteUserRequest;
 use App\Models\Group;
 use App\Http\Requests\StoreGroupRequest;
 use App\Http\Requests\UpdateGroupRequest;
 use App\Http\Resources\GroupResource;
 use App\Http\Resources\GroupUserResource;
 use App\Models\GroupUsers;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Stringable;
 use Inertia\Inertia;
 
 class GroupController extends Controller
@@ -72,7 +75,7 @@ class GroupController extends Controller
     /**
      * @var UploadedFile $cover
      */
-    $cover = $data['coverImage'] ?? null; 
+    $cover = $data['coverImage'] ?? null;
     /**
      * @var UploadedFile $thumbnail
      */
@@ -92,5 +95,21 @@ class GroupController extends Controller
       $group->update(['thumbnail_path' => $thumbnail_path]);
     }
     return back();
+  }
+  public function inviteUser(InviteUserRequest $request, Group $group)
+  {
+    $data = $request->validated();
+    $user = $request->user;
+    GroupUsers::create([
+      'user_id' => $user->id,
+      'group_id' => $group->id,
+      'created_by' => Auth::id(),
+      'status' => GroupUserStatusEnum::PENDING->value,
+      'role' => GroupUserRuleEnum::USER->value,
+      'token' => Stringable::random_bytes(265),
+      'token_expire_date' => Carbon::new()->addHours(24),
+      'token_used' => '',
+      'created_at' => '',
+    ]);
   }
 }

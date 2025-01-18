@@ -14,7 +14,9 @@ class GroupUsers extends Model
     'group_id',
     'created_by',
     'status',
-    'role'
+    'role',
+    'token',
+    'token_expire_date'
   ];
   public function user()
   {

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import GuestLayout from "@/Layouts/GuestLayout";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
@@ -13,12 +13,23 @@ export default function ResetPassword({ token, email }) {
     password: "",
     password_confirmation: "",
   });
-
+  const [password, setPassword] = useState("");
+  const [confirmation, setConfirmation] = useState("");
+  const [Email, setEmail] = useState(email);
   useEffect(() => {
     return () => {
       reset("password", "password_confirmation");
     };
   }, []);
+  useEffect(() => {
+    data.password = password;
+  }, [password]);
+  useEffect(() => {
+    data.password_confirmation = confirmation;
+  }, [confirmation]);
+  useEffect(() => {
+    data.email = email;
+  }, [email]);
 
   const submit = (e) => {
     e.preventDefault();
@@ -38,8 +49,9 @@ export default function ResetPassword({ token, email }) {
             id="email"
             type="email"
             name="email"
-            value={data.email}
-            className="mt-1 block w-full"
+            value={Email}
+            setValue={setEmail}
+            classes="mt-1 block w-full"
             autoComplete="username"
             onChange={(e) => setData("email", e.target.value)}
           />
@@ -54,8 +66,9 @@ export default function ResetPassword({ token, email }) {
             id="password"
             type="password"
             name="password"
-            value={data.password}
-            className="mt-1 block w-full"
+            value={password}
+            setValue={setPassword}
+            classes="mt-1 block w-full"
             autoComplete="new-password"
             isFocused={true}
             onChange={(e) => setData("password", e.target.value)}
@@ -73,8 +86,9 @@ export default function ResetPassword({ token, email }) {
           <TextInput
             type="password"
             name="password_confirmation"
-            value={data.password_confirmation}
-            className="mt-1 block w-full"
+            value={confirmation}
+            setValue={setConfirmation}
+            classes="mt-1 block w-full"
             autoComplete="new-password"
             onChange={(e) => setData("password_confirmation", e.target.value)}
           />

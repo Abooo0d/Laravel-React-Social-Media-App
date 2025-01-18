@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import { useForm, Head, usePage } from "@inertiajs/react";
 import { useMainContext } from "@/Contexts/MainContext";
 import { PrimaryButton } from "@/Components/Shared/Buttons";
+import InviteUserForm from "@/Components/Shared/InviteUserForm";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -26,6 +27,7 @@ const View = ({ auth, group }) => {
   const { setSuccessMessage } = useMainContext();
   const [coverImage, setCoverImage] = useState("");
   const [avatarImage, setAvatarImage] = useState("");
+  const [showInviteForm, setShowInviteForm] = useState(false);
 
   const [isTheCoverChanged, setIsTheCoverChanged] = useState(false);
   const [isTheAvatarChanged, setIsTheAvatarChanged] = useState(false);
@@ -192,7 +194,12 @@ const View = ({ auth, group }) => {
             <h2 className="pl-[250px] text-gray-400 text-lg">{group.name}</h2>
             <div className="flex justify-start items-center gap-4">
               {group?.role === "admin" && (
-                <PrimaryButton classes="px-6 py-3">
+                <PrimaryButton
+                  classes="px-6 py-3"
+                  event={() => {
+                    setShowInviteForm(true);
+                  }}
+                >
                   Invite Members
                 </PrimaryButton>
               )}
@@ -246,6 +253,10 @@ const View = ({ auth, group }) => {
             </Tab.Group>
           </div>
         </div>
+        <InviteUserForm
+          showForm={showInviteForm}
+          setShowForm={setShowInviteForm}
+        />
       </Authenticated>
     </>
   );
