@@ -11,6 +11,8 @@ use App\Http\Requests\UpdateGroupRequest;
 use App\Http\Resources\GroupResource;
 use App\Http\Resources\GroupUserResource;
 use App\Models\GroupUsers;
+use App\Notifications\GroupInvitation;
+use App\Notifications\InvitationApproved;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +20,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Stringable;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 class GroupController extends Controller
 {
@@ -63,7 +66,7 @@ class GroupController extends Controller
   {
     $data = $request->validate([
       'coverImage' => ['nullable', 'file', 'mimes:jpg,png'],
-      'avatarImage' =>  ['nullable', 'file', 'mimes:jpg,png'],
+      'avatarImage' => ['nullable', 'file', 'mimes:jpg,png'],
       'group_id' => ['required']
     ]);
     $group = Group::query()
@@ -100,16 +103,48 @@ class GroupController extends Controller
   {
     $data = $request->validated();
     $user = $request->user;
+    $groupUser = $request->groupUser;
+    if ($groupUser) {
+      $groupUser->delete();
+    }
+    $hours = 24;
+    $token = Str::random(265);
     GroupUsers::create([
       'user_id' => $user->id,
       'group_id' => $group->id,
       'created_by' => Auth::id(),
       'status' => GroupUserStatusEnum::PENDING->value,
       'role' => GroupUserRuleEnum::USER->value,
-      'token' => Stringable::random_bytes(265),
-      'token_expire_date' => Carbon::new()->addHours(24),
+      'token' => $token,
+      'token_expire_date' => Carbon::now()->addHours($hours),
       'token_used' => '',
       'created_at' => '',
     ]);
+    $user->notify(new GroupInvitation($group, $hours, $token));
+    return back()->with('success', 'User Has Been Invited Successfully');
+  }
+  public function acceptInvitation(string $token)
+  {
+    $groupUser = GroupUsers::query()->where('token', $token)->first();
+    $message = '';
+    if (!$groupUser) {
+      $message = 'This Link Isn`t Valid!';
+    } elseif ($groupUser->status == GroupUserStatusEnum::APPROVED->value || $groupUser->token_used) {
+      $message = 'This Link Is Already Used!';
+    } elseif ($groupUser->token_expire_date < Carbon::now()) {
+      $message = 'This Link Is Expired!';
+    }
+    if ($message !== '') {
+      return inertia('Error', [
+        'message' => $message
+      ]);
+    }
+    $groupUser->status = GroupUserStatusEnum::APPROVED->value;
+    $groupUser->token_used = Carbon::now();
+    $groupUser->save();
+    $adminUser = $groupUser->adminUser;
+    $group = $groupUser->group;
+    $adminUser->notify(new InvitationApproved($group, $groupUser->user));
+    return redirect(route('group.profile', $groupUser->group))->with('success', 'You Are Now A Member Of This Group');
   }
 }

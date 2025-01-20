@@ -13,8 +13,6 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 const View = ({ auth, group }) => {
-  console.log(group);
-
   const { data, setData, post, progress } = useForm({
     coverImage: null,
     avatarImage: null,
@@ -256,6 +254,7 @@ const View = ({ auth, group }) => {
         <InviteUserForm
           showForm={showInviteForm}
           setShowForm={setShowInviteForm}
+          group={group}
         />
       </Authenticated>
     </>

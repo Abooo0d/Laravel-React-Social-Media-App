@@ -48,5 +48,6 @@ Route::middleware('auth')->group(function () {
   Route::get('/profile/{group:slug}', [GroupController::class, 'index'])->name('group.profile');
   Route::post('/group/change_images', [GroupController::class, 'changeImages'])->name('group.changeImages');
   Route::post('/group/invite/{group:slug}', [GroupController::class, 'inviteUser'])->name('group.inviteUser');
+  Route::get('/group/accept-invitation/{token}', [GroupController::class, 'acceptInvitation'])->name('group.acceptInvitation');
 });
 require __DIR__ . '/auth.php';

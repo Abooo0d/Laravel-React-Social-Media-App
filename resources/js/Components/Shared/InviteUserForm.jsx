@@ -6,12 +6,30 @@ import TextInput from "../TextInput";
 import { HiMiniXMark } from "react-icons/hi2";
 import { Switch } from "@headlessui/react";
 import axiosClient from "@/AxiosClient/AxiosClient";
-const InviteUserForm = ({ showForm, setShowForm }) => {
+import { GoArrowUp } from "react-icons/go";
+import { useMainContext } from "@/Contexts/MainContext";
+const InviteUserForm = ({ showForm, setShowForm, group }) => {
   const [email, setEmail] = useState("");
+  const { setErrors, setSuccessMessage } = useMainContext();
   function close() {
     setShowForm(false);
   }
-  const inviteUser = () => {};
+  useEffect(() => {
+    setEmail("");
+  }, [showForm]);
+  const inviteUser = () => {
+    axiosClient
+      .post(route("group.inviteUser", group.slug), {
+        email: email,
+      })
+      .then((res) => {
+        setSuccessMessage("User Have Been Invited Successfully");
+        setShowForm(false);
+      })
+      .catch((err) => {
+        setErrors([err.response.data.message]);
+      });
+  };
   return (
     <div
       className={`relative z-10 focus:outline-none delay-200 ${

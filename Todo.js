@@ -7,6 +7,8 @@
 // implement The Error Messages In The Create Post From And The update Post Form
 // Put The Focus On The TextInput on The CreatePostForm And THe UpdatePostForm
 
+// Set A Loading When Sending Invitation To Group
+// Fix The Error Page Design
 /************** Working On *************/
 // Create Context Provider To The Application
 
