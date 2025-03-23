@@ -5,45 +5,40 @@ import { HiMiniXMark } from "react-icons/hi2";
 import { FaCheck } from "react-icons/fa6";
 import { Tab } from "@headlessui/react";
 import React, { useEffect, useState } from "react";
-import { useForm, Head, usePage } from "@inertiajs/react";
+import Edit from "./Edit";
+import { Head, usePage } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
 import { useMainContext } from "@/Contexts/MainContext";
-import { PrimaryButton } from "@/Components/Shared/Buttons";
-import InviteUserForm from "@/Components/Shared/InviteUserForm";
-import axiosClient from "@/AxiosClient/AxiosClient";
-import UserRequestCard from "@/Components/Shared/UserRequestCard";
-import UserMemberCard from "@/Components/Shared/UserMemberCard";
-import GroupAboutForm from "@/Components/Shared/GroupAboutForm";
+import { useUserContext } from "@/Contexts/UserContext";
 import PostContainer from "@/Components/Containers/PostContainer";
-import CreatePost from "@/Components/Shared/CreatePost";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
-const View = ({ auth, group, requests, users, isAdmin, posts }) => {
+
+const View = ({ auth, user, posts }) => {
+  const { setUser } = useUserContext();
   const { flash } = usePage().props;
-  const isCurrentUserJoined = !!(group.status == "approved");
-  const [groupData, setGroupData] = useState(group);
-  const [requestsData, setRequestsData] = useState(requests);
+
+  useEffect(() => {
+    setUser(user);
+  }, []);
+  useEffect(() => {
+    flash?.success && setSuccessMessage(flash.success);
+  }, [flash]);
+
   const { data, setData, post, progress } = useForm({
     coverImage: null,
     avatarImage: null,
-    group_id: groupData.id,
   });
-  const [allPosts, setAllPosts] = useState(posts);
   const { errors } = usePage().props;
   let errorsArray = [];
   Object.keys(errors).map((key) => errorsArray.push(errors[key]));
-  const { setSuccessMessage, setErrors } = useMainContext();
+  const { setSuccessMessage } = useMainContext();
   const [coverImage, setCoverImage] = useState("");
   const [avatarImage, setAvatarImage] = useState("");
-  const [showInviteForm, setShowInviteForm] = useState(false);
 
   const [isTheCoverChanged, setIsTheCoverChanged] = useState(false);
   const [isTheAvatarChanged, setIsTheAvatarChanged] = useState(false);
-
-  useEffect(() => {
-    if (flash.success) setSuccessMessage(flash.success);
-    if (flash.error) setErrors(flash.error);
-  }, [flash]);
 
   const handelAvatarChange = (e) => {
     const file = e.target.files[0];
@@ -65,13 +60,10 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
     setIsTheCoverChanged(false);
   };
   const submitAvatarImage = () => {
-    post(route("group.changeImages"), {
+    post(route("profile.changeImages"), {
+      preserveScroll: true,
       onStart: () => {
         errorsArray = [];
-      },
-      onSuccess: () => {},
-      onFinish: () => {
-        // resetAvatarImage();
       },
     });
     setIsTheAvatarChanged(false);
@@ -96,28 +88,15 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
     setIsTheCoverChanged(false);
   };
   const submitCoverImage = () => {
-    post(route("group.changeImages"), {
+    post(route("profile.changeImages"), {
+      preserveScroll: true,
       onStart: () => {
         errorsArray = [];
-      },
-      onSuccess: () => {},
-      onFinish: () => {
-        // resetAvatarImage();
       },
     });
     setIsTheCoverChanged(false);
   };
-  function requestJoin() {
-    axiosClient
-      .post(route("group.join", groupData))
-      .then(({ data }) => {
-        setSuccessMessage(data.message);
-        setGroupData(data.group);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
+
   return (
     <>
       <Head>
@@ -136,11 +115,11 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
               <img
                 src={
                   coverImage ||
-                  groupData.cover_url ||
+                  user.cover_url ||
                   "/images/default_cover_image.jpg"
                 }
                 alt="cover Image"
-                className="h-[300px] max-md:h-[220px] w-full object-cover "
+                className="h-[300px] w-full object-cover "
               />
               {!isTheCoverChanged ? (
                 <button className="group-hover:opacity-100 opacity-0 rounded-md absolute top-2 right-2 py-1 px-4 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center">
@@ -172,15 +151,15 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
                 </div>
               )}
             </div>
-            <div className="absolute lg:w-[200px] lg:h-[200px] md:w-[160px] md:h-[160px] w-[130px] h-[130px] -bottom-[50px] max-md:bottom-[50px] max-md:left-[40px] md:left-20 left-0 group overflow-hidden">
+            <div className="absolute lg:w-[200px] lg:h-[200px] md:w-[160px] md:h-[160px] w-[130px] h-[130px] -bottom-[50px] md:left-20 left-0 group overflow-hidden">
               <img
                 src={
                   avatarImage ||
-                  groupData.thumbnail_url ||
+                  user.avatar_url ||
                   "/images/default_avatar_image.png"
                 }
                 alt="AvatarImage"
-                className=" rounded-full w-full h-full object-cover "
+                className=" rounded-full w-full h-full "
               />
               <div className="absolute rounded-full bg-black/50 backdrop-blur-[3px] top-0 left-0 right-0 bottom-0 duration-300 group-hover:opacity-100 opacity-0 flex justify-center items-center">
                 {!isTheAvatarChanged ? (
@@ -214,121 +193,52 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
           </div>
           <div className="w-full flex justify-between items-center gap-4 bg-gray-900 py-4 px-8">
             <h2 className="pl-[250px] max-md:pl-4 text-gray-400 text-lg max-md:text-[16px]">
-              {groupData.name}
+              {user.name}
             </h2>
-            <div className="flex justify-start items-center gap-4">
-              {isAdmin === true && (
-                <PrimaryButton
-                  classes="px-6 py-3 max-md:px-3 max-md:py-2 max-md:text-[14px]"
-                  event={() => {
-                    setShowInviteForm(true);
-                  }}
-                >
-                  Invite Members
-                </PrimaryButton>
-              )}
-              {!groupData.status && !groupData.auto_approval && (
-                <PrimaryButton
-                  classes="px-6 py-3 max-md:px-3 max-md:py-2 max-md:text-[14px]"
-                  event={requestJoin}
-                >
-                  Request Join
-                </PrimaryButton>
-              )}
-              {!groupData.status && groupData.auto_approval ? (
-                <PrimaryButton
-                  classes="px-6 py-3 max-md:px-3 max-md:py-2 max-md:text-[14px]"
-                  event={() => {
-                    requestJoin();
-                  }}
-                >
-                  Join To Group
-                </PrimaryButton>
-              ) : (
-                <></>
-              )}
-            </div>
           </div>
           <div className="w-full">
             <Tab.Group>
               <Tab.List className="md:px-[40px] px-[20px] flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
                 <CustomTab text="Posts" />
+                <CustomTab text="Followers" />
+                <CustomTab text="Friends" />
                 <CustomTab text="Photos" />
-                {isCurrentUserJoined && <CustomTab text="Members" />}
-                {isAdmin && <CustomTab text="Requests" />}
-                {isAdmin && <CustomTab text="About" />}
+                <CustomTab text="About" />
               </Tab.List>
               <Tab.Panels className=" py-2 rounded-md mt-2">
-                <Tab.Panel className="rounded-md flex flex-col w-full">
-                  <CreatePost
-                    user={auth.user}
-                    setPosts={setAllPosts}
-                    posts={allPosts}
-                    groupId={group.id}
-                    classes="px-3 bg-homeFeed "
-                  />
-                  <div className=" dark:bg-homeFeed rounded-md">
-                    <PostContainer posts={allPosts} />
+                <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
+                  <div className="bg-homeFeed rounded-md">
+                    <PostContainer posts={posts} />
                   </div>
                 </Tab.Panel>
-
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
-                  <div className="relative rounded-md p-3 mb-2 dark:bg-gray-800 bg-gray-100 duration-200">
+                  <div className="relative rounded-md p-3 mb-2 dark:hover:bg-gray-700 hover:bg-gray-200 dark:bg-gray-900 bg-gray-100 duration-200">
+                    <h3 className="text-sm font-medium leading-5 text-gray-800 dark:text-gray-300">
+                      Followers
+                    </h3>
+                  </div>
+                </Tab.Panel>
+                <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
+                  <div className="relative rounded-md p-3 mb-2 dark:hover:bg-gray-700 hover:bg-gray-200 dark:bg-gray-900 bg-gray-100 duration-200">
+                    <h3 className="text-sm font-medium leading-5 text-gray-800 dark:text-gray-300">
+                      Friends
+                    </h3>
+                  </div>
+                </Tab.Panel>
+                <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
+                  <div className="relative rounded-md p-3 mb-2 dark:hover:bg-gray-700 hover:bg-gray-200 dark:bg-gray-900 bg-gray-100 duration-200">
                     <h3 className="text-sm font-medium leading-5 text-gray-800 dark:text-gray-300">
                       Photos
                     </h3>
                   </div>
                 </Tab.Panel>
-                {isCurrentUserJoined && (
-                  <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
-                    <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
-                      {users.map((user, index) => (
-                        <UserMemberCard
-                          auth={auth.user}
-                          member={user}
-                          key={index}
-                          isAdmin={isAdmin}
-                        />
-                      ))}
-                    </div>
-                  </Tab.Panel>
-                )}
-                {isAdmin && (
-                  <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
-                    {requestsData.length > 0 ? (
-                      <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
-                        {requestsData.map((request, index) => (
-                          <UserRequestCard
-                            request={request}
-                            key={index}
-                            group={groupData}
-                            setGroup={setGroupData}
-                            requestsData={requestsData}
-                            setRequestsData={setRequestsData}
-                          />
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="relative rounded-md p-3 bg-gray-900 duration-200 w-full text-center text-gray-400 cursor-default">
-                        There Is No Requests
-                      </div>
-                    )}
-                  </Tab.Panel>
-                )}
-                {isAdmin && (
-                  <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
-                    <GroupAboutForm group={group} />
-                  </Tab.Panel>
-                )}
+                <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
+                  <Edit />
+                </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>
           </div>
         </div>
-        <InviteUserForm
-          showForm={showInviteForm}
-          setShowForm={setShowInviteForm}
-          group={group}
-        />
       </Authenticated>
     </>
   );

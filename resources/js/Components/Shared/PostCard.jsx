@@ -7,6 +7,7 @@ import PostCardPostBody from "./PostCardPostBody";
 import PostCardPostAttachments from "./PostCardPostAttachments";
 import PostCardPostActions from "./PostCardPostActions";
 import PostCommentSection from "./PostCommentSection";
+import axiosClient from "@/AxiosClient/AxiosClient";
 const PostCard = ({ post, user }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [showPost, setShowPost] = useState(false);
@@ -30,7 +31,7 @@ const PostCard = ({ post, user }) => {
   return (
     <>
       <div
-        className={`max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg py-4 pb-0 lg:px-6 px-4 flex flex-col duration-500 shadow-md`}
+        className={`max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg pt-4 pb-0 lg:px-6 px-4 flex flex-col duration-500 shadow-md`}
       >
         <div className="flex justify-between items-center">
           <PostOwnerInfo post={localPost} user={user} />

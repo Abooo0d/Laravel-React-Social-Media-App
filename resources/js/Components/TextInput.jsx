@@ -1,12 +1,18 @@
 import { forwardRef, useEffect, useRef } from "react";
 
-const TextInput = ({ classes, placeholder, value, setValue }) => {
+const TextInput = ({
+  classes,
+  placeholder,
+  value,
+  setValue,
+  hidePassword = false,
+}) => {
   return (
     <input
-      type="text"
+      type={hidePassword ? "password" : "text"}
       placeholder={placeholder}
       className={
-        `border-[1px] bg-gray-700/50 text-gray-400 placeholder:text-gray-600 border-gray-800 focus:border-gray-600 duration-200 rounded-md outline-none ring-0 focus:outline-none focus:ring-0 ` +
+        `bg-gray-700/50 hover:bg-gray-700/50 text-gray-400 placeholder:text-gray-400 border-gray-800 focus:border-gray-600 duration-200 rounded-md outline-none ring-0 focus:outline-none focus:ring-0 cursor-pointer hover:border-gray-600 border-[1px] border-solid border-gray-600/50 ` +
         classes
       }
       value={value}

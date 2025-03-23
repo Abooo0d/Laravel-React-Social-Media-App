@@ -7,6 +7,7 @@ use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use App\Models\Group;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -16,22 +17,11 @@ class HomeController extends Controller
   public function index(Request $request)
   {
     $userId = Auth::id();
-    $posts = Post::query()
-      ->withCount('reactions')
-      ->withCount('comments')
-      ->with([
-        'latest5Comments',
-        'comments' => function ($query) use ($userId) {
-          $query->whereNull('parent_id');
-        },
-        'reactions' => function ($query) use ($userId) {
-          $query->where('user_id', $userId);
-        },
-        'comments.postCommentsReactions' => function ($query) use ($userId) {
-          // Load reactions for each comment and filter by user
-          $query->where('user_id', $userId);
-        }
-      ])
+    if (!$userId) {
+      return redirect()->route('login'); // Redirect to login if not authenticated
+    }
+    $users = User::query()->get();
+    $posts = Post::PostsForTimeLine($userId)
       ->latest()
       ->paginate(15);
     $groups = Group::query()
@@ -72,7 +62,8 @@ class HomeController extends Controller
             'to' => $posts->lastItem(),
           ]
         ],
-        'groups' => GroupResource::collection($groups)
+        'groups' => GroupResource::collection($groups),
+        'followers' => UserResource::collection($users)
       ]);
     }
   }

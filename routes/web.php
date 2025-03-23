@@ -23,7 +23,8 @@ use Inertia\Inertia;
 Route::get('/', [HomeController::class, 'index'])->name('Home');
 // Profile Group
 Route::middleware('auth')->group(function () {
-  Route::get('/profile', [ProfileController::class, 'index'])->name('profile.view');
+  Route::get('my-profile', [ProfileController::class, 'myProfile'])->name('profile.my-profile');
+  Route::get('/profile/{user:username}', [ProfileController::class, 'index'])->name('profile.view');
   Route::post('/profile/change_images', [ProfileController::class, 'changeImages'])->name('profile.changeImages');
   Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -45,9 +46,14 @@ Route::middleware('auth')->group(function () {
 });
 Route::middleware('auth')->group(function () {
   Route::post('/group', [GroupController::class, 'store'])->name('group.create');
-  Route::get('/profile/{group:slug}', [GroupController::class, 'index'])->name('group.profile');
+  Route::get('/group/{group:slug}', [GroupController::class, 'index'])->name('group.profile');
   Route::post('/group/change_images', [GroupController::class, 'changeImages'])->name('group.changeImages');
   Route::post('/group/invite/{group:slug}', [GroupController::class, 'inviteUser'])->name('group.inviteUser');
   Route::get('/group/accept-invitation/{token}', [GroupController::class, 'acceptInvitation'])->name('group.acceptInvitation');
+  Route::post('/group/join/{group:slug}', [GroupController::class, 'joinGroup'])->name('group.join');
+  Route::post('/group/approve/{group:slug}', [GroupController::class, 'approveRequest'])->name('group.approve-request');
+  Route::post('/group/reject/{group:slug}', [GroupController::class, 'reject'])->name('group.reject-request');
+  Route::post('/group/change-role/{group::slug}', [GroupController::class, 'changeRole'])->name('group.change-role');
+  Route::put('/group/{group:slug}', [GroupController::class, 'update'])->name('group.update');
 });
 require __DIR__ . '/auth.php';

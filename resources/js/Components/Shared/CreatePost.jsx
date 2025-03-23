@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import CreatePostForm from "./CreatePostForm";
-const CreatePost = ({ user, setPosts, posts }) => {
+const CreatePost = ({ user, setPosts, posts, groupId, classes }) => {
   const [showForm, setShowForm] = useState(false);
   return (
-    <div className="w-full bg-gray-200 dark:bg-gray-900 px-3 py-3 flex flex-col gap-4  duration-300 h-[65px] border-b-[1px] border-solid border-gray-700">
+    <div
+      className={`w-full bg-gray-200 flex flex-col duration-300 h-[58px] border-solid border-gray-700 ${classes}`}
+    >
       <div
-        className="w-full resize-none rounded-lg bg-white/5 py-1.5  px-3 text-lg focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 duration-200 min-h-[40px] cursor-pointer text-gray-400 hover:border-sky-600 border-[1px] border-solid border-transparent"
+        className="w-full rounded-lg bg-gray-800/50 hover:bg-gray-700/50 py-1.5 px-3 duration-200 min-h-[40px] cursor-pointer text-gray-400 hover:border-gray-600 border-[1px] border-solid border-gray-600/50"
         onClick={() => setShowForm(true)}
       >
         What`s On Your Mind
@@ -16,6 +18,7 @@ const CreatePost = ({ user, setPosts, posts }) => {
         user={user}
         setPosts={setPosts}
         posts={posts}
+        groupId={groupId}
       />
     </div>
   );

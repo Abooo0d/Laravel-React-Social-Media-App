@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Middleware;
-
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -28,13 +29,17 @@ class HandleInertiaRequests extends Middleware
    *
    * @return array<string, mixed>
    */
-  public function share(Request $request): array
+  public function share(Request $request): array|RedirectResponse
   {
-    $user = $request->user() !== null ? new UserResource($request->user()) : '';
+    $user = $request->user() !== null ? new UserResource($request->user()) : null;
     return [
       ...parent::share($request),
       'auth' => [
         'user' => $user
+      ],
+      'flash' => [
+        'success' => session('success'),
+        'error' => session('error'),
       ],
     ];
   }

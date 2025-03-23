@@ -34,7 +34,7 @@ class PostController extends Controller
     try {
       $data = $request->validated();
       $user = $request->user();
-      $post =  Post::create($data);
+      $post = Post::create($data);
       /** @var UploadedFile[] $attachments */
       $attachments = $data['attachments'] ?? [];
       foreach ($attachments as $attachment) {
@@ -72,7 +72,6 @@ class PostController extends Controller
       $data = $request->validated();
       $user = $request->user();
       $post->update($request->validated());
-
       $deletedFilesIds = $data['deletedFilesIds'] ?? [];
       $postAttachments = PostAttachments::query()
         ->where('post_id', $post->id)
@@ -81,7 +80,6 @@ class PostController extends Controller
       foreach ($postAttachments as $file) {
         $file->delete();
       }
-
       /** @var UploadedFile[] $attachments */
       $attachments = $data['attachments'] ?? [];
       foreach ($attachments as $attachment) {
@@ -111,10 +109,6 @@ class PostController extends Controller
     return response()
       ->download(Storage::disk('public')->path($attachment->path), $attachment->name);
   }
-
-  /**
-   * Remove the specified resource from storage.
-   */
   public function destroy(Post $post)
   {
     $id = Auth::id();
@@ -137,7 +131,7 @@ class PostController extends Controller
     } else {
       PostReactions::create([
         'post_id' => $post->id,
-        'user_id' =>  Auth::id(),
+        'user_id' => Auth::id(),
         'type' => $data['reaction']
       ]);
       $userReaction = true;
@@ -166,13 +160,14 @@ class PostController extends Controller
   {
     $data = $request->validated();
     $comment->update([
-      'comment' =>  nl2br($data['comment'])
+      'comment' => nl2br($data['comment'])
+
     ]);
     return new CommentResource($comment);
   }
   public function DeleteComment(PostComments $comment)
   {
-    if ($comment->user_id !==  Auth::id()) {
+    if ($comment->user_id !== Auth::id()) {
       return response(['message' => 'You Don`t have Permission To Delete This Comment']);
     }
     $comment->delete();

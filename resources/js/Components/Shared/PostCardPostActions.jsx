@@ -20,7 +20,7 @@ const PostCardPostActions = ({ post, setPost, setShowCommentSection }) => {
   return (
     <div className="flex justify-between items-center gap-3 flex-col flex-1 mb-0 mt-4">
       <div className=" flex-1 text-gray-300 w-full flex justify-between items-center">
-        <div className="cursor-default text-gray-400 text-sm">
+        <div className="cursor-default text-gray-400 lg:text-sm text-[13px]">
           {parseInt(post.num_of_reactions) === 0
             ? "No Reactions"
             : parseInt(post.num_of_reactions) === 1
@@ -29,7 +29,7 @@ const PostCardPostActions = ({ post, setPost, setShowCommentSection }) => {
             ? `${post.num_of_reactions} Persons Reacted`
             : ""}
         </div>
-        <div className="cursor-default text-gray-400 text-sm">
+        <div className="cursor-default text-gray-400 lg:text-sm text-[13px]">
           {post.num_of_comments === 1
             ? post.num_of_comments + " Comment"
             : post.num_of_comments > 1
@@ -58,7 +58,7 @@ const PostCardPostActions = ({ post, setPost, setShowCommentSection }) => {
               }`}
             />
           </div>
-          <span className="w-[60px]">
+          <span className="w-[60px] lg:text-[16px] text-sm">
             {post.user_has_reaction ? "Liked" : "Like"}
           </span>
         </button>
@@ -66,7 +66,7 @@ const PostCardPostActions = ({ post, setPost, setShowCommentSection }) => {
           onClick={() => {
             setShowCommentSection((prevState) => !prevState);
           }}
-          className="flex justify-center items-center text-gray-300 rounded-lg cursor-pointer duration-200 h-[40px] flex-1 bg-gray-900"
+          className="flex justify-center items-center text-gray-300 rounded-lg cursor-pointer duration-200 h-[40px] flex-1 bg-gray-900 lg:text-[16px] text-sm"
         >
           <FaRegCommentDots className=" text-xl duration-200 mr-2" />
           Comment

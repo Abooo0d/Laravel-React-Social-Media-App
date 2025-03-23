@@ -12,7 +12,14 @@ import PopupCard from "./PopupCard";
 import "./index.css";
 import { useMainContext } from "@/Contexts/MainContext";
 import Notification from "./Notification";
-const CreatePostForm = ({ showForm, setShowForm, user, setPosts, posts }) => {
+const CreatePostForm = ({
+  showForm,
+  setShowForm,
+  user,
+  setPosts,
+  posts,
+  groupId,
+}) => {
   const editorRef = useRef();
   const { errors, setErrors, successMessage, setSuccessMessage } =
     useMainContext();
@@ -21,11 +28,20 @@ const CreatePostForm = ({ showForm, setShowForm, user, setPosts, posts }) => {
   const [showPost, setShowPost] = useState(false);
   const [imageIndex, setImageIndex] = useState();
   const [attachmentsErrors, setAttachmentsErrors] = useState([]);
-  const [post, setPost] = useState({ body: "", attachments: [] });
-  const [_post, set_Post] = useState({ body: "", attachments: [] });
+  const [post, setPost] = useState({
+    body: "",
+    attachments: [],
+    group_id: groupId,
+  });
+  const [_post, set_Post] = useState({
+    body: "",
+    attachments: [],
+    user_id: user.id,
+    group_id: groupId,
+  });
   let myFile;
   useEffect(() => {
-    setPost({ body: "", attachments: [] });
+    setPost({ body: "", attachments: [], user_id: user.id, group_id: groupId });
     setAttachmentsErrors([]);
   }, [showForm]);
   useEffect(() => {
@@ -38,7 +54,7 @@ const CreatePostForm = ({ showForm, setShowForm, user, setPosts, posts }) => {
   }, [post]);
 
   function close() {
-    setPost({ body: "", attachments: [] });
+    setPost({ body: "", attachments: [], user_id: user.id, group_id: groupId });
     setShowForm(false);
   }
   const handelSubmit = () => {
@@ -46,7 +62,12 @@ const CreatePostForm = ({ showForm, setShowForm, user, setPosts, posts }) => {
       router.post(route("post.create"), _post, {
         forceFormData: true,
         onSuccess: (data1) => {
-          setPost({ body: "", attachments: [] });
+          setPost({
+            body: "",
+            attachments: [],
+            user_id: user.id,
+            group_id: groupId,
+          });
           setShowForm(false);
           setSuccessMessage("Post Created Successfully");
           setPosts((prevPosts) => ({
@@ -74,6 +95,7 @@ const CreatePostForm = ({ showForm, setShowForm, user, setPosts, posts }) => {
         },
       });
     }
+    // console.log(_post);
   };
   const HandelTheFiles = async (e) => {
     for (const file of e.target.files) {

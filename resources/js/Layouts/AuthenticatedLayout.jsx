@@ -5,12 +5,19 @@ import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
 import { MainContext, useMainContext } from "@/Contexts/MainContext";
+import { redirect } from "react-router-dom";
 
 export default function Authenticated({ user, header, children }) {
+  useEffect(() => {
+    if (!user) {
+      window.location.href = route("login"); // Redirect if user is not authenticated
+    }
+  }, [user]);
+
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
   return (
-    <div className="min-h-screen bg-gray-300/80 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-300/80 dark:bg-homeFeed">
       <nav className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
@@ -50,7 +57,7 @@ export default function Authenticated({ user, header, children }) {
                   </Dropdown.Trigger>
 
                   <Dropdown.Content>
-                    <Dropdown.Link href={route("profile.view")}>
+                    <Dropdown.Link href={route("profile.my-profile")}>
                       Profile
                     </Dropdown.Link>
                     <Dropdown.Link
@@ -120,9 +127,9 @@ export default function Authenticated({ user, header, children }) {
             </div>
 
             <div className="mt-3 space-y-1">
-              {/* <ResponsiveNavLink href={route("Profile.View")}>
+              <ResponsiveNavLink href={route("profile.my-profile")}>
                 Profile
-              </ResponsiveNavLink> */}
+              </ResponsiveNavLink>
               <ResponsiveNavLink
                 method="post"
                 href={route("logout")}

@@ -6,12 +6,11 @@ import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/react";
-import SecondaryButton from "@/Components/SecondaryButton";
 import { useUserContext } from "@/Contexts/UserContext";
 
 export default function Login({ status, canResetPassword }) {
   const { setUser } = useUserContext();
-
+  const [hidePassword, setHidePassword] = useState(true);
   const { data, setData, post, processing, errors, reset } = useForm({
     email: "",
     password: "",
@@ -68,16 +67,31 @@ export default function Login({ status, canResetPassword }) {
         <div className="mt-4">
           <InputLabel htmlFor="password" value="Password" />
 
-          <TextInput
-            id="password"
-            type="password"
-            name="password"
-            value={password}
-            setValue={setPassword}
-            classes="mt-1 block w-full"
-            autoComplete="current-password"
-            onChange={(e) => setData("password", e.target.value)}
-          />
+          <div className="relative w-full">
+            <TextInput
+              id="password"
+              type="password"
+              name="password"
+              value={password}
+              setValue={setPassword}
+              classes="mt-1 block w-full"
+              autoComplete="current-password"
+              hidePassword={hidePassword}
+              onChange={(e) => setData("password", e.target.value)}
+            />
+            <span
+              className="absolute top-0 right-0 px-2 py-2 z-[10]  flex justify-center items-center bg-gray-800 hover:bg-gray-800 text-gray-200 font-thin duration-200 border-[1px] border-solid border-gray-700 rounded-md cursor-pointer"
+              onClick={() => {
+                // preventDefault();
+                setHidePassword((prev) => {
+                  return !prev;
+                });
+                // event.stopPropagation();
+              }}
+            >
+              hide
+            </span>
+          </div>
 
           <InputError message={errors.password} className="mt-2" />
         </div>

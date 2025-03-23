@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { formatRelativeTime } from "../../Functions";
+import { Link } from "@inertiajs/react";
+import { MdOutlineArrowForwardIos } from "react-icons/md";
+import { MdOutlineArrowRight } from "react-icons/md";
 const PostOwnerInfo = ({ post, user }) => {
   return (
     <div className="flex justify-between mb-4">
@@ -7,31 +10,31 @@ const PostOwnerInfo = ({ post, user }) => {
         <img
           src={user?.avatar_url}
           alt=""
-          className="w-[60px] h-[60px] rounded-full border-[3px] border-transparent hover:border-indigo-500 duration-200"
+          className="w-[60px] h-[60px] rounded-full border-[1px] border-gray-600/50 hover:border-gray-600 duration-200"
         />
-        <div className="flex flex-col ">
-          <h2 className=" text-lg ">
-            <a
-              href="/"
-              className="dark:text-gray-400 text-gray-900 hover:underline duration-200"
+        <div className="flex flex-col w-full justify-center ">
+          <h2 className=" flex justify-center items-center text-lg  dark:text-gray-400 lg:text-[18px] text-[16px] text-gray-900 duration-200">
+            <Link
+              href={route("profile.view", user.username)}
+              className=" hover:no-underline"
             >
-              {user?.name}
-            </a>{" "}
-            {post &&
-              (post?.groupe !== "" ||
-                (post?.group !== null && (
+              {user?.name}{" "}
+            </Link>
+            {post && (
+              <>
+                {post.group && (
                   <>
-                    <a
-                      href="/"
-                      className="text-gray-500 hover:underline duration-200"
-                    >
-                      : {post.groupe}
-                    </a>
+                    <MdOutlineArrowRight className="max-h-full w-[25px] h-[25px] text-gray-600" />
+                    <Link href={route("group.profile", post.group.slug)}>
+                      {post.group.name}
+                    </Link>
                   </>
-                )))}
+                )}
+              </>
+            )}
           </h2>
           {post && (
-            <p className="text-gray-500 text-sm cursor-default">
+            <p className="text-gray-500 lg:text-sm text-[12px] cursor-default">
               {formatRelativeTime(post.updated_at)}
             </p>
           )}

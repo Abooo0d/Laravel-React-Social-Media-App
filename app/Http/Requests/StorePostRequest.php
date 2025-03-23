@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\File;
 use Pest\Bootstrappers\BootOverrides;
 
@@ -46,7 +47,8 @@ class StorePostRequest extends FormRequest
           'zip'
         ])->max(512 * 1024 * 1024)
       ],
-      "user_id" => ['numeric']
+      "user_id" => ['required', 'exists:users,id'],
+      'group_id' => ['nullable', 'exists:groups,id']
     ];
   }
   protected function prepareForValidation()

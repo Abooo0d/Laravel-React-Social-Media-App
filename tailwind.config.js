@@ -28,8 +28,7 @@ export default {
         100: "100vh",
         barHeight: "calc(100vh - 66px)",
         barContainerHeight: "calc(100vh - 170px)",
-        homeFeedM_H: "calc(100vh - 210px)",
-        postContainerM_H: "calc(100vh - 285px)",
+        homeFeedM_H: "calc(100vh - 100px)",
       },
       minHeight: {
         100: "100vh",

@@ -16,7 +16,7 @@ class GroupUserResource extends JsonResource
   public function toArray(Request $request): array
   {
     return [
-      'user' => new UserResource($this->user),
+      'user' => new UserResource($this),
       'status' => $this->status,
       'role' => $this->role,
       'excepted_at' => $this->created_at

@@ -7,9 +7,6 @@ import { useForm } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 
 export default function UpdatePasswordForm({ className = "" }) {
-  const passwordInput = useRef();
-  const currentPasswordInput = useRef();
-
   const { data, setData, errors, put, reset, processing, recentlySuccessful } =
     useForm({
       current_password: "",
@@ -55,7 +52,6 @@ export default function UpdatePasswordForm({ className = "" }) {
 
           <TextInput
             id="current_password"
-            ref={currentPasswordInput}
             value={data.current_password}
             onChange={(e) => setData("current_password", e.target.value)}
             type="password"
@@ -71,7 +67,6 @@ export default function UpdatePasswordForm({ className = "" }) {
 
           <TextInput
             id="password"
-            ref={passwordInput}
             value={data.password}
             onChange={(e) => setData("password", e.target.value)}
             type="password"

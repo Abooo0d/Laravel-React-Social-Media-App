@@ -24,12 +24,12 @@ class GroupResource extends JsonResource
       'auto_approval' => $this->auto_approval,
       'about' => $this->about,
       'description' => Str::words($this->about, 20, '...'),
-      'thumbnail_url' => Storage::url($this->thumbnail_path),
-      'cover_url' => Storage::url($this->cover_path),
+      'thumbnail_url' => $this->thumbnail_path ? Storage::url($this->thumbnail_path) : '',
+      'cover_url' => $this->cover_path ? Storage::url($this->cover_path) : '',
       'created_at' => $this->created_at,
       'owner' => $this->user_id,
-      'role' => $this->currentUserGroups->role,
-      'status' => $this->currentUserGroups->status,
+      'role' => $this->currentUserGroups?->role,
+      'status' => $this->currentUserGroups?->status,
     ];
   }
 }
