@@ -19,7 +19,9 @@ use App\Notifications\GroupInvitation;
 use App\Notifications\InvitationApproved;
 use App\Notifications\JoinRequest;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
@@ -29,7 +31,7 @@ use Illuminate\Support\Str;
 
 class GroupController extends Controller
 {
-  public function index(Group $group)
+  public function index(Request $request, Group $group)
   {
     $users = User::query()
       ->select(['users.*', 'gu.role', 'gu.status', 'gu.group_id'])
@@ -40,24 +42,19 @@ class GroupController extends Controller
     $posts = Post::PostsForTimeLine(Auth::id())
       ->where('group_id', $group->id)
       ->latest()
-      ->paginate(15);
+      ->paginate(perPage: 15);
     $allPosts = PostResource::collection($posts);
+    if ($request->wantsJson()) {
+      return response([
+        'posts' => PostResource::collection($posts)
+      ]);
+    }
     return Inertia::render(component: 'Group/View', props: [
       'group' => new GroupResource(resource: $group),
       'requests' => UserResource::collection($group->requestUsers()->get()),
       'users' => GroupUserResource::collection($users),
       'isAdmin' => $group->isAdmin(Auth::id()),
-      'posts' => [
-        'posts' => $allPosts,
-        'meta' => [
-          'total' => $posts->total(),
-          'current_page' => $posts->currentPage(),
-          'per_page' => $posts->perPage(),
-          'last_page' => $posts->lastPage(),
-          'from' => $posts->firstItem(),
-          'to' => $posts->lastItem(),
-        ]
-      ]
+      'posts' => PostResource::collection($posts),
     ]);
   }
   public function store(StoreGroupRequest $request)
@@ -247,28 +244,27 @@ class GroupController extends Controller
     }
     return response(['message' => 'There Is An Error In The Request'], 400);
   }
-  public function changeRole(Request $request, Group $group)
+  public function changeRole(Request $request, Group $group): RedirectResponse|Response
   {
     $data = $request->validate([
-      'user_id' => 'required',
+      'user_id' => 'required|exists:users,id',
       'role' => Rule::enum(GroupUserRuleEnum::class)
     ]);
     $user_id = $data['user_id'];
-    $groupUser = GroupUsers::where('user_id', $data['user_id'])
+    $groupUser = GroupUsers::where('user_id', $user_id)
       ->where('group_id', $group->id)
-      ->where('status', GroupUserRuleEnum::USER->value)
       ->first();
     if ($group->isOwner($user_id)) {
-      return response(['message' => 'You Can`t Change The Role Of The Owner Of The Group', 400]);
+      return response(['message' => 'You Can`t Change The Role Of The Owner Of The Group'], 400);
     }
     if ($groupUser) {
       if ($group->isAdmin(Auth::id())) {
         $groupUser->role = $data['role'];
         $groupUser->save();
-        // return response(['message' => 'The Role Changed Successfully'], 200);
-        return redirect()->back()->with('success', 'THe Role Changed Successfully');
+        return back()->with('success', 'Abood');
+        // return redirect(route('group.profile', $group->slug))->with('success', 'Role Changed Successfully');
       }
     }
-    return response(['message' => 'there Is An Unexpected Error']);
+    return response(['message' => 'there Is An Unexpected Error'], 400);
   }
 }

@@ -265,7 +265,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
                     setPosts={setAllPosts}
                     posts={allPosts}
                     groupId={group.id}
-                    classes="px-3 bg-homeFeed "
+                    classes="px-4 bg-homeFeed "
                   />
                   <div className=" dark:bg-homeFeed rounded-md">
                     <PostContainer posts={allPosts} />
@@ -284,10 +284,10 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
                     <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
                       {users.map((user, index) => (
                         <UserMemberCard
-                          auth={auth.user}
                           member={user}
                           key={index}
                           isAdmin={isAdmin}
+                          group={group}
                         />
                       ))}
                     </div>

@@ -4,6 +4,8 @@ import UpdatePasswordForm from "./Partials/UpdatePasswordForm";
 import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationForm";
 
 export default function Edit({ auth, mustVerifyEmail, status }) {
+  console.log(mustVerifyEmail);
+
   return (
     <div className="py-0">
       <div className="max-w-7xl mx-auto sm:px-2 lg:px-4 space-y-2">

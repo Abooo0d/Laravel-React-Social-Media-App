@@ -2,13 +2,18 @@ import { Link } from "@inertiajs/react";
 import React, { useState } from "react";
 import UserMemberCardMenu from "./UserMemberCardMenu";
 
-const UserMemberCard = ({ member, admin, isAdmin }) => {
+const UserMemberCard = ({ member, isAdmin, group }) => {
   const [openMenu, setOpenMenu] = useState(false);
   return (
     <div>
       <div className="group relative bg-gray-700/30 backdrop-blur-sm rounded-[8px] border-[1px] border-solid border-gray-500/50  flex flex-col justify-between items-center cursor-pointer duration-200 hover:bg-gray-600/50 hover:border-gray-500 overflow-hidden drop-shadow-2xl">
-        {isAdmin && (
-          <UserMemberCardMenu openMenu={openMenu} setOpenMenu={setOpenMenu} />
+        {group.owner !== member.user.id && isAdmin && (
+          <UserMemberCardMenu
+            openMenu={openMenu}
+            setOpenMenu={setOpenMenu}
+            member={member}
+            group={group}
+          />
         )}
         <img
           src={member.user.avatar_url}
@@ -33,10 +38,16 @@ const UserMemberCard = ({ member, admin, isAdmin }) => {
             </h3>
           </Link>
         </div>
-        {member.role === "admin" && (
+        {group.owner == member.user.id ? (
+          <span className="absolute bottom-[15px] right-[10px] backdrop-blur-md border-[1px] border-solid pl-[6px] px-[5px] py-[2px] rounded-sm text-gray-300 text-[10px] opacity-100 duration-200 bg-indigo-800/30 border-indigo-800">
+            Owner
+          </span>
+        ) : member.role == "admin" ? (
           <span className="absolute bottom-[15px] right-[10px] backdrop-blur-md border-[1px] border-solid pl-[6px] px-[5px] py-[2px] rounded-sm text-gray-300 text-[10px] opacity-100 duration-200 bg-emerald-600/30 border-emerald-500">
             Admin
           </span>
+        ) : (
+          <></>
         )}
       </div>
     </div>

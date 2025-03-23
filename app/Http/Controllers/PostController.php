@@ -59,8 +59,6 @@ class PostController extends Controller
     }
     return back();
   }
-
-
   /**
    * Update the specified resource in storage.
    */

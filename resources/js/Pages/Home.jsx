@@ -7,13 +7,17 @@ import TextInput from "@/Components/TextInput";
 import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
-import { useState } from "react";
+import { Head, usePage } from "@inertiajs/react";
+import { useEffect, useState } from "react";
 export default function Home({ auth, posts, user, groups, followers }) {
   const { setUser } = useUserContext();
   const [groupsData, setGroupsData] = useState(groups);
   const [followersData, setFollowersData] = useState(followers);
-
+  const { setSuccessMessage } = useMainContext();
+  const { flash } = usePage().props;
+  useEffect(() => {
+    if (flash?.success) setSuccessMessage(flash.success);
+  }, [flash]);
   return (
     <>
       <Head>

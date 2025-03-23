@@ -18,7 +18,7 @@ class HomeController extends Controller
   {
     $userId = Auth::id();
     if (!$userId) {
-      return redirect()->route('login'); // Redirect to login if not authenticated
+      return redirect()->route('login');
     }
     $users = User::query()->get();
     $posts = Post::PostsForTimeLine($userId)
@@ -33,35 +33,25 @@ class HomeController extends Controller
       ->orderBy('name')
       ->get();
     $user = $request->user() !== null ? new UserResource($request->user()) : '';
-    $allPosts = PostResource::collection($posts);
     if ($request->wantsJson()) {
       return response([
-        'posts' => [
-          'posts' => $allPosts,
-          'meta' => [
-            'total' => $posts->total(),
-            'current_page' => $posts->currentPage(),
-            'per_page' => $posts->perPage(),
-            'last_page' => $posts->lastPage(),
-            'from' => $posts->firstItem(),
-            'to' => $posts->lastItem(),
-          ]
-        ]
+        // 'posts' => [
+        //   'posts' => $allPosts,v
+        //   'meta' => [
+        //     'total' => $posts->total(),
+        //     'current_page' => $posts->currentPage(),
+        //     'per_page' => $posts->perPage(),
+        //     'last_page' => $posts->lastPage(),
+        //     'from' => $posts->firstItem(),
+        //     'to' => $posts->lastItem(),
+        //   ]
+        // ]
+        'posts' => PostResource::collection($posts)
       ]);
     } else {
       return Inertia::render('Home', [
         'user' => $user,
-        'posts' => [
-          'posts' => $allPosts,
-          'meta' => [
-            'total' => $posts->total(),
-            'current_page' => $posts->currentPage(),
-            'per_page' => $posts->perPage(),
-            'last_page' => $posts->lastPage(),
-            'from' => $posts->firstItem(),
-            'to' => $posts->lastItem(),
-          ]
-        ],
+        'posts' => PostResource::collection($posts),
         'groups' => GroupResource::collection($groups),
         'followers' => UserResource::collection($users)
       ]);

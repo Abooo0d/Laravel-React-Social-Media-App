@@ -1,8 +1,32 @@
-import React, { useState } from "react";
+import axiosClient from "@/AxiosClient/AxiosClient";
+import { useMainContext } from "@/Contexts/MainContext";
+import { router, usePage } from "@inertiajs/react";
+import React, { useEffect, useState } from "react";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 
-const UserMemberCardMenu = ({ openMenu, setOpenMenu }) => {
+const UserMemberCardMenu = ({ openMenu, setOpenMenu, group, member }) => {
   const [showForm, setShowForm] = useState(false);
+  const { setErrors, setSuccessMessage } = useMainContext();
+
+  let errors = [];
+  const changeRole = (role) => {
+    errors = [];
+    axiosClient
+      .post(route("group.change-role", group.slug), {
+        user_id: member.user.id,
+        role: role,
+      })
+      .then((data) => {
+        router.reload();
+        setSuccessMessage("Role Changed Successfully");
+      })
+      .catch((e) => {
+        Object.keys(e.response.data).map((error) => {
+          errors.push(e.response.data[error]);
+        });
+        setErrors(errors);
+      });
+  };
   return (
     <div className="absolute top-[5px] right-[5px] ">
       <button
@@ -22,15 +46,29 @@ const UserMemberCardMenu = ({ openMenu, setOpenMenu }) => {
           openMenu ? "opacity-100 visible" : " opacity-0 invisible"
         }`}
       >
-        <button
-          onClick={() => {
-            setShowForm(true);
-            setOpenMenu(false);
-          }}
-          className="bg-gray-700/60 w-full duration-300 hover:bg-gray-600/80 py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
-        >
-          Set Admin
-        </button>
+        {member.role == "admin" ? (
+          <button
+            onClick={() => {
+              setShowForm(true);
+              setOpenMenu(false);
+              changeRole("user");
+            }}
+            className="bg-gray-700/60 w-full duration-300 hover:bg-gray-600/80 py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
+          >
+            Set As User
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              setShowForm(true);
+              setOpenMenu(false);
+              changeRole("admin");
+            }}
+            className="bg-gray-700/60 w-full duration-300 hover:bg-gray-600/80 py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
+          >
+            Set As Admin
+          </button>
+        )}
         <button className="bg-gray-700/60 w-full duration-300 hover:bg-gray-600/80 py-2 px-4 text-sm font-medium text-white focus:outline-none text-left">
           Kick Out
         </button>

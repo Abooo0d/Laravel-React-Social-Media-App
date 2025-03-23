@@ -5,7 +5,6 @@ import { Disclosure } from "@headlessui/react";
 import { TiArrowSortedDown } from "react-icons/ti";
 import CreateGroupForm from "../Shared/CreateGroupForm";
 import { FaUserGroup } from "react-icons/fa6";
-import GroupeCard from "../Shared/GroupeCard";
 import SmallScreenGroupContainer from "../Shared/SmallScreenGroupContainer";
 const GroupsBar = ({ groups, setGroups }) => {
   const [showForm, setShowForm] = useState(false);
@@ -39,7 +38,7 @@ const GroupsBar = ({ groups, setGroups }) => {
       </div>
       <div className="hidden max-lg:block">
         <button
-          className="w-[65px] h-[50px] absolute top-[200px] left-0 rounded-r-md bg-gray-600/40 hover:bg-gray-600/70 duration-200 backdrop-blur-sm border-[1px] border-l-0 border-solid border-gray-500/50 hover:border-gray-500 cursor-pointer flex flex-col justify-center items-center"
+          className="w-[65px] h-[50px] absolute top-[200px] left-0 rounded-r-md bg-gray-600/40 hover:bg-gray-600/70 duration-200 backdrop-blur-sm border-[1px] border-l-0 border-solid border-gray-500/50 hover:border-gray-500 cursor-pointer flex flex-col justify-center items-center z-10"
           onClick={() => {
             setShowGroupContainer((prev) => {
               return !prev;

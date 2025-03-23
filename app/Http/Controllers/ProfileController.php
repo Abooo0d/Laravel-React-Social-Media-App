@@ -26,48 +26,39 @@ class ProfileController extends Controller
       ->where('user_id', $user->id)
       ->latest()
       ->paginate(15);
-    $allPosts = PostResource::collection($posts);
+    if ($request->wantsJson()) {
+      return response([
+        'posts' => PostResource::collection($posts)
+      ]);
+    }
     return Inertia::render('MyProfile/View', props: [
       'user' => new UserResource($user),
-      'posts' => [
-        'posts' => $allPosts,
-        'meta' => [
-          'total' => $posts->total(),
-          'current_page' => $posts->currentPage(),
-          'per_page' => $posts->perPage(),
-          'last_page' => $posts->lastPage(),
-          'from' => $posts->firstItem(),
-          'to' => $posts->lastItem(),
-        ]
-      ]
+      'posts' => PostResource::collection($posts),
+      'mustVerifyEmail' => !!!$request->user()->email_verified_at,
+      'status' => session('status'),
     ]);
+
   }
   public function index(Request $request, User $user)
   {
     $userId = Auth::id();
     if (!$userId) {
-      return redirect()->route('login'); // Redirect to login if not authenticated
+      return redirect()->route('login');
     }
     $posts = Post::PostsForTimeLine($user->id)
       ->where('user_id', $user->id)
       ->latest()
       ->paginate(15);
-    $allPosts = PostResource::collection($posts);
     if ($user->id === Auth::id())
       return Redirect::route('profile.my-profile', $user->slug);
+    if ($request->wantsJson()) {
+      return response([
+        'posts' => PostResource::collection($posts)
+      ]);
+    }
     return Inertia::render('Profile/View', [
       'user' => new UserResource($user),
-      'posts' => [
-        'posts' => $allPosts,
-        'meta' => [
-          'total' => $posts->total(),
-          'current_page' => $posts->currentPage(),
-          'per_page' => $posts->perPage(),
-          'last_page' => $posts->lastPage(),
-          'from' => $posts->firstItem(),
-          'to' => $posts->lastItem(),
-        ]
-      ]
+      'posts' => PostResource::collection($posts),
     ]);
   }
   /**
@@ -87,14 +78,12 @@ class ProfileController extends Controller
   public function update(ProfileUpdateRequest $request): RedirectResponse
   {
     $request->user()->fill($request->validated());
-
     if ($request->user()->isDirty('email')) {
       $request->user()->email_verified_at = null;
     }
-
     $request->user()->save();
 
-    return redirect()->back()->with('message', 'Profile Updated Successfully');
+    return redirect()->back()->with('success', 'Profile Updated Successfully');
   }
 
   /**

@@ -27,7 +27,6 @@ export default function Login({ status, canResetPassword }) {
 
   const submit = (e) => {
     e.preventDefault();
-
     post(route("login"));
   };
 
@@ -60,13 +59,10 @@ export default function Login({ status, canResetPassword }) {
             isFocused={true}
             onChange={(e) => setData("email", e.target.value)}
           />
-
           <InputError message={errors.email} className="mt-2" />
         </div>
-
         <div className="mt-4">
           <InputLabel htmlFor="password" value="Password" />
-
           <div className="relative w-full">
             <TextInput
               id="password"
@@ -82,20 +78,16 @@ export default function Login({ status, canResetPassword }) {
             <span
               className="absolute top-0 right-0 px-2 py-2 z-[10]  flex justify-center items-center bg-gray-800 hover:bg-gray-800 text-gray-200 font-thin duration-200 border-[1px] border-solid border-gray-700 rounded-md cursor-pointer"
               onClick={() => {
-                // preventDefault();
                 setHidePassword((prev) => {
                   return !prev;
                 });
-                // event.stopPropagation();
               }}
             >
               hide
             </span>
           </div>
-
           <InputError message={errors.password} className="mt-2" />
         </div>
-
         <div className="block mt-4">
           <label className="flex items-center">
             <Checkbox
@@ -108,7 +100,6 @@ export default function Login({ status, canResetPassword }) {
             </span>
           </label>
         </div>
-
         <div className="flex items-center justify-end mt-4">
           {canResetPassword && (
             <Link

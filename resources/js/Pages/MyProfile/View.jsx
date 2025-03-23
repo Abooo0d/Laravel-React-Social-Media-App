@@ -15,7 +15,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const View = ({ auth, user, posts }) => {
+const View = ({ auth, user, posts, mustVerifyEmail, status }) => {
   const { setUser } = useUserContext();
   const { flash } = usePage().props;
 
@@ -233,7 +233,7 @@ const View = ({ auth, user, posts }) => {
                   </div>
                 </Tab.Panel>
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
-                  <Edit />
+                  <Edit mustVerifyEmail={mustVerifyEmail} status={status} />
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>

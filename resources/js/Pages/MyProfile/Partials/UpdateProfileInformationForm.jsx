@@ -1,22 +1,29 @@
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
-import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { Link, useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
+import { useState } from "react";
+import { PrimaryButton } from "@/Components/Shared/Buttons";
 
 export default function UpdateProfileInformation({
   mustVerifyEmail,
   status,
   className = "",
 }) {
-  const user = usePage().props.auth.user;
+  console.log(mustVerifyEmail);
 
+  const user = usePage().props.auth.user;
+  console.log(user);
+
+  const [name, setName] = useState(user.name);
+  const [username, setUsername] = useState(user.username);
+  const [email, setEmail] = useState(user.email);
   const { data, setData, patch, errors, processing, recentlySuccessful } =
     useForm({
-      name: user.name,
-      username: user.username,
-      email: user.email,
+      name: name,
+      username: username,
+      email: email,
     });
 
   const submit = (e) => {
@@ -42,10 +49,11 @@ export default function UpdateProfileInformation({
           <InputLabel htmlFor="name" value="Name" />
 
           <TextInput
+            placeholder={"Name"}
+            setValue={setName}
             id="name"
             classes="mt-1 block w-full"
-            value={data.name}
-            onChange={(e) => setData("name", e.target.value)}
+            value={name}
             required
             isFocused
             autoComplete="name"
@@ -57,10 +65,11 @@ export default function UpdateProfileInformation({
           <InputLabel htmlFor="username" value="Username" />
 
           <TextInput
+            placeholder={"Username"}
             id="username"
             classes="mt-1 block w-full"
-            value={data.username}
-            onChange={(e) => setData("username", e.target.value)}
+            value={username}
+            setValue={setUsername}
             required
             autoComplete="name"
           />
@@ -72,11 +81,12 @@ export default function UpdateProfileInformation({
           <InputLabel htmlFor="email" value="Email" />
 
           <TextInput
+            placeholder={"Email"}
             id="email"
             type="email"
             classes="mt-1 block w-full"
-            value={data.email}
-            onChange={(e) => setData("email", e.target.value)}
+            value={email}
+            setValue={setEmail}
             required
             autoComplete="username"
           />
@@ -107,7 +117,7 @@ export default function UpdateProfileInformation({
         )}
 
         <div className="flex items-center gap-4">
-          <PrimaryButton disabled={processing}>Save</PrimaryButton>
+          <PrimaryButton classes="px-4 py-2">Save</PrimaryButton>
 
           <Transition
             show={recentlySuccessful}

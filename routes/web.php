@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
   Route::post('/group/join/{group:slug}', [GroupController::class, 'joinGroup'])->name('group.join');
   Route::post('/group/approve/{group:slug}', [GroupController::class, 'approveRequest'])->name('group.approve-request');
   Route::post('/group/reject/{group:slug}', [GroupController::class, 'reject'])->name('group.reject-request');
-  Route::post('/group/change-role/{group::slug}', [GroupController::class, 'changeRole'])->name('group.change-role');
+  Route::post('/group/change-role/{group:slug}', [GroupController::class, 'changeRole'])->name('group.change-role');
   Route::put('/group/{group:slug}', [GroupController::class, 'update'])->name('group.update');
 });
 require __DIR__ . '/auth.php';
