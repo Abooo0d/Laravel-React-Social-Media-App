@@ -21,7 +21,7 @@ class PostResource extends JsonResource
       'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
       'user' => new UserResource($this->user),
       'attachments' => PostAttachmentResource::collection($this->attachments),
-      'group' => $this->group,
+      'group' => new GroupResource($this->group),
       'num_of_reactions' => $this->reactions_count,
       'user_has_reaction' => $this->reactions->count() > 0,
       'comments' => CommentResource::collection($this->comments),

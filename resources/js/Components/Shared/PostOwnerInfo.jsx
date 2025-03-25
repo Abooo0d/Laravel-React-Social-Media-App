@@ -3,8 +3,6 @@ import { formatRelativeTime } from "../../Functions";
 import { Link } from "@inertiajs/react";
 import { MdOutlineArrowRight } from "react-icons/md";
 const PostOwnerInfo = ({ post, user }) => {
-  console.log(user);
-
   return (
     <div className="flex justify-between mb-4">
       <div className="flex gap-4 flex-row items-center">
