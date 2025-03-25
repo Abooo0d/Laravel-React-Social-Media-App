@@ -82,7 +82,7 @@ const ImageFullView = ({
         {show && (
           <div className="relative w-full h-full flex ">
             {post?.attachments?.map((attachment, index) => (
-              <>
+              <React.Fragment key={index}>
                 {isImage(attachment) ? (
                   <img
                     src={attachment.url}
@@ -110,7 +110,7 @@ const ImageFullView = ({
                     </h3>
                   </div>
                 )}
-              </>
+              </React.Fragment>
             ))}
           </div>
         )}

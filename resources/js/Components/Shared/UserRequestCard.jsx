@@ -33,11 +33,15 @@ const UserRequestCard = ({
   return (
     <div className="group relative bg-gray-700/30 backdrop-blur-sm rounded-[8px] border-[1px] border-solid border-gray-500/50  flex flex-col justify-between items-center cursor-pointer duration-200 hover:bg-gray-600/50 hover:border-gray-500 overflow-hidden drop-shadow-2xl">
       <img
-        src={request.avatar_url}
+        src={request.avatar_url || "/images/default_avatar_image.png"}
         alt=""
         className="absolute top-[20%] left-[10%] w-[90px] h-[90px] rounded-full border-[1px] border-solid border-gray-500/50"
       />
-      <img src={request.cover_url} alt="" className="w-full h-[80%] " />
+      <img
+        src={request.cover_url || "/images/default_cover_image.png"}
+        alt=""
+        className="w-full h-[80%] "
+      />
       <div className="flex justify-between items-center w-full pr-4">
         <Link
           className="flex flex-col justify-start items-start w-full"

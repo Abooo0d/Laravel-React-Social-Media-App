@@ -18,7 +18,7 @@ const PostAttachmentCard = ({
 }) => {
   const isImage = (attachment) => {
     let mime = attachment.type || attachment.mime;
-    mime = mime.split("/");
+    mime = mime ? mime.split("/") : "";
     return mime[0] === "image";
   };
 

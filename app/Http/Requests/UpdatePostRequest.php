@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ class UpdatePostRequest extends StorePostRequest
    */
   public function authorize(): bool
   {
-    $post = Post::where('id', $this->input('id'))->where('user_id', Auth::id());
+    $post = Post::where('id', $this->input('id'))->where('user_id', Auth::id())->first();
     return !!$post;
   }
 

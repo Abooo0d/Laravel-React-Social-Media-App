@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { formatRelativeTime } from "../../Functions";
 import { Link } from "@inertiajs/react";
-import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { MdOutlineArrowRight } from "react-icons/md";
 const PostOwnerInfo = ({ post, user }) => {
+  console.log(user);
+
   return (
     <div className="flex justify-between mb-4">
       <div className="flex gap-4 flex-row items-center">
@@ -14,12 +15,14 @@ const PostOwnerInfo = ({ post, user }) => {
         />
         <div className="flex flex-col w-full justify-center ">
           <h2 className=" flex justify-center items-center text-lg  dark:text-gray-400 lg:text-[18px] text-[16px] text-gray-900 duration-200">
-            <Link
-              href={route("profile.view", user.username)}
-              className=" hover:no-underline"
-            >
-              {user?.name}{" "}
-            </Link>
+            {post?.user && (
+              <Link
+                href={route("profile.view", user?.username)}
+                className=" hover:no-underline"
+              >
+                {user?.name}{" "}
+              </Link>
+            )}
             {post && (
               <>
                 {post.group && (
@@ -41,6 +44,7 @@ const PostOwnerInfo = ({ post, user }) => {
         </div>
       </div>
     </div>
+    // <div>Abood</div>
   );
 };
 

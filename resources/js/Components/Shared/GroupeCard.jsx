@@ -9,7 +9,7 @@ const GroupeCard = ({ data }) => {
     >
       <img
         src={data.cover_url || "/images/default_cover_image.jpg"}
-        alt=""
+        alt="groupCoverImage"
         className="absolute top-0 left-0 right-0 bottom-0 max-h-full h-full w-[100%] object-cover z-0 rounded-[10px]"
       />
       <div className="z-10 bg-black/30 backdrop-blur-sm w-[100%] h-[100%] py-2 px-4 rounded-[10px] overflow-hidden absolute inset-0 flex flex-col gap-2 justify-between items-start">
@@ -30,8 +30,8 @@ const GroupeCard = ({ data }) => {
         </div>
         <div className="flex gap-2 w-full justify-start items-center">
           <img
-            src={data.thumbnail_url || "/images/default_avatar_image.png"}
-            alt="groupe-img"
+            src={data.thumbnail_url || "/images/default_group_avatar_image.png"}
+            alt="groupeThumbnailImage"
             className="w-[50px] h-[50px] rounded-full object-cover"
           />
           <h3 className="font-bold text-md dark:text-gray-200">{data.name}</h3>

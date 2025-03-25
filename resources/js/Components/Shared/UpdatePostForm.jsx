@@ -43,6 +43,7 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
       forceFormData: true,
       onSuccess: () => {
         close();
+        router.reload();
         setSuccessMessage("Post Updated Successfully");
       },
       _method: "PUT",

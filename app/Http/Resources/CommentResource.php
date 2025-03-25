@@ -23,7 +23,7 @@ class CommentResource extends JsonResource
         'id' => $this->user->id,
         'name' => $this->user->name,
         'username' => $this->user->username,
-        'avatar_url' => Storage::url($this->user->avatar_path)
+        'avatar_url' => $this->user->avatar_path ? Storage::url($this->user->avatar_path) : asset('images/default_avatar_image.png')
       ],
       'num_of_reactions' => $this->postCommentsReactions->count(),
       'user_has_reactions' => $this->postCommentsReactions->count() > 0,

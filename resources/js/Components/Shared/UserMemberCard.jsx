@@ -16,14 +16,14 @@ const UserMemberCard = ({ member, isAdmin, group }) => {
           />
         )}
         <img
-          src={member.user.avatar_url}
+          src={member.user.avatar_url || "/images/default_avatar_image.png"}
           alt=""
           className="absolute top-[10%] left-[10%] w-[90px] h-[90px] rounded-full border-[1px] border-solid border-gray-500/50 object-cover"
         />
         <img
-          src={member.user.cover_url}
+          src={member.user.cover_url || "/images/default_cover_image.png"}
           alt=""
-          className="w-full  min-h-[120px] max-h-[120px] h-[120px] object-cover "
+          className="w-full  min-h-[120px] max-h-[120px] h-[120px] object-cover"
         />
         <div className="flex justify-between items-center w-full pr-4">
           <Link

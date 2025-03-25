@@ -57,7 +57,7 @@ class PostController extends Controller
       DB::rollBack();
       throw $e;
     }
-    return back();
+    return redirect()->back()->with('success', 'Post Created Successfully');
   }
   /**
    * Update the specified resource in storage.

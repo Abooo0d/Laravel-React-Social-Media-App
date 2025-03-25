@@ -32,7 +32,6 @@ class HomeController extends Controller
       ->orderBy('gu.role')
       ->orderBy('name')
       ->get();
-    $user = $request->user() !== null ? new UserResource($request->user()) : '';
     if ($request->wantsJson()) {
       return response([
         // 'posts' => [
@@ -50,7 +49,6 @@ class HomeController extends Controller
       ]);
     } else {
       return Inertia::render('Home', [
-        'user' => $user,
         'posts' => PostResource::collection($posts),
         'groups' => GroupResource::collection($groups),
         'followers' => UserResource::collection($users)

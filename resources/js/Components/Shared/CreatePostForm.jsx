@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { HiMiniXMark } from "react-icons/hi2";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { isImage } from "@/Functions";
 import ImageFullView from "./ImageFullView";
 import PostPreview from "./PostPreview";
@@ -20,9 +20,8 @@ const CreatePostForm = ({
   posts,
   groupId,
 }) => {
-  const editorRef = useRef();
-  const { errors, setErrors, successMessage, setSuccessMessage } =
-    useMainContext();
+  const { setErrors, setSuccessMessage } = useMainContext();
+  const { flash } = usePage().props;
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState("");
   const [showPost, setShowPost] = useState(false);
@@ -39,7 +38,11 @@ const CreatePostForm = ({
     user_id: user.id,
     group_id: groupId,
   });
+  let errorsArray = [];
   let myFile;
+  useEffect(() => {
+    if (flash?.success) setSuccessMessage(flash.success);
+  }, [flash]);
   useEffect(() => {
     setPost({ body: "", attachments: [], user_id: user.id, group_id: groupId });
     setAttachmentsErrors([]);
@@ -74,7 +77,6 @@ const CreatePostForm = ({
             ...prevPosts,
             posts: {
               ...prevPosts.posts,
-              data: [data1.props.posts.posts.data[0], ...prevPosts.posts.data],
             },
           }));
         },
@@ -82,6 +84,11 @@ const CreatePostForm = ({
           setAttachmentsErrors([]);
           setSuccessMessage("");
           setErrors([]);
+          errorsArray = [];
+          Object.keys(errors).map((error) => {
+            errorsArray.push(errors[error]);
+          });
+          setErrors(errorsArray);
           for (const key in errors) {
             setAttachmentsErrors((prevErrors) => [
               ...prevErrors,
@@ -95,7 +102,6 @@ const CreatePostForm = ({
         },
       });
     }
-    // console.log(_post);
   };
   const HandelTheFiles = async (e) => {
     for (const file of e.target.files) {

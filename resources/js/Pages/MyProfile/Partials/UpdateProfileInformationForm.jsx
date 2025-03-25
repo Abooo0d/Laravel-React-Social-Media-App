@@ -11,10 +11,7 @@ export default function UpdateProfileInformation({
   status,
   className = "",
 }) {
-  console.log(mustVerifyEmail);
-
   const user = usePage().props.auth.user;
-  console.log(user);
 
   const [name, setName] = useState(user.name);
   const [username, setUsername] = useState(user.username);

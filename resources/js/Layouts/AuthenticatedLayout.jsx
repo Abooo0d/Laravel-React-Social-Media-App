@@ -6,8 +6,10 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
 import { MainContext, useMainContext } from "@/Contexts/MainContext";
 import { redirect } from "react-router-dom";
+import { useUserContext } from "@/Contexts/UserContext";
 
-export default function Authenticated({ user, header, children }) {
+export default function Authenticated({ header, children }) {
+  const { user } = useUserContext();
   useEffect(() => {
     if (!user) {
       window.location.href = route("login"); // Redirect if user is not authenticated
@@ -28,7 +30,6 @@ export default function Authenticated({ user, header, children }) {
                 </Link>
               </div>
             </div>
-
             <div className="hidden sm:flex sm:items-center sm:ms-6">
               <div className="ms-3 relative">
                 <Dropdown>
@@ -39,7 +40,6 @@ export default function Authenticated({ user, header, children }) {
                         className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
                       >
                         {user.name}
-
                         <svg
                           className="ms-2 -me-0.5 h-4 w-4"
                           xmlns="http://www.w3.org/2000/svg"
@@ -55,7 +55,6 @@ export default function Authenticated({ user, header, children }) {
                       </button>
                     </span>
                   </Dropdown.Trigger>
-
                   <Dropdown.Content>
                     <Dropdown.Link href={route("profile.my-profile")}>
                       Profile
@@ -71,7 +70,6 @@ export default function Authenticated({ user, header, children }) {
                 </Dropdown>
               </div>
             </div>
-
             <div className="-me-2 flex items-center sm:hidden">
               <button
                 onClick={() =>

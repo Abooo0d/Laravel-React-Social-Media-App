@@ -24,8 +24,8 @@ function formatRelativeTime(dateString) {
 function isImage(file) {
   file = file.file ? file.file : file;
   let mime = file.mime || file.type;
-  mime = mime.split("/");
-  return mime[0].toLowerCase() === "image";
+  mime = mime ? mime.split("/") : "";
+  return mime[0] ? mime[0].toLowerCase() : "" === "image";
 }
 
 export { formatRelativeTime, isImage };

@@ -8,7 +8,7 @@ import PostCardPostAttachments from "./PostCardPostAttachments";
 import PostCardPostActions from "./PostCardPostActions";
 import PostCommentSection from "./PostCommentSection";
 import axiosClient from "@/AxiosClient/AxiosClient";
-const PostCard = ({ post, user }) => {
+const PostCard = ({ post, currentUser }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [showPost, setShowPost] = useState(false);
   const [image, setImage] = useState("");
@@ -34,12 +34,14 @@ const PostCard = ({ post, user }) => {
         className={`max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg pt-4 pb-0 lg:px-6 px-4 flex flex-col duration-500 shadow-md`}
       >
         <div className="flex justify-between items-center">
-          <PostOwnerInfo post={localPost} user={user} />
-          <PostCardMenu
-            post={localPost}
-            openMenu={openMenu}
-            setOpenMenu={setOpenMenu}
-          />
+          <PostOwnerInfo post={localPost} user={localPost.user} />
+          {post.user.id == currentUser.id && (
+            <PostCardMenu
+              post={localPost}
+              openMenu={openMenu}
+              setOpenMenu={setOpenMenu}
+            />
+          )}
         </div>
         <PostCardPostBody post={localPost} />
         <PostCardPostAttachments
@@ -58,6 +60,7 @@ const PostCard = ({ post, user }) => {
           show={showCommentSection}
           post={localPost}
           setPost={setLocalPost}
+          currentUser={currentUser}
         />
       </div>
       <FullPostCard
@@ -66,7 +69,7 @@ const PostCard = ({ post, user }) => {
         setShow={setShowPost}
         setImage={setImage}
         setShowImage={setShowImage}
-        user={user}
+        user={localPost.user}
         setImageIndex={setImageIndex}
       />
       <ImageFullView

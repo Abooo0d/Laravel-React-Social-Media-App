@@ -11,17 +11,14 @@ import { useForm } from "@inertiajs/react";
 import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";
 import PostContainer from "@/Components/Containers/PostContainer";
+import CreatePost from "@/Components/Shared/CreatePost";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 const View = ({ auth, user, posts, mustVerifyEmail, status }) => {
-  const { setUser } = useUserContext();
   const { flash } = usePage().props;
-
-  useEffect(() => {
-    setUser(user);
-  }, []);
+  const [allPosts, setAllPosts] = useState(posts);
   useEffect(() => {
     flash?.success && setSuccessMessage(flash.success);
   }, [flash]);
@@ -108,7 +105,7 @@ const View = ({ auth, user, posts, mustVerifyEmail, status }) => {
         />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
-      <Authenticated user={auth.user}>
+      <Authenticated>
         <div className="container mx-auto ">
           <div className="max-h-[350px] w-full relative">
             <div className="relative max-h-[350px] w-full group">
@@ -207,7 +204,13 @@ const View = ({ auth, user, posts, mustVerifyEmail, status }) => {
               </Tab.List>
               <Tab.Panels className=" py-2 rounded-md mt-2">
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
-                  <div className="bg-homeFeed rounded-md">
+                  <CreatePost
+                    user={user}
+                    setPosts={setAllPosts}
+                    posts={allPosts}
+                    classes="px-4 bg-homeFeed "
+                  />
+                  <div className=" dark:bg-homeFeed rounded-md">
                     <PostContainer posts={posts} />
                   </div>
                 </Tab.Panel>

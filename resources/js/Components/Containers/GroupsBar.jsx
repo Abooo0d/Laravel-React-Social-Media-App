@@ -6,10 +6,13 @@ import { TiArrowSortedDown } from "react-icons/ti";
 import CreateGroupForm from "../Shared/CreateGroupForm";
 import { FaUserGroup } from "react-icons/fa6";
 import SmallScreenGroupContainer from "../Shared/SmallScreenGroupContainer";
+import { usePage } from "@inertiajs/react";
+import { useMainContext } from "@/Contexts/MainContext";
 const GroupsBar = ({ groups, setGroups }) => {
   const [showForm, setShowForm] = useState(false);
   const [search, setSearch] = useState("");
   const [showGroupContainer, setShowGroupContainer] = useState(false);
+
   return (
     <>
       <div className="block max-lg:hidden shadow-lg rounded-xl m-0 lg:rounded-none order-first col-span-3 lg:py-8 px-4 py-2 bg-gray-200 dark:bg-gray-900 lg:max-h-barHeight lg:min-h-barHeight max-h-[500px] h-full overflow-hidden lg:border-r-2 dark:border-gray-800 border-gray-300 border-solid lg:border-b-0">

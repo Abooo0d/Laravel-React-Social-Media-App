@@ -9,7 +9,7 @@ import DOMPurify from "dompurify";
 import CommentMenu from "./CommentMenu";
 import CommentCard from "./CommentCard";
 import { useMainContext } from "@/Contexts/MainContext";
-const PostCommentSection = ({ show, post, setPost }) => {
+const PostCommentSection = ({ show, post, setPost, currentUser }) => {
   const { user } = useUserContext();
   const [comment, setComment] = useState("");
   const [showMenu, setShowMenu] = useState(false);
@@ -47,6 +47,7 @@ const PostCommentSection = ({ show, post, setPost }) => {
                 currentComment={comment}
                 post={post}
                 setPost={setPost}
+                currentUser={currentUser}
               />
               {post.comments.length > 1 && index < post.comments.length - 1 && (
                 <div className="w-[80%] h-[1px] bg-gray-700/20" />

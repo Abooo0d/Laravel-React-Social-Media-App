@@ -11,7 +11,8 @@ const CreateGroupForm = ({ showForm, setShowForm, setGroups }) => {
   const [groupName, setGroupName] = useState("");
   const [groupAbout, setGroupAbout] = useState("");
   const [autoApproval, setAutoApproval] = useState(false);
-  const { setSuccessMessage } = useMainContext();
+  const { setSuccessMessage, setErrors } = useMainContext();
+  let errors = [];
   function close() {
     setShowForm(false);
   }
@@ -26,6 +27,12 @@ const CreateGroupForm = ({ showForm, setShowForm, setGroups }) => {
         setGroups((prevData) => [data.group, ...prevData]);
         setSuccessMessage("Group Created Successfully");
         setShowForm(false);
+      })
+      .catch((e) => {
+        Object.keys(e.response.data.errors).map((error) => {
+          errors.push(e.response.data.errors[error]);
+        });
+        setErrors(errors);
       });
   };
   useEffect(() => {

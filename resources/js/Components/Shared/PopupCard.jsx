@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 const PopupCard = ({ showForm, children }) => {
   return (
     <div
-      className={`fixed inset-0 z-[1000] w-screen overflow-y-auto flex min-h-full items-center justify-center p-4 bg-gray-900/30 backdrop-blur-sm duration-200 ${
+      className={`fixed inset-0 z-[100] w-screen overflow-y-auto flex min-h-full items-center justify-center p-4 bg-gray-900/30 backdrop-blur-md duration-200 ${
         showForm ? "visible opacity-100" : "invisible opacity-0"
       }`}
     >

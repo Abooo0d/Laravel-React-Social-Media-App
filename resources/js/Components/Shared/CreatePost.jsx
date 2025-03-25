@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import CreatePostForm from "./CreatePostForm";
-const CreatePost = ({ user, setPosts, posts, groupId, classes }) => {
+import { useUserContext } from "@/Contexts/UserContext";
+const CreatePost = ({ setPosts, posts, groupId, classes }) => {
   const [showForm, setShowForm] = useState(false);
+  const { user } = useUserContext();
   return (
     <div
       className={`w-full bg-gray-200 flex flex-col duration-300 border-solid border-gray-700 ${classes}`}

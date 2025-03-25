@@ -18,7 +18,6 @@ const GroupAboutForm = (props) => {
   const [autoApproval, setAutoApproval] = useState(
     !!parseInt(group.auto_approval)
   );
-  console.log(autoApproval);
 
   const [groupAbout, setGroupAbout] = useState(group.about);
   const submit = () => {

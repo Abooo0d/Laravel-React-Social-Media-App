@@ -15,14 +15,7 @@ function classNames(...classes) {
 }
 
 const View = ({ auth, user, posts }) => {
-  const { setUser } = useUserContext();
-  console.log(posts);
-
   const { flash } = usePage().props;
-
-  useEffect(() => {
-    setUser(user);
-  }, []);
   useEffect(() => {
     flash?.success && setSuccessMessage(flash.success);
   }, [flash]);
@@ -49,10 +42,9 @@ const View = ({ auth, user, posts }) => {
         />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
-      <Authenticated user={auth.user}>
+      <Authenticated>
         <div className="container mx-auto ">
           <div className="max-h-[350px] w-full relative">
-            {/* <div className="relative max-h-[350px] w-full group"> */}
             <img
               src={
                 coverImage ||

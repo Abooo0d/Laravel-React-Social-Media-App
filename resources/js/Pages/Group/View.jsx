@@ -5,7 +5,7 @@ import { HiMiniXMark } from "react-icons/hi2";
 import { FaCheck } from "react-icons/fa6";
 import { Tab } from "@headlessui/react";
 import React, { useEffect, useState } from "react";
-import { useForm, Head, usePage } from "@inertiajs/react";
+import { useForm, Head, usePage, router } from "@inertiajs/react";
 import { useMainContext } from "@/Contexts/MainContext";
 import { PrimaryButton } from "@/Components/Shared/Buttons";
 import InviteUserForm from "@/Components/Shared/InviteUserForm";
@@ -101,9 +101,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
         errorsArray = [];
       },
       onSuccess: () => {},
-      onFinish: () => {
-        // resetAvatarImage();
-      },
+      onFinish: () => {},
     });
     setIsTheCoverChanged(false);
   };
@@ -113,6 +111,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
       .then(({ data }) => {
         setSuccessMessage(data.message);
         setGroupData(data.group);
+        router.reload();
       })
       .catch((e) => {
         console.log(e);
@@ -129,7 +128,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
         />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
-      <Authenticated user={auth.user}>
+      <Authenticated>
         <div className="container mx-auto ">
           <div className="max-h-[350px] w-full relative">
             <div className="relative max-h-[350px] w-full group">
@@ -142,34 +141,38 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
                 alt="cover Image"
                 className="h-[300px] max-md:h-[220px] w-full object-cover "
               />
-              {!isTheCoverChanged ? (
-                <button className="group-hover:opacity-100 opacity-0 rounded-md absolute top-2 right-2 py-1 px-4 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center">
-                  <CiCamera className="text-gray-800 w-[20px] h-[20px]" />
-                  Change Cover Image
-                  <input
-                    type="file"
-                    name="cover_image"
-                    className="absolute top-0 left-0 bottom-0 right-0 opacity-0 cursor-pointer"
-                    onChange={(e) => handelCoverChange(e)}
-                  />
-                </button>
-              ) : (
-                <div className="absolute top-2 right-2  flex justify-center items-center gap-2 group-hover:opacity-100 opacity-0 duration-300">
-                  <button
-                    onClick={resetCoverImage}
-                    className="rounded-md py-1 px-4 bg-gray-800/80 hover:bg-gray-800 duration-300 text-gray-200 flex gap-2 justify-center items-center"
-                  >
-                    <HiMiniXMark />
-                    Cancel
-                  </button>
-                  <button
-                    onClick={submitCoverImage}
-                    className="rounded-md py-1 px-4 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center"
-                  >
-                    <FaCheck />
-                    Submit
-                  </button>
-                </div>
+              {isAdmin && (
+                <>
+                  {!isTheCoverChanged ? (
+                    <button className="group-hover:opacity-100 opacity-0 rounded-md absolute top-2 right-2 py-1 px-4 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center">
+                      <CiCamera className="text-gray-800 w-[20px] h-[20px]" />
+                      Change Cover Image
+                      <input
+                        type="file"
+                        name="cover_image"
+                        className="absolute top-0 left-0 bottom-0 right-0 opacity-0 cursor-pointer"
+                        onChange={(e) => handelCoverChange(e)}
+                      />
+                    </button>
+                  ) : (
+                    <div className="absolute top-2 right-2  flex justify-center items-center gap-2 group-hover:opacity-100 opacity-0 duration-300">
+                      <button
+                        onClick={resetCoverImage}
+                        className="rounded-md py-1 px-4 bg-gray-800/80 hover:bg-gray-800 duration-300 text-gray-200 flex gap-2 justify-center items-center"
+                      >
+                        <HiMiniXMark />
+                        Cancel
+                      </button>
+                      <button
+                        onClick={submitCoverImage}
+                        className="rounded-md py-1 px-4 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center"
+                      >
+                        <FaCheck />
+                        Submit
+                      </button>
+                    </div>
+                  )}
+                </>
               )}
             </div>
             <div className="absolute lg:w-[200px] lg:h-[200px] md:w-[160px] md:h-[160px] w-[130px] h-[130px] -bottom-[50px] max-md:bottom-[50px] max-md:left-[40px] md:left-20 left-0 group overflow-hidden">
@@ -177,39 +180,43 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
                 src={
                   avatarImage ||
                   groupData.thumbnail_url ||
-                  "/images/default_avatar_image.png"
+                  "/images/default_group_avatar_image.png"
                 }
                 alt="AvatarImage"
                 className=" rounded-full w-full h-full object-cover "
               />
-              <div className="absolute rounded-full bg-black/50 backdrop-blur-[3px] top-0 left-0 right-0 bottom-0 duration-300 group-hover:opacity-100 opacity-0 flex justify-center items-center">
-                {!isTheAvatarChanged ? (
-                  <button className="cursor-pointer z-10 overflow-hidden rounded-md relative py-2 px-2 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center">
-                    <CiCamera className="text-gray-800 w-[30px] h-[30px]" />
-                    <input
-                      type="file"
-                      name="cover_image"
-                      className="absolute top-0 left-0 bottom-0 right-0 opacity-0 cursor-pointer"
-                      onChange={(e) => handelAvatarChange(e)}
-                    />
-                  </button>
-                ) : (
-                  <div className="  flex justify-center items-center gap-2 group-hover:opacity-100 opacity-0 duration-300">
-                    <button
-                      onClick={resetAvatarImage}
-                      className="cursor-pointer z-10 overflow-hidden rounded-md relative py-2 px-2 bg-gray-800/80 hover:bg-gray-800 text-gray-200 duration-300  flex gap-2 justify-center items-center"
-                    >
-                      <HiMiniXMark />
-                    </button>
-                    <button
-                      onClick={submitAvatarImage}
-                      className="cursor-pointer z-10 overflow-hidden rounded-md relative py-2 px-2 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center"
-                    >
-                      <FaCheck />
-                    </button>
+              {isAdmin && (
+                <>
+                  <div className="absolute rounded-full bg-black/50 backdrop-blur-[3px] top-0 left-0 right-0 bottom-0 duration-300 group-hover:opacity-100 opacity-0 flex justify-center items-center">
+                    {!isTheAvatarChanged ? (
+                      <button className="cursor-pointer z-10 overflow-hidden rounded-md relative py-2 px-2 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center">
+                        <CiCamera className="text-gray-800 w-[30px] h-[30px]" />
+                        <input
+                          type="file"
+                          name="cover_image"
+                          className="absolute top-0 left-0 bottom-0 right-0 opacity-0 cursor-pointer"
+                          onChange={(e) => handelAvatarChange(e)}
+                        />
+                      </button>
+                    ) : (
+                      <div className="  flex justify-center items-center gap-2 group-hover:opacity-100 opacity-0 duration-300">
+                        <button
+                          onClick={resetAvatarImage}
+                          className="cursor-pointer z-10 overflow-hidden rounded-md relative py-2 px-2 bg-gray-800/80 hover:bg-gray-800 text-gray-200 duration-300  flex gap-2 justify-center items-center"
+                        >
+                          <HiMiniXMark />
+                        </button>
+                        <button
+                          onClick={submitAvatarImage}
+                          className="cursor-pointer z-10 overflow-hidden rounded-md relative py-2 px-2 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center"
+                        >
+                          <FaCheck />
+                        </button>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
+                </>
+              )}
             </div>
           </div>
           <div className="w-full flex justify-between items-center gap-4 bg-gray-900 py-4 px-8">
