@@ -19,7 +19,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 const View = ({ auth, group, requests, users, isAdmin, posts }) => {
-  const { flash } = usePage().props;
+  const { flash, errors } = usePage().props;
   const isCurrentUserJoined = !!(group.status == "approved");
   const [groupData, setGroupData] = useState(group);
   const [requestsData, setRequestsData] = useState(requests);
@@ -28,8 +28,8 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
     avatarImage: null,
     group_id: groupData.id,
   });
+
   const [allPosts, setAllPosts] = useState(posts);
-  const { errors } = usePage().props;
   let errorsArray = [];
   Object.keys(errors).map((key) => errorsArray.push(errors[key]));
   const { setSuccessMessage, setErrors } = useMainContext();
@@ -42,8 +42,11 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
 
   useEffect(() => {
     if (flash.success) setSuccessMessage(flash.success);
-    if (flash.error) setErrors(flash.error);
+    if (flash.error) setErrors([flash.error]);
   }, [flash]);
+  useEffect(() => {
+    setAllPosts(posts);
+  }, [posts]);
 
   const handelAvatarChange = (e) => {
     const file = e.target.files[0];
@@ -128,7 +131,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
         />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
-      <Authenticated>
+      <Authenticated currentUser={auth.user}>
         <div className="container mx-auto ">
           <div className="max-h-[350px] w-full relative">
             <div className="relative max-h-[350px] w-full group">
@@ -272,7 +275,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
                     setPosts={setAllPosts}
                     posts={allPosts}
                     groupId={group.id}
-                    classes="px-4 bg-homeFeed "
+                    classes="bg-homeFeed "
                   />
                   <div className=" dark:bg-homeFeed rounded-md">
                     <PostContainer posts={allPosts} />

@@ -42,7 +42,7 @@ const View = ({ auth, user, posts }) => {
         />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
-      <Authenticated>
+      <Authenticated currentUser={auth.user}>
         <div className="container mx-auto ">
           <div className="max-h-[350px] w-full relative">
             <img

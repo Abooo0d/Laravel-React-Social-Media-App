@@ -18,8 +18,6 @@ const PostCardMenu = ({ openMenu, setOpenMenu, post, currentUser }) => {
   const showUpdate = () => {
     return post.user.id === currentUser.id ? true : false;
   };
-  console.log(post, "from PostCard");
-
   const onDelete = () => {
     if (window.confirm("Are You Sure To Delete This Post")) {
       router.delete(route("post.delete", post), {

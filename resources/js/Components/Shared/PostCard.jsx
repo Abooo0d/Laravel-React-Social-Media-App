@@ -35,7 +35,6 @@ const PostCard = ({ post, currentUser }) => {
       >
         <div className="flex justify-between items-center">
           <PostOwnerInfo post={localPost} user={localPost.user} />
-          {/* {post.user.id == currentUser.id && ( */}
           <PostCardMenu
             post={localPost}
             openMenu={openMenu}

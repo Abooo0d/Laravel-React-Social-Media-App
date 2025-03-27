@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import GuestLayout from "@/Layouts/GuestLayout";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
-import PrimaryButton from "@/Components/PrimaryButton";
+// import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/react";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { PrimaryButton } from "@/Components/Shared/Buttons";
 
 export default function Register() {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -17,6 +19,8 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [conformation, setConformation] = useState("");
+  const [hidePassword, setHidePassword] = useState(true);
+  const [hideConfirm, setHideConfirm] = useState(true);
   useEffect(() => {
     return () => {
       reset("password", "password_confirmation");
@@ -70,17 +74,39 @@ export default function Register() {
         </div>
         <div className="mt-4">
           <InputLabel htmlFor="password" value="Password" />
-          <TextInput
-            id="password"
-            type="password"
-            name="password"
-            value={password}
-            setValue={setPassword}
-            classes="mt-1 block w-full"
-            autoComplete="new-password"
-            onChange={(e) => setData("password", e.target.value)}
-            required
-          />
+          <div className="relative w-full">
+            <TextInput
+              id="password"
+              type="password"
+              name="password"
+              value={password}
+              setValue={setPassword}
+              classes="mt-1 block w-full"
+              autoComplete="new-password"
+              onChange={(e) => setData("password", e.target.value)}
+              required
+              hidePassword={hidePassword}
+            />
+            <span
+              className="absolute top-[6px] right-[6px] px-2 py-2 z-[10] w-[30px] h-[30px] flex justify-center items-center bg-gray-800 hover:bg-gray-800 text-gray-200 font-thin duration-200 border-[1px] border-solid border-gray-700 rounded-md cursor-pointer"
+              onClick={() => {
+                setHidePassword((prev) => {
+                  return !prev;
+                });
+              }}
+            >
+              <FaRegEye
+                className={`absolute duration-200 ${
+                  hidePassword ? "opacity-0 invisible" : "opacity-100 visible"
+                }`}
+              />
+              <FaRegEyeSlash
+                className={`absolute duration-200 ${
+                  !hidePassword ? "opacity-0 invisible" : "opacity-100 visible"
+                }`}
+              />
+            </span>
+          </div>
           <InputError message={errors.password} className="mt-2" />
         </div>
         <div className="mt-4">
@@ -88,34 +114,56 @@ export default function Register() {
             htmlFor="password_confirmation"
             value="Confirm Password"
           />
-          <TextInput
-            id="password_confirmation"
-            type="password"
-            name="password_confirmation"
-            value={conformation}
-            setValue={setConformation}
-            classes="mt-1 block w-full"
-            autoComplete="new-password"
-            onChange={(e) => setData("password_confirmation", e.target.value)}
-            required
-          />
+          <div className="relative w-full">
+            <TextInput
+              id="password_confirmation"
+              type="password"
+              name="password_confirmation"
+              value={conformation}
+              setValue={setConformation}
+              classes="mt-1 block w-full"
+              autoComplete="new-password"
+              onChange={(e) => setData("password_confirmation", e.target.value)}
+              required
+              hidePassword={hideConfirm}
+            />
+            <span
+              className="absolute top-[6px] right-[6px] px-2 py-2 z-[10] w-[30px] h-[30px] flex justify-center items-center bg-gray-800 hover:bg-gray-800 text-gray-200 font-thin duration-200 border-[1px] border-solid border-gray-700 rounded-md cursor-pointer"
+              onClick={() => {
+                setHideConfirm((prev) => {
+                  return !prev;
+                });
+              }}
+            >
+              <FaRegEye
+                className={`absolute duration-200 ${
+                  hideConfirm ? "opacity-0 invisible" : "opacity-100 visible"
+                }`}
+              />
+              <FaRegEyeSlash
+                className={`absolute duration-200 ${
+                  !hideConfirm ? "opacity-0 invisible" : "opacity-100 visible"
+                }`}
+              />
+            </span>
+          </div>
           <InputError message={errors.password_confirmation} className="mt-2" />
         </div>
         <div className="flex items-center justify-end mt-4">
-          <Link
+          <p
             href={route("login")}
-            className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+            className="underline text-sm text-gray-600 dark:text-gray-400  rounded-md  cursor-default"
           >
             Already registered?
-          </Link>
-          <a
+          </p>
+          <Link
             href={route("login")}
-            className={`ms-4 inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150 `}
+            className={`ms-4 inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150 `}
           >
-            Log In
-          </a>
-          <PrimaryButton className="ms-4" disabled={processing}>
-            Register
+            LogIn
+          </Link>
+          <PrimaryButton classes=" ms-4 px-4 py-2 text-xs font-semibold uppercase">
+            SignUp
           </PrimaryButton>
         </div>
       </form>

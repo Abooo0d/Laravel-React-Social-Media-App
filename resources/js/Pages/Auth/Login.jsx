@@ -3,18 +3,19 @@ import Checkbox from "@/Components/Checkbox";
 import GuestLayout from "@/Layouts/GuestLayout";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
-import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { useUserContext } from "@/Contexts/UserContext";
-
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { Switch } from "@headlessui/react";
+import { PrimaryButton } from "@/Components/Shared/Buttons";
 export default function Login({ status, canResetPassword }) {
   const { setUser } = useUserContext();
   const [hidePassword, setHidePassword] = useState(true);
   const { data, setData, post, processing, errors, reset } = useForm({
     email: "",
     password: "",
-    remember: false,
+    remember: true,
   });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -76,25 +77,36 @@ export default function Login({ status, canResetPassword }) {
               onChange={(e) => setData("password", e.target.value)}
             />
             <span
-              className="absolute top-0 right-0 px-2 py-2 z-[10]  flex justify-center items-center bg-gray-800 hover:bg-gray-800 text-gray-200 font-thin duration-200 border-[1px] border-solid border-gray-700 rounded-md cursor-pointer"
+              className="absolute top-[6px] right-[6px] px-2 py-2 z-[10] w-[30px] h-[30px] flex justify-center items-center bg-gray-800 hover:bg-gray-800 text-gray-200 font-thin duration-200 border-[1px] border-solid border-gray-700 rounded-md cursor-pointer"
               onClick={() => {
                 setHidePassword((prev) => {
                   return !prev;
                 });
               }}
             >
-              hide
+              <FaRegEye
+                className={`absolute duration-200 ${
+                  hidePassword ? "opacity-0 invisible" : "opacity-100 visible"
+                }`}
+              />
+              <FaRegEyeSlash
+                className={`absolute duration-200 ${
+                  !hidePassword ? "opacity-0 invisible" : "opacity-100 visible"
+                }`}
+              />
             </span>
           </div>
           <InputError message={errors.password} className="mt-2" />
         </div>
         <div className="block mt-4">
-          <label className="flex items-center">
-            <Checkbox
-              name="remember"
+          <label className="flex items-center cursor-pointer">
+            <Switch
               checked={data.remember}
-              onChange={(e) => setData("remember", e.target.checked)}
-            />
+              onChange={(e) => setData("remember", e)}
+              className="group inline-flex h-6 w-11 items-center rounded-full bg-gray-700/50 transition data-[checked]:bg-gray-600 duration-200"
+            >
+              <span className="size-4 translate-x-1 rounded-full bg-white transition group-data-[checked]:translate-x-6" />
+            </Switch>
             <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
               Remember me
             </span>
@@ -109,14 +121,14 @@ export default function Login({ status, canResetPassword }) {
               Forgot your password?
             </Link>
           )}
-          <a
+          <Link
             href={route("register")}
-            className={`ms-4 inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150 `}
+            className={`ms-4 inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150 `}
           >
             SignUp
-          </a>
-          <PrimaryButton className="ms-4" disabled={processing}>
-            Log in
+          </Link>
+          <PrimaryButton classes=" ms-4 px-4 py-2 text-xs font-semibold uppercase">
+            Login
           </PrimaryButton>
         </div>
       </form>

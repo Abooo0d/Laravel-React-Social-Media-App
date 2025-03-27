@@ -35,7 +35,7 @@ class StorePostRequest extends FormRequest
           'png',
           'gif',
           'mp3',
-          // 'webp',
+          'webp',
           'wav',
           'mp4',
           'doc',

@@ -12,7 +12,7 @@ const FollowerCard = ({ data }) => {
         alt=""
         className="absolute inset-0 max-h-full h-full w-[100%] object-cover z-0 rounded-[10px] group-hover:scale-110 duration-200"
       />
-      <div className="z-10 bg-black/30 backdrop-blur-sm w-[100%] h-[100%] py-2 px-4 rounded-[10px] overflow-hidden absolute inset-0 flex flex-col gap-2 justify-between items-start">
+      <div className="z-1 bg-black/30 backdrop-blur-sm w-[100%] h-[100%] py-2 px-4 rounded-[10px] overflow-hidden absolute inset-0 flex flex-col gap-2 justify-between items-start">
         <div className="flex gap-4 w-full justify-start items-center">
           <img
             src={data.avatar_url || "/images/default_avatar_image.png"}

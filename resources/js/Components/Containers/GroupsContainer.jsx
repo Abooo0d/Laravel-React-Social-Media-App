@@ -1,6 +1,5 @@
 import React from "react";
 import GroupeCard from "../Shared/GroupeCard";
-import { Disclosure } from "@headlessui/react";
 const GroupsContainer = ({ groups }) => {
   return (
     <div className="lg:pt-4 lg:pb-9 py-4 max-h-barContainerHeight h-[400px] lg:h-barHeight ">

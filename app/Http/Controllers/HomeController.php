@@ -34,17 +34,6 @@ class HomeController extends Controller
       ->get();
     if ($request->wantsJson()) {
       return response([
-        // 'posts' => [
-        //   'posts' => $allPosts,v
-        //   'meta' => [
-        //     'total' => $posts->total(),
-        //     'current_page' => $posts->currentPage(),
-        //     'per_page' => $posts->perPage(),
-        //     'last_page' => $posts->lastPage(),
-        //     'from' => $posts->firstItem(),
-        //     'to' => $posts->lastItem(),
-        //   ]
-        // ]
         'posts' => PostResource::collection($posts)
       ]);
     } else {

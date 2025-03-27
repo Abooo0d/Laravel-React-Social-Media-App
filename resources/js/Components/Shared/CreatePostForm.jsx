@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { HiMiniXMark } from "react-icons/hi2";
-import { router, usePage } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import { isImage } from "@/Functions";
 import ImageFullView from "./ImageFullView";
 import PostPreview from "./PostPreview";
@@ -11,25 +11,20 @@ import { SecondaryButton, PrimaryButton } from "./Buttons";
 import PopupCard from "./PopupCard";
 import "./index.css";
 import { useMainContext } from "@/Contexts/MainContext";
-import Notification from "./Notification";
-const CreatePostForm = ({
-  showForm,
-  setShowForm,
-  user,
-  setPosts,
-  posts,
-  groupId,
-}) => {
-  const { setErrors, setSuccessMessage } = useMainContext();
+import { useUserContext } from "@/Contexts/UserContext";
+const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
+  const { setSuccessMessage } = useMainContext();
   const { flash } = usePage().props;
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState("");
   const [showPost, setShowPost] = useState(false);
   const [imageIndex, setImageIndex] = useState();
   const [attachmentsErrors, setAttachmentsErrors] = useState([]);
+  const { user } = useUserContext();
   const [post, setPost] = useState({
     body: "",
     attachments: [],
+    user_id: user.id,
     group_id: groupId,
   });
   const [_post, set_Post] = useState({
@@ -38,15 +33,14 @@ const CreatePostForm = ({
     user_id: user.id,
     group_id: groupId,
   });
-  let errorsArray = [];
+  const { data, setData, processing, post: submit } = useForm({ ..._post });
   let myFile;
-  useEffect(() => {
-    if (flash?.success) setSuccessMessage(flash.success);
-  }, [flash]);
+
   useEffect(() => {
     setPost({ body: "", attachments: [], user_id: user.id, group_id: groupId });
     setAttachmentsErrors([]);
   }, [showForm]);
+
   useEffect(() => {
     if (post.body !== "" || post?.attachments?.length !== 0) {
       set_Post(() => ({
@@ -57,52 +51,32 @@ const CreatePostForm = ({
   }, [post]);
 
   function close() {
-    setPost({ body: "", attachments: [], user_id: user.id, group_id: groupId });
     setShowForm(false);
   }
   const handelSubmit = () => {
     if (post.body !== "" || post.attachments.length !== 0) {
-      router.post(route("post.create"), _post, {
-        forceFormData: true,
-        onSuccess: (data1) => {
-          setPost({
-            body: "",
-            attachments: [],
-            user_id: user.id,
-            group_id: groupId,
-          });
+      submit(route("post.create"), {
+        onSuccess: () => {
           setShowForm(false);
-          setSuccessMessage("Post Created Successfully");
-          setPosts((prevPosts) => ({
-            ...prevPosts,
-            posts: {
-              ...prevPosts.posts,
-            },
-          }));
         },
-        onError: (errors) => {
+        onError: (e) => {
           setAttachmentsErrors([]);
-          setSuccessMessage("");
-          setErrors([]);
-          errorsArray = [];
-          Object.keys(errors).map((error) => {
-            errorsArray.push(errors[error]);
-          });
-          setErrors(errorsArray);
-          for (const key in errors) {
+          for (const key in e) {
             setAttachmentsErrors((prevErrors) => [
               ...prevErrors,
               {
                 index: key.split(".")[1],
-                message: errors[key],
+                message: e[key],
               },
             ]);
-            setErrors([...errors, errors[key]]);
           }
         },
       });
     }
   };
+  useEffect(() => {
+    setData(_post);
+  }, [_post]);
   const HandelTheFiles = async (e) => {
     for (const file of e.target.files) {
       myFile = {
@@ -235,7 +209,7 @@ const CreatePostForm = ({
           />
         </div>
         <div className="mt-4 gap-2 flex justify-end items-center">
-          <SecondaryButton classes="relative py-1.5 px-3">
+          <SecondaryButton classes="relative py-1.5 px-3" enabled={true}>
             Add Files
             <input
               type="file"
@@ -252,6 +226,7 @@ const CreatePostForm = ({
             event={() => {
               handelSubmit();
             }}
+            enabled={true}
           >
             Submit
           </PrimaryButton>

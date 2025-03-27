@@ -23,7 +23,7 @@ class StoreGroupRequest extends FormRequest
   {
     return [
       'name' => 'required|string',
-      'about' => 'nullable|string',
+      'about' => 'required|string',
       'autoApproval' => 'required|boolean'
     ];
   }

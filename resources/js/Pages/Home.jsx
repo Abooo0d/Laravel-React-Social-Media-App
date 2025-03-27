@@ -1,9 +1,6 @@
 import FollowersBar from "@/Components/Containers/FollowersBar";
 import GroupsBar from "@/Components/Containers/GroupsBar";
-import GroupsContainer from "@/Components/Containers/GroupsContainer";
 import HomeFeed from "@/Components/Containers/HomeFeed";
-import Notification from "@/Components/Shared/Notification";
-import TextInput from "@/Components/TextInput";
 import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
@@ -14,18 +11,25 @@ export default function Home({ auth, posts, groups, followers }) {
   const [postsData, setPostsData] = useState(posts);
   const [groupsData, setGroupsData] = useState(groups);
   const [followersData, setFollowersData] = useState(followers);
-  const { setSuccessMessage } = useMainContext();
-  const { flash } = usePage().props;
+  const { setSuccessMessage, setErrors } = useMainContext();
+  const { flash, errors } = usePage().props;
   useEffect(() => {
     if (flash?.success) setSuccessMessage(flash.success);
+    if (flash?.error) setErrors([flash.error]);
   }, [flash]);
   useEffect(() => {
-    setPostsData(posts);
-  }, [posts]);
-  useEffect(() => {
     setUser(auth.user);
-  }, []);
-
+  }, [auth]);
+  useEffect(() => {
+    let messages = [];
+    Object.keys(errors).map((key) => messages.push(errors[key]));
+    setErrors(messages);
+  }, [errors]);
+  useEffect(() => {
+    setGroupsData(groups);
+    setPostsData(posts);
+    setFollowersData(followers);
+  }, [groups, posts, followers]);
   return (
     <>
       <Head>
@@ -37,7 +41,7 @@ export default function Home({ auth, posts, groups, followers }) {
         />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
-      <Authenticated>
+      <Authenticated currentUser={auth.user}>
         <div className="flex lg:flex-col flex-col-reverse lg:gap-0 gap-2 p-2 lg:p-0 lg:grid lg:grid-cols-12 min-h-barHeight max-h-barHeight overflow-scroll bg-gray-900">
           <GroupsBar groups={groupsData} setGroups={setGroupsData} />
           <HomeFeed posts={posts} />

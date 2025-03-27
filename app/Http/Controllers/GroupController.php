@@ -59,30 +59,28 @@ class GroupController extends Controller
   }
   public function store(StoreGroupRequest $request)
   {
-    // dd('ABood');
-    $data = $request->validated();
-    $user_id = Auth::id();
-    $group = Group::create([
-      'name' => $data['name'],
-      'auto_approval' => $data['autoApproval'],
-      'about' => $data['about'],
-      'user_id' => $user_id,
-    ]);
-    $groupUser = GroupUsers::create([
-      'user_id' => $user_id,
-      'group_id' => $group->id,
-      'created_by' => $user_id,
-      'status' => GroupUserStatusEnum::APPROVED->value,
-      'role' => GroupUserRuleEnum::ADMIN->value,
-    ]);
-    $group['role'] = 'admin';
-    $group['status'] = 'approved';
-    return response(
-      [
-        'group' => new GroupResource($group),
-      ],
-      201
-    );
+    try {
+      $data = $request->validated();
+      $user_id = Auth::id();
+      $group = Group::create([
+        'name' => $data['name'],
+        'auto_approval' => $data['autoApproval'],
+        'about' => $data['about'],
+        'user_id' => $user_id,
+      ]);
+      $groupUser = GroupUsers::create([
+        'user_id' => $user_id,
+        'group_id' => $group->id,
+        'created_by' => $user_id,
+        'status' => GroupUserStatusEnum::APPROVED->value,
+        'role' => GroupUserRuleEnum::ADMIN->value,
+      ]);
+      // $group['role'] = 'admin';
+      // $group['status'] = 'approved';
+      return redirect()->back()->with('success', 'Group Created Successfully');
+    } catch (\Throwable $th) {
+      return redirect()->back()->with('error', 'Some Thing Went Wrong');
+    }
   }
   public function update(UpdateGroupRequest $request, Group $group)
   {
@@ -261,10 +259,31 @@ class GroupController extends Controller
       if ($group->isAdmin(Auth::id())) {
         $groupUser->role = $data['role'];
         $groupUser->save();
-        return back()->with('success', 'Abood');
-        // return redirect(route('group.profile', $group->slug))->with('success', 'Role Changed Successfully');
+        return redirect()->back()->with('success', 'Role Changed Successfully');
       }
     }
     return response(['message' => 'there Is An Unexpected Error'], 400);
+  }
+  public function kickOut(Request $request, Group $group)
+  {
+    try {
+      $data = $request->validate([
+        'user_id' => ['required', 'exists:users,id']
+      ]);
+      $user_id = $data['user_id'];
+      $group_user = GroupUsers::where('user_id', $user_id)
+        ->where('group_id', $group->id)
+        ->first();
+      if ($group->isOwner($user_id)) {
+        return redirect()->back()->with('error', 'You Can`t Kick Out The Owner Of The Group');
+      }
+      if ($group_user) {
+        $group_user->delete();
+        return redirect()->back()->with('success', 'Member Kicked Out Successfully');
+      }
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+
   }
 }

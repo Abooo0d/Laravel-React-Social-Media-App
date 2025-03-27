@@ -1,39 +1,34 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SecondaryButton, PrimaryButton } from "./Buttons";
 import PopupCard from "./PopupCard";
 import "./index.css";
 import TextInput from "../TextInput";
 import { HiMiniXMark } from "react-icons/hi2";
 import { Switch } from "@headlessui/react";
-import axiosClient from "@/AxiosClient/AxiosClient";
-import { useMainContext } from "@/Contexts/MainContext";
-const CreateGroupForm = ({ showForm, setShowForm, setGroups }) => {
+import { useForm } from "@inertiajs/react";
+const CreateGroupForm = ({ showForm, setShowForm }) => {
   const [groupName, setGroupName] = useState("");
   const [groupAbout, setGroupAbout] = useState("");
   const [autoApproval, setAutoApproval] = useState(false);
-  const { setSuccessMessage, setErrors } = useMainContext();
-  let errors = [];
   function close() {
     setShowForm(false);
   }
+  const { data, post, processing } = useForm({
+    name: groupName,
+    autoApproval: autoApproval,
+    about: groupAbout,
+  });
+  useEffect(() => {
+    data.about = groupAbout;
+    data.autoApproval = autoApproval;
+    data.name = groupName;
+  }, [groupName, groupAbout, autoApproval]);
   const CreateGroup = () => {
-    axiosClient
-      .post(route("group.create"), {
-        name: groupName,
-        autoApproval: autoApproval,
-        about: groupAbout,
-      })
-      .then(({ data }) => {
-        setGroups((prevData) => [data.group, ...prevData]);
-        setSuccessMessage("Group Created Successfully");
+    post(route("group.create"), {
+      onSuccess: () => {
         setShowForm(false);
-      })
-      .catch((e) => {
-        Object.keys(e.response.data.errors).map((error) => {
-          errors.push(e.response.data.errors[error]);
-        });
-        setErrors(errors);
-      });
+      },
+    });
   };
   useEffect(() => {
     if (showForm) {
@@ -54,7 +49,6 @@ const CreateGroupForm = ({ showForm, setShowForm, setGroups }) => {
       <div as="h3" className="text-base/7 font-medium text-white mb-4">
         Create Group
       </div>
-
       <h2 className="text-gray-400 mb-2">Group Name:</h2>
       <TextInput
         placeholder="Group Name"
@@ -75,17 +69,20 @@ const CreateGroupForm = ({ showForm, setShowForm, setGroups }) => {
       <h2 className="text-gray-400 mb-2">About The Group:</h2>
       <textarea
         placeholder="Your comment"
-        className="flex-1 px-2 py-1 bg-gray-700/50 text-gray-400 placeholder:text-gray-600 resize-none overflow-scroll h-[80px] border-gray-800 rounded-md outline-none focus:border-gray-600 ring-0 focus:ring-0 duration-200 cursor-pointer w-[calc(100%-30px)] ml-4"
+        className="flex-1 px-2 py-1 bg-gray-700/50 text-gray-400 placeholder:text-gray-500 resize-none overflow-scroll h-[80px] border-gray-800 rounded-md outline-none focus:border-gray-600 ring-0 focus:ring-0 duration-200 cursor-pointer w-[calc(100%-30px)] ml-4"
         value={groupAbout}
         onChange={(e) => setGroupAbout(e.target.value)}
       ></textarea>
       <div className="mt-4 gap-2 flex justify-end items-center">
-        <PrimaryButton classes={"py-1.5 px-3"} event={() => CreateGroup()}>
+        <PrimaryButton
+          classes={"py-1.5 px-3"}
+          event={() => CreateGroup()}
+          enabled={processing}
+        >
           Create
         </PrimaryButton>
       </div>
     </PopupCard>
-    // </div>
   );
 };
 

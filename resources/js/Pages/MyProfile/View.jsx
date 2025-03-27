@@ -105,7 +105,7 @@ const View = ({ auth, user, posts, mustVerifyEmail, status }) => {
         />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
-      <Authenticated>
+      <Authenticated currentUser={auth.user}>
         <div className="container mx-auto ">
           <div className="max-h-[350px] w-full relative">
             <div className="relative max-h-[350px] w-full group">

@@ -1,18 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SecondaryButton } from "./Buttons";
 import { BiSolidSend } from "react-icons/bi";
 import { useUserContext } from "@/Contexts/UserContext";
 import axiosClient from "@/AxiosClient/AxiosClient";
-import { FaRegCommentDots } from "react-icons/fa";
-import { AiFillLike, AiOutlineLike } from "react-icons/ai";
-import DOMPurify from "dompurify";
-import CommentMenu from "./CommentMenu";
 import CommentCard from "./CommentCard";
 import { useMainContext } from "@/Contexts/MainContext";
 const PostCommentSection = ({ show, post, setPost, currentUser }) => {
   const { user } = useUserContext();
   const [comment, setComment] = useState("");
-  const [showMenu, setShowMenu] = useState(false);
   const { setSuccessMessage } = useMainContext();
   const createComment = () => {
     axiosClient
@@ -37,24 +32,32 @@ const PostCommentSection = ({ show, post, setPost, currentUser }) => {
           show ? "visible opacity-100 h-[150px]" : "invisible opacity-0 h-[0px]"
         }`}
       >
-        {post.comments.map((comment, index) => {
-          return (
-            <div
-              className="flex flex-col w-full h-full items-center"
-              key={index}
-            >
-              <CommentCard
-                currentComment={comment}
-                post={post}
-                setPost={setPost}
-                currentUser={currentUser}
-              />
-              {post.comments.length > 1 && index < post.comments.length - 1 && (
-                <div className="w-[80%] h-[1px] bg-gray-700/20" />
-              )}
-            </div>
-          );
-        })}
+        {post.comments.length > 0 ? (
+          post.comments.map((comment, index) => {
+            return (
+              <div
+                className="flex flex-col w-full h-full items-center"
+                key={index}
+              >
+                <CommentCard
+                  currentComment={comment}
+                  post={post}
+                  setPost={setPost}
+                  currentUser={currentUser}
+                />
+                {post.comments.length > 1 &&
+                  index < post.comments.length - 1 && (
+                    <div className="w-[80%] h-[1px] bg-gray-700/20" />
+                  )}
+              </div>
+            );
+          })
+        ) : (
+          <div className="w-full text-gray-600 text-center pt-4">
+            {" "}
+            No Comments On This Post
+          </div>
+        )}
       </div>
       <div
         className={`flex justify-between items-start gap-2 pt-2 w-full duration-200 text-gray-400 border-t-[1px] border-solid border-gray-700 mt-0 overflow-hidden  ${

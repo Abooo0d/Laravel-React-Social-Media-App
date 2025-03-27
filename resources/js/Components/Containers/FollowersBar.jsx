@@ -8,8 +8,8 @@ const FollowersBar = ({ followers }) => {
   const [showFollowersContainer, setShowFollowersContainer] = useState(false);
   return (
     <>
-      <div className="block max-lg:hidden shadow-lg rounded-xl m-0 lg:rounded-none order-last col-span-3 lg:py-8 px-4 py-2 bg-gray-200 dark:bg-gray-900 lg:max-h-barHeight lg:min-h-barHeight max-h-[500px] h-full overflow-hidden lg:border-l-2 dark:border-gray-800 border-gray-300 border-solid lg:border-b-0">
-        <h2 className="block max-lg-hidden text-2xl font-bold dark:text-gray-100">
+      <div className="block max-lg:hidden shadow-lg rounded-xl m-0 lg:rounded-none order-last col-span-3 lg:py-4 px-4 py-2 bg-gray-200 dark:bg-gray-900 lg:max-h-barHeight lg:min-h-barHeight max-h-[500px] h-full overflow-hidden lg:border-l-2 dark:border-gray-800 border-gray-300 border-solid lg:border-b-0">
+        <h2 className="block max-lg-hidden text-xl font-bold dark:text-gray-100">
           My Followers:
         </h2>
         <TextInput

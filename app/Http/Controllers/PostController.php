@@ -50,14 +50,14 @@ class PostController extends Controller
         ]);
       }
       DB::commit();
+      return redirect()->back()->with('success', 'Post Created Successfully Abood');
     } catch (\Throwable $e) {
       foreach ($files as $file) {
         Storage::disk('public')->delete($file);
       }
       DB::rollBack();
-      throw $e;
+      return redirect()->back()->with('error', 'Some Thing Went Wrong');
     }
-    return redirect()->back()->with('success', 'Post Created Successfully');
   }
   /**
    * Update the specified resource in storage.

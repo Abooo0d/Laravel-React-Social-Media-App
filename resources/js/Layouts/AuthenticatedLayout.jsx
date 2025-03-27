@@ -3,18 +3,17 @@ import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import { MainContext, useMainContext } from "@/Contexts/MainContext";
 import { redirect } from "react-router-dom";
 import { useUserContext } from "@/Contexts/UserContext";
 
-export default function Authenticated({ header, children }) {
-  const { user } = useUserContext();
+export default function Authenticated({ header, children, currentUser }) {
+  const { user, setUser } = useUserContext();
   useEffect(() => {
-    if (!user) {
-      window.location.href = route("login"); // Redirect if user is not authenticated
-    }
-  }, [user]);
+    if (currentUser) setUser(currentUser);
+    else window.location.href = route("login");
+  }, []);
 
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);

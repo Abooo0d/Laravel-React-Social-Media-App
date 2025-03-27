@@ -1,6 +1,6 @@
 import axiosClient from "@/AxiosClient/AxiosClient";
 import { useMainContext } from "@/Contexts/MainContext";
-import { router, usePage } from "@inertiajs/react";
+import { router, useForm, usePage } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 
@@ -26,6 +26,12 @@ const UserMemberCardMenu = ({ openMenu, setOpenMenu, group, member }) => {
         });
         setErrors(errors);
       });
+  };
+  const form = useForm({
+    user_id: member.user.id,
+  });
+  const kickOut = () => {
+    form.delete(route("group.kick-out", group.slug));
   };
   return (
     <div className="absolute top-[5px] right-[5px] ">
@@ -69,9 +75,14 @@ const UserMemberCardMenu = ({ openMenu, setOpenMenu, group, member }) => {
             Set As Admin
           </button>
         )}
-        <button className="bg-gray-700/60 w-full duration-300 hover:bg-gray-600/80 py-2 px-4 text-sm font-medium text-white focus:outline-none text-left">
-          Kick Out
-        </button>
+        {group.user_id !== member.user.id && (
+          <button
+            className="bg-gray-700/60 w-full duration-300 hover:bg-gray-600/80 py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
+            onClick={() => kickOut()}
+          >
+            Kick Out
+          </button>
+        )}
       </div>
     </div>
   );
