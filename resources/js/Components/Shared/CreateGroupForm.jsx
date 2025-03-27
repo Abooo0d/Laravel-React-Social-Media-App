@@ -24,11 +24,15 @@ const CreateGroupForm = ({ showForm, setShowForm }) => {
     data.name = groupName;
   }, [groupName, groupAbout, autoApproval]);
   const CreateGroup = () => {
-    post(route("group.create"), {
-      onSuccess: () => {
-        setShowForm(false);
-      },
-    });
+    try {
+      post(route("group.create"), {
+        onSuccess: () => {
+          setShowForm(false);
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
   useEffect(() => {
     if (showForm) {

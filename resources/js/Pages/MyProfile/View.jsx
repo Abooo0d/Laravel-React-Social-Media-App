@@ -9,44 +9,44 @@ import Edit from "./Edit";
 import { Head, usePage } from "@inertiajs/react";
 import { useForm } from "@inertiajs/react";
 import { useMainContext } from "@/Contexts/MainContext";
-import { useUserContext } from "@/Contexts/UserContext";
 import PostContainer from "@/Components/Containers/PostContainer";
 import CreatePost from "@/Components/Shared/CreatePost";
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 
 const View = ({ auth, user, posts, mustVerifyEmail, status }) => {
-  const { flash } = usePage().props;
-  const [allPosts, setAllPosts] = useState(posts);
-  useEffect(() => {
-    flash?.success && setSuccessMessage(flash.success);
-  }, [flash]);
-
-  const { data, setData, post, progress } = useForm({
+  const { flash, errors } = usePage().props;
+  const { setErrors, setSuccessMessage } = useMainContext();
+  const { setData, post } = useForm({
     coverImage: null,
     avatarImage: null,
   });
-  const { errors } = usePage().props;
-  let errorsArray = [];
-  Object.keys(errors).map((key) => errorsArray.push(errors[key]));
-  const { setSuccessMessage } = useMainContext();
+  const [allPosts, setAllPosts] = useState(posts);
   const [coverImage, setCoverImage] = useState("");
   const [avatarImage, setAvatarImage] = useState("");
-
   const [isTheCoverChanged, setIsTheCoverChanged] = useState(false);
   const [isTheAvatarChanged, setIsTheAvatarChanged] = useState(false);
-
+  useEffect(() => {
+    let messages = [];
+    Object.keys(errors).map((key) => messages.push(errors[key]));
+    setErrors(messages);
+  }, [errors]);
+  useEffect(() => {
+    if (flash?.success) setSuccessMessage(flash.success);
+    if (flash?.error) setErrors([flash.error]);
+  }, [flash]);
   const handelAvatarChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setData("avatarImage", e.target.files[0]);
-      setIsTheAvatarChanged(true);
-      const reader = new FileReader();
-      reader.onload = () => {
-        setAvatarImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+    try {
+      const file = e.target.files[0];
+      if (file) {
+        setData("avatarImage", e.target.files[0]);
+        setIsTheAvatarChanged(true);
+        const reader = new FileReader();
+        reader.onload = () => {
+          setAvatarImage(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   const resetAvatarImage = () => {
@@ -57,24 +57,29 @@ const View = ({ auth, user, posts, mustVerifyEmail, status }) => {
     setIsTheCoverChanged(false);
   };
   const submitAvatarImage = () => {
-    post(route("profile.changeImages"), {
-      preserveScroll: true,
-      onStart: () => {
-        errorsArray = [];
-      },
-    });
-    setIsTheAvatarChanged(false);
+    try {
+      post(route("profile.changeImages"), {
+        preserveScroll: true,
+      });
+      setIsTheAvatarChanged(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handelCoverChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setData("coverImage", e.target.files[0]);
-      setIsTheCoverChanged(true);
-      const reader = new FileReader();
-      reader.onload = () => {
-        setCoverImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+    try {
+      const file = e.target.files[0];
+      if (file) {
+        setData("coverImage", e.target.files[0]);
+        setIsTheCoverChanged(true);
+        const reader = new FileReader();
+        reader.onload = () => {
+          setCoverImage(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   const resetCoverImage = () => {
@@ -85,13 +90,14 @@ const View = ({ auth, user, posts, mustVerifyEmail, status }) => {
     setIsTheCoverChanged(false);
   };
   const submitCoverImage = () => {
-    post(route("profile.changeImages"), {
-      preserveScroll: true,
-      onStart: () => {
-        errorsArray = [];
-      },
-    });
-    setIsTheCoverChanged(false);
+    try {
+      post(route("profile.changeImages"), {
+        preserveScroll: true,
+      });
+      setIsTheCoverChanged(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

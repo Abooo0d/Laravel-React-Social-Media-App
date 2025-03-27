@@ -15,49 +15,49 @@ import UserMemberCard from "@/Components/Shared/UserMemberCard";
 import GroupAboutForm from "@/Components/Shared/GroupAboutForm";
 import PostContainer from "@/Components/Containers/PostContainer";
 import CreatePost from "@/Components/Shared/CreatePost";
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 const View = ({ auth, group, requests, users, isAdmin, posts }) => {
-  const { flash, errors } = usePage().props;
   const isCurrentUserJoined = !!(group.status == "approved");
   const [groupData, setGroupData] = useState(group);
   const [requestsData, setRequestsData] = useState(requests);
-  const { data, setData, post, progress } = useForm({
+  const [allPosts, setAllPosts] = useState(posts);
+  const [coverImage, setCoverImage] = useState("");
+  const [avatarImage, setAvatarImage] = useState("");
+  const [showInviteForm, setShowInviteForm] = useState(false);
+  const [isTheCoverChanged, setIsTheCoverChanged] = useState(false);
+  const [isTheAvatarChanged, setIsTheAvatarChanged] = useState(false);
+  const { setSuccessMessage, setErrors } = useMainContext();
+  const { flash, errors } = usePage().props;
+  const { setData, post } = useForm({
     coverImage: null,
     avatarImage: null,
     group_id: groupData.id,
   });
-
-  const [allPosts, setAllPosts] = useState(posts);
-  let errorsArray = [];
-  Object.keys(errors).map((key) => errorsArray.push(errors[key]));
-  const { setSuccessMessage, setErrors } = useMainContext();
-  const [coverImage, setCoverImage] = useState("");
-  const [avatarImage, setAvatarImage] = useState("");
-  const [showInviteForm, setShowInviteForm] = useState(false);
-
-  const [isTheCoverChanged, setIsTheCoverChanged] = useState(false);
-  const [isTheAvatarChanged, setIsTheAvatarChanged] = useState(false);
-
   useEffect(() => {
     if (flash.success) setSuccessMessage(flash.success);
     if (flash.error) setErrors([flash.error]);
   }, [flash]);
   useEffect(() => {
+    let messages = [];
+    Object.keys(errors).map((key) => messages.push(errors[key]));
+    setErrors(messages);
+  }, [errors]);
+  useEffect(() => {
     setAllPosts(posts);
   }, [posts]);
-
   const handelAvatarChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setData("avatarImage", e.target.files[0]);
-      setIsTheAvatarChanged(true);
-      const reader = new FileReader();
-      reader.onload = () => {
-        setAvatarImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+    try {
+      const file = e.target.files[0];
+      if (file) {
+        setData("avatarImage", e.target.files[0]);
+        setIsTheAvatarChanged(true);
+        const reader = new FileReader();
+        reader.onload = () => {
+          setAvatarImage(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   const resetAvatarImage = () => {
@@ -68,27 +68,23 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
     setIsTheCoverChanged(false);
   };
   const submitAvatarImage = () => {
-    post(route("group.changeImages"), {
-      onStart: () => {
-        errorsArray = [];
-      },
-      onSuccess: () => {},
-      onFinish: () => {
-        // resetAvatarImage();
-      },
-    });
+    post(route("group.changeImages"), {});
     setIsTheAvatarChanged(false);
   };
   const handelCoverChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setData("coverImage", e.target.files[0]);
-      setIsTheCoverChanged(true);
-      const reader = new FileReader();
-      reader.onload = () => {
-        setCoverImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+    try {
+      const file = e.target.files[0];
+      if (file) {
+        setData("coverImage", e.target.files[0]);
+        setIsTheCoverChanged(true);
+        const reader = new FileReader();
+        reader.onload = () => {
+          setCoverImage(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   const resetCoverImage = () => {
@@ -99,13 +95,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
     setIsTheCoverChanged(false);
   };
   const submitCoverImage = () => {
-    post(route("group.changeImages"), {
-      onStart: () => {
-        errorsArray = [];
-      },
-      onSuccess: () => {},
-      onFinish: () => {},
-    });
+    post(route("group.changeImages"));
     setIsTheCoverChanged(false);
   };
   function requestJoin() {

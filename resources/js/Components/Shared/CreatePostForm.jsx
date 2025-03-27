@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { HiMiniXMark } from "react-icons/hi2";
-import { useForm, usePage } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
 import { isImage } from "@/Functions";
 import ImageFullView from "./ImageFullView";
 import PostPreview from "./PostPreview";
@@ -10,11 +10,8 @@ import CreatePostPostAttachments from "./CreatePostPostAttachments";
 import { SecondaryButton, PrimaryButton } from "./Buttons";
 import PopupCard from "./PopupCard";
 import "./index.css";
-import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";
 const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
-  const { setSuccessMessage } = useMainContext();
-  const { flash } = usePage().props;
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState("");
   const [showPost, setShowPost] = useState(false);
@@ -35,12 +32,10 @@ const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
   });
   const { data, setData, processing, post: submit } = useForm({ ..._post });
   let myFile;
-
   useEffect(() => {
     setPost({ body: "", attachments: [], user_id: user.id, group_id: groupId });
     setAttachmentsErrors([]);
   }, [showForm]);
-
   useEffect(() => {
     if (post.body !== "" || post?.attachments?.length !== 0) {
       set_Post(() => ({
@@ -49,107 +44,126 @@ const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
       }));
     }
   }, [post]);
-
+  useEffect(() => {
+    setData(_post);
+  }, [_post]);
   function close() {
     setShowForm(false);
   }
   const handelSubmit = () => {
-    if (post.body !== "" || post.attachments.length !== 0) {
-      submit(route("post.create"), {
-        onSuccess: () => {
-          setShowForm(false);
-        },
-        onError: (e) => {
-          setAttachmentsErrors([]);
-          for (const key in e) {
-            setAttachmentsErrors((prevErrors) => [
-              ...prevErrors,
-              {
-                index: key.split(".")[1],
-                message: e[key],
-              },
-            ]);
-          }
-        },
-      });
+    try {
+      if (post.body !== "" || post.attachments.length !== 0) {
+        submit(route("post.create"), {
+          onSuccess: () => {
+            setShowForm(false);
+          },
+          onError: (e) => {
+            setAttachmentsErrors([]);
+            for (const key in e) {
+              setAttachmentsErrors((prevErrors) => [
+                ...prevErrors,
+                {
+                  index: key.split(".")[1],
+                  message: e[key],
+                },
+              ]);
+            }
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
-  useEffect(() => {
-    setData(_post);
-  }, [_post]);
   const HandelTheFiles = async (e) => {
-    for (const file of e.target.files) {
-      myFile = {
-        file,
-        url: await readFile(file),
-      };
-      setPost((prev) => ({
-        ...prev,
-        attachments: [...prev.attachments, myFile],
-      }));
+    try {
+      for (const file of e.target.files) {
+        myFile = {
+          file,
+          url: await readFile(file),
+        };
+        setPost((prev) => ({
+          ...prev,
+          attachments: [...prev.attachments, myFile],
+        }));
+      }
+      e.target.value = null;
+    } catch (error) {
+      console.log(error);
     }
-    e.target.value = null;
   };
   const readFile = async (file) => {
-    return new Promise((res, rej) => {
-      if (isImage(file)) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          res(reader.result);
-        };
-        reader.onerror = rej;
-        reader.readAsDataURL(file);
-      } else {
-        res(null);
-      }
-    });
+    try {
+      return new Promise((res, rej) => {
+        if (isImage(file)) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            res(reader.result);
+          };
+          reader.onerror = rej;
+          reader.readAsDataURL(file);
+        } else {
+          res(null);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
   const onDelete = (attachment, index, update) => {
-    if (attachment.file) {
-      setPost((prevPost) => ({
-        ...prevPost,
-        attachments: prevPost.attachments.filter((f) => f !== attachment),
-      }));
-      if (update) {
-        setFinalPost((prevPost) => ({
+    try {
+      if (attachment.file) {
+        setPost((prevPost) => ({
           ...prevPost,
           attachments: prevPost.attachments.filter((f) => f !== attachment),
         }));
+        if (update) {
+          setFinalPost((prevPost) => ({
+            ...prevPost,
+            attachments: prevPost.attachments.filter((f) => f !== attachment),
+          }));
+        }
+        setAttachmentsErrors((prevErrors) =>
+          prevErrors.filter((f) => f.index != index)
+        );
+      } else {
+        setPost((prevPost) => ({
+          ...prevPost,
+          attachments: prevPost.attachments.map((f) => ({
+            ...f,
+            isDeleted: f === attachment || f.isDeleted === true ? true : false,
+          })),
+        }));
+        if (update) {
+          setFinalPost((prevPost) => ({
+            ...prevPost,
+            deletedFilesIds: [...prevPost.deletedFilesIds, attachment.id],
+          }));
+        }
       }
-      setAttachmentsErrors((prevErrors) =>
-        prevErrors.filter((f) => f.index != index)
-      );
-    } else {
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const undoDelete = (attachment, update) => {
+    try {
       setPost((prevPost) => ({
         ...prevPost,
         attachments: prevPost.attachments.map((f) => ({
           ...f,
-          isDeleted: f === attachment || f.isDeleted === true ? true : false,
+          isDeleted: f === attachment ? false : f.isDeleted,
         })),
       }));
       if (update) {
         setFinalPost((prevPost) => ({
           ...prevPost,
-          deletedFilesIds: [...prevPost.deletedFilesIds, attachment.id],
+          deletedFilesIds: [
+            ...prevPost.deletedFilesIds.filter((f) => f !== attachment.id),
+          ],
         }));
       }
-    }
-  };
-  const undoDelete = (attachment, update) => {
-    setPost((prevPost) => ({
-      ...prevPost,
-      attachments: prevPost.attachments.map((f) => ({
-        ...f,
-        isDeleted: f === attachment ? false : f.isDeleted,
-      })),
-    }));
-    if (update) {
-      setFinalPost((prevPost) => ({
-        ...prevPost,
-        deletedFilesIds: [
-          ...prevPost.deletedFilesIds.filter((f) => f !== attachment.id),
-        ],
-      }));
+    } catch (error) {
+      console.log();
     }
   };
   return (
