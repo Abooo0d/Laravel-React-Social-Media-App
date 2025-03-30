@@ -4,7 +4,7 @@ import { useInView } from "react-intersection-observer";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import { useUserContext } from "@/Contexts/UserContext";
 
-const PostContainer = ({ posts, classes }) => {
+const PostContainer = ({ posts, classes, children }) => {
   const [ref, inView, entry] = useInView();
   const [allPosts, setAllPosts] = useState(posts.data);
   const [allData, setAllData] = useState(posts);
@@ -31,6 +31,8 @@ const PostContainer = ({ posts, classes }) => {
       <div
         className={`flex flex-col gap-3 w-full h-full max-lg:pb-4 pt-4 px-4 items-center ${classes}`}
       >
+        {children}
+
         {allPosts.length > 0 ? (
           <>
             {allPosts.map((post, index) => (

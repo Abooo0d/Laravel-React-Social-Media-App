@@ -2,21 +2,23 @@
 
 namespace App\Notifications;
 
+use App\Http\Enums\NotificationTypeEnum;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Storage;
 
-class InvitationApproved extends Notification
+class RequestActionNotification extends Notification
 {
   use Queueable;
 
   /**
    * Create a new notification instance.
    */
-  public function __construct(public Group $group, public User $user)
+  public function __construct(public Group $group, public string $type)
   {
     //
   }
@@ -28,17 +30,23 @@ class InvitationApproved extends Notification
    */
   public function via(object $notifiable): array
   {
-    return ['mail'];
+    return ['database'];
   }
 
   /**
    * Get the mail representation of the notification.
    */
-  public function toMail(object $notifiable): MailMessage
+  public function toDatabase(object $notifiable)
   {
-    return (new MailMessage)
-      ->line("{$this->user->name} Has Accepted To Join The {$this->group->name} Group")
-      ->action('Open Group', route('group.profile', $this->group->slug));
+    $message = $this->type == 'approved'
+      ? "Your Request To Join '{$this->group->name}' Group Have Been Approved."
+      : "Your Request To Join '{$this->group->name}' Group Have Been Rejected.";
+    return [
+      'type' => NotificationTypeEnum::REQUESTACTION->value,
+      'message' => $message,
+      'link' => route('group.profile', $this->group->slug),
+      'actor' => ['name' => $this->group->name, 'avatar' => Storage::url($this->group->thumbnail_path)]
+    ];
   }
 
   /**

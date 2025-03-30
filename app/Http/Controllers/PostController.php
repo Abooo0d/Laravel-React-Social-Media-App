@@ -7,19 +7,29 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\CommentResource;
-use App\Http\Resources\PostCommentReactionResource;
-use App\Http\Resources\PostResource;
+use App\Http\Resources\UserResource;
+use App\Models\Group;
 use App\Models\post;
 use App\Models\PostAttachments;
 use App\Models\PostComments;
 use App\Models\PostCommentsReactions;
 use App\Models\PostReactions;
+use App\Models\User;
+use App\Notifications\CommentReactionNotification;
+use App\Notifications\CreateCommentNotification;
+use App\Notifications\DeleteCommentNotification;
+use App\Notifications\DeletePostInGroupNotification;
+use App\Notifications\PostReactionNotification;
+use App\Notifications\UpdateCommentNotification;
+use App\Notifications\UpdatePostInGroupNotification;
+use App\Notifications\CreatePostInGroupNotification;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Notification;
 
 class PostController extends Controller
 {
@@ -50,13 +60,19 @@ class PostController extends Controller
         ]);
       }
       DB::commit();
+      if ($data['group_id']) {
+        $group = Group::where('id', $data['group_id'])->first();
+        $admins = $group->adminUsers()->where('user_id', '!=', Auth::id())->get();
+        $postOwner = User::where('id', Auth::id())->first();
+        Notification::send($admins, new CreatePostInGroupNotification($postOwner, $group));
+      }
       return redirect()->back()->with('success', 'Post Created Successfully Abood');
     } catch (\Throwable $e) {
       foreach ($files as $file) {
         Storage::disk('public')->delete($file);
       }
       DB::rollBack();
-      return redirect()->back()->with('error', 'Some Thing Went Wrong');
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
   /**
@@ -69,7 +85,7 @@ class PostController extends Controller
     try {
       $data = $request->validated();
       $user = $request->user();
-      $post->update($request->validated());
+      $post->update($data);
       $deletedFilesIds = $data['deletedFilesIds'] ?? [];
       $postAttachments = PostAttachments::query()
         ->where('post_id', $post->id)
@@ -78,6 +94,7 @@ class PostController extends Controller
       foreach ($postAttachments as $file) {
         $file->delete();
       }
+
       /** @var UploadedFile[] $attachments */
       $attachments = $data['attachments'] ?? [];
       foreach ($attachments as $attachment) {
@@ -92,109 +109,181 @@ class PostController extends Controller
           'created_by' => $user->id
         ]);
       }
+      if ($post['group_id']) {
+        $group = Group::where('id', $post->group_id)->first();
+        $admins = $group->adminUsers()->where('user_id', '!=', Auth::id())->get();
+        $postOwner = User::where('id', Auth::id())->first();
+        Notification::send($admins, new UpdatePostInGroupNotification($postOwner, $group));
+      }
       DB::commit();
+      return redirect()->back()->with('success', 'Post Created Successfully');
     } catch (\Throwable $e) {
       foreach ($files as $file) {
         Storage::disk('public')->delete($file);
       }
       DB::rollBack();
-      throw $e;
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-    return back();
   }
   public function downloadAttachment(PostAttachments $attachment)
   {
-    return response()
-      ->download(Storage::disk('public')->path($attachment->path), $attachment->name);
+    try {
+      return response()
+        ->download(Storage::disk('public')->path($attachment->path), $attachment->name);
+
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
   }
   public function destroy(Post $post)
   {
-    $id = Auth::id();
-    if ($id !== $post->user_id) {
-      return response(['message' => 'You Don`t have Permission To Delete This Post']);
+    try {
+      $id = Auth::id();
+      if ($id !== $post->user_id) {
+        return response(['message' => 'You Don`t have Permission To Delete This Post']);
+      }
+      if ($post['group_id']) {
+        $group = Group::where('id', $post['group_id'])->first();
+        $admins = $group->adminUsers()->where('user_id', '!=', Auth::id())->get();
+        $postOwner = User::where('id', Auth::id())->first();
+        Notification::send($admins, new DeletePostInGroupNotification($postOwner, $group));
+      }
+      $post->delete();
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-    $post->delete();
   }
   public function postReaction(Request $request, Post $post)
   {
-    $data = $request->validate([
-      'reaction' => [Rule::enum(PostReactionEnum::class)]
-    ]);
-    $user = Auth::id();
-    $userReaction = false;
-    $reaction = PostReactions::where('user_id', $user)->where('post_id', $post->id)->first();
-    if ($reaction) {
-      $reaction->delete();
-      $userReaction = false;
-    } else {
-      PostReactions::create([
-        'post_id' => $post->id,
-        'user_id' => Auth::id(),
-        'type' => $data['reaction']
+    try {
+      $data = $request->validate([
+        'reaction' => [Rule::enum(PostReactionEnum::class)]
       ]);
-      $userReaction = true;
+      $user = User::where('id', Auth::id())->first();
+
+      /** @var Post $postOwner */
+      $postOwner = $post->user;
+      $userReaction = false;
+      $reaction = PostReactions::where('user_id', $user->id)->where('post_id', $post->id)->first();
+      if ($reaction) {
+        $reaction->delete();
+        $userReaction = false;
+      } else {
+        PostReactions::create([
+          'post_id' => $post->id,
+          'user_id' => Auth::id(),
+          'type' => $data['reaction']
+        ]);
+        $userReaction = true;
+      }
+      if ($postOwner->id != Auth::id()) {
+        $postOwner->notify(new PostReactionNotification($user, $userReaction));
+      }
+      $reactions = PostReactions::where('post_id', $post->id)->count();
+      return response([
+        'num_of_reactions' => $reactions,
+        'user_has_reaction' => $userReaction
+      ]);
+
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-    $reactions = PostReactions::where('post_id', $post->id)->count();
-    return response([
-      'num_of_reactions' => $reactions,
-      'user_has_reaction' => $userReaction
-    ]);
   }
   public function postCommentCreate(Request $request, Post $post)
   {
-    $data = $request->validate([
-      'comment' => ['required', 'string'],
-      'parent_id' => ['nullable', 'exists:post_comments,id']
-    ]);
-    $comment = PostComments::create([
-      'post_id' => $post->id,
-      'user_id' => Auth::id(),
-      'comment' => nl2br($data['comment']),
-      'parent_id' => $data['parent_id'] ?: null
-    ]);
-    return response([new CommentResource($comment), 201]);
+    try {
+      $user = User::where('id', Auth::id())->first();
+      $data = $request->validate([
+        'comment' => ['required', 'string'],
+        'parent_id' => ['nullable', 'exists:post_comments,id']
+      ]);
+      $comment = PostComments::create([
+        'post_id' => $post->id,
+        'user_id' => Auth::id(),
+        'comment' => nl2br($data['comment']),
+        'parent_id' => $data['parent_id'] ?: null
+      ]);
+
+      $postOwner = $post->user()->first();
+      if ($postOwner->id != Auth::id())
+        $postOwner->notify(new CreateCommentNotification($user));
+      if ($data['parent_id']) {
+        $commentOwner = PostComments::where('id', $data['parent_id'])->first()->user;
+        if ($commentOwner->id != Auth::id())
+          $commentOwner->notify(new CreateCommentNotification($user, sub: true));
+      }
+      return response([new CommentResource($comment), 201]);
+
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
   }
   public function EditComment(UpdateCommentRequest $request, PostComments $comment)
   {
-    $data = $request->validated();
-    $comment->update([
-      'comment' => nl2br($data['comment'])
+    try {
+      $data = $request->validated();
+      $comment->update([
+        'comment' => nl2br($data['comment'])
+      ]);
+      $postOwner = $comment->post()->first()->user()->first();
+      $user = User::where('id', Auth::id())->first();
+      if ($postOwner->id != Auth::id())
+        $postOwner->notify(new UpdateCommentNotification($user));
+      return new CommentResource($comment);
 
-    ]);
-    return new CommentResource($comment);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
   }
   public function DeleteComment(PostComments $comment)
   {
-    if ($comment->user_id !== Auth::id()) {
-      return response(['message' => 'You Don`t have Permission To Delete This Comment']);
+    try {
+      if ($comment->user_id !== Auth::id()) {
+        return response(['message' => 'You Don`t have Permission To Delete This Comment']);
+      }
+      $comment->delete();
+      $postOwner = $comment->post()->first()->user()->first();
+      $user = User::where('id', Auth::id())->first();
+      if ($postOwner->id != Auth::id())
+        $postOwner->notify(new DeleteCommentNotification($user));
+      return response('', 204);
+
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-    $comment->delete();
-    return response('', 204);
   }
   public function CommentReaction(Request $request, PostComments $comment)
   {
-    $data = $request->validate([
-      'reaction' => [Rule::enum(PostReactionEnum::class)]
-    ]);
-    $user = Auth::id();
-    $userHasReaction = false;
-    $reaction = PostCommentsReactions::where('user_id', $user)->where('post_comments_id', $comment->id)->first();
-    if ($reaction) {
-      $reaction->delete();
-      $userHasReaction = false;
-    } else {
-      PostCommentsReactions::create([
-        'post_comments_id' => $comment->id,
-        'user_id' => $user,
-        'type' => $data['reaction']
+    try {
+      $data = $request->validate([
+        'reaction' => [Rule::enum(PostReactionEnum::class)]
       ]);
-      $userHasReaction = true;
-    }
-    $numOfReactions = PostCommentsReactions::where('post_comments_id', $comment->id)->count();
+      $user = Auth::id();
+      $userHasReaction = false;
+      $reaction = PostCommentsReactions::where('user_id', $user)->where('post_comments_id', $comment->id)->first();
+      if ($reaction) {
+        $reaction->delete();
+        $userHasReaction = false;
+      } else {
+        PostCommentsReactions::create([
+          'post_comments_id' => $comment->id,
+          'user_id' => $user,
+          'type' => $data['reaction']
+        ]);
+        $userHasReaction = true;
+      }
+      $numOfReactions = PostCommentsReactions::where('post_comments_id', $comment->id)->count();
+      $commentOwner = new UserResource($comment->user()->first());
+      $user = User::where('id', Auth::id())->first();
+      if ($commentOwner->id != Auth::id())
+        $commentOwner->notify(new CommentReactionNotification($user, $userHasReaction));
+      return response([
+        'num_of_reactions' => $numOfReactions,
+        'user_has_reactions' => $userHasReaction
+      ]);
 
-    return response([
-      'num_of_reactions' => $numOfReactions,
-      'user_has_reactions' => $userHasReaction
-    ]);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
   }
 }

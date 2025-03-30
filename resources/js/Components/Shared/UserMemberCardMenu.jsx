@@ -18,6 +18,7 @@ const UserMemberCardMenu = ({ openMenu, setOpenMenu, group, member }) => {
       })
       .then((data) => {
         router.reload();
+        setOpenMenu(false);
         setSuccessMessage("Role Changed Successfully");
       })
       .catch((e) => {

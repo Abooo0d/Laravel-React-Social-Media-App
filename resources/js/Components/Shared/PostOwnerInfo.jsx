@@ -7,7 +7,7 @@ const PostOwnerInfo = ({ post, user }) => {
     <div className="flex justify-between mb-4">
       <div className="flex gap-4 flex-row items-center">
         <img
-          src={user?.avatar_url}
+          src={user?.avatar_url || "/images/default_avatar_image.png"}
           alt=""
           className="w-[60px] h-[60px] rounded-full border-[1px] border-gray-600/50 hover:border-gray-600 duration-200"
         />

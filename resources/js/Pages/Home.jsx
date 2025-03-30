@@ -6,7 +6,13 @@ import { useUserContext } from "@/Contexts/UserContext";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
-export default function Home({ auth, posts, groups, followers }) {
+export default function Home({
+  auth,
+  posts,
+  groups,
+  followers,
+  notifications,
+}) {
   const { setUser, user } = useUserContext();
   const [postsData, setPostsData] = useState(posts);
   const [groupsData, setGroupsData] = useState(groups);
@@ -30,6 +36,7 @@ export default function Home({ auth, posts, groups, followers }) {
     setPostsData(posts);
     setFollowersData(followers);
   }, [groups, posts, followers]);
+
   return (
     <>
       <Head>
@@ -41,7 +48,7 @@ export default function Home({ auth, posts, groups, followers }) {
         />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
-      <Authenticated currentUser={auth.user}>
+      <Authenticated currentUser={auth.user} notifications={notifications}>
         <div className="flex lg:flex-col flex-col-reverse lg:gap-0 gap-2 p-2 lg:p-0 lg:grid lg:grid-cols-12 min-h-barHeight max-h-barHeight overflow-scroll bg-gray-900">
           <GroupsBar groups={groupsData} setGroups={setGroupsData} />
           <HomeFeed posts={posts} />

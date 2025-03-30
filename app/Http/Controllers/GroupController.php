@@ -15,9 +15,12 @@ use App\Http\Resources\GroupUserResource;
 use App\Models\GroupUsers;
 use App\Models\Post;
 use App\Models\User;
-use App\Notifications\GroupInvitation;
-use App\Notifications\InvitationApproved;
-use App\Notifications\JoinRequest;
+use App\Notifications\GroupInvitationNotification;
+use App\Notifications\GroupUpdateNotification;
+use App\Notifications\GroupUsersActionNotification;
+use App\Notifications\InvitationApprovedNotification;
+use App\Notifications\JoinRequestNotification;
+use App\Notifications\RequestActionNotification;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,6 +31,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
+use \Illuminate\Http\UploadedFile;
 
 class GroupController extends Controller
 {
@@ -43,7 +47,6 @@ class GroupController extends Controller
       ->where('group_id', $group->id)
       ->latest()
       ->paginate(perPage: 15);
-    $allPosts = PostResource::collection($posts);
     if ($request->wantsJson()) {
       return response([
         'posts' => PostResource::collection($posts)
@@ -75,19 +78,23 @@ class GroupController extends Controller
         'status' => GroupUserStatusEnum::APPROVED->value,
         'role' => GroupUserRuleEnum::ADMIN->value,
       ]);
-      // $group['role'] = 'admin';
-      // $group['status'] = 'approved';
       return redirect()->back()->with('success', 'Group Created Successfully');
-    } catch (\Throwable $th) {
+    } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Went Wrong');
     }
   }
   public function update(UpdateGroupRequest $request, Group $group)
   {
-    $group->update($request->validated());
-    // return redirect()->back()->with('success', 'Group updated successfully!');
-    // return redirect()->route('group.update', $group)->with('success', 'Group updated successfully!');
-    return redirect()->back()->with('success', 'Group updated successfully');
+    try {
+      $group->update($request->validated());
+      $user = User::where('id', AUth::id())->first();
+      $admins = $group->adminUsers()->where('user_id', '!=', Auth::id())->get();
+      Notification::send($admins, new GroupUpdateNotification($user, $group));
+      return redirect()->back()->with('success', 'Group updated successfully');
+
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
   }
   public function destroy(Group $group)
   {
@@ -95,174 +102,218 @@ class GroupController extends Controller
   }
   public function changeImages(Request $request, Group $group)
   {
-    $message = '';
-    $data = $request->validate([
-      'coverImage' => ['nullable', 'file', 'mimes:jpg,png'],
-      'avatarImage' => ['nullable', 'file', 'mimes:jpg,png'],
-      'group_id' => ['required']
-    ]);
-    $group = Group::query()
-      ->with('currentUserGroups')
-      ->where('id', $data['group_id'])->first();
-    if ($group->currentUserGroups['role'] !== 'admin') {
-      return back()->withErrors(['message' => 'You do not have permission to change images.']);
-      // return redirect()->back()->with('error', 'You do not have permission to change images');
-    }
-    /**
-     * @var UploadedFile $cover
-     */
-    $cover = $data['coverImage'] ?? null;
-    /**
-     * @var UploadedFile $thumbnail
-     */
-    $thumbnail = $data['avatarImage'] ?? null;
-    if ($cover) {
-      if ($group->cover_path) {
-        Storage::disk('public')->delete($group->cover_path);
+    try {
+      $message = '';
+      $image = '';
+      $data = $request->validate([
+        'coverImage' => ['nullable', 'file', 'mimes:jpg,png'],
+        'avatarImage' => ['nullable', 'file', 'mimes:jpg,png'],
+        'group_id' => ['required']
+      ]);
+      $group = Group::query()
+        ->with('currentUserGroups')
+        ->where('id', $data['group_id'])->first();
+      if ($group->currentUserGroups['role'] !== 'admin') {
+        return back()->withErrors(['message' => 'You do not have permission to change images.']);
       }
-      $coverPath = $cover->store("group-{$group->id}", 'public');
-      $group->update(['cover_path' => $coverPath]);
-      $message = 'Cover Image Updated Successfully';
-    }
-    if ($thumbnail) {
-      if ($group->thumbnail_path) {
-        Storage::disk('public')->delete($group->thumbnail_path);
+      /**
+       * @var UploadedFile $cover
+       */
+      $cover = $data['coverImage'] ?? null;
+      /**
+       * @var UploadedFile $thumbnail
+       */
+      $thumbnail = $data['avatarImage'] ?? null;
+      if ($cover) {
+        $image = 'cover';
+        if ($group->cover_path) {
+          Storage::disk('public')->delete($group->cover_path);
+        }
+        $coverPath = $cover->store("group-{$group->id}", 'public');
+        $group->update(['cover_path' => $coverPath]);
+        $message = 'Cover Image Updated Successfully';
       }
-      $thumbnail_path = $thumbnail->store("group-{$group->id}", 'public');
-      $group->update(['thumbnail_path' => $thumbnail_path]);
-      $message = 'Thumbnail Image Updated Successfully';
+      if ($thumbnail) {
+        $image = 'thumbnail';
+        if ($group->thumbnail_path) {
+          Storage::disk('public')->delete($group->thumbnail_path);
+        }
+        $thumbnail_path = $thumbnail->store("group-{$group->id}", 'public');
+        $group->update(['thumbnail_path' => $thumbnail_path]);
+        $message = 'Thumbnail Image Updated Successfully';
+      }
+      $user = User::where('id', AUth::id())->first();
+      $admins = $group->adminUsers()->where('user_id', '!=', Auth::id())->get();
+      // $image = !!$cover ? 'cover' : !!$thumbnail ? 'thumbnail' : '';
+
+      Notification::send($admins, new GroupUpdateNotification($user, $group, $image));
+      return redirect()->back()->with('success', $message);
+
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-    return redirect()->back()->with('success', $message);
   }
   public function inviteUser(InviteUserRequest $request, Group $group)
   {
-    $data = $request->validated();
-    $user = $request->user;
-    $groupUser = $request->groupUser;
-    if ($groupUser) {
-      $groupUser->delete();
+    try {
+      $data = $request->validated();
+      $user = $request->user;
+      $groupUser = $request->groupUser;
+      if ($groupUser) {
+        $groupUser->delete();
+      }
+      $hours = 24;
+      $token = Str::random(265);
+      $groupUser = GroupUsers::create([
+        'user_id' => $user->id,
+        'group_id' => $group->id,
+        'created_by' => Auth::id(),
+        'status' => GroupUserStatusEnum::PENDING->value,
+        'role' => GroupUserRuleEnum::USER->value,
+        'token' => $token,
+        'token_expire_date' => Carbon::now()->addHours($hours),
+        'token_used' => '',
+        'created_at' => '',
+      ]);
+      $groupUser->user->notify(new GroupInvitationNotification($group, $user, $hours, $token));
+      return redirect()->back()->with('success', "'{$user->name}' Was Invited Successfully");
+
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-    $hours = 24;
-    $token = Str::random(265);
-    GroupUsers::create([
-      'user_id' => $user->id,
-      'group_id' => $group->id,
-      'created_by' => Auth::id(),
-      'status' => GroupUserStatusEnum::PENDING->value,
-      'role' => GroupUserRuleEnum::USER->value,
-      'token' => $token,
-      'token_expire_date' => Carbon::now()->addHours($hours),
-      'token_used' => '',
-      'created_at' => '',
-    ]);
-    $user->notify(new GroupInvitation($group, $hours, $token));
-    return redirect()->back()->with('success', `$user.name Was Invited Successfully`);
   }
   public function acceptInvitation(string $token)
   {
-    $groupUser = GroupUsers::query()->where('token', $token)->first();
-    $message = '';
-    if (!$groupUser) {
-      $message = 'This Link Isn`t Valid!';
-    } elseif ($groupUser->status == GroupUserStatusEnum::APPROVED->value || $groupUser->token_used) {
-      $message = 'This Link Is Already Used!';
-    } elseif ($groupUser->token_expire_date < Carbon::now()) {
-      $message = 'This Link Is Expired!';
+    try {
+      $groupUser = GroupUsers::query()->where('token', $token)->first();
+      $message = '';
+      if (!$groupUser) {
+        $message = 'This Link Isn`t Valid!';
+      } elseif ($groupUser->status == GroupUserStatusEnum::APPROVED->value || $groupUser->token_used) {
+        $message = 'This Link Is Already Used!';
+      } elseif ($groupUser->token_expire_date < Carbon::now()) {
+        $message = 'This Link Is Expired!';
+      }
+      if ($message !== '') {
+        return inertia('Error', [
+          'message' => $message
+        ]);
+      }
+      $groupUser->status = GroupUserStatusEnum::APPROVED->value;
+      $groupUser->token_used = Carbon::now();
+      $groupUser->save();
+      $adminUser = $groupUser->adminUser;
+      $group = $groupUser->group;
+      $adminUser->notify(new InvitationApprovedNotification($group, $groupUser->user));
+      return redirect()->back()->with('success', "You Are New A Member Of {$group->name} Group");
+
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-    if ($message !== '') {
-      return inertia('Error', [
-        'message' => $message
-      ]);
-    }
-    $groupUser->status = GroupUserStatusEnum::APPROVED->value;
-    $groupUser->token_used = Carbon::now();
-    $groupUser->save();
-    $adminUser = $groupUser->adminUser;
-    $group = $groupUser->group;
-    $adminUser->notify(new InvitationApproved($group, $groupUser->user));
-    // return redirect(route('group.profile', $groupUser->group))->with('success', 'You Are Now A Member Of This Group');
-    return redirect()->back()->with('success', 'You Are New A Member Of Thi Group');
   }
   public function joinGroup(Request $request, Group $group)
   {
-    $user = $request->user();
-    $status = GroupUserStatusEnum::APPROVED->value;
-    $message = 'You Have Joined ' . $group->name . ' Successfully';
-    if (!$group->auto_approval) {
-      $message = 'Your Request Has Been Received, You Will Be Notified When Accepted';
-      $status = GroupUserStatusEnum::PENDING->value;
-      $group->adminUsers->each(function ($adminUser) use ($group, $user) {
-        Notification::send(
-          $adminUser,
-          new JoinRequest($group, $user)
-        );
-      });
+    try {
+      $user = $request->user();
+      $status = GroupUserStatusEnum::APPROVED->value;
+      $join = true;
+      $message = 'You Have Joined ' . $group->name . ' Successfully';
+      $adminUsers = $group->adminUsers()->get();
+      if (!$group->auto_approval) {
+        $join = false;
+        $message = 'Your Request Has Been Received, You Will Be Notified When Accepted';
+        $status = GroupUserStatusEnum::PENDING->value;
+        Notification::send($adminUsers, new JoinRequestNotification($group, $user, $join));
+      }
+      GroupUsers::create([
+        'user_id' => $user->id,
+        'group_id' => $group->id,
+        'created_by' => Auth::id(),
+        'status' => $status,
+        'role' => GroupUserRuleEnum::USER->value,
+      ]);
+      Notification::send($adminUsers, new JoinRequestNotification($group, $user, $join));
+      return response()->json([
+        'message' => $message,
+        'group' => new GroupResource($group)
+      ]);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-    GroupUsers::create([
-      'user_id' => $user->id,
-      'group_id' => $group->id,
-      'created_by' => Auth::id(),
-      'status' => $status,
-      'role' => GroupUserRuleEnum::USER->value,
-    ]);
-    return response()->json([
-      'message' => $message,
-      'group' => new GroupResource($group)
-    ]);
   }
   public function approveRequest(Request $request, Group $group)
   {
-    $data = $request->validate([
-      'user_id' => 'required'
-    ]);
-    $groupUser = GroupUsers::where('user_id', $data['user_id'])
-      ->where('group_id', $group->id)
-      ->where('status', GroupUserStatusEnum::PENDING->value)
-      ->first();
-    if (!$groupUser) {
-      return response(['message' => "There IS An Error With The Request"], 404);
+    try {
+      $data = $request->validate([
+        'user_id' => 'required'
+      ]);
+      $groupUser = GroupUsers::where('user_id', $data['user_id'])
+        ->where('group_id', $group->id)
+        ->where('status', GroupUserStatusEnum::PENDING->value)
+        ->first();
+      if (!$groupUser) {
+        return response(['message' => "There IS An Error With The Request"], 404);
+      }
+      $groupUser->status = GroupUserStatusEnum::APPROVED->value;
+      $groupUser->save();
+      $groupUser->user->notify(new RequestActionNotification($group, 'approved'));
+      return response(['message' => "The User Have Been Approved"], 200);
+
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-    $groupUser->status = GroupUserStatusEnum::APPROVED->value;
-    $groupUser->save();
-    return response(['message' => "The User Have Been Approved"], 200);
   }
   public function reject(Request $request, Group $group)
   {
-    $data = $request->validate([
-      'user_id' => 'required'
-    ]);
-    $groupUser = GroupUsers::where('user_id', $data['user_id'])
-      ->where('group_id', $group->id)
-      ->where('status', GroupUserStatusEnum::PENDING->value)
-      ->first();
-    if ($groupUser) {
-      $groupUser->status = GroupUserStatusEnum::REJECTED->value;
-      $groupUser->save();
-      return response(['message' => 'User Have Been Rejected'], 200);
+    try {
+      $data = $request->validate([
+        'user_id' => 'required'
+      ]);
+      $groupUser = GroupUsers::where('user_id', $data['user_id'])
+        ->where('group_id', $group->id)
+        ->where('status', GroupUserStatusEnum::PENDING->value)
+        ->first();
+      if ($groupUser) {
+        $groupUser->status = GroupUserStatusEnum::REJECTED->value;
+        $groupUser->save();
+        $groupUser->user->notify(new RequestActionNotification($group, 'rejected'));
+        return response(['message' => 'User Have Been Rejected'], 200);
+      }
+      return response(['message' => 'There Is An Error In The Request'], 400);
+
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-    return response(['message' => 'There Is An Error In The Request'], 400);
   }
   public function changeRole(Request $request, Group $group): RedirectResponse|Response
   {
-    $data = $request->validate([
-      'user_id' => 'required|exists:users,id',
-      'role' => Rule::enum(GroupUserRuleEnum::class)
-    ]);
-    $user_id = $data['user_id'];
-    $groupUser = GroupUsers::where('user_id', $user_id)
-      ->where('group_id', $group->id)
-      ->first();
-    if ($group->isOwner($user_id)) {
-      return response(['message' => 'You Can`t Change The Role Of The Owner Of The Group'], 400);
-    }
-    if ($groupUser) {
-      if ($group->isAdmin(Auth::id())) {
-        $groupUser->role = $data['role'];
-        $groupUser->save();
-        return redirect()->back()->with('success', 'Role Changed Successfully');
+    try {
+      $data = $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'role' => Rule::enum(GroupUserRuleEnum::class)
+      ]);
+      $user_id = $data['user_id'];
+      $groupUser = GroupUsers::where('user_id', $user_id)
+        ->where('group_id', $group->id)
+        ->first();
+      if ($group->isOwner($user_id)) {
+        return response(['message' => 'You Can`t Change The Role Of The Owner Of The Group'], 400);
       }
+      if ($groupUser) {
+        if ($group->isAdmin(Auth::id())) {
+          $groupUser->role = $data['role'];
+          $groupUser->save();
+          $admin = User::where('id', Auth::id())->first();
+          $groupUser->user->notify(new GroupUsersActionNotification($admin, $group, 'ChangeRole', $data['role']));
+          return redirect()->back()->with('success', 'Role Changed Successfully');
+        }
+      }
+
+      return response(['message' => 'there Is An Unexpected Error'], 400);
+
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-    return response(['message' => 'there Is An Unexpected Error'], 400);
   }
   public function kickOut(Request $request, Group $group)
   {
@@ -271,14 +322,16 @@ class GroupController extends Controller
         'user_id' => ['required', 'exists:users,id']
       ]);
       $user_id = $data['user_id'];
-      $group_user = GroupUsers::where('user_id', $user_id)
+      $groupUser = GroupUsers::where('user_id', $user_id)
         ->where('group_id', $group->id)
         ->first();
       if ($group->isOwner($user_id)) {
         return redirect()->back()->with('error', 'You Can`t Kick Out The Owner Of The Group');
       }
-      if ($group_user) {
-        $group_user->delete();
+      if ($groupUser) {
+        $groupUser->delete();
+        $admin = User::where('id', Auth::id())->first();
+        $groupUser->user->notify(new GroupUsersActionNotification($admin, $group, 'KickOut'));
         return redirect()->back()->with('success', 'Member Kicked Out Successfully');
       }
     } catch (e) {

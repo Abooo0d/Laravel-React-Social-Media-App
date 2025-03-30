@@ -208,16 +208,17 @@ const View = ({ auth, user, posts, mustVerifyEmail, status }) => {
                 <CustomTab text="Photos" />
                 <CustomTab text="About" />
               </Tab.List>
-              <Tab.Panels className=" py-2 rounded-md mt-2">
+              <Tab.Panels className="rounded-md">
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
-                  <CreatePost
-                    user={user}
-                    setPosts={setAllPosts}
-                    posts={allPosts}
-                    classes="px-4 bg-homeFeed "
-                  />
                   <div className=" dark:bg-homeFeed rounded-md">
-                    <PostContainer posts={posts} />
+                    <PostContainer posts={posts}>
+                      <CreatePost
+                        user={user}
+                        setPosts={setAllPosts}
+                        posts={allPosts}
+                        classes="px-3 py-3 bg-homeFeed "
+                      />
+                    </PostContainer>
                   </div>
                 </Tab.Panel>
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">

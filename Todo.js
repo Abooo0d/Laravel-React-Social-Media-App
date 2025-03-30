@@ -7,6 +7,9 @@
 // Set A Loading When Sending Invitation To Group
 /************** Working On *************/
 
+/************** TOday *************/
+// Fix The Comment Card
+
 /************** Done *************/
 // Fix The Error Page Design
 // implement The Error Messages In The Create Post From And The update Post Form

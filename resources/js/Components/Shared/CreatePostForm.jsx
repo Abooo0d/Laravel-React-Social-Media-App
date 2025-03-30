@@ -30,7 +30,7 @@ const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
     user_id: user.id,
     group_id: groupId,
   });
-  const { data, setData, processing, post: submit } = useForm({ ..._post });
+  const { setData, post: submit } = useForm({ ..._post });
   let myFile;
   useEffect(() => {
     setPost({ body: "", attachments: [], user_id: user.id, group_id: groupId });

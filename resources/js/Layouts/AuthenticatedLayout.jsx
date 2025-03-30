@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
-import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
-import { Link, router } from "@inertiajs/react";
-import { MainContext, useMainContext } from "@/Contexts/MainContext";
-import { redirect } from "react-router-dom";
+import { Link } from "@inertiajs/react";
 import { useUserContext } from "@/Contexts/UserContext";
+import NotificationsBar from "@/Components/Containers/NotificationsBar";
 
-export default function Authenticated({ header, children, currentUser }) {
+export default function Authenticated({
+  header,
+  children,
+  currentUser,
+  notifications,
+}) {
   const { user, setUser } = useUserContext();
+  const [showForm, setShowForm] = useState(false);
   useEffect(() => {
     if (currentUser) setUser(currentUser);
     else window.location.href = route("login");
@@ -30,6 +34,11 @@ export default function Authenticated({ header, children, currentUser }) {
               </div>
             </div>
             <div className="hidden sm:flex sm:items-center sm:ms-6">
+              <NotificationsBar
+                showForm={showForm}
+                setShowForm={setShowForm}
+                notifications={notifications}
+              />
               <div className="ms-3 relative">
                 <Dropdown>
                   <Dropdown.Trigger>

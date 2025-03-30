@@ -36,11 +36,14 @@ class HomeController extends Controller
       return response([
         'posts' => PostResource::collection($posts)
       ]);
+
     } else {
+      $notifications = Auth::user()->notifications;
       return Inertia::render('Home', [
         'posts' => PostResource::collection($posts),
         'groups' => GroupResource::collection($groups),
-        'followers' => UserResource::collection($users)
+        'followers' => UserResource::collection($users),
+        'notifications' => $notifications
       ]);
     }
   }

@@ -6,7 +6,7 @@ const CreatePost = ({ setPosts, posts, groupId, classes }) => {
   const { user } = useUserContext();
   return (
     <div
-      className={`max-lg:px-4 w-full bg-gray-200 flex flex-col duration-300 border-solid border-gray-700 ${classes}`}
+      className={`max-w-[700px] w-full dark:bg-gray-900 rounded-lg lg:px-6 px-4 flex flex-col duration-500 ${classes}`}
     >
       <div
         className="w-full rounded-lg bg-gray-800/50 hover:bg-gray-700/50 py-1.5 px-3 duration-200 min-h-[40px] cursor-pointer text-gray-400 hover:border-gray-600 border-[1px] border-solid border-gray-600/50"

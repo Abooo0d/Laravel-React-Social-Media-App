@@ -2,21 +2,23 @@
 
 namespace App\Notifications;
 
+use App\Http\Enums\NotificationTypeEnum;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Storage;
 
-class JoinRequest extends Notification
+class UpdatePostInGroupNotification extends Notification
 {
   use Queueable;
 
   /**
    * Create a new notification instance.
    */
-  public function __construct(public Group $group, public User $user)
+  public function __construct(public User $user, public Group $group)
   {
     //
   }
@@ -28,17 +30,20 @@ class JoinRequest extends Notification
    */
   public function via(object $notifiable): array
   {
-    return ['mail'];
+    return ['database'];
   }
 
   /**
    * Get the mail representation of the notification.
    */
-  public function toMail(object $notifiable): MailMessage
+  public function toDatabase($notifiable): array
   {
-    return (new MailMessage)
-      ->line('User "' . $this->user->name . '" Requested To Join Group "' . $this->group->name . '"')
-      ->action('Accept Request', url('/'));
+    return [
+      'type' => NotificationTypeEnum::UPDATEPOST->value,
+      'message' => "'" . $this->user->name . "' Updated His Post In '" . $this->group->name . "' Group.",
+      'link' => route('group.profile', $this->group->slug),
+      'actor' => ['name' => $this->user->name, 'avatar' => $this->user->avatar_path ? Storage::url($this->user->avatar_path) : asset('images/default_avatar_image.png')]
+    ];
   }
 
   /**

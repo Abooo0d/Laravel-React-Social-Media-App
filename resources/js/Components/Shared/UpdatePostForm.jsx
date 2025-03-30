@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { HiMiniXMark } from "react-icons/hi2";
 import PostOwnerInfo from "./PostOwnerInfo";
-import { router } from "@inertiajs/react";
+import { router, useForm } from "@inertiajs/react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import PostPreview from "./PostPreview";
@@ -25,9 +25,13 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
     attachments: [],
     deletedFilesIds: [],
   });
+  const { setData, post: submit } = useForm({ ...finalPost });
   function close() {
     setShowForm(false);
   }
+  useEffect(() => {
+    setData(finalPost);
+  }, [finalPost]);
   useEffect(() => {
     setPostData(post);
     setFinalPost({
@@ -39,30 +43,26 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
   }, [showForm]);
 
   const handelSubmit = () => {
-    router.post(route("post.update", finalPost), finalPost, {
-      forceFormData: true,
-      onSuccess: () => {
-        close();
-        router.reload();
-        setSuccessMessage("Post Updated Successfully");
-      },
-      _method: "PUT",
-      onError: (errors) => {
-        setAttachmentsErrors([]);
-        setSuccessMessage("");
-        setErrors([]);
-        for (const key in errors) {
-          setAttachmentsErrors((prevErrors) => [
-            ...prevErrors,
-            {
-              index: key.split(".")[1],
-              message: errors[key],
-            },
-          ]);
-          setErrors([...errors, errors[key]]);
-        }
-      },
-    });
+    if (post.body !== "" || post.attachments.length !== 0) {
+      submit(route("post.update", finalPost), {
+        onSuccess: () => {
+          setShowForm(false);
+        },
+        _method: "PUT",
+        onError: (e) => {
+          setAttachmentsErrors([]);
+          for (const key in e) {
+            setAttachmentsErrors((prevErrors) => [
+              ...prevErrors,
+              {
+                index: key.split(".")[1],
+                message: e[key],
+              },
+            ]);
+          }
+        },
+      });
+    }
   };
   const HandelTheFiles = async (e) => {
     for (const file of e.target.files) {

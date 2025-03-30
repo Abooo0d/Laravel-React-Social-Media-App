@@ -110,6 +110,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
         console.log(e);
       });
   }
+
   return (
     <>
       <Head>
@@ -258,17 +259,20 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
                 {isAdmin && <CustomTab text="Requests" />}
                 {isAdmin && <CustomTab text="About" />}
               </Tab.List>
-              <Tab.Panels className=" py-2 rounded-md mt-2">
+              <Tab.Panels className=" rounded-md">
                 <Tab.Panel className="rounded-md flex flex-col w-full">
-                  <CreatePost
-                    user={auth.user}
-                    setPosts={setAllPosts}
-                    posts={allPosts}
-                    groupId={group.id}
-                    classes="bg-homeFeed "
-                  />
                   <div className=" dark:bg-homeFeed rounded-md">
-                    <PostContainer posts={allPosts} />
+                    <PostContainer posts={allPosts}>
+                      {group.status && (
+                        <CreatePost
+                          user={auth.user}
+                          setPosts={setAllPosts}
+                          posts={allPosts}
+                          groupId={group.id}
+                          classes="bg-homeFeed px-3 py-3"
+                        />
+                      )}{" "}
+                    </PostContainer>
                   </div>
                 </Tab.Panel>
 

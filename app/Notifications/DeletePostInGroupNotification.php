@@ -2,20 +2,25 @@
 
 namespace App\Notifications;
 
+use App\Http\Enums\NotificationTypeEnum;
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Storage;
 
-class GroupInvitation extends Notification
+class DeletePostInGroupNotification extends Notification
 {
   use Queueable;
+
   /**
    * Create a new notification instance.
    */
-  public function __construct(public Group $group, public $hours, public $token)
+  public function __construct(public User $user, public Group $group)
   {
+    //
   }
 
   /**
@@ -25,18 +30,20 @@ class GroupInvitation extends Notification
    */
   public function via(object $notifiable): array
   {
-    return ['mail'];
+    return ['database'];
   }
 
   /**
    * Get the mail representation of the notification.
    */
-  public function toMail(object $notifiable): MailMessage
+  public function toDatabase($notifiable)
   {
-    return (new MailMessage)
-      ->line(`Hi You Have Been Invited To Join {$this->group->name}`)
-      ->action('Join The Group', url(route('group.acceptInvitation', $this->token)))
-      ->line('The Link Will Be Valid For ' . $this->hours . ' Hours.');
+    return [
+      'type' => NotificationTypeEnum::DELETEPOST->value, // e.g., 'like', 'comment', 'group_join'
+      'message' => "'" . $this->user->name . "' Deleted His Post In '" . $this->group->name . "' Group.",
+      'link' => route('profile.view', $this->user->username),
+      'actor' => ['name' => $this->user->name, 'avatar' => $this->user->avatar_path ? Storage::url($this->user->avatar_path) : asset('images/default_avatar_image.png')]
+    ];
   }
 
   /**
