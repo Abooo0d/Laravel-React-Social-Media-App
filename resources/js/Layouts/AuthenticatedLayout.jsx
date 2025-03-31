@@ -5,15 +5,16 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
 import { useUserContext } from "@/Contexts/UserContext";
 import NotificationsBar from "@/Components/Containers/NotificationsBar";
+import GroupsBar_new from "@/Components/Containers/GroupsBar_new";
 
 export default function Authenticated({
   header,
   children,
   currentUser,
   notifications,
+  groups,
 }) {
   const { user, setUser } = useUserContext();
-  const [showForm, setShowForm] = useState(false);
   useEffect(() => {
     if (currentUser) setUser(currentUser);
     else window.location.href = route("login");
@@ -34,11 +35,10 @@ export default function Authenticated({
               </div>
             </div>
             <div className="hidden sm:flex sm:items-center sm:ms-6">
-              <NotificationsBar
-                showForm={showForm}
-                setShowForm={setShowForm}
-                notifications={notifications}
-              />
+              <div className="flex gap-2">
+                <NotificationsBar notifications={notifications} />
+                <GroupsBar_new groups={groups} />
+              </div>
               <div className="ms-3 relative">
                 <Dropdown>
                   <Dropdown.Trigger>
@@ -64,7 +64,7 @@ export default function Authenticated({
                     </span>
                   </Dropdown.Trigger>
                   <Dropdown.Content>
-                    <Dropdown.Link href={route("profile.my-profile")}>
+                    <Dropdown.Link href={route("profile.myProfile")}>
                       Profile
                     </Dropdown.Link>
                     <Dropdown.Link
@@ -133,7 +133,7 @@ export default function Authenticated({
             </div>
 
             <div className="mt-3 space-y-1">
-              <ResponsiveNavLink href={route("profile.my-profile")}>
+              <ResponsiveNavLink href={route("profile.myProfile")}>
                 Profile
               </ResponsiveNavLink>
               <ResponsiveNavLink

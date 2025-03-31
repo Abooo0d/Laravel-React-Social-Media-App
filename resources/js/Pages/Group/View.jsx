@@ -15,7 +15,16 @@ import UserMemberCard from "@/Components/Shared/UserMemberCard";
 import GroupAboutForm from "@/Components/Shared/GroupAboutForm";
 import PostContainer from "@/Components/Containers/PostContainer";
 import CreatePost from "@/Components/Shared/CreatePost";
-const View = ({ auth, group, requests, users, isAdmin, posts }) => {
+const View = ({
+  auth,
+  group,
+  requests,
+  users,
+  isAdmin,
+  posts,
+  notifications,
+  groups,
+}) => {
   const isCurrentUserJoined = !!(group.status == "approved");
   const [groupData, setGroupData] = useState(group);
   const [requestsData, setRequestsData] = useState(requests);
@@ -122,7 +131,11 @@ const View = ({ auth, group, requests, users, isAdmin, posts }) => {
         />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
-      <Authenticated currentUser={auth.user}>
+      <Authenticated
+        currentUser={auth.user}
+        groups={groups}
+        notifications={notifications}
+      >
         <div className="container mx-auto ">
           <div className="max-h-[350px] w-full relative">
             <div className="relative max-h-[350px] w-full group">

@@ -5,7 +5,7 @@ import React from "react";
 import { Head } from "@inertiajs/react";
 import PostContainer from "@/Components/Containers/PostContainer";
 
-const View = ({ auth, user, posts }) => {
+const View = ({ auth, user, posts, groups, notifications }) => {
   return (
     <>
       <Head>
@@ -17,7 +17,11 @@ const View = ({ auth, user, posts }) => {
         />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
-      <Authenticated currentUser={auth.user}>
+      <Authenticated
+        currentUser={auth.user}
+        groups={groups}
+        notifications={notifications}
+      >
         <div className="container mx-auto ">
           <div className="max-h-[350px] w-full relative">
             <img

@@ -13,7 +13,7 @@ const UserRequestCard = ({
   const { setSuccessMessage, setErrors } = useMainContext();
   const approve = () => {
     axiosClient
-      .post(route("group.approve-request", group), { user_id: request.id })
+      .post(route("group.approveRequest", group), { user_id: request.id })
       .then((data) => {
         setSuccessMessage(data.data.message);
         setRequestsData((prev) => prev.filter((req) => req.id !== request.id));
@@ -21,7 +21,7 @@ const UserRequestCard = ({
   };
   const reject = () => {
     axiosClient
-      .post(route("group.reject-request", group), { user_id: request.id })
+      .post(route("group.rejectRequest", group), { user_id: request.id })
       .then((data) => {
         setSuccessMessage(data.data.message);
         setRequestsData((prev) => prev.filter((req) => req.id !== request.id));

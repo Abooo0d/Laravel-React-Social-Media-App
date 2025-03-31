@@ -7,6 +7,7 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\CommentResource;
+use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use App\Models\Group;
 use App\Models\post;
@@ -29,6 +30,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Inertia\Inertia;
 use Notification;
 
 class PostController extends Controller
@@ -285,5 +287,9 @@ class PostController extends Controller
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
+  }
+  public function publicView(Post $post)
+  {
+    return Inertia::render('Post/View', ['post' => new PostResource($post)]);
   }
 }

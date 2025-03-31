@@ -9,8 +9,8 @@ import { useEffect, useState } from "react";
 export default function Home({
   auth,
   posts,
-  groups,
   followers,
+  groups,
   notifications,
 }) {
   const { setUser, user } = useUserContext();
@@ -48,11 +48,15 @@ export default function Home({
         />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
-      <Authenticated currentUser={auth.user} notifications={notifications}>
-        <div className="flex lg:flex-col flex-col-reverse lg:gap-0 gap-2 p-2 lg:p-0 lg:grid lg:grid-cols-12 min-h-barHeight max-h-barHeight overflow-scroll bg-gray-900">
-          <GroupsBar groups={groupsData} setGroups={setGroupsData} />
-          <HomeFeed posts={posts} />
+      <Authenticated
+        currentUser={auth.user}
+        notifications={notifications}
+        groups={groups}
+      >
+        <div className="flex min-h-[calc(100vh-66px)] max-h-[calc(100vh-66px)] overflow-hidden bg-gray-900">
+          {/* <GroupsBar groups={groupsData} setGroups={setGroupsData} /> */}
           <FollowersBar followers={followersData} />
+          <HomeFeed posts={posts} />
         </div>
       </Authenticated>
     </>

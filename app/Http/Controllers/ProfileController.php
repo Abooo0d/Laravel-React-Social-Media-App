@@ -31,11 +31,13 @@ class ProfileController extends Controller
         'posts' => PostResource::collection($posts)
       ]);
     }
+    $notifications = Auth::user()->notifications()->paginate(20);
     return Inertia::render('MyProfile/View', props: [
       'user' => new UserResource($user),
       'posts' => PostResource::collection($posts),
       'mustVerifyEmail' => !!!$request->user()->email_verified_at,
       'status' => session('status'),
+      'notifications' => $notifications
     ]);
 
   }
@@ -50,15 +52,17 @@ class ProfileController extends Controller
       ->latest()
       ->paginate(15);
     if ($user->id === Auth::id())
-      return Redirect::route('profile.my-profile', $user->slug);
+      return Redirect::route('profile.myProfile', $user->slug);
     if ($request->wantsJson()) {
       return response([
         'posts' => PostResource::collection($posts)
       ]);
     }
+    $notifications = Auth::user()->notifications()->paginate(20);
     return Inertia::render('Profile/View', [
       'user' => new UserResource($user),
       'posts' => PostResource::collection($posts),
+      'notifications' => $notifications
     ]);
   }
   /**

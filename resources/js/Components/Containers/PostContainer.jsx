@@ -29,7 +29,7 @@ const PostContainer = ({ posts, classes, children }) => {
   return (
     <>
       <div
-        className={`flex flex-col gap-3 w-full h-full max-lg:pb-4 pt-4 px-4 items-center ${classes}`}
+        className={`flex flex-col gap-3 w-full h-full py-4 items-center ${classes}`}
       >
         {children}
 
@@ -44,7 +44,7 @@ const PostContainer = ({ posts, classes, children }) => {
                 className="w-[40px] min-h-[40px] bg-transparent border-[2px] rounded-full border-t-gray-600 border-t-[4px] border-gray-700/50 border-top-gray-900 mx-auto my-1 animate-spin"
               />
             ) : (
-              <div className="text-gray-600 text-sm">No More Posts</div>
+              <div className="text-gray-600 text-sm pb-4">No More Posts</div>
             )}
           </>
         ) : (

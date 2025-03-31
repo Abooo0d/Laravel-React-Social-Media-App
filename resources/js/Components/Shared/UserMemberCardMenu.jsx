@@ -12,7 +12,7 @@ const UserMemberCardMenu = ({ openMenu, setOpenMenu, group, member }) => {
   const changeRole = (role) => {
     errors = [];
     axiosClient
-      .post(route("group.change-role", group.slug), {
+      .post(route("group.changeRole", group.slug), {
         user_id: member.user.id,
         role: role,
       })
@@ -32,7 +32,7 @@ const UserMemberCardMenu = ({ openMenu, setOpenMenu, group, member }) => {
     user_id: member.user.id,
   });
   const kickOut = () => {
-    form.delete(route("group.kick-out", group.slug));
+    form.delete(route("group.kickOut", group.slug));
   };
   return (
     <div className="absolute top-[5px] right-[5px] ">

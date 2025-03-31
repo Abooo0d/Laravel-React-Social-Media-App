@@ -53,10 +53,8 @@ const SubCommentCard = ({ comment, setMainComment }) => {
       });
   };
   return (
-    <div className=" flex flex-1 w-full items-start justify-start flex-col relative">
-      <div className="absolute top-[calc(100%-37px)] left-[-43px] w-[30px] h-[30px] bg-transparent border-l-solid border-l-[4px] border-l-[#1d2533] border-b-solid border-b-[4px] border-b-[#1d2533] rounded-bl-full" />
-      <div className="absolute top-[calc(100%-10px)] left-[-13px] h-[3px] w-full bg-[#1d2533]" />
-      <div className="flex gap-4 justify-between items-center w-full ">
+    <div className=" flex  w-full items-start justify-start flex-col relative h-fit max-h-[250px]">
+      <div className="flex gap-4 justify-between items-center w-full">
         <div className="flex justify-start items-center gap-[10px] flex-1">
           <img
             src={currentComment.user.avatar_url}
@@ -120,7 +118,7 @@ const SubCommentCard = ({ comment, setMainComment }) => {
         </div>
       ) : (
         <div
-          className={`flex flex-col gap-[2px] justify-start items-end w-full duration-200 px-4 min-h-[150px] ${
+          className={`flex flex-col gap-[2px] justify-start items-end w-full duration-200 px-4 py-2 h-[150px] ${
             editing ? "h-full opacity-100" : "h-0 opacity-0"
           }`}
         >

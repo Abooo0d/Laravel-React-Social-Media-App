@@ -12,7 +12,15 @@ import { useMainContext } from "@/Contexts/MainContext";
 import PostContainer from "@/Components/Containers/PostContainer";
 import CreatePost from "@/Components/Shared/CreatePost";
 
-const View = ({ auth, user, posts, mustVerifyEmail, status }) => {
+const View = ({
+  auth,
+  user,
+  posts,
+  mustVerifyEmail,
+  status,
+  groups,
+  notifications,
+}) => {
   const { flash, errors } = usePage().props;
   const { setErrors, setSuccessMessage } = useMainContext();
   const { setData, post } = useForm({
@@ -111,7 +119,11 @@ const View = ({ auth, user, posts, mustVerifyEmail, status }) => {
         />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
-      <Authenticated currentUser={auth.user}>
+      <Authenticated
+        currentUser={auth.user}
+        groups={groups}
+        notifications={notifications}
+      >
         <div className="container mx-auto ">
           <div className="max-h-[350px] w-full relative">
             <div className="relative max-h-[350px] w-full group">

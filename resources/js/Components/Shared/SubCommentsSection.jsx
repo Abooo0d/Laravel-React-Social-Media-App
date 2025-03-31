@@ -11,7 +11,7 @@ const SubCommentsSection = ({ show, comments, post, comment, setComment }) => {
   const [newComment, setNewComment] = useState("");
   const createComment = () => {
     axiosClient
-      .post(route("post.comment.create", post), {
+      .post(route("post.commentCreate", post), {
         comment: newComment,
         parent_id: comment.id,
       })
@@ -26,8 +26,8 @@ const SubCommentsSection = ({ show, comments, post, comment, setComment }) => {
       });
   };
   return (
-    <>
-      <div className="relative flex-1 flex justify-center items-center w-full pl-[50px] gap-[10px]">
+    <div className="pl-[50px] w-full max-h-[500px] h-full border-solid border-gray-700/20 border-b-[1px] overflow-auto">
+      <div className="relative flex-1 flex justify-center items-center w-full gap-[10px] mb-4">
         <img
           src={user.avatar_url}
           alt="Avatar Image"
@@ -40,28 +40,31 @@ const SubCommentsSection = ({ show, comments, post, comment, setComment }) => {
           onChange={(e) => setNewComment(e.target.value)}
         ></textarea>
         <SecondaryButton
-          classes={
-            "px-2 py-1.5 absolute top-[5px] right-[5px] bg-transparent border-none"
-          }
+          classes={"px-2 py-1.5 absolute top-[5px] right-[5px]"}
           event={() => createComment()}
         >
           <BiSolidSend className="text-gray-400" />
         </SecondaryButton>
       </div>
       <div
-        className={`w-full duration-200 pl-[80px] flex gap-2 flex-col justify-start items-start ${
+        className={`w-full duration-200 flex gap-2 flex-col justify-start items-start ${
           show ? "h-full visible opacity-100" : "h-[0] invisible opacity-0"
         }`}
       >
         {comments.map((comment, index) => (
-          <SubCommentCard
-            key={index}
-            comment={comment}
-            setMainComment={setComment}
-          />
+          <>
+            <SubCommentCard
+              key={index}
+              comment={comment}
+              setMainComment={setComment}
+            />
+            {comments.length > 1 && index < comments.length - 1 && (
+              <div className="w-[80%] h-[1px] bg-gray-700/20" />
+            )}
+          </>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

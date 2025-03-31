@@ -3,7 +3,7 @@ import FollowerCard from "../Shared/FollowerCard";
 
 const FollowersContainer = ({ followers }) => {
   return (
-    <div className="lg:pt-4 lg:pb-9 py-4 max-h-barContainerHeight flex h-[400px] lg:h-barHeight">
+    <div className="py-4 max-h-barContainerHeight flex h-[400px] lg:h-barHeight">
       {false ? (
         <div className="text-gray-600 text-center">
           You Don`t Have Followers Yet.

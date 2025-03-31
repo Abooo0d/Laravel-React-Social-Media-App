@@ -52,12 +52,14 @@ class GroupController extends Controller
         'posts' => PostResource::collection($posts)
       ]);
     }
-    return Inertia::render(component: 'Group/View', props: [
+    $notifications = Auth::user()->notifications()->paginate(20);
+    return Inertia::render('Group/View', [
       'group' => new GroupResource(resource: $group),
       'requests' => UserResource::collection($group->requestUsers()->get()),
       'users' => GroupUserResource::collection($users),
       'isAdmin' => $group->isAdmin(Auth::id()),
       'posts' => PostResource::collection($posts),
+      'notifications' => $notifications
     ]);
   }
   public function store(StoreGroupRequest $request)

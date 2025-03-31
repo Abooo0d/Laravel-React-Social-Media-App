@@ -11,7 +11,7 @@ const PostCommentSection = ({ show, post, setPost, currentUser }) => {
   const { setSuccessMessage } = useMainContext();
   const createComment = () => {
     axiosClient
-      .post(route("post.comment.create", post), {
+      .post(route("post.commentCreate", post), {
         comment: comment,
         parent_id: null,
       })
@@ -28,8 +28,8 @@ const PostCommentSection = ({ show, post, setPost, currentUser }) => {
   return (
     <>
       <div
-        className={`flex justify-start items-start flex-col gap-4 max-h-[300px] overflow-auto border-gray-800 border-t-[2px] border-solid py-2 ${
-          show ? "visible opacity-100 h-[150px]" : "invisible opacity-0 h-[0px]"
+        className={`flex justify-start items-center flex-col gap-4 max-h-[500px] overflow-auto border-gray-800 border-t-[2px] border-solid py-2 ${
+          show ? "visible opacity-100 h-full" : "invisible opacity-0 h-[0px]"
         }`}
       >
         {post.comments.length > 0 ? (

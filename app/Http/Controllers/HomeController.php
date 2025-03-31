@@ -24,26 +24,14 @@ class HomeController extends Controller
     $posts = Post::PostsForTimeLine($userId)
       ->latest()
       ->paginate(15);
-    $groups = Group::query()
-      ->with('currentUserGroups')
-      ->select(['groups.*'])
-      ->join('group_users AS gu', 'gu.group_id', 'groups.id')
-      ->where('gu.user_id', $userId)
-      ->orderBy('gu.role')
-      ->orderBy('name')
-      ->get();
     if ($request->wantsJson()) {
       return response([
         'posts' => PostResource::collection($posts)
       ]);
-
     } else {
-      $notifications = Auth::user()->notifications;
       return Inertia::render('Home', [
         'posts' => PostResource::collection($posts),
-        'groups' => GroupResource::collection($groups),
         'followers' => UserResource::collection($users),
-        'notifications' => $notifications
       ]);
     }
   }

@@ -1,7 +1,6 @@
 import { isImage } from "@/Functions";
 import React from "react";
 import { FaFile } from "react-icons/fa";
-
 const PostCardPostAttachments = ({
   post,
   setImage,
@@ -34,7 +33,7 @@ const PostCardPostAttachments = ({
                           <img
                             key={index}
                             src={attachment.url}
-                            className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer"
+                            className="w-full h-full max-h-[400px] object-cover rounded-lg cursor-pointer"
                             onClick={() => {
                               setImage(attachment.url);
                               setShowImage(true);
@@ -43,7 +42,7 @@ const PostCardPostAttachments = ({
                           />
                         ) : (
                           <div
-                            className="w-full min-h-[200px] h-full max-h-[500px] object-cover rounded-lg cursor-pointer bg-gray-800 flex justify-center items-center flex-col gap-4"
+                            className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gray-800 flex justify-center items-center flex-col gap-4"
                             onClick={() => {
                               setImage("");
                               setShowImage(true);
@@ -65,7 +64,7 @@ const PostCardPostAttachments = ({
                               <img
                                 key={index}
                                 src={attachment.url}
-                                className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer"
+                                className="w-full h-full max-h-[400px] object-cover rounded-lg cursor-pointer"
                                 onClick={() => setImage(attachment.url)}
                               />
                               <div
@@ -80,7 +79,7 @@ const PostCardPostAttachments = ({
                             </div>
                           ) : (
                             <div
-                              className="w-full min-h-[200px] h-full max-h-[500px] object-cover rounded-lg cursor-pointer bg-gray-800 flex justify-center items-center flex-col gap-4"
+                              className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gray-800 flex justify-center items-center flex-col gap-4"
                               onClick={() => {
                                 setImage("");
                                 setShowImage(true);
@@ -107,7 +106,7 @@ const PostCardPostAttachments = ({
                       <img
                         key={index}
                         src={attachment.url}
-                        className="w-full h-full max-h-[500px] object-cover rounded-lg cursor-pointer"
+                        className="w-full h-full max-h-[400px] object-cover rounded-lg cursor-pointer"
                         onClick={() => {
                           setImage(attachment.url);
                           setShowImage(true);
@@ -116,7 +115,7 @@ const PostCardPostAttachments = ({
                       />
                     ) : (
                       <div
-                        className="w-full min-h-[200px] h-full max-h-[500px] object-cover rounded-lg cursor-pointer bg-gray-800 flex justify-center items-center flex-col gap-4"
+                        className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gray-800 flex justify-center items-center flex-col gap-4"
                         onClick={() => {
                           setImage("");
                           setShowImage(true);
