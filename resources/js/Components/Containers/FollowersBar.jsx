@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaUserGroup } from "react-icons/fa6";
 import FollowerCard from "../Shared/FollowerCard";
-const FollowersBar_new = ({ followers, showFollowerContainer }) => {
+const FollowersBar = ({ followers, showFollowerContainer }) => {
   const [followersData, setFollowersData] = useState(followers);
   return (
     <>
@@ -37,4 +37,4 @@ const FollowersBar_new = ({ followers, showFollowerContainer }) => {
   );
 };
 
-export default FollowersBar_new;
+export default FollowersBar;

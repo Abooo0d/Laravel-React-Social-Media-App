@@ -60,7 +60,6 @@ export default function Home({
         followers={followersData}
       >
         <div className="flex min-h-[calc(100vh-66px)] max-h-[calc(100vh-66px)] overflow-hidden bg-gray-900">
-          {/* <GroupsBar groups={groupsData} setGroups={setGroupsData} /> */}
           <ChatsBar followers={followersData} />
           <HomeFeed posts={posts} />
         </div>

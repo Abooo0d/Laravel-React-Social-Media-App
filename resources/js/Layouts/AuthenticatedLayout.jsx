@@ -4,14 +4,13 @@ import Dropdown from "@/Components/Dropdown";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link, router } from "@inertiajs/react";
 import NotificationsBar from "@/Components/Containers/NotificationsBar";
-import GroupsBar_new from "@/Components/Containers/GroupsBar_new";
-import FollowersBar_new from "@/Components/Containers/FollowersBar_new";
-import { IoReloadOutline } from "react-icons/io5";
 import { IoMenu } from "react-icons/io5";
 import { FaUserGroup } from "react-icons/fa6";
 import MenuButton from "@/Components/Shared/MenuButton";
 import { IoMdNotifications } from "react-icons/io";
 import { MdGroups2 } from "react-icons/md";
+import FollowersBar from "@/Components/Containers/FollowersBar";
+import GroupsBar from "@/Components/Containers/GroupsBar";
 export default function Authenticated({
   header,
   children,
@@ -187,7 +186,7 @@ export default function Authenticated({
         </div>
       </nav>
       {followers && (
-        <FollowersBar_new
+        <FollowersBar
           followers={followers}
           showFollowerContainer={showFollowerContainer}
         />
@@ -199,10 +198,7 @@ export default function Authenticated({
         />
       )}
       {groups && (
-        <GroupsBar_new
-          groups={groups}
-          showGroupContainer={showGroupContainer}
-        />
+        <GroupsBar groups={groups} showGroupContainer={showGroupContainer} />
       )}
       {header && (
         <header className="bg-white dark:bg-gray-800 shadow">
