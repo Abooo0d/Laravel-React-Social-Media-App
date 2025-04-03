@@ -33,10 +33,8 @@ export default function Login({ status, canResetPassword }) {
 
   useEffect(() => {
     data.email = email;
-  }, [email]);
-  useEffect(() => {
     data.password = password;
-  }, [password]);
+  }, [email, password]);
   return (
     <GuestLayout>
       <Head title="Log in" />

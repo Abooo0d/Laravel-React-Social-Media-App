@@ -19,19 +19,19 @@ const Notification = () => {
   return (
     <>
       <div
-        className={`bg-emerald-500/40 backdrop-blur-sm border-[2px] border-solid border-emerald-500 border-r-[0px] text-white absolute top-[100px] w-[400px] z-[1000] h-[60px] flex justify-start items-center pl-4 rounded-l-md duration-300 cursor-default  ${
+        className={`bg-emerald-500/40 backdrop-blur-sm border-[2px] border-solid border-emerald-500 border-r-[0px] text-white absolute top-[100px] right-0 z-[1000] h-[60px] flex justify-start items-center pl-4 rounded-l-md duration-300 cursor-default  ${
           ShowNotification && successMessage
-            ? "opacity-100 right-0 visible"
-            : " opacity-0 right-[-100px] invisible"
+            ? "opacity-100 w-[400px] visible"
+            : " opacity-0 w-[0] invisible"
         }`}
       >
         {successMessage}
       </div>
       <div
-        className={`bg-red-500/40 backdrop-blur-sm border-[2px] border-solid border-red-500 border-r-[0px] text-white absolute top-[200px] w-[400px] z-[1000] h-[60px] flex justify-center items-start pl-4 rounded-l-md duration-300 flex-col cursor-default ${
+        className={`bg-red-500/40 backdrop-blur-sm border-[2px] border-solid border-red-500 border-r-[0px] text-white absolute top-[200px] right-0 z-[1000] h-[60px] flex justify-center items-start pl-4 rounded-l-md duration-300 flex-col cursor-default ${
           ShowNotification && errors.length > 0
-            ? "opacity-100 right-0 visible"
-            : " opacity-0 right-[-100px] invisible"
+            ? "opacity-100 w-[400px] visible"
+            : " opacity-0 w-[0] invisible"
         }`}
       >
         {errors.map((error, index) => (

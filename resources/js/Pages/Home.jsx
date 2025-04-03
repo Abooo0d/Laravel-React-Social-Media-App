@@ -1,5 +1,4 @@
-import FollowersBar from "@/Components/Containers/FollowersBar";
-import GroupsBar from "@/Components/Containers/GroupsBar";
+import ChatsBar from "@/Components/Containers/ChatsBar";
 import HomeFeed from "@/Components/Containers/HomeFeed";
 import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";
@@ -37,6 +36,12 @@ export default function Home({
     setFollowersData(followers);
   }, [groups, posts, followers]);
 
+  useEffect(() => {
+    if (!auth?.user) {
+      window.location.href(route("login"));
+    }
+  }, [auth]);
+
   return (
     <>
       <Head>
@@ -49,13 +54,14 @@ export default function Home({
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
       <Authenticated
-        currentUser={auth.user}
+        currentUser={auth?.user}
         notifications={notifications}
         groups={groups}
+        followers={followersData}
       >
         <div className="flex min-h-[calc(100vh-66px)] max-h-[calc(100vh-66px)] overflow-hidden bg-gray-900">
           {/* <GroupsBar groups={groupsData} setGroups={setGroupsData} /> */}
-          <FollowersBar followers={followersData} />
+          <ChatsBar followers={followersData} />
           <HomeFeed posts={posts} />
         </div>
       </Authenticated>

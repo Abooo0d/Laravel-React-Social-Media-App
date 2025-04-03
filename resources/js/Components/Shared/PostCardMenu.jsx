@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
-import {
-  PiDotsThreeOutlineVerticalFill,
-  PiClipboardBold,
-} from "react-icons/pi";
-import { FaGlobe } from "react-icons/fa6";
+import React, { useState } from "react";
+import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
+
+import { MdDeleteOutline } from "react-icons/md";
+import { RiEditBoxLine } from "react-icons/ri";
+import { FaRegClipboard } from "react-icons/fa";
+import { CiGlobe } from "react-icons/ci";
 import UpdatePostForm from "./UpdatePostForm";
 import { Link, router } from "@inertiajs/react";
 import { useMainContext } from "@/Contexts/MainContext";
@@ -11,21 +12,13 @@ import { useMainContext } from "@/Contexts/MainContext";
 const PostCardMenu = ({ openMenu, setOpenMenu, post, currentUser }) => {
   const [showForm, setShowForm] = useState(false);
   const { setSuccessMessage } = useMainContext();
-  // const showMenu = () => {
-  //   return post.user.id === currentUser.id
-  //     ? true
-  //     : (post.group && post.group.user_id === currentUser.id) ||
-  //       (post.group && post.group.role === "admin")
-  //     ? true
-  //     : false;
-  // };
   const showUpdate = () => {
-    return post.user.id === currentUser.id ? true : false;
+    return post.user.id === currentUser?.id ? true : false;
   };
   const showDelete = () => {
-    return post.user.id == currentUser.id
+    return post.user.id == currentUser?.id
       ? true
-      : post.group && post.group.user_id == currentUser.id
+      : post.group && post.group.user_id == currentUser?.id
       ? true
       : false;
   };
@@ -40,11 +33,14 @@ const PostCardMenu = ({ openMenu, setOpenMenu, post, currentUser }) => {
       });
     }
   };
+  const copyToClipBoard = () => {
+    navigator.clipboard.writeText(route("post.publicView", post));
+  };
   return (
     <>
       <div className="relative">
         <button
-          className={`w-10 h-10 rounded-md cursor-pointer flex justify-center items-center border-[1px] border-solid  p-1 duration-200 ${
+          className={`w-10 h-10 rounded-md cursor-pointer flex justify-center items-center border-[1px] border-solid p-1 duration-200 ${
             openMenu
               ? "bg-gray-800 border-gray-700"
               : "bg-gray-900 border-transparent"
@@ -64,17 +60,16 @@ const PostCardMenu = ({ openMenu, setOpenMenu, post, currentUser }) => {
             href={route("post.publicView", post)}
             className="bg-gray-800 duration-300 flex gap-2 justify-start items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
           >
-            <FaGlobe />
+            <CiGlobe className="w-[17px] h-[17px]" />
             View Post
           </Link>
           <button
             onClick={() => {
-              // setShowForm(true);
-              // setOpenMenu(false);
+              copyToClipBoard();
             }}
             className="bg-gray-800 duration-300 flex gap-2 justify-start items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
           >
-            <PiClipboardBold />
+            <FaRegClipboard className="w-[17px] h-[17px]" />
             Copy Link
           </button>
           {showUpdate() && (
@@ -85,7 +80,7 @@ const PostCardMenu = ({ openMenu, setOpenMenu, post, currentUser }) => {
               }}
               className="bg-gray-800 duration-300 flex gap-2 justify-start items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
             >
-              Edit Post
+              <RiEditBoxLine className="w-[17px] h-[17px]" /> Edit Post
             </button>
           )}
           {showDelete() && (
@@ -93,6 +88,7 @@ const PostCardMenu = ({ openMenu, setOpenMenu, post, currentUser }) => {
               className="bg-gray-800 duration-300 flex gap-2 justify-start items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
               onClick={() => onDelete()}
             >
+              <MdDeleteOutline className="w-[17px] h-[17px]" />
               Delete
             </button>
           )}

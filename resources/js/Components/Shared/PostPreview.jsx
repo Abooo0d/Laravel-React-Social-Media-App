@@ -20,7 +20,7 @@ const PostPreview = ({
   undoDelete,
 }) => {
   return (
-    <PopupCard showForm={show}>
+    <PopupCard showForm={show} index="z-[600]">
       <div className="flex justify-between items-center">
         <PostOwnerInfo user={user} />
         <SecondaryButton event={() => setShow(false)} classes="px-3 py-1.5">

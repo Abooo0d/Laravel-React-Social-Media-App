@@ -17,7 +17,7 @@ class CreateCommentNotification extends Notification
   /**
    * Create a new notification instance.
    */
-  public function __construct(public User $user, public bool $sub = false)
+  public function __construct(public User $user, public int $postId, public bool $sub = false)
   {
     //
   }
@@ -43,7 +43,7 @@ class CreateCommentNotification extends Notification
     return [
       'type' => NotificationTypeEnum::CREATECOMMENT->value,
       'message' => $message,
-      'link' => route('profile.view', $this->user->username),
+      'link' => route('post.publicView', $this->postId),
       'actor' => ['name' => $this->user->name, 'avatar' => $this->user->avatar_path ? Storage::url($this->user->avatar_path) : asset('images/default_avatar_image.png')]
     ];
   }

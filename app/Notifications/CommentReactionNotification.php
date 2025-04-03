@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Http\Enums\NotificationTypeEnum;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
@@ -15,7 +16,7 @@ class CommentReactionNotification extends Notification
   /**
    * Create a new notification instance.
    */
-  public function __construct(public User $user, public bool $reaction)
+  public function __construct(public User $user, public bool $reaction, public int $postId)
   {
     //
   }
@@ -40,7 +41,7 @@ class CommentReactionNotification extends Notification
       'message' => $this->reaction
         ? "'" . $this->user->name . "' Reacted To You Comment"
         : "'" . $this->user->name . "' Removed His Reaction From Your Comment",
-      'link' => route('profile.view', $this->user->username),
+      'link' => route('post.publicView', $this->postId),
       'actor' => ['name' => $this->user->name, 'avatar' => $this->user->avatar_path ? Storage::url($this->user->avatar_path) : asset('images/default_avatar_image.png')]
     ];
   }

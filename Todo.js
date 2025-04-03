@@ -5,12 +5,20 @@
 // why the pdf File Come Tow Times When Selected As Attachment
 // Put The Focus On The TextInput on The CreatePostForm And THe UpdatePostForm
 // Set A Loading When Sending Invitation To Group
-/************** Working On *************/
 
 /************** TOday *************/
-// Fix The Comment Card
+// make to inviteUserForm returning The Ordered User as A User Card
+// fix the Notification To Take The Image From The data base And Not To Save The Image In The Notifications Table
+/************** Working On *************/
 
 /************** Done *************/
+// MAke The New NotificationsBar And the Group Bar Responsive
+// Make The Followers bar THe Same As THe Groups And Notifications Bars
+// Fix The Design In The COmment Section
+// fix the design Of TheNotificationBar And THe Notifications Card
+// Fixing THe Fll Post card
+// Fix The Design Of The PublicPostView
+// Fix The Comment Card
 // Fix The Error Page Design
 // implement The Error Messages In The Create Post From And The update Post Form
 // Create Context Provider To The Application
@@ -27,4 +35,9 @@
 // Make All Responses From The Backend With THe Redirect And Set The Success Message Correctly
 // edit the profile controller to show the right view for if the user if the user is the same user he is authenticated or the visit view if he is not
 
-palmicon;
+//Notifications // 1000
+// ImageFull VIew // 800
+// FullPostCard //  600
+// PostPreview // 600
+
+//Delete Post Must Return THe Group Page Instate Of The PublicPotView

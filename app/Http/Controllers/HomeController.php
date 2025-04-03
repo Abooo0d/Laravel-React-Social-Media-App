@@ -20,7 +20,6 @@ class HomeController extends Controller
     if (!$userId) {
       return redirect()->route('login');
     }
-    $users = User::query()->get();
     $posts = Post::PostsForTimeLine($userId)
       ->latest()
       ->paginate(15);
@@ -31,7 +30,6 @@ class HomeController extends Controller
     } else {
       return Inertia::render('Home', [
         'posts' => PostResource::collection($posts),
-        'followers' => UserResource::collection($users),
       ]);
     }
   }

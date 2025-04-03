@@ -10,6 +10,7 @@ const PostContainer = ({ posts, classes, children }) => {
   const [allData, setAllData] = useState(posts);
   const [currentPage, setCurrentPage] = useState(1);
   const { user } = useUserContext();
+
   useEffect(() => {
     if (inView && currentPage < allData.meta.last_page) {
       axiosClient

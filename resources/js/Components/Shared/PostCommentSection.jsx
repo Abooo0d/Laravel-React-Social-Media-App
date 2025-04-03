@@ -29,7 +29,7 @@ const PostCommentSection = ({ show, post, setPost, currentUser }) => {
     <>
       <div
         className={`flex justify-start items-center flex-col gap-4 max-h-[500px] overflow-auto border-gray-800 border-t-[2px] border-solid py-2 ${
-          show ? "visible opacity-100 h-full" : "invisible opacity-0 h-[0px]"
+          show ? "visible opacity-100 h-fit" : "invisible opacity-0 h-0"
         }`}
       >
         {post.comments.length > 0 ? (

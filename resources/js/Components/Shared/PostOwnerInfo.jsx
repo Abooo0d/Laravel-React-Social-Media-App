@@ -9,16 +9,16 @@ const PostOwnerInfo = ({ post, user }) => {
         <img
           src={user?.avatar_url || "/images/default_avatar_image.png"}
           alt=""
-          className="w-[60px] h-[60px] rounded-full border-[1px] border-gray-600/50 hover:border-gray-600 duration-200"
+          className="w-[60px] h-[60px] rounded-full border-[1px] border-gray-600/50 hover:border-gray-600 duration-200 object-cover"
         />
-        <div className="flex flex-col w-full justify-center ">
-          <h2 className=" flex justify-center items-center text-lg  dark:text-gray-400 lg:text-[18px] text-[16px] text-gray-900 duration-200">
+        <div className="flex flex-col w-full">
+          <h2 className=" flex justify-start items-center text-lg dark:text-gray-400 lg:text-[18px] text-[16px] text-gray-900 duration-200">
             {post?.user && (
               <Link
                 href={route("profile.view", user?.username)}
                 className=" hover:no-underline"
               >
-                {user?.name}{" "}
+                {user?.name}
               </Link>
             )}
             {post && (

@@ -37,8 +37,8 @@ Route::middleware('auth')->group(function () {
   Route::get('/post/download/{attachment}', [PostController::class, 'downloadAttachment'])->name('post.download');
   Route::post('/post/{post}/reaction', [PostController::class, 'postReaction'])->name('post.reaction');
   Route::post('/post/{post}/comment', [PostController::class, 'postCommentCreate'])->name('post.commentCreate');
-  Route::get('/public/post/{post:id}',[PostController::class,'publicView'])->name('post.publicView');
 });
+Route::get('/public/post/{post:id}', [PostController::class, 'publicView'])->name('post.publicView');
 // Comment Group
 Route::middleware('auth')->group(function () {
   Route::delete('/comment/{comment}', [PostController::class, 'DeleteComment'])->name('comment.delete');

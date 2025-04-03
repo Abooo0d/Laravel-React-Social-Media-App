@@ -20,6 +20,7 @@ const View = ({
   status,
   groups,
   notifications,
+  followers,
 }) => {
   const { flash, errors } = usePage().props;
   const { setErrors, setSuccessMessage } = useMainContext();
@@ -37,10 +38,17 @@ const View = ({
     Object.keys(errors).map((key) => messages.push(errors[key]));
     setErrors(messages);
   }, [errors]);
+
   useEffect(() => {
     if (flash?.success) setSuccessMessage(flash.success);
     if (flash?.error) setErrors([flash.error]);
   }, [flash]);
+
+  useEffect(() => {
+    if (!auth?.user) {
+      window.location.href(route("login"));
+    }
+  }, [auth]);
   const handelAvatarChange = (e) => {
     try {
       const file = e.target.files[0];
@@ -123,6 +131,7 @@ const View = ({
         currentUser={auth.user}
         groups={groups}
         notifications={notifications}
+        followers={followers}
       >
         <div className="container mx-auto ">
           <div className="max-h-[350px] w-full relative">
@@ -134,7 +143,7 @@ const View = ({
                   "/images/default_cover_image.jpg"
                 }
                 alt="cover Image"
-                className="h-[300px] w-full object-cover "
+                className="h-[300px] w-full object-cover"
               />
               {!isTheCoverChanged ? (
                 <button className="group-hover:opacity-100 opacity-0 rounded-md absolute top-2 right-2 py-1 px-4 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center">
@@ -174,7 +183,7 @@ const View = ({
                   "/images/default_avatar_image.png"
                 }
                 alt="AvatarImage"
-                className=" rounded-full w-full h-full "
+                className=" rounded-full w-full h-full object-cover"
               />
               <div className="absolute rounded-full bg-black/50 backdrop-blur-[3px] top-0 left-0 right-0 bottom-0 duration-300 group-hover:opacity-100 opacity-0 flex justify-center items-center">
                 {!isTheAvatarChanged ? (

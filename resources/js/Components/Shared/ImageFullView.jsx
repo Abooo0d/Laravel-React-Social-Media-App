@@ -37,7 +37,7 @@ const ImageFullView = ({
   };
   return (
     <div
-      className={`fixed inset-0 z-10 w-screen overflow-y-auto flex min-h-full items-center justify-center p-4 bg-gray-950/60 backdrop-blur-sm duration-200 ${
+      className={`fixed inset-0 z-[800] w-screen overflow-y-auto flex min-h-full items-center justify-center p-4 bg-gray-950/60 backdrop-blur-sm duration-200 ${
         show ? `visible opacity-100` : `invisible opacity-0 scale-[95%]`
       }`}
     >

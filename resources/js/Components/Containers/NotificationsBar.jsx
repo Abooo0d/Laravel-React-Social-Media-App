@@ -1,46 +1,32 @@
-import React, { useState } from "react";
-import { PrimaryButton, SecondaryButton } from "../Shared/Buttons";
+import React from "react";
 import NotificationCard from "../Shared/NotificationCard";
-import { IoMdNotifications } from "react-icons/io";
-const NotificationsBar = ({ notifications }) => {
-  const [showForm, setShowForm] = useState(false);
+const NotificationsBar = ({ notifications, showNotificationsForm }) => {
   return (
     <div className="relative">
-      <button
-        className={`px-2 py-1 text-gray-400 border-solid border-[1px] duration-200 rounded-md ${
-          showForm
-            ? "border-gray-400/50 bg-gray-800/50"
-            : "border-transparent bg-gray-900"
-        }`}
-        onClick={() => {
-          setShowForm(!showForm);
-        }}
-      >
-        <IoMdNotifications className="w-[25px] h-[25px]" />
-        {/* {showForm ? (
-        ) : (
-          <IoMdNotificationsOutline className="w-[25px] h-[25px]" />
-        )} */}
-      </button>
       <div
-        className={`flex flex-col h-[500px] absolute top-[40px] w-[400px] right-0 z-[100] overflow-hidden rounded-xl bg-gray-900/80 border-[2px] border-solid border-gray-700 backdrop-blur-2xl duration-200 ${
-          showForm ? "visible opacity-100" : "invisible opacity-0 scale-90 "
+        className={`flex flex-col max-h-[500px] h-fit absolute top-[-10px] w-[400px] max-w-[90%] right-[50%] translate-x-[50%] md:right-[363px] z-[100] overflow-hidden rounded-xl bg-gray-900/80 border-[2px] border-solid border-gray-700 backdrop-blur-2xl duration-200 ${
+          showNotificationsForm
+            ? "visible opacity-100"
+            : "invisible opacity-0 scale-90 "
         } `}
       >
         <h2 className="text-gray-400 bg-gray-800 w-full py-3 px-4 text-xl font-bold cursor-default">
           Notifications:
         </h2>
         <div
-          className={`flex flex-col gap-4 max-h-[500px] h-fit overflow-auto px-4 py-2`}
+          className={`flex flex-col gap-1 max-h-[500px] h-fit overflow-auto px-4 py-2`}
         >
           {notifications && (
             <>
               {notifications.data.length > 0 ? (
                 notifications.data.map((notify, index) => (
-                  <NotificationCard notification={notify} key={index} />
+                  <div className="flex flex-col gap-1" key={index}>
+                    <NotificationCard notification={notify} />
+                    <div className="w-[80%] h-[1px] relative bg-gray-700/20 mx-auto" />
+                  </div>
                 ))
               ) : (
-                <div className="w-full text-gray-500 text-center">
+                <div className="w-full text-gray-500 text-center my-4">
                   No Notifications Yet
                 </div>
               )}

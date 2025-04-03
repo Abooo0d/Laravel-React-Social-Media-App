@@ -197,3 +197,11 @@
 .ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
   max-height: 500px;
 }
+/* * {
+  border: 1px solid rgb(255 0 0 /50%);
+  opacity: 100 !important;
+  visibility: visible !important;
+}
+body {
+  overflow: hidden;
+} */

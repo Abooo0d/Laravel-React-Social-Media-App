@@ -1,11 +1,16 @@
 import CustomTab from "@/Components/Shared/CustomTab";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Tab } from "@headlessui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { Head } from "@inertiajs/react";
 import PostContainer from "@/Components/Containers/PostContainer";
 
-const View = ({ auth, user, posts, groups, notifications }) => {
+const View = ({ auth, user, posts, groups, notifications, followers }) => {
+  useEffect(() => {
+    if (!auth?.user) {
+      window.location.href(route("login"));
+    }
+  }, [auth]);
   return (
     <>
       <Head>
@@ -21,6 +26,7 @@ const View = ({ auth, user, posts, groups, notifications }) => {
         currentUser={auth.user}
         groups={groups}
         notifications={notifications}
+        followers={followers}
       >
         <div className="container mx-auto ">
           <div className="max-h-[350px] w-full relative">
@@ -33,7 +39,7 @@ const View = ({ auth, user, posts, groups, notifications }) => {
               <img
                 src={user.avatar_url || "/images/default_avatar_image.png"}
                 alt="AvatarImage"
-                className=" rounded-full w-full h-full "
+                className=" rounded-full w-full h-full object-cover"
               />
             </div>
           </div>

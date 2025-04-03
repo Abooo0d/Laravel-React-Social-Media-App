@@ -15,6 +15,7 @@ import UserMemberCard from "@/Components/Shared/UserMemberCard";
 import GroupAboutForm from "@/Components/Shared/GroupAboutForm";
 import PostContainer from "@/Components/Containers/PostContainer";
 import CreatePost from "@/Components/Shared/CreatePost";
+import { useUserContext } from "@/Contexts/UserContext";
 const View = ({
   auth,
   group,
@@ -24,6 +25,7 @@ const View = ({
   posts,
   notifications,
   groups,
+  followers,
 }) => {
   const isCurrentUserJoined = !!(group.status == "approved");
   const [groupData, setGroupData] = useState(group);
@@ -36,23 +38,37 @@ const View = ({
   const [isTheAvatarChanged, setIsTheAvatarChanged] = useState(false);
   const { setSuccessMessage, setErrors } = useMainContext();
   const { flash, errors } = usePage().props;
+  const { setUser } = useUserContext();
   const { setData, post } = useForm({
     coverImage: null,
     avatarImage: null,
     group_id: groupData.id,
   });
   useEffect(() => {
+    setUser(auth.user);
+  }, [auth?.user]);
+
+  useEffect(() => {
     if (flash.success) setSuccessMessage(flash.success);
     if (flash.error) setErrors([flash.error]);
   }, [flash]);
+
   useEffect(() => {
     let messages = [];
     Object.keys(errors).map((key) => messages.push(errors[key]));
     setErrors(messages);
   }, [errors]);
+
   useEffect(() => {
     setAllPosts(posts);
   }, [posts]);
+
+  useEffect(() => {
+    if (!auth?.user) {
+      window.location.href(route("login"));
+    }
+  }, [auth]);
+
   const handelAvatarChange = (e) => {
     try {
       const file = e.target.files[0];
@@ -135,6 +151,7 @@ const View = ({
         currentUser={auth.user}
         groups={groups}
         notifications={notifications}
+        followers={followers}
       >
         <div className="container mx-auto ">
           <div className="max-h-[350px] w-full relative">
@@ -190,7 +207,7 @@ const View = ({
                   "/images/default_group_avatar_image.png"
                 }
                 alt="AvatarImage"
-                className=" rounded-full w-full h-full object-cover "
+                className=" rounded-full w-full h-full object-cover"
               />
               {isAdmin && (
                 <>

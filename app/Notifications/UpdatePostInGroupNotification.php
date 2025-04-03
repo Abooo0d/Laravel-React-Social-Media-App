@@ -18,7 +18,7 @@ class UpdatePostInGroupNotification extends Notification
   /**
    * Create a new notification instance.
    */
-  public function __construct(public User $user, public Group $group)
+  public function __construct(public User $user, public Group $group, public int $postId)
   {
     //
   }
@@ -41,7 +41,7 @@ class UpdatePostInGroupNotification extends Notification
     return [
       'type' => NotificationTypeEnum::UPDATEPOST->value,
       'message' => "'" . $this->user->name . "' Updated His Post In '" . $this->group->name . "' Group.",
-      'link' => route('group.profile', $this->group->slug),
+      'link' => route('post.publicView', $this->postId),
       'actor' => ['name' => $this->user->name, 'avatar' => $this->user->avatar_path ? Storage::url($this->user->avatar_path) : asset('images/default_avatar_image.png')]
     ];
   }

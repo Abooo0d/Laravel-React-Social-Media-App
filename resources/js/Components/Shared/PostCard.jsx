@@ -41,7 +41,6 @@ const PostCard = ({ post, currentUser }) => {
             setOpenMenu={setOpenMenu}
             currentUser={currentUser}
           />
-          {/* )} */}
         </div>
         <PostCardPostBody post={localPost} />
         <PostCardPostAttachments

@@ -16,7 +16,7 @@ class PostReactionNotification extends Notification
   /**
    * Create a new notification instance.
    */
-  public function __construct(public User $user, public bool $reaction)
+  public function __construct(public User $user, public int $postId, public bool $reaction)
   {
     //
   }
@@ -42,7 +42,7 @@ class PostReactionNotification extends Notification
       'message' => $this->reaction
         ? "'" . $this->user->name . "' Reacted To You Post"
         : "'" . $this->user->name . "' Removed His Reaction From Your Post",
-      'link' => route('profile.view', $this->user->username),
+      'link' => route('post.publicView', $this->postId),
       'actor' => ['name' => $this->user->name, 'avatar' => $this->user->avatar_path ? Storage::url($this->user->avatar_path) : asset('images/default_avatar_image.png')]
     ];
   }

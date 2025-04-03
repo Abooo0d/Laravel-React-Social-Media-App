@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 use App\Http\Resources\GroupResource;
 use App\Models\Group;
+use App\Models\User;
 use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
@@ -34,23 +35,29 @@ class HandleInertiaRequests extends Middleware
    */
   public function share(Request $request): array|RedirectResponse
   {
-    $notifications = Auth::user()->notifications()->paginate(20);
-    $groups = Group::query()
-      ->with('currentUserGroups')
-      ->select(['groups.*'])
-      ->join('group_users AS gu', 'gu.group_id', 'groups.id')
-      ->where('gu.user_id', Auth::id())
-      ->orderBy('gu.role')
-      ->orderBy('name')
-      ->get();
-    $user = $request->user() !== null ? new UserResource($request->user()) : null;
+    if (Auth::id()) {
+      $notifications = Auth::user()->notifications()->paginate(20);
+      $groups = Group::query()
+        ->with('currentUserGroups')
+        ->select(['groups.*'])
+        ->join('group_users AS gu', 'gu.group_id', 'groups.id')
+        ->where('gu.user_id', Auth::id())
+        ->orderBy('gu.role')
+        ->orderBy('name')
+        ->get();
+      $groupsData = GroupResource::collection($groups);
+      $user = $request->user() !== null ? new UserResource($request->user()) : null;
+      $users = User::query()->get() ?? [];
+      $usersData = UserResource::collection($users);
+    }
     return [
       ...parent::share($request),
       'auth' => [
-        'user' => $user
+        'user' => $user ?? null
       ],
-      'notifications' => $notifications,
-      'groups' => GroupResource::collection($groups),
+      'notifications' => $notifications ?? null,
+      'groups' => $groupsData ?? null,
+      'followers' => $usersData ?? null,
       'flash' => [
         'success' => session('success'),
         'error' => session('error'),

@@ -38,11 +38,12 @@ class GroupUpdateNotification extends Notification
    */
   public function toDatabase(object $notifiable)
   {
-    $message = !$this->image
-      ? "'" . $this->user->name . "' Updated The Information Of '" . $this->group->name . "' Group."
-      : $this->image == 'cover'
-      ? "'" . $this->user->name . "' Updated The Cover Image Of The '" . $this->group->name . "' Group."
-      : "'" . $this->user->name . "' Updated The Thumbnail Image Of The '" . $this->group->name . "' Group.";
+    if (!$this->image)
+      $message = "'" . $this->user->name . "' Updated The Information Of '" . $this->group->name . "' Group.";
+    elseif ($this->image == 'cover')
+      $message = "'" . $this->user->name . "' Updated The Cover Image Of The '" . $this->group->name . "' Group.";
+    else
+      $message = "'" . $this->user->name . "' Updated The Thumbnail Image Of The '" . $this->group->name . "' Group.";
     return [
       'type' => NotificationTypeEnum::GROUPUPDATED->value,
       'message' => $message,

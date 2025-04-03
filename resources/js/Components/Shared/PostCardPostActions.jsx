@@ -18,7 +18,7 @@ const PostCardPostActions = ({ post, setPost, setShowCommentSection }) => {
   };
 
   return (
-    <div className="flex justify-between items-center gap-3 flex-col flex-1 mb-0 mt-4">
+    <div className="flex justify-between items-center gap-3 flex-col flex-1 mt-4 ">
       <div className=" flex-1 text-gray-300 w-full flex justify-between items-center">
         <div className="cursor-default text-gray-400 lg:text-sm text-[13px]">
           {parseInt(post.num_of_reactions) === 0
