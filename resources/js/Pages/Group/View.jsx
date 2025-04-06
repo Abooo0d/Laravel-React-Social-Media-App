@@ -282,7 +282,7 @@ const View = ({
           </div>
           <div className="w-full">
             <Tab.Group>
-              <Tab.List className="md:px-[40px] px-[20px] flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
+              <Tab.List className="md:px-[40px] mb-4 px-[20px] flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
                 <CustomTab text="Posts" />
                 <CustomTab text="Photos" />
                 {isCurrentUserJoined && <CustomTab text="Members" />}

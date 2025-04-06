@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import GroupeCard from "../Shared/GroupeCard";
+import CreateGroupForm from "../Shared/CreateGroupForm";
+import { PrimaryButton } from "../Shared/Buttons";
 const GroupsBar = ({ groups, showGroupContainer }) => {
+  const [groupData, setGroupsData] = useState(groups);
+  const [showCreateForm, setShowCreateForm] = useState(false);
   return (
     <>
       <div className="relative">
@@ -11,15 +15,26 @@ const GroupsBar = ({ groups, showGroupContainer }) => {
               : "invisible opacity-0 scale-90 "
           } `}
         >
-          <h2 className="text-gray-400 bg-gray-800 w-full py-3 px-4 text-xl font-bold cursor-default">
-            Groups:
-          </h2>
+          <div className="flex justify-between items-center bg-gray-800 px-4">
+            {" "}
+            <h2 className="text-gray-400  w-full py-3  text-xl font-bold cursor-default">
+              Groups:
+            </h2>
+            <PrimaryButton
+              classes="px-3 py-1.5"
+              event={() => {
+                setShowCreateForm(true);
+              }}
+            >
+              New
+            </PrimaryButton>
+          </div>
           <div
             className={`flex flex-col gap-4 max-h-[500px] h-fit overflow-auto px-4 py-2`}
           >
-            {groups.length > 0 ? (
+            {groupData.length > 0 ? (
               <>
-                {groups.map((group, index) => (
+                {groupData.map((group, index) => (
                   <GroupeCard data={group} key={index} />
                 ))}
               </>
@@ -31,11 +46,11 @@ const GroupsBar = ({ groups, showGroupContainer }) => {
           </div>
         </div>
       </div>
-      {/* <CreateGroupForm
-        showForm={showForm}
-        setShowForm={setShowForm}
+      <CreateGroupForm
+        showForm={showCreateForm}
+        setShowForm={setShowCreateForm}
         setGroups={setGroupsData}
-      /> */}
+      />
     </>
   );
 };

@@ -4,6 +4,7 @@ import { Tab } from "@headlessui/react";
 import React, { useEffect } from "react";
 import { Head } from "@inertiajs/react";
 import PostContainer from "@/Components/Containers/PostContainer";
+import UserFriendCard from "@/Components/Shared/UserFriendCard";
 
 const View = ({ auth, user, posts, groups, notifications, followers }) => {
   useEffect(() => {
@@ -11,6 +12,17 @@ const View = ({ auth, user, posts, groups, notifications, followers }) => {
       window.location.href(route("login"));
     }
   }, [auth]);
+  // const addFriend = () => {
+  //   axiosClient
+  //     .post(route("user.addFriend", user.id), { type: "add" })
+  //     .then((data) => {
+  //       setShowForm(false);
+  //       setSuccessMessage(data.data.message);
+  //     })
+  //     .catch((e) => {
+  //       setMessage(e.response.data.message);
+  //     });
+  // };
   return (
     <>
       <Head>
@@ -43,16 +55,17 @@ const View = ({ auth, user, posts, groups, notifications, followers }) => {
               />
             </div>
           </div>
-          <div className="w-full flex justify-between items-center gap-4 bg-gray-900 py-4 px-8">
-            <h2 className="pl-[250px] max-md:pl-4 text-gray-400 text-lg max-md:text-[16px]">
-              {user.name}
-            </h2>
+          <div className="w-full flex flex-col justify-start items-start gap-1 bg-gray-900 py-4 pl-[250px]">
+            <div className="flex gap-2 justify-center items-center">
+              <h2 className="text-gray-300 text-lg mb-0">{user.name}</h2>
+              <p className=" text-gray-500">{user.email}</p>
+            </div>
+            <h2 className="text-gray-500 text-lg mb-0">@{user.username}</h2>
           </div>
           <div className="w-full">
             <Tab.Group>
-              <Tab.List className="md:px-[40px] px-[20px] flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
+              <Tab.List className="md:px-[40px] px-[20px] mb-4 flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
                 <CustomTab text="Posts" />
-                <CustomTab text="Followers" />
                 <CustomTab text="Friends" />
                 <CustomTab text="Photos" />
               </Tab.List>
@@ -63,19 +76,13 @@ const View = ({ auth, user, posts, groups, notifications, followers }) => {
                   </div>
                 </Tab.Panel>
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
-                  <div className="relative rounded-md p-3 mb-2 dark:hover:bg-gray-700 hover:bg-gray-200 dark:bg-gray-800 bg-gray-100 duration-200">
-                    <h3 className="text-sm font-medium leading-5 text-gray-800 dark:text-gray-300">
-                      Followers
-                    </h3>
+                  <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
+                    {user.friends?.map((friend, index) => (
+                      <UserFriendCard user={friend} key={index} />
+                    ))}
                   </div>
                 </Tab.Panel>
-                <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
-                  <div className="relative rounded-md p-3 mb-2 dark:hover:bg-gray-700 hover:bg-gray-200 dark:bg-gray-800 bg-gray-100 duration-200">
-                    <h3 className="text-sm font-medium leading-5 text-gray-800 dark:text-gray-300">
-                      Friends
-                    </h3>
-                  </div>
-                </Tab.Panel>
+
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
                   <div className="relative rounded-md p-3 mb-2 dark:hover:bg-gray-700 hover:bg-gray-200 dark:bg-gray-800 bg-gray-100 duration-200">
                     <h3 className="text-sm font-medium leading-5 text-gray-800 dark:text-gray-300">

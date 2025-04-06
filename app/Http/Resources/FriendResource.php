@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
+
+class FriendResource extends JsonResource
+{
+
+  protected $targetUserId;
+
+  public function __construct($resource, $targetUserId = null)
+  {
+    parent::__construct($resource);
+    $this->targetUserId = $targetUserId ?? auth()->id();
+  }
+
+  /**
+   * Transform the resource into an array.
+   *
+   * @return array<string, mixed>
+   */
+  public function toArray(Request $request): array
+  {
+    $friendUser = $this->user_id === $this->targetUserId
+      ? $this->friendUser // You sent the request
+      : $this->user; // You received the request
+    return [
+      'name' => $friendUser->name,
+      'username' => $friendUser->username,
+      'email' => $friendUser->email,
+      'cover_url' => $friendUser->cover_path ? Storage::url($friendUser->cover_path) : asset('images/default_cover_image.jpg'),
+      'avatar_url' => $friendUser->avatar_path ? Storage::url($friendUser->avatar_path) : asset('images/default_avatar_image.png'),
+    ];
+  }
+}

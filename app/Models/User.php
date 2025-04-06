@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Enums\FriendsRequestEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -61,5 +62,25 @@ class User extends Authenticatable
         'taylor@laravel.com',
       ]);
     });
+  }
+  public function sentFriendRequests()
+  {
+    return $this->hasMany(Friends::class, 'user_id')
+      ->where('status', FriendsRequestEnum::ACCEPTED->value);
+  }
+  public function receivedFriendRequests()
+  {
+    return $this->hasMany(Friends::class, 'friend_id')
+      ->where('status', FriendsRequestEnum::ACCEPTED->value);
+  }
+  public function getAllFriendsAttribute()
+  {
+    $sent = $this->sentFriendRequests()->with('friendUser')->get();
+    $received = $this->receivedFriendRequests()->with('user')->get();
+    return $sent->merge($received);
+  }
+  public function comingRequests()
+  {
+    return $this->hasMany(Friends::class, 'friend_id')->where('status', FriendsRequestEnum::PENDING->value);
   }
 }

@@ -4,6 +4,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -57,5 +58,9 @@ Route::middleware('auth')->group(function () {
   Route::post('/group/change-role/{group:slug}', [GroupController::class, 'changeRole'])->name('group.changeRole');
   Route::delete('/group/kick-out/{group:slug}', [GroupController::class, 'kickOut'])->name('group.kickOut');
   Route::put('/group/{group:slug}', [GroupController::class, 'update'])->name('group.update');
+});
+Route::middleware('auth')->group(function () {
+  Route::post('/user/search', [UserController::class, 'searchForUser'])->name('user.searchForUser');
+  Route::post('/user/invite/{user:id}', [UserController::class, 'addFriend'])->name('user.addFriend');
 });
 require __DIR__ . '/auth.php';

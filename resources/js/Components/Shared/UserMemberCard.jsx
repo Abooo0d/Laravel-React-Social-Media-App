@@ -28,10 +28,10 @@ const UserMemberCard = ({ member, isAdmin, group }) => {
         <div className="flex justify-between items-center w-full pr-4">
           <Link
             className="flex flex-col justify-start items-start w-full"
-            href={route("profile.view", member.user.username)}
+            href={route("profile.view", member.user.name)}
           >
             <h3 className="text-gray-300 font-bold mt-1 w-full text-left px-4">
-              {member.user.username}
+              {member.user.name}
             </h3>
             <h3 className="text-gray-400 mb-2 w-full text-left px-4 text-[13px] -mt-1">
               {member.user.email}

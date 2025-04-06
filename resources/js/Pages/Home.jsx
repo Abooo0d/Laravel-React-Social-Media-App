@@ -12,9 +12,9 @@ export default function Home({
   groups,
   notifications,
 }) {
+  console.log(auth.user);
+
   const { setUser, user } = useUserContext();
-  const [postsData, setPostsData] = useState(posts);
-  const [groupsData, setGroupsData] = useState(groups);
   const [followersData, setFollowersData] = useState(followers);
   const { setSuccessMessage, setErrors } = useMainContext();
   const { flash, errors } = usePage().props;
@@ -31,8 +31,6 @@ export default function Home({
     setErrors(messages);
   }, [errors]);
   useEffect(() => {
-    setGroupsData(groups);
-    setPostsData(posts);
     setFollowersData(followers);
   }, [groups, posts, followers]);
 

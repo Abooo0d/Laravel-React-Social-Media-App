@@ -10,6 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class InviteUserRequest extends FormRequest
 {
+
   public ?User $user = null;
   public ?GroupUsers $groupUser = null;
   public Group $group;
@@ -30,15 +31,12 @@ class InviteUserRequest extends FormRequest
   public function rules(): array
   {
     return [
-      'email' => [
+      'user_id' => [
         'required',
         function ($attribute, $value, \Closure $fail) {
-          $this->user = User::query()->where('email', $value)
-            ->orWhere('username', $value)
-            ->first();
-          if (!$this->user) {
-            $fail('User Don`t Exist');
-          }
+          $this->user = User::where("id", $this->user_id)->first();
+        },
+        function ($attribute, $value, \Closure $fail) {
           $this->groupUser = GroupUsers::query()->where('user_id', $this->user->id)->where('group_id', $this->group->id)->first();
           if ($this->groupUser && $this->groupUser->status === GroupUserStatusEnum::APPROVED->value) {
             $fail('User Is Already Member Of The Group');
