@@ -5,17 +5,9 @@ import { useUserContext } from "@/Contexts/UserContext";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
-export default function Home({
-  auth,
-  posts,
-  followers,
-  groups,
-  notifications,
-}) {
-  console.log(auth.user);
-
+export default function Home({ auth, posts, groups, notifications }) {
   const { setUser, user } = useUserContext();
-  const [followersData, setFollowersData] = useState(followers);
+  const [friends, setFriends] = useState(auth.user.friends);
   const { setSuccessMessage, setErrors } = useMainContext();
   const { flash, errors } = usePage().props;
   useEffect(() => {
@@ -31,8 +23,8 @@ export default function Home({
     setErrors(messages);
   }, [errors]);
   useEffect(() => {
-    setFollowersData(followers);
-  }, [groups, posts, followers]);
+    setFriends(auth.user.friends);
+  }, [groups, posts, auth.user.friends]);
 
   useEffect(() => {
     if (!auth?.user) {
@@ -55,10 +47,10 @@ export default function Home({
         currentUser={auth?.user}
         notifications={notifications}
         groups={groups}
-        followers={followersData}
+        followers={friends}
       >
         <div className="flex min-h-[calc(100vh-66px)] max-h-[calc(100vh-66px)] overflow-hidden bg-gray-900">
-          <ChatsBar followers={followersData} />
+          <ChatsBar followers={friends} />
           <HomeFeed posts={posts} />
         </div>
       </Authenticated>

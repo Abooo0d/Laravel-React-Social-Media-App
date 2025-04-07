@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Enums\FriendsRequestEnum;
+use Auth;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -77,10 +78,34 @@ class User extends Authenticatable
   {
     $sent = $this->sentFriendRequests()->with('friendUser')->get();
     $received = $this->receivedFriendRequests()->with('user')->get();
-    return $sent->merge($received);
+    $data = $sent->merge($received);
+    return $data;
+  }
+  public function getFriendsWithRequestsAttribute()
+  {
+    $sent = $this->sentFriendRequests()->with('friendUser')->get();
+    $received = $this->receivedFriendRequests()->with('user')->get();
+    $comingRequests = $this->comingRequests()->with('user')->get();
+    $sentRequest = $this->sentRequests()->with('friendUser')->get();
+    $data = $sent->merge($received)->merge($comingRequests)->merge($sentRequest);
+    return $data;
+  }
+  public function isFriend($user_id)
+  {
+    // dd(Auth::id(), $user_id);
+    return Friends
+      ::where('user_id', $user_id)
+      ->where('friend_id', Auth::id())
+      ->orWhere('user_id', Auth::id())
+      ->Where('friend_id', $user_id)
+      ->exists();
   }
   public function comingRequests()
   {
     return $this->hasMany(Friends::class, 'friend_id')->where('status', FriendsRequestEnum::PENDING->value);
+  }
+  public function sentRequests()
+  {
+    return $this->hasMany(Friends::class, 'user_id')->where('status', FriendsRequestEnum::PENDING->value);
   }
 }

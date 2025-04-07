@@ -20,4 +20,8 @@ enum NotificationTypeEnum: string
   case JOINGROUPREQUEST = 'joinGroupRequest|groupAction';
   case REQUESTACTION = 'requestAction|groupAction';
   case GROUPUSERACTION = 'groupUserAction|groupAction';
+
+  case SENDFRIENDREQUEST = 'sendFriendRequest|userAction';
+  case ACCEPTFRIENDREQUEST = 'acceptFriendRequest|userAction';
+  case BLCOKFRIENDREQUEST = 'blockFriendRequest|userAction';
 }

@@ -8,6 +8,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Followers;
 use App\Models\Friends;
 use App\Models\User;
+use App\Notifications\FriendRequestNotification;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,47 +18,75 @@ class UserController extends Controller
 {
   public function searchForUser(SearchUserRequest $request)
   {
-    $data = $request->Validated();
-    $followerData = $request->user;
-    if ($request->wantsJson())
-      return response()->json(['followers' => UserResource::collection($followerData)]);
-  }
-  public function SearchForGroupMember()
-  {
-
+    try {
+      $data = $request->Validated();
+      $followerData = $request->user;
+      if ($request->wantsJson())
+        return response()->json(['followers' => UserResource::collection($followerData)]);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
   }
   public function addFriend(Request $request, User $user)
   {
-    $data = $request->validate([
-      'type' => ['required', 'string'] // add , block
-    ]);
-    $currentUser = Auth::user();
-    if ($user->id == $currentUser->id) {
-      return response()->json(['message' => "You Can`t Send Friend Request To Your Self"], 400);
+    try {
+      $data = $request->validate([
+        'type' => ['required', 'string'] // add , block
+      ]);
+      $currentUser = Auth::user();
+      if ($user->id == $currentUser->id) {
+        return redirect()->back()->with('error', "You Can`t Send Friend Request To Your Self");
+
+      }
+      $follower = Friends::query()->where('user_id', Auth::id())->where('friend_id', $user->id)->first();
+      switch ($data['type']) {
+        case 'add':
+          if ($follower) {
+            return redirect()->back()->with('error', "You Are Already Friend With {$user->name}");
+          } else {
+            $follower = Friends::create([
+              'user_id' => $currentUser->id,
+              'friend_id' => $user->id,
+              'status' => FriendsRequestEnum::PENDING->value,
+            ]);
+            $user->notify(new FriendRequestNotification($currentUser, 'add'));
+            return redirect()->back()->with('success', "Your Request Has Been Send To {$user->name}, You Will Be Notified When Accepted");
+          }
+        case 'block':
+          if ($follower) {
+            $follower->status = FriendsRequestEnum::BLOCKED->value;
+            $follower->save();
+          } else {
+            return redirect()->back()->with('error', "You Are Not Friend With {$user->name} To Block Him");
+          }
+          break;
+        default:
+          return redirect()->back()->with('error', 'There Is An Error With The Request');
+      }
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-    $follower = Friends::query()->where('user_id', Auth::id())->where('friend_id', $user->id)->first();
-    switch ($data['type']) {
-      case 'add':
-        if ($follower) {
-          return response()->json(['message' => "You Are Already Friend With {$user->name}"], 400);
-        } else {
-          $follower = Friends::create([
-            'user_id' => $currentUser->id,
-            'friend_id' => $user->id,
-            'status' => FriendsRequestEnum::PENDING->value,
-          ]);
-          return response()->json(['message' => "Your Request Has Been Send To {$user->name}, You Will Be Notified When Accepted"], 200);
-        }
-      case 'block':
-        if ($follower) {
-          $follower->status = FriendsRequestEnum::BLOCKED->value;
-          $follower->save();
-        } else {
-          return response()->json(['message' => "You Are Not Friend With {$user->name} To Block Him"], 400);
-        }
-        break;
-      default:
+  }
+  public function acceptRequest(Request $request)
+  {
+    try {
+      $data = $request->validate([
+        'request_id' => ['required'],
+        'request_owner_id' => ['required']
+      ]);
+      $friendRequest = Friends::where('id', $data['request_id'])
+        ->where('user_id', $data['request_owner_id'])
+        ->where('friend_id', auth()->id())
+        ->where('status', FriendsRequestEnum::PENDING->value)
+        ->first();
+      if ($friendRequest) {
+        $friendRequest->status = FriendsRequestEnum::ACCEPTED->value;
+        $friendRequest->save();
+        return redirect()->back()->with('success', "Friend Request Is Accepted");
+      } else
         return response()->json(['message' => "There Is An Error With The Request"], 400);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
 }

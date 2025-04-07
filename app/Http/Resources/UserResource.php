@@ -27,8 +27,7 @@ class UserResource extends JsonResource
       'email_verified_at' => $this->email_verified_at,
       'cover_url' => $this->cover_path ? Storage::url($this->cover_path) : asset('images/default_cover_image.jpg'),
       'avatar_url' => $this->avatar_path ? Storage::url($this->avatar_path) : asset('images/default_avatar_image.png'),
-      // 'friends' => FriendResource::collection($this->all_friends),
-      'friends' => FriendResource::collection($this->all_friends)->additional(['target_user_id' => $this->id]),
+      'friends' => FriendResource::collectionWithTarget($this->all_friends, $this->id),
       'pending_requests' => FriendResource::collection($this->comingRequests)->additional(['target_user_id' => $this->id])
     ];
   }

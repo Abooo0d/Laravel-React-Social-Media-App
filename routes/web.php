@@ -62,5 +62,6 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
   Route::post('/user/search', [UserController::class, 'searchForUser'])->name('user.searchForUser');
   Route::post('/user/invite/{user:id}', [UserController::class, 'addFriend'])->name('user.addFriend');
+  Route::post('/user/acceptRequest', [UserController::class, 'acceptRequest'])->name('user.acceptRequest');
 });
 require __DIR__ . '/auth.php';

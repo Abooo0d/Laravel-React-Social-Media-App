@@ -47,8 +47,6 @@ class HandleInertiaRequests extends Middleware
         ->get();
       $groupsData = GroupResource::collection($groups);
       $user = $request->user() !== null ? new UserResource($request->user()) : null;
-      $users = User::query()->get() ?? [];
-      $usersData = UserResource::collection($users);
     }
     return [
       ...parent::share($request),
@@ -57,7 +55,6 @@ class HandleInertiaRequests extends Middleware
       ],
       'notifications' => $notifications ?? null,
       'groups' => $groupsData ?? null,
-      'followers' => $usersData ?? null,
       'flash' => [
         'success' => session('success'),
         'error' => session('error'),

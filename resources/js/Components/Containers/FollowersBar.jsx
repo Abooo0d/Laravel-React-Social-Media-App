@@ -39,8 +39,8 @@ const FollowersBar = ({ followers, showFollowerContainer }) => {
                 ))}
               </>
             ) : (
-              <div className="text-gray-600 text-center">
-                You Don`t Have Any Followers.
+              <div className="text-gray-600 text-center py-4">
+                You Don`t Have Any Friends.
               </div>
             )}
           </div>

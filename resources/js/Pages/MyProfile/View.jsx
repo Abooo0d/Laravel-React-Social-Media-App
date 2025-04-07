@@ -12,6 +12,9 @@ import { useMainContext } from "@/Contexts/MainContext";
 import PostContainer from "@/Components/Containers/PostContainer";
 import CreatePost from "@/Components/Shared/CreatePost";
 import UserFriendCard from "@/Components/Shared/UserFriendCard";
+import PrimaryButton from "@/Components/PrimaryButton";
+import axiosClient from "@/AxiosClient/AxiosClient";
+import UserFriendRequestCard from "@/Components/Shared/UserFriendRequestCard";
 
 const View = ({
   auth,
@@ -21,7 +24,6 @@ const View = ({
   status,
   groups,
   notifications,
-  followers,
 }) => {
   const { flash, errors } = usePage().props;
   const { setErrors, setSuccessMessage } = useMainContext();
@@ -116,7 +118,6 @@ const View = ({
       console.log(error);
     }
   };
-
   return (
     <>
       <Head>
@@ -132,7 +133,7 @@ const View = ({
         currentUser={auth.user}
         groups={groups}
         notifications={notifications}
-        followers={followers}
+        followers={auth.user.friends}
       >
         <div className="container mx-auto ">
           <div className="max-h-[350px] w-full relative">
@@ -253,11 +254,17 @@ const View = ({
                   </div>
                 </Tab.Panel>
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
-                  <div className="relative rounded-md p-3 mb-2 dark:hover:bg-gray-700 hover:bg-gray-200 dark:bg-gray-900 bg-gray-100 duration-200">
-                    <h3 className="text-sm font-medium leading-5 text-gray-800 dark:text-gray-300">
-                      Requests
-                    </h3>
-                  </div>
+                  {auth.user?.pending_requests.length > 0 ? (
+                    <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2">
+                      {auth.user.pending_requests?.map((request, index) => (
+                        <UserFriendRequestCard request={request} key={index} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="w-full text-center text-gray-500 py-8 dark:bg-gray-900 rounded-md">
+                      There Is No Pending Requests
+                    </div>
+                  )}
                 </Tab.Panel>
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
                   <div className="relative rounded-md p-3 mb-2 dark:hover:bg-gray-700 hover:bg-gray-200 dark:bg-gray-900 bg-gray-100 duration-200">

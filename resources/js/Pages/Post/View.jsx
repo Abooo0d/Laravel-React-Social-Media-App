@@ -3,7 +3,7 @@ import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import React from "react";
 
-const View = ({ groups, notifications, auth, post, followers }) => {
+const View = ({ groups, notifications, auth, post }) => {
   return (
     <>
       <Head>
@@ -19,7 +19,7 @@ const View = ({ groups, notifications, auth, post, followers }) => {
         currentUser={auth?.user}
         groups={groups}
         notifications={notifications}
-        followers={followers}
+        followers={auth.user.friends}
       >
         <div className="w-full flex justify-center items-start py-4 max-h-barHeight overflow-auto">
           <PostCard post={post} currentUser={auth.user} />

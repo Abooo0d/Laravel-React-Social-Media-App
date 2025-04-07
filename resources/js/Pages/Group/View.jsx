@@ -25,7 +25,6 @@ const View = ({
   posts,
   notifications,
   groups,
-  followers,
 }) => {
   const isCurrentUserJoined = !!(group.status == "approved");
   const [groupData, setGroupData] = useState(group);
@@ -151,7 +150,7 @@ const View = ({
         currentUser={auth.user}
         groups={groups}
         notifications={notifications}
-        followers={followers}
+        followers={auth.user.friends}
       >
         <div className="container mx-auto ">
           <div className="max-h-[350px] w-full relative">

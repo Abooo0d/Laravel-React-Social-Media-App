@@ -1,28 +1,33 @@
 import CustomTab from "@/Components/Shared/CustomTab";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Tab } from "@headlessui/react";
-import React, { useEffect } from "react";
-import { Head } from "@inertiajs/react";
+import React, { useEffect, useState } from "react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import PostContainer from "@/Components/Containers/PostContainer";
 import UserFriendCard from "@/Components/Shared/UserFriendCard";
+import axiosClient from "@/AxiosClient/AxiosClient";
+import { useMainContext } from "@/Contexts/MainContext";
+import { PrimaryButton } from "@/Components/Shared/Buttons";
+import { FiUserPlus } from "react-icons/fi";
 
-const View = ({ auth, user, posts, groups, notifications, followers }) => {
+const View = ({ auth, user, posts, groups, notifications, isFriend }) => {
+  const { setSuccessMessage, setErrors } = useMainContext();
+  const { flash, errors } = usePage().props;
+  const { data, post } = useForm({
+    type: "add",
+  });
   useEffect(() => {
     if (!auth?.user) {
       window.location.href(route("login"));
     }
   }, [auth]);
-  // const addFriend = () => {
-  //   axiosClient
-  //     .post(route("user.addFriend", user.id), { type: "add" })
-  //     .then((data) => {
-  //       setShowForm(false);
-  //       setSuccessMessage(data.data.message);
-  //     })
-  //     .catch((e) => {
-  //       setMessage(e.response.data.message);
-  //     });
-  // };
+  useEffect(() => {
+    if (flash.success) setSuccessMessage(flash.success);
+    if (flash.error) setErrors([flash.error]);
+  }, [flash]);
+  const addFriend = () => {
+    post(route("user.addFriend", user.id));
+  };
   return (
     <>
       <Head>
@@ -38,7 +43,7 @@ const View = ({ auth, user, posts, groups, notifications, followers }) => {
         currentUser={auth.user}
         groups={groups}
         notifications={notifications}
-        followers={followers}
+        followers={auth.user.friends}
       >
         <div className="container mx-auto ">
           <div className="max-h-[350px] w-full relative">
@@ -55,12 +60,26 @@ const View = ({ auth, user, posts, groups, notifications, followers }) => {
               />
             </div>
           </div>
-          <div className="w-full flex flex-col justify-start items-start gap-1 bg-gray-900 py-4 pl-[250px]">
-            <div className="flex gap-2 justify-center items-center">
-              <h2 className="text-gray-300 text-lg mb-0">{user.name}</h2>
-              <p className=" text-gray-500">{user.email}</p>
+          <div className="flex justify-between items-center bg-gray-900 py-4 pl-[250px] pr-8">
+            {" "}
+            <div className="w-full flex flex-col justify-start items-start gap-1">
+              <div className="flex gap-2 justify-center items-center">
+                <h2 className="text-gray-300 text-lg mb-0">{user.name}</h2>
+                <p className=" text-gray-500">{user.email}</p>
+              </div>
+              <h2 className="text-gray-500 text-lg mb-0">@{user.username}</h2>
             </div>
-            <h2 className="text-gray-500 text-lg mb-0">@{user.username}</h2>
+            {!isFriend ? (
+              <PrimaryButton
+                event={addFriend}
+                classes="py-1.5 px-2 flex w-[200px] gap-2"
+              >
+                Add Friend
+                <FiUserPlus />
+              </PrimaryButton>
+            ) : (
+              <div className="text-gray-500 cursor-pointer">Friend.</div>
+            )}
           </div>
           <div className="w-full">
             <Tab.Group>

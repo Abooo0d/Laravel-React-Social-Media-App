@@ -11,6 +11,13 @@ class FriendResource extends JsonResource
 
   protected $targetUserId;
 
+  public static function collectionWithTarget($resourceCollection, $targetUserId)
+  {
+    return $resourceCollection->map(function ($item) use ($targetUserId) {
+      return new self($item, $targetUserId);
+    });
+  }
+
   public function __construct($resource, $targetUserId = null)
   {
     parent::__construct($resource);
@@ -28,6 +35,8 @@ class FriendResource extends JsonResource
       ? $this->friendUser // You sent the request
       : $this->user; // You received the request
     return [
+      'request_id' => $this->id,
+      'friend_id' => $friendUser->id,
       'name' => $friendUser->name,
       'username' => $friendUser->username,
       'email' => $friendUser->email,
