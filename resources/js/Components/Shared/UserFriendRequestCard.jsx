@@ -4,8 +4,6 @@ import { Link, useForm } from "@inertiajs/react";
 import React from "react";
 
 const UserFriendRequestCard = ({ request }) => {
-  console.log(request);
-
   const { setSuccessMessage, setErrors } = useMainContext();
   const { data, post } = useForm({
     request_id: request.request_id,
@@ -17,17 +15,6 @@ const UserFriendRequestCard = ({ request }) => {
       onSuccess: () => {},
       onError: () => {},
     });
-    // axiosClient
-    //   .post(route("user.acceptRequest"), {
-    //     request_id: request.request_id,
-    //     request_owner_id: request.friend_id,
-    //   })
-    //   .then(({ data }) => {
-    //     console.log(data);
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
   };
   return (
     <div className="group relative bg-gray-700/30 backdrop-blur-sm rounded-[8px] border-[1px] border-solid border-gray-500/50  flex flex-col justify-between items-center cursor-pointer duration-200 hover:bg-gray-600/50 hover:border-gray-500 overflow-hidden drop-shadow-2xl">

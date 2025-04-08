@@ -10,9 +10,9 @@
 
 // fix the Notification To Take The Image From The data base And Not To Save The Image In The Notifications Table
 /************** Working On *************/
-// make to inviteUserForm returning The Ordered User as A User Card
 
 /************** Done *************/
+// make to inviteUserForm returning The Ordered User as A User Card
 // MAke The New NotificationsBar And the Group Bar Responsive
 // Make The Followers bar THe Same As THe Groups And Notifications Bars
 // Fix The Design In The COmment Section

@@ -4,6 +4,7 @@ import { FaUserGroup } from "react-icons/fa6";
 import { AiFillLike } from "react-icons/ai";
 import { FaCommentAlt } from "react-icons/fa";
 import { FaRegCommentDots } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 const NotificationCard = ({ notification }) => {
   const Icon = () => {
     if (notification.data?.type?.split("|")[0] == "postReaction") return "like";
@@ -14,11 +15,14 @@ const NotificationCard = ({ notification }) => {
         return "comment";
       case "groupAction":
         return "group";
+      case "userAction":
+        return "user";
     }
   };
   const Message = () => {
     let me = notification.data?.type?.split("|");
     if (me[1] == "groupAction") return "Click Here To Visit The Group.";
+    else if (me[1] == "userAction") return "click Here To Visit.";
     else {
       if (me[0] == "deletePost") return "Click Here To Visit The Group.";
       else return "Click Here To See The Post.";
@@ -47,6 +51,8 @@ const NotificationCard = ({ notification }) => {
             <FaRegCommentDots className="w-full h-full" />
           ) : Icon() == "group" ? (
             <FaUserGroup className="w-full h-full" />
+          ) : Icon() == "user" ? (
+            <FaUser className="w-full h-full" />
           ) : (
             <></>
           )}

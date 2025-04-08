@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Resources\PostAttachmentResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use App\Models\Post;
+use App\Models\PostAttachments;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -31,13 +33,17 @@ class ProfileController extends Controller
         'posts' => PostResource::collection($posts)
       ]);
     }
+    $posts_ids = $user->posts($user->id)->pluck('id')->toArray();
+    $photos = PostAttachments::whereIn('post_id', $posts_ids)->where('mime', 'like', 'image/%')->get();
+    // dd($photos);
     $notifications = Auth::user()->notifications()->paginate(20);
     return Inertia::render('MyProfile/View', props: [
       'user' => new UserResource($user),
       'posts' => PostResource::collection($posts),
       'mustVerifyEmail' => !!!$request->user()->email_verified_at,
       'status' => session('status'),
-      'notifications' => $notifications
+      'notifications' => $notifications,
+      'photos' => PostAttachmentResource::collection($photos)
     ]);
 
   }
@@ -132,7 +138,7 @@ class ProfileController extends Controller
       if ($user->cover_path) {
         Storage::disk('public')->delete($user->cover_path);
       }
-      $coverPath = $cover->store("user-{$user->id}", 'public');
+      $coverPath = $cover->store("users/{$user->id}", 'public');
       $user->update(['cover_path' => $coverPath]);
       $message = 'Cover Image Updated Successfully';
     }
@@ -140,7 +146,7 @@ class ProfileController extends Controller
       if ($user->avatar_path) {
         Storage::disk('public')->delete($user->avatar_path);
       }
-      $avatarPath = $avatar->store("user-{$user->id}", 'public');
+      $avatarPath = $avatar->store("users/{$user->id}", 'public');
       $user->update(['avatar_path' => $avatarPath]);
       $message = 'Avatar Image Updated Successfully';
     }

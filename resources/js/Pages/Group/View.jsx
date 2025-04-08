@@ -38,7 +38,7 @@ const View = ({
   const { setSuccessMessage, setErrors } = useMainContext();
   const { flash, errors } = usePage().props;
   const { setUser } = useUserContext();
-  const { setData, post } = useForm({
+  const { data, setData, post } = useForm({
     coverImage: null,
     avatarImage: null,
     group_id: groupData.id,
@@ -72,7 +72,7 @@ const View = ({
     try {
       const file = e.target.files[0];
       if (file) {
-        setData("avatarImage", e.target.files[0]);
+        setData({ avatarImage: e.target.files[0], group_id: groupData.id });
         setIsTheAvatarChanged(true);
         const reader = new FileReader();
         reader.onload = () => {
@@ -99,7 +99,7 @@ const View = ({
     try {
       const file = e.target.files[0];
       if (file) {
-        setData("coverImage", e.target.files[0]);
+        setData({ coverImage: e.target.files[0], group_id: groupData.id });
         setIsTheCoverChanged(true);
         const reader = new FileReader();
         reader.onload = () => {
@@ -119,6 +119,8 @@ const View = ({
     setIsTheCoverChanged(false);
   };
   const submitCoverImage = () => {
+    // console.log(data);
+
     post(route("group.changeImages"));
     setIsTheCoverChanged(false);
   };
@@ -297,7 +299,7 @@ const View = ({
                           user={auth.user}
                           setPosts={setAllPosts}
                           posts={allPosts}
-                          groupId={group.id}
+                          group_id={group.id}
                           classes="bg-homeFeed px-3 py-3"
                         />
                       )}{" "}

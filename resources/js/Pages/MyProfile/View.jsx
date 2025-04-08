@@ -15,7 +15,6 @@ import UserFriendCard from "@/Components/Shared/UserFriendCard";
 import PrimaryButton from "@/Components/PrimaryButton";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import UserFriendRequestCard from "@/Components/Shared/UserFriendRequestCard";
-
 const View = ({
   auth,
   user,
@@ -24,6 +23,7 @@ const View = ({
   status,
   groups,
   notifications,
+  photos,
 }) => {
   const { flash, errors } = usePage().props;
   const { setErrors, setSuccessMessage } = useMainContext();
@@ -31,6 +31,8 @@ const View = ({
     coverImage: null,
     avatarImage: null,
   });
+  // console.log(photos);
+
   const [allPosts, setAllPosts] = useState(posts);
   const [coverImage, setCoverImage] = useState("");
   const [avatarImage, setAvatarImage] = useState("");
@@ -247,11 +249,17 @@ const View = ({
                   </div>
                 </Tab.Panel>
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
-                  <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
-                    {auth.user.friends?.map((friend, index) => (
-                      <UserFriendCard user={friend} key={index} />
-                    ))}
-                  </div>
+                  {auth.user.friends.length > 0 ? (
+                    <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
+                      {auth.user.friends?.map((friend, index) => (
+                        <UserFriendCard user={friend} key={index} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="w-full text-center text-gray-500 py-8 dark:bg-gray-900 rounded-md">
+                      You Don`t Have Any Friends Yet.
+                    </div>
+                  )}
                 </Tab.Panel>
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
                   {auth.user?.pending_requests.length > 0 ? (

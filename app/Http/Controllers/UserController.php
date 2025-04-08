@@ -74,14 +74,17 @@ class UserController extends Controller
         'request_id' => ['required'],
         'request_owner_id' => ['required']
       ]);
+      $currentUser = Auth::user();
+      $user = User::where('id', $data['request_owner_id'])->first();
       $friendRequest = Friends::where('id', $data['request_id'])
-        ->where('user_id', $data['request_owner_id'])
+        ->where('user_id', $user->id)
         ->where('friend_id', auth()->id())
         ->where('status', FriendsRequestEnum::PENDING->value)
         ->first();
       if ($friendRequest) {
         $friendRequest->status = FriendsRequestEnum::ACCEPTED->value;
         $friendRequest->save();
+        $user->notify(new FriendRequestNotification($currentUser, 'accept'));
         return redirect()->back()->with('success', "Friend Request Is Accepted");
       } else
         return response()->json(['message' => "There Is An Error With The Request"], 400);

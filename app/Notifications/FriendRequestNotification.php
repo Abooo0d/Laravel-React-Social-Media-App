@@ -3,10 +3,7 @@
 namespace App\Notifications;
 
 use App\Http\Enums\NotificationTypeEnum;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
 
@@ -38,29 +35,19 @@ class FriendRequestNotification extends Notification
   public function toDatabase(object $notifiable)
   {
     $type = '';
-    switch ($this->status) {
-      case 'send':
-        $type = NotificationTypeEnum::SENDFRIENDREQUEST->value;
-        break;
-      case 'accept':
-        $type = NotificationTypeEnum::ACCEPTFRIENDREQUEST->value;
-        break;
-      case 'block':
-        $type = NotificationTypeEnum::BLCOKFRIENDREQUEST->value;
-        break;
-    }
+    $type = match ($this->status) {
+      'add' => NotificationTypeEnum::SENDFRIENDREQUEST->value,
+      'accept' => NotificationTypeEnum::ACCEPTFRIENDREQUEST->value,
+      'block' => NotificationTypeEnum::BLCOKFRIENDREQUEST->value,
+      default => throw new \InvalidArgumentException("Invalid status type: {$this->status}"),
+    };
     $message = '';
-    switch ($this->status) {
-      case 'send':
-        $message = "'{$this->user->name}' Send To You Friend Request.";
-        break;
-      case 'accept':
-        $message = "'{$this->user->name}' Accepted You Friend Request.";
-        break;
-      case 'block':
-        $message = "'{$this->user->name}'Block You From His Friends.";
-        break;
-    }
+    $message = match ($this->status) {
+      'add' => "'{$this->user->name}' Send To You Friend Request.",
+      'accept' => "'{$this->user->name}' Accepted You Friend Request.",
+      'block' => "'{$this->user->name}'Block You From His Friends.",
+      default => throw new \InvalidArgumentException("Invalid status type: {$this->status}"),
+    };
     return [
       'type' => $type,
       'message' => $message,

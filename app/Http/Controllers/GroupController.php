@@ -131,7 +131,7 @@ class GroupController extends Controller
         if ($group->cover_path) {
           Storage::disk('public')->delete($group->cover_path);
         }
-        $coverPath = $cover->store("group-{$group->id}", 'public');
+        $coverPath = $cover->store("groups/{$group->id}", 'public');
         $group->update(['cover_path' => $coverPath]);
         $message = 'Cover Image Updated Successfully';
       }
@@ -140,13 +140,12 @@ class GroupController extends Controller
         if ($group->thumbnail_path) {
           Storage::disk('public')->delete($group->thumbnail_path);
         }
-        $thumbnail_path = $thumbnail->store("group-{$group->id}", 'public');
+        $thumbnail_path = $thumbnail->store("groups/{$group->id}", 'public');
         $group->update(['thumbnail_path' => $thumbnail_path]);
         $message = 'Thumbnail Image Updated Successfully';
       }
       $user = User::where('id', AUth::id())->first();
       $admins = $group->adminUsers()->where('user_id', '!=', Auth::id())->get();
-      // $image = !!$cover ? 'cover' : !!$thumbnail ? 'thumbnail' : '';
 
       Notification::send($admins, new GroupUpdateNotification($user, $group, $image));
       return redirect()->back()->with('success', $message);

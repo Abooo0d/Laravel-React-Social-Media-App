@@ -4,7 +4,7 @@ import Dropdown from "@/Components/Dropdown";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link, router } from "@inertiajs/react";
 import NotificationsBar from "@/Components/Containers/NotificationsBar";
-import { IoMenu } from "react-icons/io5";
+import { IoMenu, IoReloadOutline } from "react-icons/io5";
 import { FaUserGroup } from "react-icons/fa6";
 import MenuButton from "@/Components/Shared/MenuButton";
 import { IoMdNotifications } from "react-icons/io";
@@ -81,14 +81,14 @@ export default function Authenticated({
                 >
                   <MdGroups2 className="text-gray-400 text-lg w-[20px] h-[20px]" />
                 </MenuButton>
-                {/* <button
+                <button
                   onClick={() => {
                     router.reload();
                   }}
                   className="text-gray-400"
                 >
                   <IoReloadOutline />
-                </button> */}
+                </button>
               </div>
               <div className="hidden sm:flex sm:items-center">
                 <div className="relative">
