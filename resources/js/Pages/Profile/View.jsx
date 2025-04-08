@@ -9,16 +9,33 @@ import axiosClient from "@/AxiosClient/AxiosClient";
 import { useMainContext } from "@/Contexts/MainContext";
 import { PrimaryButton } from "@/Components/Shared/Buttons";
 import { FiUserPlus } from "react-icons/fi";
+import { useUserContext } from "@/Contexts/UserContext";
+import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
 
-const View = ({ auth, user, posts, groups, notifications, isFriend }) => {
+const View = ({
+  auth,
+  user,
+  posts,
+  groups,
+  notifications,
+  isFriend,
+  photos,
+}) => {
+  const [imageIndex, setImageIndex] = useState(0);
+  const [showImage, setShowImage] = useState(false);
   const { setSuccessMessage, setErrors } = useMainContext();
+  const { setUser } = useUserContext();
   const { flash, errors } = usePage().props;
   const { data, post } = useForm({
     type: "add",
   });
+  console.log(photos);
+
   useEffect(() => {
     if (!auth?.user) {
       window.location.href(route("login"));
+    } else {
+      setUser(auth.user);
     }
   }, [auth]);
   useEffect(() => {
@@ -85,8 +102,8 @@ const View = ({ auth, user, posts, groups, notifications, isFriend }) => {
             <Tab.Group>
               <Tab.List className="md:px-[40px] px-[20px] mb-4 flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
                 <CustomTab text="Posts" />
-                <CustomTab text="Friends" />
                 <CustomTab text="Photos" />
+                <CustomTab text="Friends" />
               </Tab.List>
               <Tab.Panels className=" py-2 rounded-md mt-2">
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
@@ -95,18 +112,39 @@ const View = ({ auth, user, posts, groups, notifications, isFriend }) => {
                   </div>
                 </Tab.Panel>
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
+                  <div className="relative rounded-md mb-2 bg-gray-900 duration-200 flex flex-row gap-4 flex-wrap p-4">
+                    {photos.length > 0 ? (
+                      photos.map((photo, index) => (
+                        <img
+                          src={photo.url}
+                          key={index}
+                          alt=""
+                          className="object-cover flex-1 min-w-[250px] max-h-[150px] rounded-md cursor-pointer border-gray-700/20 border-[1px] border-solid hover:border-gray-700 duration-200"
+                          onClick={() => {
+                            setImageIndex(index);
+                            setShowImage(true);
+                          }}
+                        />
+                      ))
+                    ) : (
+                      <div className="relative rounded-md p-3 bg-gray-900 duration-200 w-full text-center text-gray-400 cursor-default">
+                        There Is No Photos
+                      </div>
+                    )}
+                    <ProfileImageFullView
+                      photos={photos}
+                      setShowImage={setShowImage}
+                      showImage={showImage}
+                      setImageIndex={setImageIndex}
+                      imageIndex={imageIndex}
+                    />
+                  </div>
+                </Tab.Panel>
+                <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
                   <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
                     {user.friends?.map((friend, index) => (
                       <UserFriendCard user={friend} key={index} />
                     ))}
-                  </div>
-                </Tab.Panel>
-
-                <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
-                  <div className="relative rounded-md p-3 mb-2 dark:hover:bg-gray-700 hover:bg-gray-200 dark:bg-gray-800 bg-gray-100 duration-200">
-                    <h3 className="text-sm font-medium leading-5 text-gray-800 dark:text-gray-300">
-                      Photos
-                    </h3>
                   </div>
                 </Tab.Panel>
               </Tab.Panels>

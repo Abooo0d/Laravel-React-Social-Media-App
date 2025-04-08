@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Enums\GroupUserRuleEnum;
 use App\Http\Enums\GroupUserStatusEnum;
 use App\Http\Requests\InviteUserRequest;
+use App\Http\Resources\PostAttachmentResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use App\Models\Group;
@@ -14,6 +15,7 @@ use App\Http\Resources\GroupResource;
 use App\Http\Resources\GroupUserResource;
 use App\Models\GroupUsers;
 use App\Models\Post;
+use App\Models\PostAttachments;
 use App\Models\User;
 use App\Notifications\GroupInvitationNotification;
 use App\Notifications\GroupUpdateNotification;
@@ -26,6 +28,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -47,6 +50,8 @@ class GroupController extends Controller
       ->where('group_id', $group->id)
       ->latest()
       ->paginate(perPage: 15);
+    $posts_ids = Post::where('group_id', $group->id)->pluck('id')->toArray();
+    $photos = PostAttachments::whereIn('post_id', $posts_ids)->where('mime', 'like', 'image/%')->get();
     if ($request->wantsJson()) {
       return response([
         'posts' => PostResource::collection($posts)
@@ -59,7 +64,8 @@ class GroupController extends Controller
       'users' => GroupUserResource::collection($users),
       'isAdmin' => $group->isAdmin(Auth::id()),
       'posts' => PostResource::collection($posts),
-      'notifications' => $notifications
+      'notifications' => $notifications,
+      'photos' => PostAttachmentResource::collection($photos)
     ]);
   }
   public function store(StoreGroupRequest $request)
@@ -102,7 +108,7 @@ class GroupController extends Controller
   {
     //
   }
-  public function changeImages(Request $request, Group $group)
+  public function changeImages(Request $request)
   {
     try {
       $message = '';
@@ -144,9 +150,30 @@ class GroupController extends Controller
         $group->update(['thumbnail_path' => $thumbnail_path]);
         $message = 'Thumbnail Image Updated Successfully';
       }
+      DB::beginTransaction();
+      $files = [];
+      $attachment = $cover ?: $thumbnail;
       $user = User::where('id', AUth::id())->first();
-      $admins = $group->adminUsers()->where('user_id', '!=', Auth::id())->get();
+      $post = Post::create(
+        [
+          'user_id' => $user->id,
+          'attachments' => $cover ?: $thumbnail,
+          'body' => $cover ? "{$user->name} The Group Cover Image" : "{$user->name} Changed The Group Thumbnail Image",
+          'group_id' => $group->id
+        ]
+      );
+      $path = $attachment->store("attachments/{$post->id}", 'public');
+      PostAttachments::create([
+        'post_id' => $post->id,
+        'name' => $attachment->getClientOriginalName(),
+        'path' => $path,
+        'mime' => $attachment->getMimeType(),
+        'size' => $attachment->getSize(),
+        'created_by' => $user->id,
+      ]);
+      DB::commit();
 
+      $admins = $group->adminUsers()->where('user_id', '!=', Auth::id())->get();
       Notification::send($admins, new GroupUpdateNotification($user, $group, $image));
       return redirect()->back()->with('success', $message);
 

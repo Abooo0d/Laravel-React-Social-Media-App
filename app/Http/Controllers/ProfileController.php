@@ -9,6 +9,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Post;
 use App\Models\PostAttachments;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,7 +36,6 @@ class ProfileController extends Controller
     }
     $posts_ids = $user->posts($user->id)->pluck('id')->toArray();
     $photos = PostAttachments::whereIn('post_id', $posts_ids)->where('mime', 'like', 'image/%')->get();
-    // dd($photos);
     $notifications = Auth::user()->notifications()->paginate(20);
     return Inertia::render('MyProfile/View', props: [
       'user' => new UserResource($user),
@@ -57,6 +57,8 @@ class ProfileController extends Controller
       ->where('user_id', $user->id)
       ->latest()
       ->paginate(15);
+    $posts_ids = $user->posts($user->id)->pluck('id')->toArray();
+    $photos = PostAttachments::whereIn('post_id', $posts_ids)->where('mime', 'like', 'image/%')->get();
     if ($user->id === Auth::id())
       return Redirect::route('profile.myProfile', $user->slug);
     if ($request->wantsJson()) {
@@ -70,7 +72,8 @@ class ProfileController extends Controller
       'user' => new UserResource($user),
       'posts' => PostResource::collection($posts),
       'isFriend' => $isFriend,
-      'notifications' => $notifications
+      'notifications' => $notifications,
+      'photos' => PostAttachmentResource::collection($photos)
     ]);
   }
   /**
@@ -150,6 +153,30 @@ class ProfileController extends Controller
       $user->update(['avatar_path' => $avatarPath]);
       $message = 'Avatar Image Updated Successfully';
     }
+
+
+    DB::beginTransaction();
+    $files = [];
+    $attachment = $cover ?: $avatar;
+    $post = Post::create(
+      [
+        'user_id' => $user->id,
+        'attachments' => $cover ?: $avatar,
+        'body' => $cover ? "{$user->name} Changed His Cover Image" : "{$user->name} Changed His Avatar Image"
+      ]
+    );
+    $path = $attachment->store("attachments/{$post->id}", 'public');
+    PostAttachments::create([
+      'post_id' => $post->id,
+      'name' => $attachment->getClientOriginalName(),
+      'path' => $path,
+      'mime' => $attachment->getMimeType(),
+      'size' => $attachment->getSize(),
+      'created_by' => $user->id
+    ]);
+    DB::commit();
+
+
     return redirect()->back()->with('success', $message);
   }
 }

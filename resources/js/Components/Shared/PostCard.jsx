@@ -7,7 +7,6 @@ import PostCardPostBody from "./PostCardPostBody";
 import PostCardPostAttachments from "./PostCardPostAttachments";
 import PostCardPostActions from "./PostCardPostActions";
 import PostCommentSection from "./PostCommentSection";
-import axiosClient from "@/AxiosClient/AxiosClient";
 const PostCard = ({ post, currentUser }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [showPost, setShowPost] = useState(false);

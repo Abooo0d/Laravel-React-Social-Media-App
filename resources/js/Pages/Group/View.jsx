@@ -16,6 +16,7 @@ import GroupAboutForm from "@/Components/Shared/GroupAboutForm";
 import PostContainer from "@/Components/Containers/PostContainer";
 import CreatePost from "@/Components/Shared/CreatePost";
 import { useUserContext } from "@/Contexts/UserContext";
+import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
 const View = ({
   auth,
   group,
@@ -25,6 +26,7 @@ const View = ({
   posts,
   notifications,
   groups,
+  photos,
 }) => {
   const isCurrentUserJoined = !!(group.status == "approved");
   const [groupData, setGroupData] = useState(group);
@@ -35,6 +37,8 @@ const View = ({
   const [showInviteForm, setShowInviteForm] = useState(false);
   const [isTheCoverChanged, setIsTheCoverChanged] = useState(false);
   const [isTheAvatarChanged, setIsTheAvatarChanged] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0);
+  const [showImage, setShowImage] = useState(false);
   const { setSuccessMessage, setErrors } = useMainContext();
   const { flash, errors } = usePage().props;
   const { setUser } = useUserContext();
@@ -43,9 +47,6 @@ const View = ({
     avatarImage: null,
     group_id: groupData.id,
   });
-  useEffect(() => {
-    setUser(auth.user);
-  }, [auth?.user]);
 
   useEffect(() => {
     if (flash.success) setSuccessMessage(flash.success);
@@ -65,6 +66,8 @@ const View = ({
   useEffect(() => {
     if (!auth?.user) {
       window.location.href(route("login"));
+    } else {
+      setUser(auth.user);
     }
   }, [auth]);
 
@@ -89,7 +92,7 @@ const View = ({
     setData({
       avatarImage: null,
     });
-    setIsTheCoverChanged(false);
+    setIsTheAvatarChanged(false);
   };
   const submitAvatarImage = () => {
     post(route("group.changeImages"), {});
@@ -308,10 +311,32 @@ const View = ({
                 </Tab.Panel>
 
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
-                  <div className="relative rounded-md p-3 mb-2 dark:bg-gray-800 bg-gray-100 duration-200">
-                    <h3 className="text-sm font-medium leading-5 text-gray-800 dark:text-gray-300">
-                      Photos
-                    </h3>
+                  <div className="relative rounded-md mb-2 bg-gray-900 duration-200 flex flex-row gap-4 flex-wrap p-4">
+                    {photos.length > 0 ? (
+                      photos.map((photo, index) => (
+                        <img
+                          src={photo.url}
+                          key={index}
+                          alt=""
+                          className="object-cover flex-1 min-w-[250px] max-h-[150px] rounded-md cursor-pointer border-gray-700/20 border-[1px] border-solid hover:border-gray-700 duration-200"
+                          onClick={() => {
+                            setImageIndex(index);
+                            setShowImage(true);
+                          }}
+                        />
+                      ))
+                    ) : (
+                      <div className="relative rounded-md p-3 bg-gray-900 duration-200 w-full text-center text-gray-400 cursor-default">
+                        There Is No Photos
+                      </div>
+                    )}
+                    <ProfileImageFullView
+                      photos={photos}
+                      setShowImage={setShowImage}
+                      showImage={showImage}
+                      setImageIndex={setImageIndex}
+                      imageIndex={imageIndex}
+                    />
                   </div>
                 </Tab.Panel>
                 {isCurrentUserJoined && (

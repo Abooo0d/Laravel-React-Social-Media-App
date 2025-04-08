@@ -1,9 +1,17 @@
 import PostCard from "@/Components/Shared/PostCard";
+import { useUserContext } from "@/Contexts/UserContext";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
-import React from "react";
+import React, { useEffect } from "react";
 
 const View = ({ groups, notifications, auth, post }) => {
+  const { setUser } = useUserContext();
+  useEffect(() => {
+    if (auth?.user) {
+      setUser(auth.user);
+    }
+  }, [auth]);
+
   return (
     <>
       <Head>

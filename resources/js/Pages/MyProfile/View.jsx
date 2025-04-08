@@ -15,6 +15,9 @@ import UserFriendCard from "@/Components/Shared/UserFriendCard";
 import PrimaryButton from "@/Components/PrimaryButton";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import UserFriendRequestCard from "@/Components/Shared/UserFriendRequestCard";
+import ImageFullView from "@/Components/Shared/ImageFullView";
+import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
+import { useUserContext } from "@/Contexts/UserContext";
 const View = ({
   auth,
   user,
@@ -25,19 +28,21 @@ const View = ({
   notifications,
   photos,
 }) => {
+  const { setUser } = useUserContext();
   const { flash, errors } = usePage().props;
   const { setErrors, setSuccessMessage } = useMainContext();
   const { setData, post } = useForm({
     coverImage: null,
     avatarImage: null,
   });
-  // console.log(photos);
 
   const [allPosts, setAllPosts] = useState(posts);
   const [coverImage, setCoverImage] = useState("");
   const [avatarImage, setAvatarImage] = useState("");
   const [isTheCoverChanged, setIsTheCoverChanged] = useState(false);
   const [isTheAvatarChanged, setIsTheAvatarChanged] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0);
+  const [showImage, setShowImage] = useState(false);
   useEffect(() => {
     let messages = [];
     Object.keys(errors).map((key) => messages.push(errors[key]));
@@ -52,6 +57,8 @@ const View = ({
   useEffect(() => {
     if (!auth?.user) {
       window.location.href(route("login"));
+    } else {
+      setUser(auth.user);
     }
   }, [auth]);
   const handelAvatarChange = (e) => {
@@ -72,10 +79,10 @@ const View = ({
   };
   const resetAvatarImage = () => {
     setAvatarImage("");
+    setIsTheAvatarChanged(false);
     setData({
       avatarImage: null,
     });
-    setIsTheCoverChanged(false);
   };
   const submitAvatarImage = () => {
     try {
@@ -230,9 +237,9 @@ const View = ({
             <Tab.Group>
               <Tab.List className="md:px-[40px] px-[20px] mb-4 flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
                 <CustomTab text="Posts" />
+                <CustomTab text="Photos" />
                 <CustomTab text="Friends" />
                 <CustomTab text="requests" />
-                <CustomTab text="Photos" />
                 <CustomTab text="About" />
               </Tab.List>
               <Tab.Panels className="rounded-md">
@@ -246,6 +253,35 @@ const View = ({
                         classes="px-3 py-3 bg-homeFeed "
                       />
                     </PostContainer>
+                  </div>
+                </Tab.Panel>
+                <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
+                  <div className="relative rounded-md mb-2 bg-gray-900 duration-200 flex flex-row gap-4 flex-wrap p-4">
+                    {photos.length > 0 ? (
+                      photos.map((photo, index) => (
+                        <img
+                          src={photo.url}
+                          key={index}
+                          alt=""
+                          className="object-cover flex-1 min-w-[250px] max-h-[150px] rounded-md cursor-pointer border-gray-700/20 border-[1px] border-solid hover:border-gray-700 duration-200"
+                          onClick={() => {
+                            setImageIndex(index);
+                            setShowImage(true);
+                          }}
+                        />
+                      ))
+                    ) : (
+                      <div className="relative rounded-md p-3 bg-gray-900 duration-200 w-full text-center text-gray-400 cursor-default">
+                        There Is No Photos
+                      </div>
+                    )}
+                    <ProfileImageFullView
+                      photos={photos}
+                      setShowImage={setShowImage}
+                      showImage={showImage}
+                      setImageIndex={setImageIndex}
+                      imageIndex={imageIndex}
+                    />
                   </div>
                 </Tab.Panel>
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
@@ -273,13 +309,6 @@ const View = ({
                       There Is No Pending Requests
                     </div>
                   )}
-                </Tab.Panel>
-                <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
-                  <div className="relative rounded-md p-3 mb-2 dark:hover:bg-gray-700 hover:bg-gray-200 dark:bg-gray-900 bg-gray-100 duration-200">
-                    <h3 className="text-sm font-medium leading-5 text-gray-800 dark:text-gray-300">
-                      Photos
-                    </h3>
-                  </div>
                 </Tab.Panel>
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
                   <Edit mustVerifyEmail={mustVerifyEmail} status={status} />
