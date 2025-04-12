@@ -32,7 +32,7 @@ const PostCardPostBody = ({ post }) => {
                       ></div>
                     </Disclosure.Panel>
                   )}
-                  <Disclosure.Button className="text-indigo-600 text-lg w-full flex justify-end mt-2">
+                  <Disclosure.Button className="text-gray-600 text-lg w-full flex justify-end mt-2">
                     {open ? "Read Less" : "Read more"}
                   </Disclosure.Button>
                 </>

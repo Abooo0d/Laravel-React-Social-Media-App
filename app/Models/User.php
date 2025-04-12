@@ -118,4 +118,8 @@ class User extends Authenticatable
   {
     return $this->hasMany(Friends::class, 'user_id')->where('status', FriendsRequestEnum::PENDING->value);
   }
+  public function conversation()
+  {
+    return $this->belongsToMany(Conversation::class)->withTimestamps();
+  }
 }

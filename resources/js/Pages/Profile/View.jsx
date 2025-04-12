@@ -29,7 +29,6 @@ const View = ({
   const { data, post } = useForm({
     type: "add",
   });
-  console.log(photos);
 
   useEffect(() => {
     if (!auth?.user) {

@@ -8,13 +8,16 @@ import ImageFullView from "./ImageFullView";
 import PostPreview from "./PostPreview";
 import CreatePostPostAttachments from "./CreatePostPostAttachments";
 import { SecondaryButton, PrimaryButton } from "./Buttons";
+import { WiStars } from "react-icons/wi";
 import PopupCard from "./PopupCard";
 import "./index.css";
 import { useUserContext } from "@/Contexts/UserContext";
+import axiosClient from "@/AxiosClient/AxiosClient";
 const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState("");
   const [showPost, setShowPost] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [imageIndex, setImageIndex] = useState();
   const [attachmentsErrors, setAttachmentsErrors] = useState([]);
   const { user } = useUserContext();
@@ -166,6 +169,23 @@ const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
       console.log();
     }
   };
+  const aiPost = () => {
+    try {
+      axiosClient
+        .post(route("post.aiPost"), {
+          message: post.body,
+        })
+        .then(({ data }) => {
+          setPost({ ...post, body: data.message });
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div
       className={`relative z-10 focus:outline-none delay-200 ${
@@ -183,33 +203,42 @@ const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
           Create Post
         </div>
         <div className="max-h-[600px] overflow-auto">
-          <CKEditor
-            editor={ClassicEditor}
-            data={post.body}
-            config={{
-              toolbar: [
-                "heading", // Heading dropdown
-                "|", // Separator
-                "bold", // Bold
-                "italic", // Italic
-                "|", // Separator
-                "link", // Link
-                "blockquote", // Block quote
-                "|", // Separator
-                "bulletedList", // Bulleted list
-                "numberedList", // Numbered list
-                "|", // Separator
-                "outdent", // Outdent
-                "indent", // Indent
-                "|", // Separator
-                "undo", // Undo
-                "redo", // Redo
-              ],
-            }}
-            onChange={(event, editor) => {
-              setPost({ ...post, body: editor.getData() });
-            }}
-          />
+          <div className="relative">
+            <PrimaryButton
+              classes="absolute top-[50px] right-[10px] z-[100]"
+              enabled={loading}
+              event={aiPost}
+            >
+              <WiStars className="w-[30px] h-[30px]" />
+            </PrimaryButton>
+            <CKEditor
+              editor={ClassicEditor}
+              data={post.body}
+              config={{
+                toolbar: [
+                  "heading", // Heading dropdown
+                  "|", // Separator
+                  "bold", // Bold
+                  "italic", // Italic
+                  "|", // Separator
+                  "link", // Link
+                  "blockquote", // Block quote
+                  "|", // Separator
+                  "bulletedList", // Bulleted list
+                  "numberedList", // Numbered list
+                  "|", // Separator
+                  "outdent", // Outdent
+                  "indent", // Indent
+                  "|", // Separator
+                  "undo", // Undo
+                  "redo", // Redo
+                ],
+              }}
+              onChange={(event, editor) => {
+                setPost({ ...post, body: editor.getData() });
+              }}
+            />
+          </div>
           <CreatePostPostAttachments
             post={post}
             attachmentsErrors={attachmentsErrors}

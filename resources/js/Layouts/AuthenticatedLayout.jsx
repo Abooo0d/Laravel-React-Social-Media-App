@@ -11,6 +11,7 @@ import { IoMdNotifications } from "react-icons/io";
 import { MdGroups2 } from "react-icons/md";
 import FollowersBar from "@/Components/Containers/FollowersBar";
 import GroupsBar from "@/Components/Containers/GroupsBar";
+import { PiChatsCircle } from "react-icons/pi";
 export default function Authenticated({
   header,
   children,
@@ -42,7 +43,7 @@ export default function Authenticated({
       setShowNotificationsForm(false);
     }
   }, [showGroupContainer]);
-
+  const chat = {};
   return (
     <div className="min-h-screen bg-gray-300/80 dark:bg-homeFeed">
       <nav className="relative bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">
@@ -80,6 +81,14 @@ export default function Authenticated({
                   show={showGroupContainer}
                 >
                   <MdGroups2 className="text-gray-400 text-lg w-[20px] h-[20px]" />
+                </MenuButton>
+                <MenuButton
+                  event={() => {
+                    router.get(route("chats", { chat_id: 1 }));
+                  }}
+                  show={false}
+                >
+                  <PiChatsCircle className="text-gray-400 text-lg w-[20px] h-[20px]" />
                 </MenuButton>
                 <button
                   onClick={() => {

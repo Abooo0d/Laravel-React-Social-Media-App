@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
@@ -22,6 +23,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('Home');
+
 // Profile Group
 Route::middleware('auth')->group(function () {
   Route::get('my-profile', [ProfileController::class, 'myProfile'])->name('profile.myProfile');
@@ -38,6 +40,8 @@ Route::middleware('auth')->group(function () {
   Route::get('/post/download/{attachment}', [PostController::class, 'downloadAttachment'])->name('post.download');
   Route::post('/post/{post}/reaction', [PostController::class, 'postReaction'])->name('post.reaction');
   Route::post('/post/{post}/comment', [PostController::class, 'postCommentCreate'])->name('post.commentCreate');
+  Route::post('/post/aiPost/post', [PostController::class, 'aiPost'])->name('post.aiPost');
+  Route::post('/post/Abood/post', [PostController::class, 'Abood'])->name('Abood');
 });
 Route::get('/public/post/{post:id}', [PostController::class, 'publicView'])->name('post.publicView');
 // Comment Group
@@ -63,5 +67,8 @@ Route::middleware('auth')->group(function () {
   Route::post('/user/search', [UserController::class, 'searchForUser'])->name('user.searchForUser');
   Route::post('/user/invite/{user:id}', [UserController::class, 'addFriend'])->name('user.addFriend');
   Route::post('/user/acceptRequest', [UserController::class, 'acceptRequest'])->name('user.acceptRequest');
+});
+Route::middleware('auth')->group(function () {
+  Route::get('/chats', [ChatsController::class, 'index'])->name('chats');
 });
 require __DIR__ . '/auth.php';

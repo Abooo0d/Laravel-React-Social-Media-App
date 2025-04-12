@@ -24,6 +24,7 @@ use App\Notifications\PostReactionNotification;
 use App\Notifications\UpdateCommentNotification;
 use App\Notifications\UpdatePostInGroupNotification;
 use App\Notifications\CreatePostInGroupNotification;
+use Gemini\Laravel\Facades\Gemini;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +33,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Notification;
+use OpenAI\Laravel\Facades\OpenAI;
 
 class PostController extends Controller
 {
@@ -282,5 +284,26 @@ class PostController extends Controller
   public function publicView(Post $post)
   {
     return Inertia::render('Post/View', ['post' => new PostResource($post)]);
+  }
+  public function aiPost(Request $request)
+  {
+
+    $data = $request->get('message');
+    $message = Gemini::geminiFlash()->generateContent("Generate a creative and engaging social media post based on the following idea: '{$data}'.
+        Make it friendly, relatable, and around 5-10 sentences. If relevant, include a question or call to action at the end to boost engagement.
+        Avoid hashtags and keep the tone casual.");
+
+    // $result = OpenAI::chat()->create([
+    //   'model' => 'gpt-4o-mini',
+    //   'messages' => [
+    //     ['role' => 'user', 'content' => $data],
+    //   ],
+    // ]);
+
+    return response(['message' => $message->candidates[0]->content->parts[0]->text]);
+  }
+  public function Abood(Request $request)
+  {
+    dd('Abood');
   }
 }

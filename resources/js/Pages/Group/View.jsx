@@ -122,8 +122,6 @@ const View = ({
     setIsTheCoverChanged(false);
   };
   const submitCoverImage = () => {
-    // console.log(data);
-
     post(route("group.changeImages"));
     setIsTheCoverChanged(false);
   };

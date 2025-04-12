@@ -30,7 +30,7 @@ const PostContainer = ({ posts, classes, children }) => {
   return (
     <>
       <div
-        className={`flex flex-col gap-3 w-full h-full items-center ${classes}`}
+        className={`flex flex-col gap-3 w-full h-full items-center ${classes} pt-4`}
       >
         {children}
 
