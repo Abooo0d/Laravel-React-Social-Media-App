@@ -42,5 +42,3 @@
 // PostPreview // 600
 
 //Delete Post Must Return THe Group Page Instate Of The PublicPotView
-
-//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
