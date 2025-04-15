@@ -1,6 +1,7 @@
-import ChatContainer from "@/Components/Containers/ChatContainer";
+// import ChatContainer from "@/Components/Containers/MessagesContainer";
 import ChatsBar from "@/Components/Containers/ChatsBar";
 import HomeFeed from "@/Components/Containers/HomeFeed";
+import MessagesContainer from "@/Components/Containers/MessagesContainer";
 import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
@@ -11,16 +12,14 @@ export default function Chats({
   posts,
   groups,
   notifications,
-  chat,
-  data,
+  groupsChat,
+  chat_with_friend,
 }) {
   const { setUser, user } = useUserContext();
   const [friends, setFriends] = useState(auth.user.friends);
-  const [chatData, setChatData] = useState(chat);
   const { setSuccessMessage, setErrors } = useMainContext();
   const { flash, errors } = usePage().props;
-  console.log(chat);
-
+  const [currentChat, setCurrentChat] = useState(chat_with_friend);
   useEffect(() => {
     if (flash?.success) setSuccessMessage(flash.success);
     if (flash?.error) setErrors([flash.error]);
@@ -61,8 +60,12 @@ export default function Chats({
         followers={friends}
       >
         <div className="flex min-h-[calc(100vh-66px)] max-h-[calc(100vh-66px)] overflow-hidden bg-gray-900">
-          <ChatsBar followers={friends} />
-          <ChatContainer chat={chatData} />
+          <ChatsBar
+            chats={auth.user.friends}
+            setChat={setCurrentChat}
+            groupsChat={groupsChat}
+          />
+          <MessagesContainer chat={currentChat} setChat={setCurrentChat} />
         </div>
       </Authenticated>
     </>

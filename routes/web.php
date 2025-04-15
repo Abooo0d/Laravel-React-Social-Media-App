@@ -70,5 +70,7 @@ Route::middleware('auth')->group(function () {
 });
 Route::middleware('auth')->group(function () {
   Route::get('/chats', [ChatsController::class, 'index'])->name('chats');
+  Route::post('/chats', [ChatsController::class, 'getChat'])->name('getChat');
+  Route::post('/chat/new_message/{chat:id}', [chatsController::class, 'newMessage'])->name('newMessage');
 });
 require __DIR__ . '/auth.php';

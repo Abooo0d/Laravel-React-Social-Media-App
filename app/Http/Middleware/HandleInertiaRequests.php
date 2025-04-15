@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Middleware;
+use App\Http\Resources\ChatResource;
 use App\Http\Resources\GroupResource;
 use App\Models\Group;
 use App\Models\User;
@@ -47,6 +48,7 @@ class HandleInertiaRequests extends Middleware
         ->get();
       $groupsData = GroupResource::collection($groups);
       $user = $request->user() !== null ? new UserResource($request->user()) : null;
+      $groupChats = auth()->user()->chats()->where('is_group', true)->with('users', 'messages')->get();
     }
     return [
       ...parent::share($request),
@@ -59,6 +61,7 @@ class HandleInertiaRequests extends Middleware
         'success' => session('success'),
         'error' => session('error'),
       ],
+      'groupChats' => ChatResource::collection($groupChats)
     ];
   }
 }

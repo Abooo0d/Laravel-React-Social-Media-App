@@ -3,34 +3,30 @@ import HomeFeed from "@/Components/Containers/HomeFeed";
 import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import { Head, usePage } from "@inertiajs/react";
-import { useEffect, useState } from "react";
-export default function Home({ auth, posts, groups, notifications }) {
-  const { setUser, user } = useUserContext();
-  const [friends, setFriends] = useState(auth.user.friends);
+import { Head, router, usePage } from "@inertiajs/react";
+import { useEffect } from "react";
+const Home = ({ auth }) => {
+  const { setUser } = useUserContext();
   const { setSuccessMessage, setErrors } = useMainContext();
   const { flash, errors } = usePage().props;
   useEffect(() => {
     if (flash?.success) setSuccessMessage(flash.success);
     if (flash?.error) setErrors([flash.error]);
   }, [flash]);
+
   useEffect(() => {
-    setUser(auth.user);
+    if (!auth?.user) {
+      router.get(route("login"));
+    } else {
+      setUser(auth.user);
+    }
   }, [auth]);
+
   useEffect(() => {
     let messages = [];
     Object.keys(errors).map((key) => messages.push(errors[key]));
     setErrors(messages);
   }, [errors]);
-  useEffect(() => {
-    setFriends(auth.user.friends);
-  }, [groups, posts, auth.user.friends]);
-
-  useEffect(() => {
-    if (!auth?.user) {
-      window.location.href(route("login"));
-    }
-  }, [auth]);
 
   return (
     <>
@@ -43,17 +39,14 @@ export default function Home({ auth, posts, groups, notifications }) {
         />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
-      <Authenticated
-        currentUser={auth?.user}
-        notifications={notifications}
-        groups={groups}
-        followers={friends}
-      >
-        <div className="flex min-h-[calc(100vh-66px)] max-h-[calc(100vh-66px)] overflow-hidden bg-gray-900">
-          <ChatsBar followers={friends} />
-          <HomeFeed posts={posts} />
-        </div>
-      </Authenticated>
+      <div className="flex min-h-[calc(100vh-66px)] max-h-[calc(100vh-66px)] overflow-hidden bg-gray-900">
+        <ChatsBar />
+        <HomeFeed />
+      </div>
     </>
   );
-}
+};
+Home.layout = (page) => {
+  return <Authenticated children={page}></Authenticated>;
+};
+export default Home;

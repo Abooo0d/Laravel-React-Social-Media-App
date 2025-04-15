@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
-import { Link, router } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import NotificationsBar from "@/Components/Containers/NotificationsBar";
 import { IoMenu, IoReloadOutline } from "react-icons/io5";
 import { FaUserGroup } from "react-icons/fa6";
@@ -12,19 +12,15 @@ import { MdGroups2 } from "react-icons/md";
 import FollowersBar from "@/Components/Containers/FollowersBar";
 import GroupsBar from "@/Components/Containers/GroupsBar";
 import { PiChatsCircle } from "react-icons/pi";
-export default function Authenticated({
-  header,
-  children,
-  currentUser,
-  notifications,
-  groups,
-  followers,
-}) {
+export default function Authenticated({ children }) {
+  const { groups, followers, notifications, auth } = usePage().props;
+
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
   const [showFollowerContainer, setShowFollowerContainer] = useState(false);
   const [showNotificationsForm, setShowNotificationsForm] = useState(false);
   const [showGroupContainer, setShowGroupContainer] = useState(false);
+  const [currentUser, setCurrentUser] = useState(auth?.user);
   useEffect(() => {
     if (showFollowerContainer) {
       setShowNotificationsForm(false);
@@ -84,7 +80,10 @@ export default function Authenticated({
                 </MenuButton>
                 <MenuButton
                   event={() => {
-                    router.get(route("chats", { chat_id: 1 }));
+                    router.get(route("chats"), {
+                      chat_id: null,
+                      is_group: null,
+                    });
                   }}
                   show={false}
                 >
@@ -208,13 +207,6 @@ export default function Authenticated({
       )}
       {groups && (
         <GroupsBar groups={groups} showGroupContainer={showGroupContainer} />
-      )}
-      {header && (
-        <header className="bg-white dark:bg-gray-800 shadow">
-          <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            {header}
-          </div>
-        </header>
       )}
       <main>{children}</main>
     </div>

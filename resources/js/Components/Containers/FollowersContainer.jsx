@@ -1,7 +1,7 @@
 import React from "react";
 import FollowerCard from "../Shared/FollowerCard";
 
-const FollowersContainer = ({ followers }) => {
+const FollowersContainer = ({ chats }) => {
   return (
     <div className="py-4 max-h-barContainerHeight flex h-barHeight">
       {false ? (

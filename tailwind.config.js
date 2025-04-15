@@ -12,6 +12,10 @@ export default {
 
   theme: {
     extend: {
+      backgroundImage: {
+        "chat-pattern": "url('/images/ChatsContainer.png')",
+      },
+
       fontFamily: {
         sans: ["Figtree", ...defaultTheme.fontFamily.sans],
       },

@@ -38,7 +38,6 @@ class ProfileController extends Controller
     $photos = PostAttachments::whereIn('post_id', $posts_ids)->where('mime', 'like', 'image/%')->get();
     $notifications = Auth::user()->notifications()->paginate(20);
     return Inertia::render('MyProfile/View', props: [
-      'user' => new UserResource($user),
       'posts' => PostResource::collection($posts),
       'mustVerifyEmail' => !!!$request->user()->email_verified_at,
       'status' => session('status'),

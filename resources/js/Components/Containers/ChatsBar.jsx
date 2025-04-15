@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import FollowersContainer from "./FollowersContainer";
 import TextInput from "../TextInput";
+import ChatsContainer from "./ChatsContainer";
 import { PiChatsCircle } from "react-icons/pi";
-const ChatsBar = ({ followers }) => {
+import { usePage } from "@inertiajs/react";
+const ChatsBar = ({ setChat = () => {} }) => {
+  const { auth, groupChats } = usePage().props;
   const [search, setSearch] = useState("");
   const [showChats, setShowChats] = useState(false);
+  const [chatsData, setChatData] = useState(auth.user.friends);
+
   return (
     <div className="relative">
       <div className="lg:block hidden shadow-lg rounded-xl m-0 lg:rounded-none order-first max-w-full min-w-full lg:py-4 px-4 py-2 bg-gray-200 dark:bg-gray-900 max-h-barHeight min-h-barHeight h-full overflow-hidden border-r-2 dark:border-gray-800 border-gray-300 border-solid">
@@ -17,7 +21,11 @@ const ChatsBar = ({ followers }) => {
           value={search}
           setValue={setSearch}
         />
-        <FollowersContainer followers={followers} />
+        <ChatsContainer
+          chats={chatsData}
+          groupChats={groupChats}
+          setChat={setChat}
+        />
       </div>
       <div className="block lg:hidden">
         <button
@@ -42,7 +50,11 @@ const ChatsBar = ({ followers }) => {
             value={search}
             setValue={setSearch}
           />
-          <FollowersContainer followers={followers} />
+          <ChatsContainer
+            chats={chatsData}
+            setChat={setChat}
+            groupChats={groupChats}
+          />
         </div>
       </div>
     </div>

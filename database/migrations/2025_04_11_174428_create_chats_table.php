@@ -10,10 +10,11 @@ return new class extends Migration {
    */
   public function up(): void
   {
-    Schema::create('conversations', function (Blueprint $table) {
+    Schema::create('chats', function (Blueprint $table) {
       $table->id();
       $table->string('name')->nullable();
       $table->boolean('is_group')->default(false);
+      $table->string('avatar_path', 1024)->nullable();
       $table->timestamps();
     });
   }
@@ -23,6 +24,6 @@ return new class extends Migration {
    */
   public function down(): void
   {
-    Schema::dropIfExists('conversations');
+    Schema::dropIfExists('chats');
   }
 };

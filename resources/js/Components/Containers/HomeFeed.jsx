@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import CreatePost from "../Shared/CreatePost";
 import PostContainer from "./PostContainer";
 import { useUserContext } from "@/Contexts/UserContext";
+import { usePage } from "@inertiajs/react";
 
-const HomeFeed = ({ posts }) => {
+const HomeFeed = () => {
+  const { posts } = usePage().props;
   const [allPosts, setAllPosts] = useState(posts);
   useEffect(() => {
     setAllPosts(posts);
