@@ -4,6 +4,8 @@ import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head, router, usePage } from "@inertiajs/react";
+import Echo from "laravel-echo";
+// import Echo from "laravel-echo";
 import { useEffect } from "react";
 const Home = ({ auth }) => {
   const { setUser } = useUserContext();
@@ -21,12 +23,25 @@ const Home = ({ auth }) => {
       setUser(auth.user);
     }
   }, [auth]);
-
   useEffect(() => {
     let messages = [];
     Object.keys(errors).map((key) => messages.push(errors[key]));
     setErrors(messages);
   }, [errors]);
+
+  useEffect(() => {
+    window.Echo.join("chat")
+      .here((users) => {
+        console.log("Online users:", users);
+      })
+      .joining((user) => {
+        console.log(`${user.name} joined`);
+      })
+      .leaving((user) => {
+        console.log(`${user.name} left`);
+      });
+    console.log("ABood");
+  }, []);
 
   return (
     <>

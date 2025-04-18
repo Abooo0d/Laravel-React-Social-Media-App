@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ChatCard from "../Shared/ChatCard";
 
 const ChatsContainer = ({ chats, setChat, groupChats }) => {

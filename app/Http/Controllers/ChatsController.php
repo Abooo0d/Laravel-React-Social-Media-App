@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewMessageSent;
 use App\Http\Requests\NewMessageRequest;
 use App\Http\Resources\ChatResource;
 use App\Http\Resources\MessageResource;
@@ -61,8 +62,8 @@ class ChatsController extends Controller
     $chat_id = $data['chat_id'] ?? null;
     $is_group = $data['is_group'];
     $chat = null;
-    if (!!$is_group) {
-      $chats = Chat::where('id', $chat_id)->first();
+    if ((bool) $is_group) {
+      $chat = Chat::where('id', $chat_id)->first();
     } else {
       if ($chat_id) {
         $chat = Chat::whereHas('users', function ($q) {
@@ -99,10 +100,12 @@ class ChatsController extends Controller
       'body' => $data['body'] ?? null,
       'attachment_path' => $data['attachment_path'] ?? null,
     ]);
-    $messageStatus = MessageStatus::create([
+    MessageStatus::create([
       'message_id' => $message->id,
       'user_id' => auth()->id()
     ]);
+    // broadcast(new NewMessageSent($message));
+    broadcast(new NewMessageSent($message));
     return response(['message' => new MessageResource($message)], 200);
   }
 }

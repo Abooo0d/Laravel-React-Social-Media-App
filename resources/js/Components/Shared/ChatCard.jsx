@@ -12,6 +12,8 @@ const ChatCard = ({ chat, setChat, isGroup = false }) => {
       axiosClient
         .post(route("getChat"), props)
         .then(({ data }) => {
+          console.log(data, "ABood");
+
           setChat(data.chat_with_friend);
         })
         .catch((err) => {

@@ -16,7 +16,7 @@ class ChatResource extends JsonResource
   public function toArray(Request $request): array
   {
     $image = '';
-    if (!!$this->is_group) {
+    if ((bool) $this->is_group) {
       $image = $this->avatar_path
         ? Storage::url($this->avatar_path)
         : asset('images/default_avatar_image.png');
@@ -26,7 +26,7 @@ class ChatResource extends JsonResource
         : asset('images/default_avatar_image.png');
     return [
       'id' => $this->id,
-      'name' => !!$this->is_group
+      'name' => (bool) $this->is_group
         ? $this->name
         : $this->users->firstWhere('id', '!=', auth()->id())?->name,
       'users' => $this->users->map(

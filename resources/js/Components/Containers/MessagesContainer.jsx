@@ -6,13 +6,25 @@ import MessageCard from "../Shared/MessageCard";
 
 const MessagesContainer = ({ chat }) => {
   const [chatData, setChatData] = useState(chat);
+  const { user } = useUserContext();
   useEffect(() => {
     setChatData(chat);
   }, [chat]);
   const containerRef = useRef();
+  useEffect(() => {
+    window.Echo.channel("chat").listen("NewMessageSent", (e) => {
+      if (e.message.user_id == user.id) {
+      } else {
+        setChatData((prev) => ({
+          ...prev,
+          messages: [...prev.messages, e.message],
+        }));
+      }
+    });
+  }, []);
 
   return (
-    <div className="order-2 relative bg-gray-300 dark:bg-homeFeed bg-chat-pattern lg:min-h-full min-h-[500px] max-h-barHeight flex-1 overflow-scroll flex flex-col justify-end items-center gap-2">
+    <div className="order-2 relative bg-gray-300 dark:bg-homeFeed bg-chat-pattern min-h-full max-h-barHeight flex-1 overflow-scroll flex flex-col justify-end items-center gap-2">
       <div className="absolute inset-0 w-full h-full bg-[rgba(17,24,39,58%)]" />
       {!!chatData && <ChatInfo chat={chat} />}
       {!!chatData && (

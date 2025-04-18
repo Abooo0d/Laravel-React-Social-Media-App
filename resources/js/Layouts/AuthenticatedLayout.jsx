@@ -13,14 +13,14 @@ import FollowersBar from "@/Components/Containers/FollowersBar";
 import GroupsBar from "@/Components/Containers/GroupsBar";
 import { PiChatsCircle } from "react-icons/pi";
 export default function Authenticated({ children }) {
-  const { groups, followers, notifications, auth } = usePage().props;
-
+  const { groups, notifications, auth } = usePage().props;
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
   const [showFollowerContainer, setShowFollowerContainer] = useState(false);
   const [showNotificationsForm, setShowNotificationsForm] = useState(false);
   const [showGroupContainer, setShowGroupContainer] = useState(false);
   const [currentUser, setCurrentUser] = useState(auth?.user);
+  const [followers] = useState(auth?.user.friends);
   useEffect(() => {
     if (showFollowerContainer) {
       setShowNotificationsForm(false);
@@ -39,7 +39,7 @@ export default function Authenticated({ children }) {
       setShowNotificationsForm(false);
     }
   }, [showGroupContainer]);
-  const chat = {};
+
   return (
     <div className="min-h-screen bg-gray-300/80 dark:bg-homeFeed">
       <nav className="relative bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">

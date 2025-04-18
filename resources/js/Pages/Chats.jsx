@@ -59,7 +59,7 @@ export default function Chats({
         groups={groups}
         followers={friends}
       >
-        <div className="flex min-h-[calc(100vh-66px)] max-h-[calc(100vh-66px)] overflow-hidden bg-gray-900">
+        <div className="flex min-h-barHeight overflow-scroll bg-gray-900">
           <ChatsBar
             chats={auth.user.friends}
             setChat={setCurrentChat}
