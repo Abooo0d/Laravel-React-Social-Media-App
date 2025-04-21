@@ -12,15 +12,17 @@ import { MdGroups2 } from "react-icons/md";
 import FollowersBar from "@/Components/Containers/FollowersBar";
 import GroupsBar from "@/Components/Containers/GroupsBar";
 import { PiChatsCircle } from "react-icons/pi";
+import { useMainContext } from "@/Contexts/MainContext";
 export default function Authenticated({ children }) {
   const { groups, notifications, auth } = usePage().props;
+  const { onlineUsers, setOnlineUsers } = useMainContext();
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
   const [showFollowerContainer, setShowFollowerContainer] = useState(false);
   const [showNotificationsForm, setShowNotificationsForm] = useState(false);
   const [showGroupContainer, setShowGroupContainer] = useState(false);
   const [currentUser, setCurrentUser] = useState(auth?.user);
-  const [followers] = useState(auth?.user.friends);
+  const [followers, setFollowers] = useState(auth?.user.friends);
   useEffect(() => {
     if (showFollowerContainer) {
       setShowNotificationsForm(false);
@@ -39,7 +41,22 @@ export default function Authenticated({ children }) {
       setShowNotificationsForm(false);
     }
   }, [showGroupContainer]);
-
+  useEffect(() => {
+    window.Echo.join("online")
+      .here((users) => {
+        setOnlineUsers(users);
+      })
+      .joining((user) => {
+        setOnlineUsers((prevUsers) => [...prevUsers, user]);
+      })
+      .leaving((user) => {
+        setOnlineUsers((prevUsers) =>
+          prevUsers.filter((u) => {
+            return u.id != user.id;
+          })
+        );
+      });
+  }, []);
   return (
     <div className="min-h-screen bg-gray-300/80 dark:bg-homeFeed">
       <nav className="relative bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">
@@ -80,10 +97,7 @@ export default function Authenticated({ children }) {
                 </MenuButton>
                 <MenuButton
                   event={() => {
-                    router.get(route("chats"), {
-                      chat_id: null,
-                      is_group: null,
-                    });
+                    router.get(route("chats"));
                   }}
                   show={false}
                 >

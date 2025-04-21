@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Chat extends Model
 {
+  protected $fillable = ['last_message_id', 'last_message'];
+
   use HasFactory;
   public function users()
   {
@@ -14,6 +16,6 @@ class Chat extends Model
   }
   public function messages()
   {
-    return $this->hasMany(Message::class);
+    return $this->hasMany(Message::class)->orderBy('created_at', 'desc');
   }
 }

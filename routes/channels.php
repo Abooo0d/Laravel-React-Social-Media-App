@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -19,5 +20,9 @@ Broadcast::channel('chat', function ($user) {
 
 
 Broadcast::channel('online', function ($user) {
-  return (string) $user->name;
+  $authUser = Auth::user();
+  if ($authUser && $authUser->isFriend($user->id)) {
+    return new UserResource($user);
+  }
+  return $authUser;
 });

@@ -18,7 +18,7 @@ const ChatForm = ({ chat, chatData, setChatData }) => {
         .then(({ data }) => {
           setChatData((prev) => ({
             ...prev,
-            messages: [...prev.messages, data.message],
+            messages: [data.message, ...prev.messages],
           }));
           setMessage("");
         })

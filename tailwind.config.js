@@ -1,5 +1,6 @@
 import defaultTheme from "tailwindcss/defaultTheme";
 import forms from "@tailwindcss/forms";
+import daisyui from "daisyui";
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -36,7 +37,7 @@ export default {
       },
       minHeight: {
         100: "100vh",
-        barHeight: "calc(100vh - 66px)",
+        barHeight: "calc(100dvh - 66px)",
       },
       animation: {
         scaleUp: "scale-up-hor-center 0.4s ease-in-out both",

@@ -1,3 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+::-webkit-scrollbar {
+  background-color: #111827;
+  width: 0px !important;
+  display: none !important;
+  visibility: hidden !important;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #262272;
+}
 :root {
   /* Base colors */
   --ck-custom-background: hwb(221 9% 8%); /* Dark background */

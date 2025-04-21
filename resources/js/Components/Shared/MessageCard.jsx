@@ -3,19 +3,76 @@ import React from "react";
 
 const MessageCard = ({ message }) => {
   const { user } = useUserContext();
+
   return (
     <div
       className={`w-full flex gap-1 flex-col items-start justify-center ${
-        message.user_id != user.id ? "items-start" : " items-end"
+        message.user.id != user.id ? "items-start" : " items-end"
       }`}
     >
+      <span className="text-gray-400 text-[11px]">{message.created_at}</span>
       <div
-        className={`bg-gray-600/50 backdrop-blur-sm w-fit px-4 py-2 rounded-md text-gray-400 cursor-default max-w-[60%] `}
+        className={`flex items-center justify-end gap-4
+        ${
+          message.user.id != user.id
+            ? "justify-start flex-row-reverse"
+            : " justify-end flex-row"
+        }`}
       >
-        {message.body}
+        <div
+          className={`backdrop-blur-sm w-fit px-4 py-2 rounded-md text-gray-400 cursor-default max-w-[60%] flex justify-center items-center ${
+            message.user.id != user.id
+              ? "bg-[rgba(46,59,78,100%)]"
+              : "bg-[rgba(9,73,112,100%)]"
+          }`}
+        >
+          {message.body}
+          <div
+            className={`absolute bottom-0 ${
+              message.user.id != user.id
+                ? "left-[-10px] w-[20px] h-[20px] border-[10px] border-solid border-transparent border-b-[rgba(46,59,78,100%)] z-10"
+                : "right-[-10px] w-[20px] h-[20px] border-[10px] border-solid border-transparent border-b-[rgba(9,73,112,100%)] z-10"
+            }`}
+          />
+        </div>
+        <img
+          src={message.user.avatar_url}
+          className="w-[30px] h-[30px] rounded-full"
+        />
       </div>
-      <span className="text-xs text-gray-500">{message.updated_at}</span>
+      <span className="text-xs text-gray-500 opacity-50">Delivered</span>
     </div>
+
+    // <>
+    //   <div
+    //     className={`chat ${
+    //       message.user_id != user.id ? " chat-start" : " chat-end"
+    //     }`}
+    //   >
+    //     <div className="chat-image avatar">
+    //       <div className="w-10 rounded-full">
+    //         <img
+    //           alt="Tailwind CSS chat bubble component"
+    //           src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+    //         />
+    //       </div>
+    //     </div>
+    //     <div className="chat-header">
+    //       Obi-Wan Kenobi
+    //       <time className="text-xs opacity-50">12:45</time>
+    //     </div>
+    //     <div
+    //       className={`chat-bubble ${
+    //         message.user_id != user.id
+    //           ? " bg-[rgba(46,59,78,100%)]"
+    //           : " bg-[rgb(3,105,161,60%)] "
+    //       }`}
+    //     >
+    //       {message.body}
+    //     </div>
+    //     <div className="chat-footer opacity-50">Delivered</div>
+    //   </div>
+    // </>
   );
 };
 

@@ -13,11 +13,14 @@ const MessagesContainer = ({ chat }) => {
   const containerRef = useRef();
   useEffect(() => {
     window.Echo.channel("chat").listen("NewMessageSent", (e) => {
+      console.log("Abood From The Function");
       if (e.message.user_id == user.id) {
+        console.log("Abood From The If");
       } else {
+        console.log("Abood From The else");
         setChatData((prev) => ({
           ...prev,
-          messages: [...prev.messages, e.message],
+          messages: [e.message, ...prev.messages],
         }));
       }
     });
@@ -29,7 +32,7 @@ const MessagesContainer = ({ chat }) => {
       {!!chatData && <ChatInfo chat={chat} />}
       {!!chatData && (
         <div
-          className="w-full h-full relative z-[50] p-4 overflow-auto flex flex-col "
+          className="w-full max-h-[calc(100dvh-225px)] relative z-[50] p-4 overflow-auto flex flex-col-reverse flex-1 "
           ref={containerRef}
         >
           {chatData?.messages?.map((message, index) => (
@@ -37,6 +40,7 @@ const MessagesContainer = ({ chat }) => {
           ))}
         </div>
       )}
+
       {!!chatData && (
         <ChatForm
           chat={chatData}

@@ -3,11 +3,10 @@ import TextInput from "../TextInput";
 import ChatsContainer from "./ChatsContainer";
 import { PiChatsCircle } from "react-icons/pi";
 import { usePage } from "@inertiajs/react";
-const ChatsBar = ({ setChat = () => {} }) => {
+const ChatsBar = ({ setChat = () => {}, chats }) => {
   const { auth, groupChats } = usePage().props;
   const [search, setSearch] = useState("");
   const [showChats, setShowChats] = useState(false);
-  const [chatsData, setChatData] = useState(auth.user.friends);
 
   return (
     <div className="relative">
@@ -22,7 +21,7 @@ const ChatsBar = ({ setChat = () => {} }) => {
           setValue={setSearch}
         />
         <ChatsContainer
-          chats={chatsData}
+          chats={chats}
           groupChats={groupChats}
           setChat={setChat}
         />
@@ -51,7 +50,7 @@ const ChatsBar = ({ setChat = () => {} }) => {
             setValue={setSearch}
           />
           <ChatsContainer
-            chats={chatsData}
+            chats={chats}
             setChat={setChat}
             groupChats={groupChats}
           />

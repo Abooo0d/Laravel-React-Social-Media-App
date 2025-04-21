@@ -36,11 +36,16 @@ class ChatResource extends JsonResource
           'avatar' => $user->avatar_path ? Storage::url($user->avatar_path) : asset('images/default_avatar_image.png'),
         ]
       ),
+      'user_id' => !(bool) $this->is_group ? $this->users()->where(function ($q) {
+        $q->where('user_id', '!=', auth()->id());
+      })->first()->id : null,
       'avatar_url' => $image,
       'is_group' => !!$this->is_group,
       'messages' => MessageResource::collection($this->messages),
       'created_at' => $this->created_at,
-      'updated_at' => $this->updated_at
+      'updated_at' => $this->updated_at,
+      'last_message' => $this->last_message,
+      'last_message_id' => $this->last_message_id,
     ];
   }
 }
