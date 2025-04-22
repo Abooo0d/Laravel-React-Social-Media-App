@@ -15,6 +15,12 @@ class ChatResource extends JsonResource
    */
   public function toArray(Request $request): array
   {
+    // $user_id = !(bool) $this->is_group ? $this->users()->where(function ($q) {
+    //   $q->where('user_id', '!=', auth()->id());
+    // })->first()->id : null;
+    $user_id = !(bool) $this->is_group ? $this->users()->where(function ($q) {
+      $q->where('user_id', '!=', auth()->id());
+    })->first()->id : null;
     $image = '';
     if ((bool) $this->is_group) {
       $image = $this->avatar_path
@@ -36,12 +42,10 @@ class ChatResource extends JsonResource
           'avatar' => $user->avatar_path ? Storage::url($user->avatar_path) : asset('images/default_avatar_image.png'),
         ]
       ),
-      'user_id' => !(bool) $this->is_group ? $this->users()->where(function ($q) {
-        $q->where('user_id', '!=', auth()->id());
-      })->first()->id : null,
+      'user_id' => !$user_id,
       'avatar_url' => $image,
       'is_group' => !!$this->is_group,
-      'messages' => MessageResource::collection($this->messages),
+      'messages' => MessageResource::collectionWithTarget($this->messages, $user_id),
       'created_at' => $this->created_at,
       'updated_at' => $this->updated_at,
       'last_message' => $this->last_message,

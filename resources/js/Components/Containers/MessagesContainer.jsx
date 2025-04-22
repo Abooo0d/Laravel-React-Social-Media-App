@@ -27,7 +27,7 @@ const MessagesContainer = ({ chat }) => {
   }, []);
 
   return (
-    <div className="order-2 relative bg-gray-300 dark:bg-homeFeed bg-chat-pattern min-h-full max-h-barHeight flex-1 overflow-scroll flex flex-col justify-end items-center gap-2">
+    <div className="order-2 relative bg-gray-300 dark:bg-homeFeed bg-chat-pattern bg-cover min-h-full max-h-barHeight flex-1 overflow-scroll flex flex-col justify-end items-center gap-2">
       <div className="absolute inset-0 w-full h-full bg-[rgba(17,24,39,58%)]" />
       {!!chatData && <ChatInfo chat={chat} />}
       {!!chatData && (

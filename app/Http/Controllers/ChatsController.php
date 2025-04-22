@@ -9,7 +9,6 @@ use App\Http\Resources\MessageResource;
 use App\Models\Chat;
 use App\Models\Message;
 use App\Models\MessageStatus;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -17,13 +16,24 @@ class ChatsController extends Controller
 {
   public function index(Request $request)
   {
-    $chats = auth()->user()->chats()->where('is_group', true)->with('users', 'messages')->get();
-    $allChats = auth()->user()->chats()->where('is_group', false)->get();
+    // $chats = auth()
+    //   ->user()
+    //   ->chats()
+    //   ->where('is_group', true)
+    //   ->with('users', 'messages')
+    //   ->orderBy('last_message_id', "desc")
+    //   ->get();
+    $allChats = auth()
+      ->user()
+      ->chats()
+      ->where('is_group', false)
+      ->orderBy('last_message_id', "desc")
+      ->get();
     return Inertia::render(
       'Chats',
       [
         'chat_with_friend' => null,
-        'groupsChat' => $chats ? ChatResource::collection($chats) : [],
+        // 'groupsChat' => $chats ? ChatResource::collection($chats) : [],
         "allChats" => ChatResource::collection($allChats)
       ]
     );
@@ -37,7 +47,6 @@ class ChatsController extends Controller
     $chat_id = $data['chat_id'] ?? null;
     $is_group = $data['is_group'];
     $chat = Chat::where('id', $chat_id)->first();
-    // dd($chat);
     // if ((bool) $is_group) {
     //   $chat = Chat::where('id', $chat_id)->first();
     // } else {
@@ -76,10 +85,10 @@ class ChatsController extends Controller
       'body' => $data['body'] ?? null,
       'attachment_path' => $data['attachment_path'] ?? null,
     ]);
-    MessageStatus::create([
-      'message_id' => $message->id,
-      'user_id' => auth()->id()
-    ]);
+    // MessageStatus::create([
+    //   'message_id' => $message->id,
+    //   'user_id' => auth()->id()
+    // ]);
     $chat->last_message_id = $message->id;
     $chat->last_message = $message->body;
     $chat->update([

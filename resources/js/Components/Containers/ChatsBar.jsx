@@ -10,7 +10,7 @@ const ChatsBar = ({ setChat = () => {}, chats }) => {
 
   return (
     <div className="relative">
-      <div className="lg:block hidden shadow-lg rounded-xl m-0 lg:rounded-none order-first max-w-full min-w-full lg:py-4 px-4 py-2 bg-gray-200 dark:bg-gray-900 max-h-barHeight min-h-barHeight h-full overflow-hidden border-r-2 dark:border-gray-800 border-gray-300 border-solid">
+      <div className="lg:block hidden shadow-lg rounded-xl m-0 lg:rounded-none order-first max-w-full min-w-full py-2 bg-gray-200 dark:bg-gray-900 max-h-barHeight min-h-barHeight h-full overflow-hidden border-r-2 dark:border-gray-800 border-gray-300 border-solid">
         <h2 className="block max-lg-hidden text-xl font-bold dark:text-gray-100 ">
           My Chats:
         </h2>
@@ -37,7 +37,7 @@ const ChatsBar = ({ setChat = () => {}, chats }) => {
           <PiChatsCircle className="w-[20px] h-[20px]" />
         </button>
         <div
-          className={`absolute top-0 py-2 px-4 z-[100] left-0 h-full min-w-[250px] duration-200 bg-gray-900/80 backdrop-blur-lg border-r-[1px] border-solid border-gray-600/70
+          className={`flex flex-col absolute top-0 py-2 z-[100] left-0 h-full min-w-[250px] duration-200 bg-gray-900/80 backdrop-blur-lg border-r-[1px] border-solid border-gray-600/70
           ${showChats ? "left-0 " : "left-[-250px]"}`}
         >
           <h2 className="block max-lg:hidden text-xl font-bold dark:text-gray-100 ">
@@ -45,7 +45,7 @@ const ChatsBar = ({ setChat = () => {}, chats }) => {
           </h2>
           <TextInput
             placeholder="Type To Search"
-            classes="w-full mt-4 font-lg"
+            classes=" mt-3 font-lg flex-1 mx-2 max-h-[50px]"
             value={search}
             setValue={setSearch}
           />

@@ -3,16 +3,17 @@ import React from "react";
 
 const MessageCard = ({ message }) => {
   const { user } = useUserContext();
+  console.log(message);
 
   return (
     <div
-      className={`w-full flex gap-1 flex-col items-start justify-center ${
+      className={`w-full flex gap-1 flex-col   justify-end ${
         message.user.id != user.id ? "items-start" : " items-end"
       }`}
     >
       <span className="text-gray-400 text-[11px]">{message.created_at}</span>
       <div
-        className={`flex items-center justify-end gap-4
+        className={`flex items-center justify-end gap-4 w-full
         ${
           message.user.id != user.id
             ? "justify-start flex-row-reverse"
@@ -37,42 +38,11 @@ const MessageCard = ({ message }) => {
         </div>
         <img
           src={message.user.avatar_url}
-          className="w-[30px] h-[30px] rounded-full"
+          className="w-[30px] h-[30px] rounded-full mt-auto"
         />
       </div>
       <span className="text-xs text-gray-500 opacity-50">Delivered</span>
     </div>
-
-    // <>
-    //   <div
-    //     className={`chat ${
-    //       message.user_id != user.id ? " chat-start" : " chat-end"
-    //     }`}
-    //   >
-    //     <div className="chat-image avatar">
-    //       <div className="w-10 rounded-full">
-    //         <img
-    //           alt="Tailwind CSS chat bubble component"
-    //           src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-    //         />
-    //       </div>
-    //     </div>
-    //     <div className="chat-header">
-    //       Obi-Wan Kenobi
-    //       <time className="text-xs opacity-50">12:45</time>
-    //     </div>
-    //     <div
-    //       className={`chat-bubble ${
-    //         message.user_id != user.id
-    //           ? " bg-[rgba(46,59,78,100%)]"
-    //           : " bg-[rgb(3,105,161,60%)] "
-    //       }`}
-    //     >
-    //       {message.body}
-    //     </div>
-    //     <div className="chat-footer opacity-50">Delivered</div>
-    //   </div>
-    // </>
   );
 };
 

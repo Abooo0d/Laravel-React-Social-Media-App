@@ -302,8 +302,5 @@ class PostController extends Controller
 
     return response(['message' => $message->candidates[0]->content->parts[0]->text]);
   }
-  public function Abood(Request $request)
-  {
-    dd('Abood');
-  }
+
 }

@@ -9,9 +9,11 @@ class Message extends Model
 {
   use HasFactory;
   protected $fillable = ['body', 'chat_id', 'user_id'];
-  public function status()
+  public function status($user_id)
   {
-    return $this->hasOne(MessageStatus::class)->first;
+    return $this->hasOne(MessageStatus::class)
+      ->where('message_id', $this->id)
+      ->where('user_id', $user_id);
   }
   public function user()
   {
