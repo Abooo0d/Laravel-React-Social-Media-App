@@ -4,14 +4,18 @@ import { useMainContext } from "@/Contexts/MainContext";
 import { MdGroups2 } from "react-icons/md";
 import { useChatsContext } from "@/Contexts/ChatsContext";
 
-const ChatCard = ({ chat, isGroup = false }) => {
+const ChatCard = ({ chat }) => {
   const { setCurrentChat } = useChatsContext();
   const { onlineUsersIds } = useChatsContext();
-  const [online, setOnline] = useState(onlineUsersIds.includes(chat.user_id));
+  const [chatData, setChatData] = useState(chat);
+  const [online, setOnline] = useState(
+    onlineUsersIds.includes(chatData.user_id)
+  );
+  const [isGroup, setIsGroup] = useState(chatData.is_group);
   const getChat = () => {
     let props = !!isGroup
-      ? { is_group: !!isGroup, chat_id: chat.id }
-      : { is_group: !!isGroup, chat_id: chat.id };
+      ? { is_group: !!isGroup, chat_id: chatData.id }
+      : { is_group: !!isGroup, chat_id: chatData.id };
     if (window.location.pathname == "/chats") {
       axiosClient
         .post(route("getChat"), props)
@@ -24,8 +28,12 @@ const ChatCard = ({ chat, isGroup = false }) => {
     }
   };
   useEffect(() => {
-    setOnline(onlineUsersIds.includes(chat.user_id));
+    setOnline(onlineUsersIds.includes(chatData.user_id));
   }, [onlineUsersIds]);
+
+  useEffect(() => {
+    setChatData(chat);
+  }, [chat]);
 
   return (
     <div
@@ -36,7 +44,7 @@ const ChatCard = ({ chat, isGroup = false }) => {
     >
       <div className="relative">
         <img
-          src={chat.avatar_url}
+          src={chatData.avatar_url}
           alt="user"
           className="w-[40px] h-[40px] rounded-full"
         />
@@ -51,13 +59,15 @@ const ChatCard = ({ chat, isGroup = false }) => {
       </div>
       <div className="flex flex-col ">
         <h3 className="text-[16px] w-full text-nowrap overflow-hidden">
-          {chat.name.length > 20 ? chat.name.substr(0, 20) + "..." : chat.name}
+          {chatData.name.length > 20
+            ? chatData.name.substr(0, 20) + "..."
+            : chatData.name}
         </h3>
         <p className="text-gray-600 text-sm">
-          {chat?.last_message
-            ? chat.last_message.length > 25
-              ? chat.last_message.substr(0, 25) + "..."
-              : chat.last_message
+          {chatData?.last_message
+            ? chatData.last_message.length > 25
+              ? chatData.last_message.substr(0, 25) + "..."
+              : chatData.last_message
             : "New Chat"}
         </p>
       </div>

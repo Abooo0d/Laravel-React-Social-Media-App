@@ -11,6 +11,8 @@ const INITIAL_DATA = {
   setAllChats: () => {},
   groupChats: [],
   setGroupChats: () => {},
+  combinedChats: [],
+  setCombinedChats: () => {},
 };
 const Context = createContext(INITIAL_DATA);
 export const ChatsContext = ({ children }) => {
@@ -19,10 +21,32 @@ export const ChatsContext = ({ children }) => {
   const [currentChat, setCurrentChat] = useState({});
   const [allChats, setAllChats] = useState([]);
   const [groupChats, setGroupChats] = useState([]);
+  const [combinedChats, setCombinedChats] = useState();
   useEffect(() => {
     let array = onlineUsers.map((user) => user.id);
     setOnlineUsersIds(array);
   }, [onlineUsers]);
+  useEffect(() => {
+    groupChats
+      ? setCombinedChats([...groupChats, ...allChats])
+      : setCombinedChats([...allChats]);
+  }, [groupChats, allChats]);
+
+  useEffect(() => {
+    console.log(currentChat, "CurrentChat");
+  }, [currentChat]);
+
+  useEffect(() => {
+    if (currentChat == null) return;
+    else {
+      setCombinedChats((prevChats) => {
+        const array = prevChats.map((chat) =>
+          chat.id == currentChat.id ? currentChat : chat
+        );
+        return array.sort((a, b) => b.last_message_id - a.last_message_id);
+      });
+    }
+  }, [currentChat]);
 
   return (
     <Context.Provider
@@ -37,6 +61,8 @@ export const ChatsContext = ({ children }) => {
         setAllChats,
         groupChats,
         setGroupChats,
+        combinedChats,
+        setCombinedChats,
       }}
     >
       {children}

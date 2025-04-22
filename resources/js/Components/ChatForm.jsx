@@ -21,6 +21,8 @@ const ChatForm = () => {
           setCurrentChat((prev) => ({
             ...prev,
             messages: [data.message, ...prev.messages],
+            last_message: data.message.body,
+            last_message_id: data.message.id,
           }));
           setMessage("");
         })

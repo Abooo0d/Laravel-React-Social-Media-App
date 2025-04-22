@@ -6,7 +6,7 @@ const MessageCard = ({ message }) => {
 
   return (
     <div
-      className={`w-full flex gap-1 flex-col   justify-end ${
+      className={`w-full flex gap-1 flex-col justify-end ${
         message.user.id != user.id ? "items-start" : " items-end"
       }`}
     >

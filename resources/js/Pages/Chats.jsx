@@ -10,8 +10,7 @@ function Chats({ auth, groupsChat, chat_with_friend, allChats }) {
   const { setUser } = useUserContext();
   const { setSuccessMessage, setErrors } = useMainContext();
   const { flash, errors } = usePage().props;
-  const { currentChat, setCurrentChat, setAllChats, setGroupChats } =
-    useChatsContext();
+  const { setCurrentChat, setAllChats, setGroupChats } = useChatsContext();
 
   useEffect(() => {
     if (flash?.success) setSuccessMessage(flash.success);
@@ -37,7 +36,6 @@ function Chats({ auth, groupsChat, chat_with_friend, allChats }) {
     setCurrentChat(chat_with_friend);
     setAllChats(allChats);
     setGroupChats(groupsChat);
-    console.log("Abood", allChats);
   }, [chat_with_friend, allChats, groupsChat]);
 
   return (
