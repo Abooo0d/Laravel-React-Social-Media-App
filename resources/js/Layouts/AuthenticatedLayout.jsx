@@ -12,10 +12,10 @@ import { MdGroups2 } from "react-icons/md";
 import FollowersBar from "@/Components/Containers/FollowersBar";
 import GroupsBar from "@/Components/Containers/GroupsBar";
 import { PiChatsCircle } from "react-icons/pi";
-import { useMainContext } from "@/Contexts/MainContext";
+import { useChatsContext } from "@/Contexts/ChatsContext";
 export default function Authenticated({ children }) {
   const { groups, notifications, auth } = usePage().props;
-  const { onlineUsers, setOnlineUsers } = useMainContext();
+  const { onlineUsers, setOnlineUsers } = useChatsContext();
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
   const [showFollowerContainer, setShowFollowerContainer] = useState(false);

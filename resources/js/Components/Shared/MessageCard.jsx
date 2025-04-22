@@ -3,7 +3,6 @@ import React from "react";
 
 const MessageCard = ({ message }) => {
   const { user } = useUserContext();
-  console.log(message);
 
   return (
     <div

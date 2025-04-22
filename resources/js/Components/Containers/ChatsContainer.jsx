@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ChatCard from "../Shared/ChatCard";
+import { useChatsContext } from "@/Contexts/ChatsContext";
 
-const ChatsContainer = ({ chats, setChat, groupChats }) => {
+const ChatsContainer = () => {
+  const { allChats, groupChats } = useChatsContext();
   return (
     <div className="py-4 max-h-barContainerHeight flex h-barHeight overflow-hidden">
       {false ? (
@@ -16,24 +18,18 @@ const ChatsContainer = ({ chats, setChat, groupChats }) => {
                   className="flex flex-col justify-start items-center gap-2"
                   key={index}
                 >
-                  <ChatCard
-                    chat={chat}
-                    key={index}
-                    setChat={setChat}
-                    isGroup={true}
-                  />
+                  <ChatCard chat={chat} key={index} isGroup={true} />
                   {/* <div className="w-[80%] h-[1px] relative bg-gray-700/40 mx-auto" /> */}
                 </div>
               ))}
             </>
           )}
-          {chats?.map((chat, index) => (
+          {allChats?.map((chat, index) => (
             <div
               className="flex flex-col justify-start items-center gap-2"
               key={index}
             >
-              <ChatCard chat={chat} key={index} setChat={setChat} />
-              {/* <div className="w-[80%] h-[1px] relative bg-gray-700/40 mx-auto" /> */}
+              <ChatCard chat={chat} key={index} />
             </div>
           ))}
         </div>

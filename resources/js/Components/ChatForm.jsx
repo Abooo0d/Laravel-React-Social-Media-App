@@ -4,19 +4,21 @@ import TextInput from "./TextInput";
 import { PrimaryButton } from "./Shared/Buttons";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import { useUserContext } from "@/Contexts/UserContext";
-const ChatForm = ({ chat, chatData, setChatData }) => {
+import { useChatsContext } from "@/Contexts/ChatsContext";
+const ChatForm = () => {
+  const { currentChat, setCurrentChat } = useChatsContext();
   const { user } = useUserContext();
   const [message, setMessage] = useState("");
   const newMessage = () => {
     if (message !== "") {
       axiosClient
-        .post(route("newMessage", chat), {
+        .post(route("newMessage", currentChat), {
           body: message,
           user_id: user.id,
-          chat_id: chat.id,
+          chat_id: currentChat.id,
         })
         .then(({ data }) => {
-          setChatData((prev) => ({
+          setCurrentChat((prev) => ({
             ...prev,
             messages: [data.message, ...prev.messages],
           }));

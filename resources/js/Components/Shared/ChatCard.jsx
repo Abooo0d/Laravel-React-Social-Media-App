@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import { useMainContext } from "@/Contexts/MainContext";
 import { MdGroups2 } from "react-icons/md";
+import { useChatsContext } from "@/Contexts/ChatsContext";
 
-const ChatCard = ({ chat, setChat, isGroup = false }) => {
-  const { onlineUsersIds } = useMainContext();
+const ChatCard = ({ chat, isGroup = false }) => {
+  const { setCurrentChat } = useChatsContext();
+  const { onlineUsersIds } = useChatsContext();
   const [online, setOnline] = useState(onlineUsersIds.includes(chat.user_id));
   const getChat = () => {
     let props = !!isGroup
@@ -14,7 +16,7 @@ const ChatCard = ({ chat, setChat, isGroup = false }) => {
       axiosClient
         .post(route("getChat"), props)
         .then(({ data }) => {
-          setChat(data.chat_with_friend);
+          setCurrentChat(data.chat_with_friend);
         })
         .catch((err) => {
           console.log(err);

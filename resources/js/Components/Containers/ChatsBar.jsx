@@ -2,12 +2,9 @@ import React, { useState } from "react";
 import TextInput from "../TextInput";
 import ChatsContainer from "./ChatsContainer";
 import { PiChatsCircle } from "react-icons/pi";
-import { usePage } from "@inertiajs/react";
-const ChatsBar = ({ setChat = () => {}, chats }) => {
-  const { auth, groupChats } = usePage().props;
+const ChatsBar = () => {
   const [search, setSearch] = useState("");
   const [showChats, setShowChats] = useState(false);
-
   return (
     <div className="relative">
       <div className="lg:block hidden shadow-lg rounded-xl m-0 lg:rounded-none order-first max-w-full min-w-full py-2 bg-gray-200 dark:bg-gray-900 max-h-barHeight min-h-barHeight h-full overflow-hidden border-r-2 dark:border-gray-800 border-gray-300 border-solid">
@@ -20,11 +17,7 @@ const ChatsBar = ({ setChat = () => {}, chats }) => {
           value={search}
           setValue={setSearch}
         />
-        <ChatsContainer
-          chats={chats}
-          groupChats={groupChats}
-          setChat={setChat}
-        />
+        <ChatsContainer />
       </div>
       <div className="block lg:hidden">
         <button
@@ -49,11 +42,7 @@ const ChatsBar = ({ setChat = () => {}, chats }) => {
             value={search}
             setValue={setSearch}
           />
-          <ChatsContainer
-            chats={chats}
-            setChat={setChat}
-            groupChats={groupChats}
-          />
+          <ChatsContainer />
         </div>
       </div>
     </div>

@@ -7,6 +7,7 @@ import { createInertiaApp } from "@inertiajs/react";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { MainContext } from "./Contexts/MainContext";
 import { UserContext } from "./Contexts/UserContext";
+import { ChatsContext } from "./Contexts/ChatsContext";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -22,7 +23,9 @@ createInertiaApp({
     root.render(
       <UserContext>
         <MainContext>
-          <App {...props} style={{ height: "100vh" }} />
+          <ChatsContext>
+            <App {...props} style={{ height: "100vh" }} />
+          </ChatsContext>
         </MainContext>
       </UserContext>
     );
