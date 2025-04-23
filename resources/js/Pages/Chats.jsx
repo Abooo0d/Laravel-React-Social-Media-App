@@ -32,6 +32,7 @@ function Chats({ auth, groupsChat, chat_with_friend, allChats }) {
       router.get(route("login"));
     }
   }, [auth]);
+
   useEffect(() => {
     setCurrentChat(chat_with_friend);
     setAllChats(allChats);

@@ -42,6 +42,7 @@ class MessageResource extends JsonResource
           ? Storage::url($this->user->avatar_path)
           : asset('images/default_avatar_image.png'),
       ],
+      'chat_id' => $this->chat_id,
       'status' => $this->targetUserId != 0 ? $this->status($this->targetUserId)->first() : null
     ];
   }

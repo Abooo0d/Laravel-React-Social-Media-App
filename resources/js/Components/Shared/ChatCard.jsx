@@ -5,11 +5,10 @@ import { MdGroups2 } from "react-icons/md";
 import { useChatsContext } from "@/Contexts/ChatsContext";
 
 const ChatCard = ({ chat }) => {
-  const { setCurrentChat } = useChatsContext();
-  const { onlineUsersIds } = useChatsContext();
+  const { setCurrentChat, onlineUsersIds } = useChatsContext();
   const [chatData, setChatData] = useState(chat);
   const [online, setOnline] = useState(
-    onlineUsersIds.includes(chatData.user_id)
+    !!onlineUsersIds.includes(chatData.user_id)
   );
   const [isGroup, setIsGroup] = useState(chatData.is_group);
   const getChat = () => {
@@ -34,6 +33,10 @@ const ChatCard = ({ chat }) => {
   useEffect(() => {
     setChatData(chat);
   }, [chat]);
+
+  useEffect(() => {
+    setOnline(!!onlineUsersIds.includes(chatData.user_id));
+  }, [chatData]);
 
   return (
     <div

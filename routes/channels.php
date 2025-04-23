@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Resources\UserResource;
+use App\Models\Chat;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -14,8 +15,8 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('chat', function ($user) {
-  return true;
+Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
+  return Chat::find($chatId)->users->contains($user->id);
 });
 
 

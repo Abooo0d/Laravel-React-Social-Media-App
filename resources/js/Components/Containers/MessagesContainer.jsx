@@ -1,28 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import ChatForm from "../ChatForm";
-import { useUserContext } from "@/Contexts/UserContext";
 import ChatInfo from "../Shared/ChatInfo";
 import MessageCard from "../Shared/MessageCard";
 import { useChatsContext } from "@/Contexts/ChatsContext";
 
-const MessagesContainer = ({ chat }) => {
-  const { currentChat, setCurrentChat } = useChatsContext();
-  const { user } = useUserContext();
-  // useEffect(() => {
-  //   setChatData(chat);
-  // }, [chat]);
+const MessagesContainer = ({}) => {
+  const { currentChat } = useChatsContext();
   const containerRef = useRef();
-  useEffect(() => {
-    window.Echo.channel("chat").listen("NewMessageSent", (e) => {
-      if (e.message.user_id == user.id) {
-      } else {
-        setCurrentChat((prev) => ({
-          ...prev,
-          messages: [e.message, ...prev.messages],
-        }));
-      }
-    });
-  }, []);
 
   return (
     <div className="order-2 relative bg-gray-300 dark:bg-homeFeed bg-chat-pattern bg-cover min-h-full max-h-barHeight flex-1 overflow-scroll flex flex-col justify-end items-center gap-2">

@@ -42,7 +42,7 @@ class ChatResource extends JsonResource
           'avatar' => $user->avatar_path ? Storage::url($user->avatar_path) : asset('images/default_avatar_image.png'),
         ]
       ),
-      'user_id' => !$user_id,
+      'user_id' => $user_id,
       'avatar_url' => $image,
       'is_group' => !!$this->is_group,
       'messages' => MessageResource::collectionWithTarget($this->messages, $user_id),

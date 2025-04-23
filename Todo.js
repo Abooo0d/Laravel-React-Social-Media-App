@@ -10,6 +10,7 @@
 // Fix THe Profile Design
 // fix the Notification To Take The Image From The data base And Not To Save The Image In The Notifications Table
 // fix the chat Card
+// Fix The Post Card On The Mobile Phone
 /************** Working On *************/
 
 /************** Done *************/

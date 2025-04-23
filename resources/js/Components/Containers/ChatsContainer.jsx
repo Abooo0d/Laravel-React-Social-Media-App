@@ -4,7 +4,6 @@ import { useChatsContext } from "@/Contexts/ChatsContext";
 
 const ChatsContainer = () => {
   const { combinedChats } = useChatsContext();
-
   return (
     <div className="py-4 max-h-barContainerHeight flex h-barHeight overflow-hidden">
       {false ? (

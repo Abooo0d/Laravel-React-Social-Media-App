@@ -36,12 +36,22 @@ class NewMessageSent implements ShouldBroadcast
   //     new PrivateChannel('channel-name'),
   //   ];
   // }
+  // public function broadcastOns()
+  // {
+  //   return new PrivateChannel('chat.' . $this->message->chat_id); // public channel 'chat'
+  // }
+
   public function broadcastOn()
   {
-    return ['chat']; // public channel 'chat'
+    return [
+      new PrivateChannel('chat.' . $this->message->chat_id)
+    ];
   }
   public function broadcastWith()
   {
-    return ['message' => $this->message];
+    return [
+      'message' => $this->message,
+      // 'chat_id' => $this->message->chat_id
+    ];
   }
 }

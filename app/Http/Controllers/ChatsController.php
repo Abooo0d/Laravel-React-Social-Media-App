@@ -16,13 +16,13 @@ class ChatsController extends Controller
 {
   public function index(Request $request)
   {
-    // $chats = auth()
-    //   ->user()
-    //   ->chats()
-    //   ->where('is_group', true)
-    //   ->with('users', 'messages')
-    //   ->orderBy('last_message_id', "desc")
-    //   ->get();
+    $chats = auth()
+      ->user()
+      ->chats()
+      ->where('is_group', true)
+      ->with('users', 'messages')
+      ->orderBy('last_message_id', "desc")
+      ->get();
     $allChats = auth()
       ->user()
       ->chats()
@@ -33,7 +33,7 @@ class ChatsController extends Controller
       'Chats',
       [
         'chat_with_friend' => null,
-        // 'groupsChat' => $chats ? ChatResource::collection($chats) : [],
+        'groupsChat' => $chats ? ChatResource::collection($chats) : [],
         "allChats" => ChatResource::collection($allChats)
       ]
     );
