@@ -15,7 +15,6 @@ import { PiChatsCircle } from "react-icons/pi";
 import { useChatsContext } from "@/Contexts/ChatsContext";
 export default function Authenticated({ children }) {
   const { groups, notifications, auth } = usePage().props;
-  const { onlineUsers, setOnlineUsers } = useChatsContext();
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
   const [showFollowerContainer, setShowFollowerContainer] = useState(false);
@@ -41,22 +40,7 @@ export default function Authenticated({ children }) {
       setShowNotificationsForm(false);
     }
   }, [showGroupContainer]);
-  useEffect(() => {
-    window.Echo.join("online")
-      .here((users) => {
-        setOnlineUsers(users);
-      })
-      .joining((user) => {
-        setOnlineUsers((prevUsers) => [...prevUsers, user]);
-      })
-      .leaving((user) => {
-        setOnlineUsers((prevUsers) =>
-          prevUsers.filter((u) => {
-            return u.id != user.id;
-          })
-        );
-      });
-  }, []);
+
   return (
     <div className="min-h-screen bg-gray-300/80 dark:bg-homeFeed">
       <nav className="relative bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">

@@ -18,12 +18,12 @@ const ChatForm = () => {
           chat_id: currentChat.id,
         })
         .then(({ data }) => {
-          setCurrentChat((prev) => ({
-            ...prev,
-            messages: [data.message, ...prev.messages],
-            last_message: data.message.body,
-            last_message_id: data.message.id,
-          }));
+          // setCurrentChat((prev) => ({
+          //   ...prev,
+          //   messages: [data.message, ...prev.messages],
+          //   last_message: data.message.body,
+          //   last_message_id: data.message.id,
+          // }));
           setMessage("");
         })
         .catch((err) => {
