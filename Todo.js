@@ -7,13 +7,19 @@
 // Set A Loading When Sending Invitation To Group
 
 /************** TOday *************/
-// Fix THe Profile Design
 // fix the Notification To Take The Image From The data base And Not To Save The Image In The Notifications Table
-// fix the chat Card
-// Fix The Post Card On The Mobile Phone
+// Fix The Design In The Post CArd For Small Screens
+// send the data from a custom request from The front not with the page loading
+// Paginate The Data Coming From The Backend
+
 /************** Working On *************/
 
 /************** Done *************/
+// Add The loading For All Needed Pages
+// Make Any Button On The Navbar Close The Other menus
+// fix the chat Card
+// Fix The Post Card On The Mobile Phone
+// Fix THe Profile Design
 // make to inviteUserForm returning The Ordered User as A User Card
 // MAke The New NotificationsBar And the Group Bar Responsive
 // Make The Followers bar THe Same As THe Groups And Notifications Bars

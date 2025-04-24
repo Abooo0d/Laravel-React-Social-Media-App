@@ -6,7 +6,7 @@ import axiosClient from "@/AxiosClient/AxiosClient";
 import { useUserContext } from "@/Contexts/UserContext";
 import { useChatsContext } from "@/Contexts/ChatsContext";
 const ChatForm = () => {
-  const { currentChat, setCurrentChat } = useChatsContext();
+  const { currentChat } = useChatsContext();
   const { user } = useUserContext();
   const [message, setMessage] = useState("");
   const newMessage = () => {
@@ -18,12 +18,6 @@ const ChatForm = () => {
           chat_id: currentChat.id,
         })
         .then(({ data }) => {
-          // setCurrentChat((prev) => ({
-          //   ...prev,
-          //   messages: [data.message, ...prev.messages],
-          //   last_message: data.message.body,
-          //   last_message_id: data.message.id,
-          // }));
           setMessage("");
         })
         .catch((err) => {

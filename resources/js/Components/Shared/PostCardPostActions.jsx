@@ -20,16 +20,16 @@ const PostCardPostActions = ({ post, setPost, setShowCommentSection }) => {
   return (
     <div className="flex justify-between items-center gap-3 flex-col flex-1 mt-4 ">
       <div className=" flex-1 text-gray-300 w-full flex justify-between items-center">
-        <div className="cursor-default text-gray-400 lg:text-sm text-[13px]">
+        <div className="cursor-default text-gray-600 lg:text-sm text-[13px]">
           {parseInt(post.num_of_reactions) === 0
             ? "No Reactions"
             : parseInt(post.num_of_reactions) === 1
             ? `${post.num_of_reactions} Person Reacted`
             : parseInt(post.num_of_reactions) > 1
             ? `${post.num_of_reactions} Persons Reacted`
-            : ""}
+            : "Np Reactions"}
         </div>
-        <div className="cursor-default text-gray-400 lg:text-sm text-[13px]">
+        <div className="cursor-default text-gray-600 lg:text-sm text-[13px]">
           {post.num_of_comments === 1
             ? post.num_of_comments + " Comment"
             : post.num_of_comments > 1
@@ -39,7 +39,7 @@ const PostCardPostActions = ({ post, setPost, setShowCommentSection }) => {
       </div>
       <div className="flex justify-end items-center gap-2 flex-1 w-full border-t-[2px] border-solid border-gray-800 pt-1">
         <button
-          className="flex justify-center items-center relative text-gray-300 rounded-lg cursor-pointer duration-200 h-[40px] flex-1 bg-gray-900"
+          className="flex justify-center items-center relative text-gray-400 rounded-lg cursor-pointer duration-200 h-[40px] flex-1 bg-gray-900"
           onClick={sendReaction}
         >
           <div className="relative mr-2">
@@ -66,7 +66,7 @@ const PostCardPostActions = ({ post, setPost, setShowCommentSection }) => {
           onClick={() => {
             setShowCommentSection((prevState) => !prevState);
           }}
-          className="flex justify-center items-center text-gray-300 rounded-lg cursor-pointer duration-200 h-[40px] flex-1 bg-gray-900 lg:text-[16px] text-sm"
+          className="flex justify-center items-center text-gray-400 rounded-lg cursor-pointer duration-200 h-[40px] flex-1 bg-gray-900 lg:text-[16px] text-sm"
         >
           <FaRegCommentDots className=" text-xl duration-200 mr-2" />
           Comment

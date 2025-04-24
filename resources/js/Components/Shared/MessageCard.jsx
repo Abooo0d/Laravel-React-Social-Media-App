@@ -20,7 +20,7 @@ const MessageCard = ({ message }) => {
         }`}
       >
         <div
-          className={`backdrop-blur-sm w-fit px-4 py-2 rounded-md text-gray-400 cursor-default max-w-[60%] flex justify-center items-center ${
+          className={`backdrop-blur-sm w-fit px-4 py-2 rounded-md text-gray-400 word-wrap cursor-default max-w-[60%] flex justify-center items-center break-all  ${
             message.user.id != user.id
               ? "bg-[rgba(46,59,78,100%)]"
               : "bg-[rgba(9,73,112,100%)]"

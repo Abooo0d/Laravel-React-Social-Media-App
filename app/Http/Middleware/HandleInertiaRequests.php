@@ -37,7 +37,7 @@ class HandleInertiaRequests extends Middleware
   public function share(Request $request): array|RedirectResponse
   {
     if (Auth::id()) {
-      $notifications = Auth::user()->notifications()->paginate(20);
+      $notifications = Auth::user()->notifications()->paginate(10);
       $groups = Group::query()
         ->with('currentUserGroups')
         ->select(['groups.*'])

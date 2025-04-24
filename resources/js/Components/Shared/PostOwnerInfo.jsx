@@ -12,7 +12,7 @@ const PostOwnerInfo = ({ post, user }) => {
           className="w-[60px] h-[60px] rounded-full border-[1px] border-gray-600/50 hover:border-gray-600 duration-200 object-cover"
         />
         <div className="flex flex-col w-full">
-          <h2 className=" flex justify-start items-center text-lg dark:text-gray-400 lg:text-[18px] text-[16px] text-gray-900 duration-200">
+          <h2 className=" flex justify-start items-center dark:text-gray-400 lg:text-[18px] text-[16px] text-gray-900 duration-200">
             {post?.user && (
               <Link
                 href={route("profile.view", user?.name)}
@@ -35,7 +35,7 @@ const PostOwnerInfo = ({ post, user }) => {
             )}
           </h2>
           {post && (
-            <p className="text-gray-500 lg:text-sm text-[12px] cursor-default">
+            <p className="text-gray-500 lg:text-sm text-[11px] cursor-default">
               {formatRelativeTime(post.updated_at)}
             </p>
           )}

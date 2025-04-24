@@ -19,15 +19,11 @@ const Context = createContext(INITIAL_DATA);
 export const ChatsContext = ({ children }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [onlineUsersIds, setOnlineUsersIds] = useState([]);
-  const [currentChat, _setCurrentChat] = useState({});
+  const [currentChat, setCurrentChat] = useState({});
   const [allChats, setAllChats] = useState([]);
   const [groupChats, setGroupChats] = useState([]);
   const [combinedChats, setCombinedChats] = useState();
   const { user } = useUserContext();
-  const setCurrentChat = (object) => {
-    console.log("Abood");
-    _setCurrentChat(object);
-  };
   useEffect(() => {
     let array = onlineUsers.map((user) => user.id);
     setOnlineUsersIds(array);

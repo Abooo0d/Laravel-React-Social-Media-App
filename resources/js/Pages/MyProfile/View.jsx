@@ -166,7 +166,7 @@ const View = ({ auth, posts, mustVerifyEmail, status, photos }) => {
               </div>
             )}
           </div>
-          <div className="absolute lg:w-[200px] lg:h-[200px] md:w-[160px] md:h-[160px] w-[130px] h-[130px] -bottom-[50px] md:left-20 left-0 group overflow-hidden">
+          <div className="absolute lg:w-[200px] lg:h-[200px] md:w-[160px] md:h-[160px] w-[130px] h-[130px] md:-bottom-[50px] md:left-20 left-4 -bottom-[80px] group overflow-hidden">
             <img
               src={
                 avatarImage ||
@@ -206,14 +206,20 @@ const View = ({ auth, posts, mustVerifyEmail, status, photos }) => {
             </div>
           </div>
         </div>
-        <div className="w-full flex flex-col justify-start items-start gap-1 bg-gray-900 py-4 pl-[250px]">
-          <div className="flex gap-2 justify-center items-center">
-            <h2 className="text-gray-300 text-lg mb-0">{user.name}</h2>
-            <p className=" text-gray-500">{user.email}</p>
+        <div className="w-full flex flex-col justify-start items-start gap-1 sm:gap-0 bg-gray-900 py-4 lg:pl-[300px] md:pl-[250px] pl-[160px]">
+          <div className="flex gap-2 justify-center items-start max-sm:flex-col max-sm:gap-0">
+            <h2 className="text-gray-300 sm:text-lg text-[16px] mb-0">
+              {user.name}
+            </h2>
+            <p className=" text-gray-500 sm:text-lg text-[16px]">
+              {user.email}
+            </p>
           </div>
-          <h2 className="text-gray-500 text-lg mb-0">@{user.username}</h2>
+          <h2 className="text-gray-500 mb-0 sm:text-lg text-[16px]">
+            @{user.username}
+          </h2>
         </div>
-        <div className="w-full">
+        <div className="w-full h-full max-sm:pb-[55px] ">
           <Tab.Group>
             <Tab.List className="md:px-[40px] px-[20px] mb-4 flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
               <CustomTab text="Posts" />

@@ -57,7 +57,7 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
             alt="cover Image"
             className="h-[300px] w-full object-cover "
           />
-          <div className="absolute lg:w-[200px] lg:h-[200px] md:w-[160px] md:h-[160px] w-[130px] h-[130px] -bottom-[50px] md:left-20 left-0 group overflow-hidden">
+          <div className="absolute lg:w-[200px] lg:h-[200px] md:w-[160px] md:h-[160px] w-[100px] h-[100px] md:-bottom-[50px] md:left-20 left-4 -bottom-[40px] group overflow-hidden">
             <img
               src={user.avatar_url || "/images/default_avatar_image.png"}
               alt="AvatarImage"
@@ -65,14 +65,19 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
             />
           </div>
         </div>
-        <div className="flex justify-between items-center bg-gray-900 py-4 pl-[250px] pr-8">
-          {" "}
-          <div className="w-full flex flex-col justify-start items-start gap-1">
-            <div className="flex gap-2 justify-center items-center">
-              <h2 className="text-gray-300 text-lg mb-0">{user.name}</h2>
-              <p className=" text-gray-500">{user.email}</p>
+        <div className="flex justify-between items-center bg-gray-900 py-4 lg:pl-[300px] md:pl-[250px] pl-[40px] max-md:pt-[50px] md:pr-8 pr-4">
+          <div className="w-full flex flex-col justify-start items-start">
+            <div className="flex gap-2 justify-center items-start max-sm:flex-col max-sm:gap-0">
+              <h2 className="text-gray-300 md:text-[20px] text-[16px] mb-0">
+                {user.name}
+              </h2>
+              <p className=" text-gray-500 md:text-[20px] text-[16px]">
+                {user.email}
+              </p>
             </div>
-            <h2 className="text-gray-500 text-lg mb-0">@{user.username}</h2>
+            <h2 className="text-gray-500 mb-0 md:text-[20px] text-[16px]">
+              @{user.username}
+            </h2>
           </div>
           {!isFriend ? (
             <PrimaryButton
@@ -84,9 +89,9 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
             </PrimaryButton>
           ) : (
             <div className="text-gray-500 cursor-pointer">Friend.</div>
-          )}
+          )}{" "}
         </div>
-        <div className="w-full">
+        <div className="w-full h-full max-sm:pb-[55px] ">
           <Tab.Group>
             <Tab.List className="md:px-[40px] px-[20px] mb-4 flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
               <CustomTab text="Posts" />

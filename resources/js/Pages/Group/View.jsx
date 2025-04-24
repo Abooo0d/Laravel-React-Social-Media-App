@@ -138,7 +138,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts, photos }) => {
         />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
-      <div className="container mx-auto ">
+      <div className="container mx-auto h-full">
         <div className="max-h-[350px] w-full relative">
           <div className="relative max-h-[350px] w-full group">
             <img
@@ -265,7 +265,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts, photos }) => {
             )}
           </div>
         </div>
-        <div className="w-full">
+        <div className="w-full h-full max-sm:pb-[55px] ">
           <Tab.Group>
             <Tab.List className="md:px-[40px] mb-4 px-[20px] flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
               <CustomTab text="Posts" />
@@ -274,7 +274,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts, photos }) => {
               {isAdmin && <CustomTab text="Requests" />}
               {isAdmin && <CustomTab text="About" />}
             </Tab.List>
-            <Tab.Panels className=" rounded-md">
+            <Tab.Panels className=" rounded-md h-full">
               <Tab.Panel className="rounded-md flex flex-col w-full">
                 <div className=" dark:bg-homeFeed rounded-md">
                   <PostContainer posts={allPosts}>
@@ -321,8 +321,8 @@ const View = ({ auth, group, requests, users, isAdmin, posts, photos }) => {
                 </div>
               </Tab.Panel>
               {isCurrentUserJoined && (
-                <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
-                  <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
+                <Tab.Panel className="rounded-md  gap-1 w-full h-full ">
+                  <div className="relative rounded-md p-3 mb-2 h-full dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
                     {users.map((user, index) => (
                       <UserMemberCard
                         member={user}

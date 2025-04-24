@@ -12,16 +12,53 @@ import { MdGroups2 } from "react-icons/md";
 import FollowersBar from "@/Components/Containers/FollowersBar";
 import GroupsBar from "@/Components/Containers/GroupsBar";
 import { PiChatsCircle } from "react-icons/pi";
-import { useChatsContext } from "@/Contexts/ChatsContext";
+import { Inertia } from "@inertiajs/inertia";
+import { useMainContext } from "@/Contexts/MainContext";
+import HomeLoader from "@/Components/Containers/Homeloader";
+import ProfileLoader from "@/Components/Containers/ProfileLoader";
+import ChatsLoader from "@/Components/Containers/ChtasLoader";
 export default function Authenticated({ children }) {
   const { groups, notifications, auth } = usePage().props;
+  const { setGoingToUrl, goingToUrl, setHideAllMenus, hideAllMenus } =
+    useMainContext();
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [showFollowerContainer, setShowFollowerContainer] = useState(false);
   const [showNotificationsForm, setShowNotificationsForm] = useState(false);
   const [showGroupContainer, setShowGroupContainer] = useState(false);
   const [currentUser, setCurrentUser] = useState(auth?.user);
   const [followers, setFollowers] = useState(auth?.user.friends);
+  const location = () => {
+    try {
+      if (goingToUrl == "/" || goingToUrl == "") return "Home";
+      let url = goingToUrl.split("//")[1].split("/")[1];
+      switch (url) {
+        case "group":
+        case "profile":
+        case "my-profile":
+          return "Profile";
+        case "public":
+          return "Home";
+        case "chats":
+          return "Chats";
+        default:
+          return "Home";
+      }
+    } catch (e) {
+      return "Home";
+    }
+  };
+  useEffect(() => {
+    const start = () => setIsLoading(true);
+    const finish = () => setIsLoading(false);
+
+    Inertia.on("start", start);
+    Inertia.on("finish", finish);
+
+    return () => {};
+  }, []);
+
   useEffect(() => {
     if (showFollowerContainer) {
       setShowNotificationsForm(false);
@@ -41,6 +78,14 @@ export default function Authenticated({ children }) {
     }
   }, [showGroupContainer]);
 
+  useEffect(() => {
+    if (hideAllMenus) {
+      setShowFollowerContainer(false);
+      setShowGroupContainer(false);
+      setShowNotificationsForm(false);
+      setHideAllMenus(false);
+    }
+  }, [hideAllMenus]);
   return (
     <div className="min-h-screen bg-gray-300/80 dark:bg-homeFeed">
       <nav className="relative bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">
@@ -48,7 +93,13 @@ export default function Authenticated({ children }) {
           <div className="flex justify-between h-16">
             <div className="flex">
               <div className="shrink-0 flex items-center">
-                <Link href="/">
+                <Link
+                  href="/"
+                  onClick={() => {
+                    setHideAllMenus(true);
+                    setGoingToUrl("/");
+                  }}
+                >
                   <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                 </Link>
               </div>
@@ -81,6 +132,8 @@ export default function Authenticated({ children }) {
                 </MenuButton>
                 <MenuButton
                   event={() => {
+                    setHideAllMenus(true);
+                    setGoingToUrl(route("chats"));
                     router.get(route("chats"));
                   }}
                   show={false}
@@ -97,7 +150,7 @@ export default function Authenticated({ children }) {
                 </button>
               </div>
               <div className="hidden sm:flex sm:items-center">
-                <div className="relative">
+                <div className="relative z-[100]">
                   {currentUser ? (
                     <Dropdown>
                       <Dropdown.Trigger>
@@ -206,7 +259,16 @@ export default function Authenticated({ children }) {
       {groups && (
         <GroupsBar groups={groups} showGroupContainer={showGroupContainer} />
       )}
-      <main>{children}</main>
+
+      {!isLoading ? (
+        <main>{children}</main>
+      ) : location() == "Home" ? (
+        <HomeLoader />
+      ) : location() == "Chats" ? (
+        <ChatsLoader />
+      ) : (
+        <ProfileLoader />
+      )}
     </div>
   );
 }

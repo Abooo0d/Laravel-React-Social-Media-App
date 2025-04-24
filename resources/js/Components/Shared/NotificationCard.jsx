@@ -5,7 +5,9 @@ import { AiFillLike } from "react-icons/ai";
 import { FaCommentAlt } from "react-icons/fa";
 import { FaRegCommentDots } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
+import { useMainContext } from "@/Contexts/MainContext";
 const NotificationCard = ({ notification }) => {
+  const { setGoingToUrl, setHideAllMenus } = useMainContext();
   const Icon = () => {
     if (notification.data?.type?.split("|")[0] == "postReaction") return "like";
     switch (notification.data?.type?.split("|")[1]) {
@@ -32,6 +34,10 @@ const NotificationCard = ({ notification }) => {
     <Link
       className="bg-gray-900 rounded-lg px-4 py-2 flex gap-4 justify-start items-center hover:bg-gray-800/70 duration-200"
       href={notification.data.link}
+      onClick={() => {
+        setHideAllMenus(true);
+        setGoingToUrl(notification.data.link);
+      }}
     >
       <div className="relative min-w-[50px] min-h-[50px]">
         <img

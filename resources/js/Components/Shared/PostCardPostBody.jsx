@@ -14,7 +14,7 @@ const PostCardPostBody = ({ post }) => {
                   {!open ? (
                     <>
                       <div
-                        className="ch-content-output dark:text-gray-300 text-gray-700 lg:text-xl text-lg"
+                        className="ch-content-output dark:text-gray-400 text-gray-700 lg:text-xl md:text-lg"
                         dangerouslySetInnerHTML={{
                           __html: DOMPurify.sanitize(
                             post.body.substring(0, 150) + ".."
@@ -25,26 +25,24 @@ const PostCardPostBody = ({ post }) => {
                   ) : (
                     <Disclosure.Panel>
                       <div
-                        className="ch-content-output dark:text-gray-300 text-gray-700 lg:text-xl text-lg"
+                        className="ch-content-output dark:text-gray-400 text-gray-700 lg:text-xl md:text-lg"
                         dangerouslySetInnerHTML={{
                           __html: DOMPurify.sanitize(post.body),
                         }}
                       ></div>
                     </Disclosure.Panel>
                   )}
-                  <Disclosure.Button className="text-gray-600 text-lg w-full flex justify-end mt-2">
+                  <Disclosure.Button className="text-gray-500 w-full flex justify-end mt-2 underline max-md:text-[14px]">
                     {open ? "Read Less" : "Read more"}
                   </Disclosure.Button>
                 </>
               ) : (
                 <div
-                  className="dark:text-gray-300 text-gray-700 lg:text-xl text-lg"
+                  className="dark:text-gray-400 text-gray-700 lg:text-xl md:text-lg"
                   dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(post.body),
                   }}
-                >
-                  {/* {post.body} */}
-                </div>
+                ></div>
               )}
             </div>
           )}
