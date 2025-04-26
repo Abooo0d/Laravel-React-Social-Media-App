@@ -23,7 +23,12 @@ use Inertia\Inertia;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('Home');
-
+Route::middleware('auth')->group(function () {
+  Route::get('/get-posts', [HomeController::class, 'getPosts'])->name('getPosts');
+  Route::get('/get-groups', [HomeController::class, 'getGroups'])->name('getGroups');
+  Route::get('/get-notifications', [HomeController::class, 'getNotifications'])->name('getNotifications');
+  ROute::get('/get-chat-groups', [HomeController::class, 'getChatGroups'])->name('getChatGroups');
+});
 // Profile Group
 Route::middleware('auth')->group(function () {
   Route::get('my-profile', [ProfileController::class, 'myProfile'])->name('profile.myProfile');

@@ -14,6 +14,7 @@ const Notification = () => {
         setErrors([]);
       }, 5000);
     }
+    // console.log(errors, "From Notification");
   }, [successMessage, errors]);
 
   return (

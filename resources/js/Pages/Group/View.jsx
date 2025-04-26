@@ -283,7 +283,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts, photos }) => {
                         user={auth.user}
                         setPosts={setAllPosts}
                         posts={allPosts}
-                        group_id={group.id}
+                        groupId={group.id}
                         classes="bg-homeFeed px-3 py-3"
                       />
                     )}{" "}

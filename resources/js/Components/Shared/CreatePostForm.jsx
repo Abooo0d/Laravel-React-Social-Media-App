@@ -9,10 +9,13 @@ import PostPreview from "./PostPreview";
 import CreatePostPostAttachments from "./CreatePostPostAttachments";
 import { SecondaryButton, PrimaryButton } from "./Buttons";
 import { WiStars } from "react-icons/wi";
+import { BsStars } from "react-icons/bs";
+import { SiOpenai } from "react-icons/si";
 import PopupCard from "./PopupCard";
 import "./index.css";
 import { useUserContext } from "@/Contexts/UserContext";
 import axiosClient from "@/AxiosClient/AxiosClient";
+import Spinner from "./Spinner";
 const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState("");
@@ -20,6 +23,7 @@ const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
   const [loading, setLoading] = useState(false);
   const [imageIndex, setImageIndex] = useState();
   const [attachmentsErrors, setAttachmentsErrors] = useState([]);
+  const [loadingAi, setLoadingAi] = useState(false);
   const { user } = useUserContext();
   const [post, setPost] = useState({
     body: "",
@@ -170,6 +174,8 @@ const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
     }
   };
   const aiPost = () => {
+    if (post.body == "") return;
+    setLoadingAi(true);
     try {
       axiosClient
         .post(route("post.aiPost"), {
@@ -177,13 +183,15 @@ const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
         })
         .then(({ data }) => {
           setPost({ ...post, body: data.message });
-          console.log(data);
+          setLoadingAi(false);
         })
         .catch((error) => {
           console.log(error);
+          setLoadingAi(false);
         });
     } catch (error) {
       console.log(error);
+      setLoadingAi(false);
     }
   };
   return (
@@ -205,11 +213,14 @@ const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
         <div className="max-h-[600px] overflow-auto">
           <div className="relative">
             <PrimaryButton
-              classes="absolute top-[50px] right-[10px] z-[100]"
-              enabled={loading}
+              classes="absolute top-[50px] right-[10px] z-[100] flex justify-center items-center w-[35px] h-[35px] text-gray-400"
               event={aiPost}
             >
-              <WiStars className="w-[30px] h-[30px]" />
+              {loadingAi ? (
+                <Spinner size="small " />
+              ) : (
+                <SiOpenai className="absolute w-[25px] h-[25px] top-[5px] left-[5px]" />
+              )}
             </PrimaryButton>
             <CKEditor
               editor={ClassicEditor}

@@ -4,10 +4,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 const INITIAL_DATA = {
   errors: [],
   successMessage: "",
-  goingToUrl: "",
   setErrors: () => {},
   setSuccessMessage: () => {},
-  setGoingToUrl: () => {},
   hideAllMenus: false,
   setHideAllMenus: () => {},
 };
@@ -15,7 +13,6 @@ const Context = createContext(INITIAL_DATA);
 export const MainContext = ({ children }) => {
   const [errors, setErrors] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
-  const [goingToUrl, setGoingToUrl] = useState("");
   const [hideAllMenus, setHideAllMenus] = useState(false);
 
   return (
@@ -25,8 +22,6 @@ export const MainContext = ({ children }) => {
         setErrors,
         successMessage,
         setSuccessMessage,
-        goingToUrl,
-        setGoingToUrl,
         hideAllMenus,
         setHideAllMenus,
       }}

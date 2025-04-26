@@ -1,10 +1,4 @@
-import "animate.css";
-import { Disclosure } from "@headlessui/react";
 import React from "react";
-import { CiCirclePlus } from "react-icons/ci";
-import { FaRegCommentDots } from "react-icons/fa";
-import { PiThumbsUpBold } from "react-icons/pi";
-import { TiArrowBack } from "react-icons/ti";
 import PostOwnerInfo from "./PostOwnerInfo";
 import { HiMiniXMark } from "react-icons/hi2";
 import PostCardPostBody from "./PostCardPostBody";

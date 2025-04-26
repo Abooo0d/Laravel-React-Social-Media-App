@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import "animate.css";
+import React from "react";
 import { HiMiniXMark } from "react-icons/hi2";
 import DOMPurify from "dompurify";
 import PostOwnerInfo from "./PostOwnerInfo";

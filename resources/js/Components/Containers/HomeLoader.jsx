@@ -2,13 +2,8 @@ import React from "react";
 
 const HomeLoader = () => {
   return (
-    <div className=" flex justify-start items-center">
+    <div className=" flex justify-start items-center w-full">
       <div className="w-full min-h-barHeight flex justify-center items-center flex-col gap-3">
-        <div
-          className={`max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg py-4 lg:px-6 px-4 flex flex-col duration-500 shadow-md `}
-        >
-          <div className=" w-full rounded-lg bg-gray-800/50 py-1.5 px-3 duration-200 min-h-[40px] cursor-pointer text-gray-400 border-[1px] border-solid border-gray-600/50 animate-pulse" />
-        </div>
         <div
           className={`max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg pt-4 pb-0 lg:px-6 px-4 flex flex-col duration-500 shadow-md `}
         >

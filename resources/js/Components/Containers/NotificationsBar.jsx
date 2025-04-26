@@ -1,6 +1,11 @@
 import React from "react";
 import NotificationCard from "../Shared/NotificationCard";
-const NotificationsBar = ({ notifications, showNotificationsForm }) => {
+import Spinner from "../Shared/Spinner";
+const NotificationsBar = ({
+  notifications,
+  showNotificationsForm,
+  isLoading,
+}) => {
   return (
     <div className="relative">
       <div
@@ -16,19 +21,25 @@ const NotificationsBar = ({ notifications, showNotificationsForm }) => {
         <div
           className={`flex flex-col gap-1 max-h-[500px] h-fit overflow-auto px-4 py-2`}
         >
-          {notifications && (
+          {isLoading ? (
+            <Spinner size={"large"} />
+          ) : (
             <>
-              {notifications.data.length > 0 ? (
-                notifications.data.map((notify, index) => (
-                  <div className="flex flex-col gap-1" key={index}>
-                    <NotificationCard notification={notify} />
-                    <div className="w-[80%] h-[1px] relative bg-gray-700/20 mx-auto" />
-                  </div>
-                ))
-              ) : (
-                <div className="w-full text-gray-500 text-center my-4">
-                  No Notifications Yet
-                </div>
+              {notifications && (
+                <>
+                  {notifications?.length > 0 ? (
+                    notifications?.map((notify, index) => (
+                      <div className="flex flex-col gap-1" key={index}>
+                        <NotificationCard notification={notify} />
+                        <div className="w-[80%] h-[1px] relative bg-gray-700/20 mx-auto" />
+                      </div>
+                    ))
+                  ) : (
+                    <div className="w-full text-gray-500 text-center my-4">
+                      No Notifications Yet
+                    </div>
+                  )}
+                </>
               )}
             </>
           )}

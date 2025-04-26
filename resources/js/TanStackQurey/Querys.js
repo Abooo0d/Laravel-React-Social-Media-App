@@ -1,0 +1,39 @@
+import axiosClient from "@/AxiosClient/AxiosClient";
+import { QUERY_KEYS } from "./QueryKeys";
+import { useQuery } from "@tanstack/react-query";
+export const useGetPosts = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_POSTS],
+    queryFn: () =>
+      axiosClient.get(route("getPosts")).then(({ data }) => {
+        return data;
+      }),
+  });
+};
+export const useGetNotifications = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_NOTIFICATIONS],
+    queryFn: () =>
+      axiosClient.get(route("getNotifications")).then(({ data }) => {
+        return data;
+      }),
+  });
+};
+export const useGetGroups = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_GROUPS],
+    queryFn: () =>
+      axiosClient.get(route("getGroups")).then(({ data }) => {
+        return data;
+      }),
+  });
+};
+export const useGetChatGroups = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_CHAT_GROUPS],
+    queryFn: () =>
+      axiosClient.get(route("getChatGroups")).then(({ data }) => {
+        return data;
+      }),
+  });
+};

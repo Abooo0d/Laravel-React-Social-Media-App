@@ -1,4 +1,3 @@
-import ChatsBar from "@/Components/Containers/ChatsBar";
 import HomeFeed from "@/Components/Containers/HomeFeed";
 import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";
@@ -22,10 +21,12 @@ const Home = ({ auth }) => {
     }
   }, [auth]);
   useEffect(() => {
-    let messages = [];
-    Object.keys(errors).map((key) => messages.push(errors[key]));
-    setErrors(messages);
-  }, [errors]);
+    if (!!errors || !!flash?.error) {
+      let messages = [];
+      Object.keys(errors).map((key) => messages.push(errors[key]));
+      if (flash?.error) setErrors([flash.error, ...messages]);
+    }
+  }, [errors, flash?.error]);
   return (
     <>
       <Head>

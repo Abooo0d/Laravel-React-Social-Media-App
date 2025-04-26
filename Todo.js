@@ -8,13 +8,13 @@
 
 /************** TOday *************/
 // fix the Notification To Take The Image From The data base And Not To Save The Image In The Notifications Table
-// Fix The Design In The Post CArd For Small Screens
-// send the data from a custom request from The front not with the page loading
+// send the data from a custom request from The frontend not with the page loading
 // Paginate The Data Coming From The Backend
-
+// add trycatch toAll New Api End Points
 /************** Working On *************/
 
 /************** Done *************/
+// Fix The Design In The Post CArd For Small Screens
 // Add The loading For All Needed Pages
 // Make Any Button On The Navbar Close The Other menus
 // fix the chat Card

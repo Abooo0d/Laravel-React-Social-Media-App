@@ -7,7 +7,7 @@ import { FaRegCommentDots } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 import { useMainContext } from "@/Contexts/MainContext";
 const NotificationCard = ({ notification }) => {
-  const { setGoingToUrl, setHideAllMenus } = useMainContext();
+  const { setHideAllMenus } = useMainContext();
   const Icon = () => {
     if (notification.data?.type?.split("|")[0] == "postReaction") return "like";
     switch (notification.data?.type?.split("|")[1]) {
@@ -36,7 +36,6 @@ const NotificationCard = ({ notification }) => {
       href={notification.data.link}
       onClick={() => {
         setHideAllMenus(true);
-        setGoingToUrl(notification.data.link);
       }}
     >
       <div className="relative min-w-[50px] min-h-[50px]">

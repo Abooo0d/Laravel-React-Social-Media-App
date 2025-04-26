@@ -12,53 +12,21 @@ import { MdGroups2 } from "react-icons/md";
 import FollowersBar from "@/Components/Containers/FollowersBar";
 import GroupsBar from "@/Components/Containers/GroupsBar";
 import { PiChatsCircle } from "react-icons/pi";
-import { Inertia } from "@inertiajs/inertia";
 import { useMainContext } from "@/Contexts/MainContext";
-import HomeLoader from "@/Components/Containers/Homeloader";
-import ProfileLoader from "@/Components/Containers/ProfileLoader";
-import ChatsLoader from "@/Components/Containers/ChtasLoader";
+import { useGetGroups, useGetNotifications } from "@/TanStackQurey/Querys";
 export default function Authenticated({ children }) {
-  const { groups, notifications, auth } = usePage().props;
-  const { setGoingToUrl, goingToUrl, setHideAllMenus, hideAllMenus } =
-    useMainContext();
+  const { auth } = usePage().props;
+  const { setHideAllMenus, hideAllMenus } = useMainContext();
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [showFollowerContainer, setShowFollowerContainer] = useState(false);
   const [showNotificationsForm, setShowNotificationsForm] = useState(false);
   const [showGroupContainer, setShowGroupContainer] = useState(false);
   const [currentUser, setCurrentUser] = useState(auth?.user);
   const [followers, setFollowers] = useState(auth?.user.friends);
-  const location = () => {
-    try {
-      if (goingToUrl == "/" || goingToUrl == "") return "Home";
-      let url = goingToUrl.split("//")[1].split("/")[1];
-      switch (url) {
-        case "group":
-        case "profile":
-        case "my-profile":
-          return "Profile";
-        case "public":
-          return "Home";
-        case "chats":
-          return "Chats";
-        default:
-          return "Home";
-      }
-    } catch (e) {
-      return "Home";
-    }
-  };
-  useEffect(() => {
-    const start = () => setIsLoading(true);
-    const finish = () => setIsLoading(false);
-
-    Inertia.on("start", start);
-    Inertia.on("finish", finish);
-
-    return () => {};
-  }, []);
-
+  const { data: notifications, isLoading: LoadingNotifications } =
+    useGetNotifications();
+  const { data: groups, isLoading: loadingGroups } = useGetGroups();
   useEffect(() => {
     if (showFollowerContainer) {
       setShowNotificationsForm(false);
@@ -97,7 +65,6 @@ export default function Authenticated({ children }) {
                   href="/"
                   onClick={() => {
                     setHideAllMenus(true);
-                    setGoingToUrl("/");
                   }}
                 >
                   <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
@@ -133,7 +100,6 @@ export default function Authenticated({ children }) {
                 <MenuButton
                   event={() => {
                     setHideAllMenus(true);
-                    setGoingToUrl(route("chats"));
                     router.get(route("chats"));
                   }}
                   show={false}
@@ -150,7 +116,7 @@ export default function Authenticated({ children }) {
                 </button>
               </div>
               <div className="hidden sm:flex sm:items-center">
-                <div className="relative z-[100]">
+                <div className="relative z-[50]">
                   {currentUser ? (
                     <Dropdown>
                       <Dropdown.Trigger>
@@ -252,23 +218,20 @@ export default function Authenticated({ children }) {
       )}
       {notifications && (
         <NotificationsBar
-          notifications={notifications}
+          notifications={notifications.notifications}
           showNotificationsForm={showNotificationsForm}
+          isLoading={LoadingNotifications}
         />
       )}
       {groups && (
-        <GroupsBar groups={groups} showGroupContainer={showGroupContainer} />
+        <GroupsBar
+          groups={groups.groups}
+          showGroupContainer={showGroupContainer}
+          isLoading={loadingGroups}
+        />
       )}
 
-      {!isLoading ? (
-        <main>{children}</main>
-      ) : location() == "Home" ? (
-        <HomeLoader />
-      ) : location() == "Chats" ? (
-        <ChatsLoader />
-      ) : (
-        <ProfileLoader />
-      )}
+      <main>{children}</main>
     </div>
   );
 }
