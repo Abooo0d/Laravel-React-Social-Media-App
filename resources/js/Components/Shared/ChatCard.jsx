@@ -4,7 +4,7 @@ import { useMainContext } from "@/Contexts/MainContext";
 import { MdGroups2 } from "react-icons/md";
 import { useChatsContext } from "@/Contexts/ChatsContext";
 
-const ChatCard = ({ chat }) => {
+const ChatCard = ({ chat, setShow, setIsLoading }) => {
   const { setCurrentChat, onlineUsersIds } = useChatsContext();
   const [chatData, setChatData] = useState(chat);
   const [online, setOnline] = useState(
@@ -12,6 +12,7 @@ const ChatCard = ({ chat }) => {
   );
   const [isGroup, setIsGroup] = useState(chatData.is_group);
   const getChat = () => {
+    setIsLoading(true);
     let props = !!isGroup
       ? { is_group: !!isGroup, chat_id: chatData.id }
       : { is_group: !!isGroup, chat_id: chatData.id };
@@ -20,9 +21,11 @@ const ChatCard = ({ chat }) => {
         .post(route("getChat"), props)
         .then(({ data }) => {
           setCurrentChat(data.chat_with_friend);
+          setIsLoading(false);
         })
         .catch((err) => {
           console.log(err);
+          setIsLoading(false);
         });
     }
   };
@@ -42,6 +45,7 @@ const ChatCard = ({ chat }) => {
     <div
       className="min-h-[50px] w-[250px] flex items-center justify-start gap-2 py-2 px-4 text-gray-400 duration-200 rounded-md hover:bg-gray-800/60 cursor-pointer"
       onClick={() => {
+        setShow(false);
         getChat();
       }}
     >

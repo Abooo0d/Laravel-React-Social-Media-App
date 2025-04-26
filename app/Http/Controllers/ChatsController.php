@@ -32,7 +32,6 @@ class ChatsController extends Controller
     return Inertia::render(
       'Chats',
       [
-        'chat_with_friend' => null,
         'groupsChat' => $chats ? ChatResource::collection($chats) : [],
         "allChats" => ChatResource::collection($allChats)
       ]
@@ -45,31 +44,11 @@ class ChatsController extends Controller
       'is_group' => ['nullable', 'boolean']
     ]);
     $chat_id = $data['chat_id'] ?? null;
-    $is_group = $data['is_group'];
     $chat = Chat::where('id', $chat_id)->first();
-    // if ((bool) $is_group) {
-    //   $chat = Chat::where('id', $chat_id)->first();
-    // } else {
-    //   if ($chat_id) {
-    //     $chat = Chat::whereHas('users', function ($q) {
-    //       $q->where('user_id', auth()->id());
-    //     })->whereHas('users', function ($q) use ($chat_id): void {
-    //       $q->where('user_id', $chat_id);
-    //     })->withCount('users')
-    //       ->having('users_count', 2)
-    //       ->with('messages')
-    //       ->first();
-    //     if (!$chat) {
-    //       $chat = Chat::create();
-    //       $chat->users()->attach([auth()->id(), $chat_id]);
-    //     }
-    //   }
-    // }
-
     if (!!$chat) {
       return response(
         [
-          'chat_with_friend' => $chat ? new ChatResource($chat) : null
+          'chat_with_friend' => $chat ? new ChatResource($chat) : null,
         ],
         200
       );

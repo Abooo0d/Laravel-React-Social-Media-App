@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import TextInput from "../TextInput";
 import ChatsContainer from "./ChatsContainer";
 import { PiChatsCircle } from "react-icons/pi";
-const ChatsBar = () => {
+const ChatsBar = ({ setIsLoading }) => {
   const [search, setSearch] = useState("");
   const [showChats, setShowChats] = useState(false);
   return (
@@ -17,7 +17,7 @@ const ChatsBar = () => {
           value={search}
           setValue={setSearch}
         />
-        <ChatsContainer />
+        <ChatsContainer setShow={setShowChats} setIsLoading={setIsLoading} />
       </div>
       <div className="block lg:hidden">
         <button
@@ -42,7 +42,7 @@ const ChatsBar = () => {
             value={search}
             setValue={setSearch}
           />
-          <ChatsContainer />
+          <ChatsContainer setShow={setShowChats} setIsLoading={setIsLoading} />
         </div>
       </div>
     </div>

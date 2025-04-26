@@ -15,9 +15,6 @@ class ChatResource extends JsonResource
    */
   public function toArray(Request $request): array
   {
-    // $user_id = !(bool) $this->is_group ? $this->users()->where(function ($q) {
-    //   $q->where('user_id', '!=', auth()->id());
-    // })->first()->id : null;
     $user_id = !(bool) $this->is_group ? $this->users()->where(function ($q) {
       $q->where('user_id', '!=', auth()->id());
     })->first()->id : null;
