@@ -26,11 +26,11 @@ export default {
         buttonBackColor: "rgba(201 201 201 / 0.2);",
       },
       height: {
-        barHeight: "calc(100vh - 66px)",
+        barHeight: "calc(100dvh - 66px)",
       },
       maxHeight: {
         homeFeed: "calc(100vh - 160px)",
-        100: "100vh",
+        100: "100dvh",
         barHeight: "calc(100vh - 66px)",
         barContainerHeight: "calc(100vh - 170px)",
         homeFeedM_H: "calc(100vh - 100px)",
