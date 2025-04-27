@@ -37,3 +37,12 @@ export const useGetChatGroups = () => {
       }),
   });
 };
+export const useGetMoreMessages = (messageId) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_MORE_MESSAGES],
+    queryFn: () =>
+      axiosClient.get(route("getMoreMessages", messageId)).then(({ data }) => {
+        return data;
+      }),
+  });
+};

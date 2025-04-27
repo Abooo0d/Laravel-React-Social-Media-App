@@ -4,4 +4,5 @@ export const QUERY_KEYS = {
   GET_NOTIFICATIONS: "getNotifications",
   GET_CHAT_GROUPS: "getChatGroups",
   GET_CHAT: "getChat",
+  GET_MORE_MESSAGES: "getMoreMessages",
 };

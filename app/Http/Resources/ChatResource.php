@@ -42,7 +42,7 @@ class ChatResource extends JsonResource
       'user_id' => $user_id,
       'avatar_url' => $image,
       'is_group' => !!$this->is_group,
-      'messages' => MessageResource::collectionWithTarget($this->messages, $user_id),
+      'messages' => MessageResource::collectionWithTarget($this->messages, targetUserId: $user_id),
       'created_at' => $this->created_at,
       'updated_at' => $this->updated_at,
       'last_message' => $this->last_message,

@@ -6,14 +6,11 @@ const INITIAL_DATA = {
   successMessage: "",
   setErrors: () => {},
   setSuccessMessage: () => {},
-  hideAllMenus: false,
-  setHideAllMenus: () => {},
 };
 const Context = createContext(INITIAL_DATA);
 export const MainContext = ({ children }) => {
   const [errors, setErrors] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
-  const [hideAllMenus, setHideAllMenus] = useState(false);
 
   return (
     <Context.Provider
@@ -22,8 +19,6 @@ export const MainContext = ({ children }) => {
         setErrors,
         successMessage,
         setSuccessMessage,
-        hideAllMenus,
-        setHideAllMenus,
       }}
     >
       {children}

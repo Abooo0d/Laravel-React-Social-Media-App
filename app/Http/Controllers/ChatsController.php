@@ -55,6 +55,14 @@ class ChatsController extends Controller
     } else
       return redirect()->back()->with('error', 'Some Thing Went Wrong');
   }
+  public function getMoreMessages(Message $message)
+  {
+    $messages = Message::where('created_at', '<', $message->created_at)
+      ->orderBy('created_at', 'desc')
+      ->limit(20)
+      ->get();
+    return response(['messages' => MessageResource::collection($messages)]);
+  }
   public function newMessage(NewMessageRequest $request, Chat $chat)
   {
     $data = $request->validated();

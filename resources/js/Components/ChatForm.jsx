@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { BiSolidSend } from "react-icons/bi";
-import TextInput from "./TextInput";
-import { PrimaryButton } from "./Shared/Buttons";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import { useUserContext } from "@/Contexts/UserContext";
 import { useChatsContext } from "@/Contexts/ChatsContext";
-import { AiFillLike } from "react-icons/ai";
 import { FiPaperclip } from "react-icons/fi";
 import { FaImage } from "react-icons/fa";
 import { BsFillEmojiSmileFill } from "react-icons/bs";
+import { FaMicrophone } from "react-icons/fa";
 import Spinner from "./Shared/Spinner";
 const ChatForm = () => {
   const { currentChat } = useChatsContext();
@@ -33,6 +31,7 @@ const ChatForm = () => {
           console.log(err);
           setIsLoading(false);
         });
+      handleInput();
     }
   };
   useEffect(() => {
@@ -47,45 +46,71 @@ const ChatForm = () => {
       textarea.style.height = `${textarea.scrollHeight}px`; // then grow if needed
     }
   };
+  useEffect(() => {
+    handleInput();
+  }, [message]);
 
   return (
-    <div className="flex w-full justify-between items-center bg-gray-900 p-4 z-[50] border-t-[1px] border-solid border-gray-700 pb-[70px]">
-      <div className="flex justify-between items-center w-full bg-gray-700 rounded-md overflow-hidden max-sm:h-[60px]">
+    <div className="flex w-full justify-between items-center bg-gray-900 p-4 z-[50] border-t-[1px] border-solid border-gray-700 max-sm:pb-[70px]">
+      <div className="flex justify-between items-center w-full bg-gray-700 rounded-md overflow-hidden max-sm:h-[60px] px-2">
+        <span className="w-[30px] h-[30px] text-gray-400 flex justify-center items-center hover:bg-gray-800/50 rounded-md duration-200">
+          <BsFillEmojiSmileFill />
+        </span>
         <textarea
           className="flex-1 bg-transparent outline-none border-none focus:outline-none focus:border-none ring-0 focus:ring-0 text-gray-300 resize-none h-auto min-h-[40px] max-h-[150px] "
           ref={textareaRef}
-          onInput={handleInput}
           onChange={(e) => {
             setMessage(e.target.value);
           }}
-        >
-          {message}
-        </textarea>
+          placeholder="Message"
+          value={message}
+        ></textarea>
         <div className="flex h-[40px] justify-center items-center max-sm:flex-col">
           <div className="flex">
-            <span className="w-[30px] h-[30px] text-gray-400 flex justify-center items-center hover:bg-gray-800/50 rounded-md duration-200">
-              <BsFillEmojiSmileFill />
-            </span>
-            <span className="w-[30px] h-[30px] text-gray-400 flex justify-center items-center hover:bg-gray-800/50 rounded-md duration-200">
-              <AiFillLike />
-            </span>
-          </div>
-          <div className="flex">
-            <span className="w-[30px] h-[30px] text-gray-400 flex justify-center items-center hover:bg-gray-800/50 rounded-md duration-200">
+            <span className="relative w-[30px] h-[30px] text-gray-400 flex justify-center items-center hover:bg-gray-800/50 rounded-md duration-200">
               <FiPaperclip />
+              <input
+                type="file"
+                name="files"
+                multiple
+                className="absolute inset-0 opacity-0 cursor-pointer z-[10]"
+              />
             </span>
-            <span className="w-[30px] h-[30px] text-gray-400 flex justify-center items-center hover:bg-gray-800/50 rounded-md duration-200">
+            <span className="relative w-[30px] h-[30px] text-gray-400 flex justify-center items-center hover:bg-gray-800/50 rounded-md duration-200">
               <FaImage />
+              <input
+                type="file"
+                name="files"
+                multiple
+                accept="image/*"
+                className="absolute inset-0 opacity-0 cursor-pointer z-[10]"
+              />
             </span>
           </div>
         </div>
-        <PrimaryButton
-          classes="px-3 py-1.5 w-[50px] h-[40px] bg-gray-700/50 hover:bg-gray-800/50 rounded-l-none border-none"
-          event={newMessage}
-        >
-          {isLoading ? <Spinner size="small" /> : <BiSolidSend />}
-        </PrimaryButton>
       </div>
+      <button
+        className="relative px-3 py-1.5 w-[40px] h-[40px] bg-blue-700 hover:bg-blue-600 rounded-full text-gray-300 ml-2 duration-200"
+        // event={newMessage}
+        onClick={() => newMessage()}
+      >
+        {isLoading ? (
+          <Spinner size="small" />
+        ) : (
+          <>
+            <FaMicrophone
+              className={`absolute inset-0 duration-200 w-full h-full flex justify-center items-center p-[10px] ${
+                message == "" ? " opacity-100" : "  opacity-0"
+              }`}
+            />
+            <BiSolidSend
+              className={`absolute inset-0  duration-200 w-full h-full flex justify-center items-center p-[10px] ${
+                message == "" ? " opacity-0" : " opacity-100 "
+              }`}
+            />
+          </>
+        )}
+      </button>
     </div>
   );
 };

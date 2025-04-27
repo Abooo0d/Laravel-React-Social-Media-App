@@ -16,7 +16,6 @@ import { useMainContext } from "@/Contexts/MainContext";
 import { useGetGroups, useGetNotifications } from "@/TanStackQurey/Querys";
 export default function Authenticated({ children }) {
   const { auth } = usePage().props;
-  const { setHideAllMenus, hideAllMenus } = useMainContext();
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
   const [showFollowerContainer, setShowFollowerContainer] = useState(false);
@@ -27,33 +26,31 @@ export default function Authenticated({ children }) {
   const { data: notifications, isLoading: LoadingNotifications } =
     useGetNotifications();
   const { data: groups, isLoading: loadingGroups } = useGetGroups();
+  const hideAll = () => {
+    setShowFollowerContainer(false);
+    setShowGroupContainer(false);
+    setShowNotificationsForm(false);
+  };
+
   useEffect(() => {
     if (showFollowerContainer) {
-      setShowNotificationsForm(false);
       setShowGroupContainer(false);
+      setShowNotificationsForm(false);
     }
   }, [showFollowerContainer]);
+  useEffect(() => {
+    if (showGroupContainer) {
+      setShowNotificationsForm(false);
+      setShowFollowerContainer(false);
+    }
+  }, [showGroupContainer]);
   useEffect(() => {
     if (showNotificationsForm) {
       setShowFollowerContainer(false);
       setShowGroupContainer(false);
     }
   }, [showNotificationsForm]);
-  useEffect(() => {
-    if (showGroupContainer) {
-      setShowFollowerContainer(false);
-      setShowNotificationsForm(false);
-    }
-  }, [showGroupContainer]);
 
-  useEffect(() => {
-    if (hideAllMenus) {
-      setShowFollowerContainer(false);
-      setShowGroupContainer(false);
-      setShowNotificationsForm(false);
-      setHideAllMenus(false);
-    }
-  }, [hideAllMenus]);
   return (
     <div className="min-h-screen bg-gray-300/80 dark:bg-homeFeed">
       <nav className="relative bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">
@@ -64,7 +61,7 @@ export default function Authenticated({ children }) {
                 <Link
                   href="/"
                   onClick={() => {
-                    setHideAllMenus(true);
+                    hideAll();
                   }}
                 >
                   <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
@@ -99,7 +96,7 @@ export default function Authenticated({ children }) {
                 </MenuButton>
                 <MenuButton
                   event={() => {
-                    setHideAllMenus(true);
+                    hideAll();
                     router.get(route("chats"));
                   }}
                   show={false}
@@ -116,7 +113,7 @@ export default function Authenticated({ children }) {
                 </button>
               </div>
               <div className="hidden sm:flex sm:items-center">
-                <div className="relative z-[50]">
+                <div className="relative z-[100]">
                   {currentUser ? (
                     <Dropdown>
                       <Dropdown.Trigger>
