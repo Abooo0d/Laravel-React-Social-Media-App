@@ -1,6 +1,7 @@
 import { useUserContext } from "@/Contexts/UserContext";
 import React from "react";
-
+import ReactMarkdown from "react-markdown";
+import MarkdownRenderer from "./MarkdownRenderer";
 const MessageCard = ({ message }) => {
   const { user } = useUserContext();
 
@@ -20,18 +21,22 @@ const MessageCard = ({ message }) => {
         }`}
       >
         <div
-          className={`backdrop-blur-sm w-fit px-4 py-2 rounded-md text-gray-400 word-wrap cursor-default max-w-[60%] flex justify-center items-center break-all  ${
+          className={`backdrop-blur-sm w-fit px-4 py-2 rounded-md text-gray-400 word-wrap cursor-default max-w-[80%] flex justify-center items-center break-all  ${
             message.user.id != user.id
               ? "bg-[rgba(46,59,78,100%)]"
-              : "bg-[rgba(9,73,112,100%)]"
+              : "bg-[rgba(12,36,51,100%)]"
           }`}
         >
-          {message.body}
+          {/* <div className="markdown-body"> */}
+          <MarkdownRenderer content={message.body}>
+            {message.body}
+          </MarkdownRenderer>
+          {/* </div> */}
           <div
             className={`absolute bottom-0 ${
               message.user.id != user.id
                 ? "left-[-10px] w-[20px] h-[20px] border-[10px] border-solid border-transparent border-b-[rgba(46,59,78,100%)] z-10"
-                : "right-[-10px] w-[20px] h-[20px] border-[10px] border-solid border-transparent border-b-[rgba(9,73,112,100%)] z-10"
+                : "right-[-10px] w-[20px] h-[20px] border-[10px] border-solid border-transparent border-b-[rgba(12,36,51,100%)] z-10"
             }`}
           />
         </div>

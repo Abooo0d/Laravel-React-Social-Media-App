@@ -138,6 +138,7 @@ export const ChatsContext = ({ children }) => {
                   messages: [message, ...chat.messages],
                   last_message: message.body,
                   last_message_id: message.id,
+                  last_message_date: message.created_at,
                 };
               }
               return chat;
@@ -158,6 +159,7 @@ export const ChatsContext = ({ children }) => {
               messages: [message, ...prevChat.messages],
               last_message: message.body,
               last_message_id: message.id,
+              last_message_date: message.created_at,
             };
           });
         },

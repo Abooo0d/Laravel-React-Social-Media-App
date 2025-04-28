@@ -13,7 +13,6 @@ const MessagesContainer = ({ isLoading }) => {
   const [ref, inView, entry] = useInView();
   const { currentChat, setCurrentChat } = useChatsContext();
   const [thereIsMore, setThereIsMore] = useState(true);
-  const [newMessages, setNewMessages] = useState(false);
   const getMore = () => {
     axiosClient
       .get(
@@ -23,7 +22,6 @@ const MessagesContainer = ({ isLoading }) => {
         )
       )
       .then(({ data }) => {
-        setNewMessages(true);
         if (data.messages.length == 0) {
           setThereIsMore(false);
           return;
@@ -43,12 +41,9 @@ const MessagesContainer = ({ isLoading }) => {
     }
   }, [inView]);
   useEffect(() => {
-    if (!newMessages) return;
-    let scrollHeight = containerRef.current.scrollHeight;
-    let scrollTop = containerRef.current.scrollTop;
-    let offsetHeight = containerRef.current.offsetHeight;
-    console.log("Abood");
-  }, [newMessages]);
+    setThereIsMore(true);
+  }, [currentChat]);
+
   return (
     <div className="order-2 relative bg-gray-300 dark:bg-homeFeed bg-chat-pattern bg-cover min-h-full max-h-barHeight flex-1 overflow-scroll flex flex-col justify-between items-center gap-2">
       <div className="absolute inset-0 w-full h-full bg-[rgba(17,24,39,58%)]" />

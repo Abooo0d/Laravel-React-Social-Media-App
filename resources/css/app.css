@@ -22,3 +22,23 @@ main {
 ::-webkit-scrollbar-thumb {
   background-color: #262272;
 }
+.epr-main.EmojiPickerReact {
+  background-color: #111827;
+}
+.epr-emoji-category h2.epr-emoji-category-label {
+  background-color: #24314c7a;
+}
+
+/* Paste styles from `node_modules/unreset-css/unreset.css` here */
+
+pre {
+  background-color: transparent !important;
+  div {
+    background-color: transparent !important;
+    code {
+      background-color: transparent !important;
+    }
+  }
+}
+
+/* Add more elements as needed */

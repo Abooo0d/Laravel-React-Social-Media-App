@@ -72,15 +72,21 @@ class ChatsController extends Controller
       'body' => $data['body'] ?? null,
       'attachment_path' => $data['attachment_path'] ?? null,
     ]);
-    // MessageStatus::create([
-    //   'message_id' => $message->id,
-    //   'user_id' => auth()->id()
-    // ]);
-    $chat->last_message_id = $message->id;
-    $chat->last_message = $message->body;
+    MessageStatus::create([
+      'message_id' => $message->id,
+      'user_id' => auth()->id(),
+      'is_read' => '1'
+    ]);
+    $lastMessageBody = $message->body;
+
+    // If message is longer than 100 chars, truncate it with ellipsis
+    if (strlen($message->body) > 20) {
+      $lastMessageBody = substr($message->body, 0, 20) . '...';
+    }
     $chat->update([
       'last_massage_id' => $message->id,
-      'last_message' => $message->body
+      'last_message' => $lastMessageBody,
+      'last_message_date' => $message->created_at->format('M:d - H:i')
     ]);
     $chat->save();
     broadcast(new NewMessageSent($message));

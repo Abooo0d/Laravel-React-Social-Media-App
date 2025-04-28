@@ -27,6 +27,7 @@
     "@heroicons/react": "^2.1.1",
     "@inertiajs/inertia": "^0.11.1",
     "@inertiajs/inertia-react": "^0.8.1",
+    "@tailwindcss/typography": "^0.5.16",
     "@tanstack/react-query": "^5.74.4",
     "@tiptap/pm": "^2.6.6",
     "@tiptap/react": "^2.6.6",
@@ -43,6 +44,8 @@
     "react-intersection-observer": "^9.13.1",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^6.26.0",
-    "react-spinners": "^0.17.0"
+    "react-spinners": "^0.17.0",
+    "react-syntax-highlighter": "^15.6.1",
+    "unreset-css": "^1.0.1"
   }
 }

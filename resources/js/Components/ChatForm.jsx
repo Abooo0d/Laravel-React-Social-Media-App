@@ -8,11 +8,14 @@ import { FaImage } from "react-icons/fa";
 import { BsFillEmojiSmileFill } from "react-icons/bs";
 import { FaMicrophone } from "react-icons/fa";
 import Spinner from "./Shared/Spinner";
+import EmojiPicker from "emoji-picker-react";
+import { AiFillLike } from "react-icons/ai";
 const ChatForm = () => {
   const { currentChat } = useChatsContext();
   const { user } = useUserContext();
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [openEmoji, setOpenEmoji] = useState(false);
   const textareaRef = useRef(null);
   const newMessage = () => {
     if (message !== "") {
@@ -26,6 +29,7 @@ const ChatForm = () => {
         .then(({ data }) => {
           setMessage("");
           setIsLoading(false);
+          setOpenEmoji(false);
         })
         .catch((err) => {
           console.log(err);
@@ -36,15 +40,27 @@ const ChatForm = () => {
   };
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "40px"; // force initial height
+      textareaRef.current.style.height = "40px";
     }
   }, []);
   const handleInput = () => {
     const textarea = textareaRef.current;
     if (textarea) {
-      textarea.style.height = "40px"; // reset to min height first
-      textarea.style.height = `${textarea.scrollHeight}px`; // then grow if needed
+      textarea.style.height = "40px";
+      textarea.style.height = `${textarea.scrollHeight}px`;
     }
+  };
+  const sendLike = () => {
+    axiosClient
+      .post(route("newMessage", currentChat), {
+        body: "👍",
+        user_id: user.id,
+        chat_id: currentChat.id,
+      })
+      .then(() => {})
+      .catch((err) => {
+        console.log(err);
+      });
   };
   useEffect(() => {
     handleInput();
@@ -52,9 +68,36 @@ const ChatForm = () => {
 
   return (
     <div className="flex w-full justify-between items-center bg-gray-900 p-4 z-[50] border-t-[1px] border-solid border-gray-700 max-sm:pb-[70px]">
-      <div className="flex justify-between items-center w-full bg-gray-700 rounded-md overflow-hidden max-sm:h-[60px] px-2">
-        <span className="w-[30px] h-[30px] text-gray-400 flex justify-center items-center hover:bg-gray-800/50 rounded-md duration-200">
-          <BsFillEmojiSmileFill />
+      <div className=" relative flex justify-between items-center w-full bg-gray-700 rounded-md max-sm:h-[60px] px-2">
+        <div
+          className={`absolute -top-[320px] left-0 duration-200 ${
+            openEmoji ? "opacity-100 visible z-10" : " opacity-0 invisible z-0"
+          }`}
+        >
+          {/* <EmojiPicker
+            className="absolute w-full h-full top-0 left-0 "
+            width="300px"
+            height="300px"
+            theme="dark"
+            style={{ border: "1px solid #374151" }}
+            lazyLoadEmojis={true}
+            searchDisabled={true}
+            emojiStyle="google"
+            onEmojiClick={(emoji) => {
+              setMessage((prev) => prev + emoji.emoji);
+            }}
+          /> */}
+        </div>
+        <span
+          className={`w-[30px] h-[30px] text-gray-400 flex justify-center items-center hover:bg-gray-800/50 rounded-md duration-200 cursor-pointer
+          ${openEmoji && "bg-gray-800/50"}
+          `}
+        >
+          <BsFillEmojiSmileFill
+            onClick={() => {
+              setOpenEmoji((prev) => !prev);
+            }}
+          />
         </span>
         <textarea
           className="flex-1 bg-transparent outline-none border-none focus:outline-none focus:border-none ring-0 focus:ring-0 text-gray-300 resize-none h-auto min-h-[40px] max-h-[150px] "
@@ -67,6 +110,12 @@ const ChatForm = () => {
         ></textarea>
         <div className="flex h-[40px] justify-center items-center max-sm:flex-col">
           <div className="flex">
+            <span
+              className="relative w-[30px] h-[30px] text-gray-400 flex justify-center items-center hover:bg-gray-800/50 rounded-md duration-200"
+              onClick={() => sendLike()}
+            >
+              <AiFillLike />
+            </span>
             <span className="relative w-[30px] h-[30px] text-gray-400 flex justify-center items-center hover:bg-gray-800/50 rounded-md duration-200">
               <FiPaperclip />
               <input

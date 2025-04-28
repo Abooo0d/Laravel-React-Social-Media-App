@@ -47,6 +47,7 @@ class ChatResource extends JsonResource
       'updated_at' => $this->updated_at,
       'last_message' => $this->last_message,
       'last_message_id' => $this->last_message_id,
+      'last_message_date' => $this->last_message_date
     ];
   }
 }

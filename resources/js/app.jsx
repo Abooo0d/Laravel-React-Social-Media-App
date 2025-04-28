@@ -94,7 +94,8 @@ import "./bootstrap";
 import "animate.css";
 import "./Components/Shared/index.css";
 import "../css/app.css";
-
+// import "unreset-css/dist/unreset.min.css"; // Restores default styles
+import "unreset-css/dist/unreset.css";
 import { createRoot } from "react-dom/client";
 import { createInertiaApp } from "@inertiajs/react";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
