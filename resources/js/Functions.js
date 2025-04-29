@@ -27,5 +27,58 @@ function isImage(file) {
   mime = mime ? mime.split("/") : "";
   return mime[0] ? mime[0].toLowerCase() : "" === "image";
 }
-
-export { formatRelativeTime, isImage };
+function MessageIsImage(file) {
+  file = file.file ? file.file : file;
+  let mime = file.mime || file.type;
+  mime = mime ? mime.split("/") : "";
+  return mime[0].toLowerCase() === "image";
+}
+function MessageIsVideo(file) {
+  file = file.file ? file.file : file;
+  let mime = file.mime || file.type;
+  mime = mime ? mime.split("/") : "";
+  return mime[0].toLowerCase() == "video";
+}
+function MessageIsAudio(file) {
+  file = file.file ? file.file : file;
+  let mime = file.mime || file.type;
+  mime = mime ? mime.split("/") : "";
+  return mime[0].toLowerCase() === "audio";
+}
+function MessageIsPDF(file) {
+  file = file.file ? file.file : file;
+  let mime = file.mime || file.type;
+  mime = mime ? mime.split("/") : "";
+  return mime[0].toLowerCase() === "pdf";
+}
+const isPreviewAble = (attachment) => {
+  return (
+    isImage(attachment) ||
+    isAudio(attachment) ||
+    isVideo(attachment) ||
+    isPDF(attachment)
+  );
+};
+const formatBytes = (bytes, decimals = 2) => {
+  if (bytes == 0) return "0 Bytes";
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  let sizes = ["Bytes", "KB", "MB", "GB"];
+  let i = 0;
+  let size = bytes;
+  while (size >= k) {
+    size /= k;
+    i++;
+  }
+  return parseFloat(size.toFixed(dm)) + " " + sizes[i];
+};
+export {
+  formatRelativeTime,
+  isImage,
+  MessageIsImage,
+  MessageIsVideo,
+  MessageIsAudio,
+  MessageIsPDF,
+  isPreviewAble,
+  formatBytes,
+};

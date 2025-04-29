@@ -10,30 +10,64 @@ import { FaMicrophone } from "react-icons/fa";
 import Spinner from "./Shared/Spinner";
 import EmojiPicker from "emoji-picker-react";
 import { AiFillLike } from "react-icons/ai";
+import { useMainContext } from "@/Contexts/MainContext";
+import MessageAttachmentsContainer from "./Shared/MessageAttachmentsContainer";
 const ChatForm = () => {
   const { currentChat } = useChatsContext();
   const { user } = useUserContext();
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [openEmoji, setOpenEmoji] = useState(false);
+  const [chosenFiles, setChosenFiles] = useState([]);
+  const [uploadingProgress, setUploadingProgress] = useState(0);
+  const { setErrors } = useMainContext();
+  const onFileChange = (ev) => {
+    const files = ev.target.files;
+    const updatedFiles = [...files].map((file) => {
+      return { file: file, url: URL.createObjectURL(file) };
+    });
+    setChosenFiles((prev) => {
+      return [...prev, ...updatedFiles];
+    });
+  };
   const textareaRef = useRef(null);
   const newMessage = () => {
     if (message !== "") {
       setIsLoading(true);
+      const files = chosenFiles?.map((file) => {
+        return file.file;
+      });
       axiosClient
-        .post(route("newMessage", currentChat), {
-          body: message,
-          user_id: user.id,
-          chat_id: currentChat.id,
-        })
-        .then(({ data }) => {
+        .post(
+          route("newMessage", currentChat),
+          {
+            body: message,
+            user_id: user.id,
+            chat_id: currentChat.id,
+            attachments: files,
+          },
+          {
+            onUploadProgress: (progressEvent) => {
+              const progress = Math.round(
+                (progressEvent.loaded / progressEvent.total) * 100
+              );
+              setUploadingProgress(progress);
+            },
+          }
+        )
+        .then(() => {
           setMessage("");
           setIsLoading(false);
           setOpenEmoji(false);
+          setUploadingProgress(0);
+          setChosenFiles([]);
         })
         .catch((err) => {
           console.log(err);
           setIsLoading(false);
+          setChosenFiles([]);
+          let message = err?.response?.data?.message;
+          setErrors([message]);
         });
       handleInput();
     }
@@ -65,9 +99,12 @@ const ChatForm = () => {
   useEffect(() => {
     handleInput();
   }, [message]);
-
   return (
-    <div className="flex w-full justify-between items-center bg-gray-900 p-4 z-[50] border-t-[1px] border-solid border-gray-700 max-sm:pb-[70px]">
+    <div className="flex relative w-full justify-between items-center bg-gray-900 p-4 z-[50] border-t-[1px] border-solid border-gray-700 max-sm:pb-[70px]">
+      <MessageAttachmentsContainer
+        attachments={chosenFiles}
+        setAttachments={setChosenFiles}
+      />
       <div className=" relative flex justify-between items-center w-full bg-gray-700 rounded-md max-sm:h-[60px] px-2">
         <div
           className={`absolute -top-[320px] left-0 duration-200 ${
@@ -99,6 +136,16 @@ const ChatForm = () => {
             }}
           />
         </span>
+        {!!uploadingProgress && (
+          <div className="absolute top-[-10px] left-0 w-full h-[5px] bg-gray-800 flex justify-start items-center rounded-full overflow-hidden">
+            <span
+              className={`absolute top-0 left-0 h-full bg-blue-700 duration-500 max-w-full`}
+              style={{
+                width: uploadingProgress + "%",
+              }}
+            ></span>
+          </div>
+        )}
         <textarea
           className="flex-1 bg-transparent outline-none border-none focus:outline-none focus:border-none ring-0 focus:ring-0 text-gray-300 resize-none h-auto min-h-[40px] max-h-[150px] "
           ref={textareaRef}
@@ -121,6 +168,7 @@ const ChatForm = () => {
               <input
                 type="file"
                 name="files"
+                onChange={onFileChange}
                 multiple
                 className="absolute inset-0 opacity-0 cursor-pointer z-[10]"
               />
@@ -130,6 +178,7 @@ const ChatForm = () => {
               <input
                 type="file"
                 name="files"
+                onChange={onFileChange}
                 multiple
                 accept="image/*"
                 className="absolute inset-0 opacity-0 cursor-pointer z-[10]"
