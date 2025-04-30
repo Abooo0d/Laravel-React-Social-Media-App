@@ -3,7 +3,7 @@ import MessageAttachment from "./MessageAttachment";
 import { PrimaryButton } from "./Buttons";
 import { HiMiniXMark } from "react-icons/hi2";
 
-const MessageAttachmentsContainer = ({ attachments, setAttachments }) => {
+const ChatFormAttachmentContainer = ({ attachments, setAttachments }) => {
   return (
     <div
       className={`absolute bottom-[calc(100%+10px)] left-[10px] bg-gray-800 rounded-md border-[1px] border-solid border-gray-500 flex flex-col justify-start items-start gap-2 py-2 px-4 max-sm:p-2 w-[300px] max-h-[350px] overflow-hidden
@@ -31,7 +31,6 @@ const MessageAttachmentsContainer = ({ attachments, setAttachments }) => {
           {attachments?.map((attachment, index) => (
             <MessageAttachment
               attachment={attachment}
-              allAttachments={attachments}
               setAllAttachments={setAttachments}
               index={index}
               key={index}
@@ -43,4 +42,4 @@ const MessageAttachmentsContainer = ({ attachments, setAttachments }) => {
   );
 };
 
-export default MessageAttachmentsContainer;
+export default ChatFormAttachmentContainer;

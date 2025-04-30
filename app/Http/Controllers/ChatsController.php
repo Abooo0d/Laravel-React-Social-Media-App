@@ -8,8 +8,11 @@ use App\Http\Resources\ChatResource;
 use App\Http\Resources\MessageResource;
 use App\Models\Chat;
 use App\Models\Message;
+use App\Models\MessageAttachment;
 use App\Models\MessageStatus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class ChatsController extends Controller
@@ -66,12 +69,30 @@ class ChatsController extends Controller
   public function newMessage(NewMessageRequest $request, Chat $chat)
   {
     $data = $request->validated();
+    $files = $data['attachments'] ?? [];
     $message = Message::create([
       'chat_id' => $chat->id,
       'user_id' => auth()->id(),
       'body' => $data['body'] ?? null,
       'attachment_path' => $data['attachment_path'] ?? null,
     ]);
+    $attachments = [];
+    if ($files) {
+      foreach ($files as $file) {
+        $directory = 'MessagesAttachments/' . Str::random(32);
+        Storage::makeDirectory($directory);
+        $model = [
+          'message_id' => $message->id,
+          'name' => $file->getClientOriginalName(),
+          'mime' => $file->getClientMimeType(),
+          'size' => $file->getSize(),
+          'path' => $file->store($directory, 'public')
+        ];
+        $attachment = MessageAttachment::create($model);
+        $attachments[] = $attachment;
+      }
+      $message->attachments = $attachments;
+    }
     MessageStatus::create([
       'message_id' => $message->id,
       'user_id' => auth()->id(),

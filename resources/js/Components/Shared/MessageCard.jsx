@@ -2,6 +2,7 @@ import { useUserContext } from "@/Contexts/UserContext";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import MarkdownRenderer from "./MarkdownRenderer";
+import MessageAttachmentContainer from "./MessageAttachmentContainer";
 const MessageCard = ({ message }) => {
   const { user } = useUserContext();
 
@@ -21,17 +22,18 @@ const MessageCard = ({ message }) => {
         }`}
       >
         <div
-          className={`backdrop-blur-sm w-fit px-4 py-2 rounded-md text-gray-400 word-wrap cursor-default max-w-[80%] flex justify-center items-center break-all  ${
+          className={`backdrop-blur-sm w-fit px-4 py-2 rounded-md text-gray-400 word-wrap cursor-default max-w-[80%] flex justify-center items-start flex-col break-all  ${
             message.user.id != user.id
               ? "bg-[rgba(46,59,78,100%)]"
               : "bg-[rgba(12,36,51,100%)]"
           }`}
         >
-          {/* <div className="markdown-body"> */}
+          {message?.attachments.length > 0 && (
+            <MessageAttachmentContainer attachments={message.attachments} />
+          )}
           <MarkdownRenderer content={message.body}>
             {message.body}
           </MarkdownRenderer>
-          {/* </div> */}
           <div
             className={`absolute bottom-0 ${
               message.user.id != user.id

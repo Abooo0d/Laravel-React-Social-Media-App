@@ -32,7 +32,7 @@ class MessageResource extends JsonResource
     return [
       'id' => $this->id,
       'body' => $this->body,
-      'attachment' => $this->attachment_path,
+      'attachments' => MessageAttachmentResource::collection($this->attachments),
       'created_at' => $this?->created_at->format('M:d - H:i'),
       'user' => [
         'id' => $this->user->id,

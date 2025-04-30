@@ -89,4 +89,13 @@ pre {
   border-radius: 9999px;
   height: 6px;
 }
+/* .custom-audio::-webkit-media-controls-panel {
+  background-color: ;
+}
+
+.custom-audio::-webkit-media-controls-play-button,
+.custom-audio::-webkit-media-controls-mute-button {
+  background-color: white;
+  border-radius: 50%;
+} */
 /* Add more elements as needed */

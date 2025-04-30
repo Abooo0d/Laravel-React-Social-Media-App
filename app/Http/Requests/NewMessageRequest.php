@@ -24,9 +24,11 @@ class NewMessageRequest extends FormRequest
   public function rules(): array
   {
     return [
-      'body' => ['required', 'string'],
+      'body' => ['nullable', 'string', 'required_without:attachments',],
       'chat_id' => ['required', 'exists:chats,id'],
-      'user_id' => ['required', 'exists:users,id']
+      'user_id' => ['required', 'exists:users,id'],
+      'attachments' => ['array', 'nullable', 'max:10', 'required_without:body'],
+      'attachment.*' => ['file', 'max:1024000']
     ];
   }
 }

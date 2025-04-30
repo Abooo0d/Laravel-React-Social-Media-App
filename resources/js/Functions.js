@@ -22,41 +22,42 @@ function formatRelativeTime(dateString) {
   return `${diffInDays} days ago`;
 }
 function isImage(file) {
-  file = file.file ? file.file : file;
-  let mime = file.mime || file.type;
-  mime = mime ? mime.split("/") : "";
-  return mime[0] ? mime[0].toLowerCase() : "" === "image";
+  file = file?.file ? file?.file : file;
+  let mime = file?.mime || file?.type;
+  mime = mime ? mime?.split("/") : "";
+  return mime[0] ? mime[0]?.toLowerCase() : "" === "image";
 }
 function MessageIsImage(file) {
-  file = file.file ? file.file : file;
-  let mime = file.mime || file.type;
-  mime = mime ? mime.split("/") : "";
-  return mime[0].toLowerCase() === "image";
+  file = file?.file ? file?.file : file;
+  let mime = file?.mime || file?.type;
+  mime = mime ? mime?.split("/") : "";
+  return mime[0]?.toLowerCase() === "image";
 }
 function MessageIsVideo(file) {
-  file = file.file ? file.file : file;
-  let mime = file.mime || file.type;
-  mime = mime ? mime.split("/") : "";
-  return mime[0].toLowerCase() == "video";
+  file = file?.file ? file?.file : file;
+  let mime = file?.mime || file?.type;
+  mime = mime ? mime?.split("/") : "";
+  return mime[0]?.toLowerCase() == "video";
 }
 function MessageIsAudio(file) {
-  file = file.file ? file.file : file;
-  let mime = file.mime || file.type;
-  mime = mime ? mime.split("/") : "";
-  return mime[0].toLowerCase() === "audio";
+  file = file.file ? file?.file : file;
+  let mime = file?.mime || file?.type;
+  mime = mime ? mime?.split("/") : "";
+  return mime[0]?.toLowerCase() === "audio";
 }
 function MessageIsPDF(file) {
   file = file.file ? file.file : file;
-  let mime = file.mime || file.type;
-  mime = mime ? mime.split("/") : "";
-  return mime[0].toLowerCase() === "pdf";
+  let mime = file?.mime || file?.type;
+  return mime == "application/pdf";
+  // mime = mime ? mime.split("/") : "";
+  // return mime[0].toLowerCase() === "pdf";
 }
 const isPreviewAble = (attachment) => {
   return (
-    isImage(attachment) ||
-    isAudio(attachment) ||
-    isVideo(attachment) ||
-    isPDF(attachment)
+    MessageIsImage(attachment) ||
+    MessageIsVideo(attachment) ||
+    MessageIsAudio(attachment) ||
+    MessageIsPDF(attachment)
   );
 };
 const formatBytes = (bytes, decimals = 2) => {

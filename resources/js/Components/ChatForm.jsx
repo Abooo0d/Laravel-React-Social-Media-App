@@ -11,7 +11,8 @@ import Spinner from "./Shared/Spinner";
 import EmojiPicker from "emoji-picker-react";
 import { AiFillLike } from "react-icons/ai";
 import { useMainContext } from "@/Contexts/MainContext";
-import MessageAttachmentsContainer from "./Shared/MessageAttachmentsContainer";
+import { useForm } from "@inertiajs/inertia-react";
+import ChatFormAttachmentContainer from "./Shared/ChatFormAttachmentContainer";
 const ChatForm = () => {
   const { currentChat } = useChatsContext();
   const { user } = useUserContext();
@@ -32,29 +33,27 @@ const ChatForm = () => {
   };
   const textareaRef = useRef(null);
   const newMessage = () => {
-    if (message !== "") {
-      setIsLoading(true);
+    if (message !== "" || chosenFiles.length > 0) {
       const files = chosenFiles?.map((file) => {
         return file.file;
       });
+      const formData = new FormData();
+      formData.append("body", message);
+      formData.append("user_id", user.id);
+      formData.append("chat_id", currentChat.id);
+      files.forEach((file) => {
+        formData.append("attachments[]", file);
+      });
+      setIsLoading(true);
       axiosClient
-        .post(
-          route("newMessage", currentChat),
-          {
-            body: message,
-            user_id: user.id,
-            chat_id: currentChat.id,
-            attachments: files,
+        .post(route("newMessage", currentChat), formData, {
+          onUploadProgress: (progressEvent) => {
+            const progress = Math.round(
+              (progressEvent.loaded / progressEvent.total) * 100
+            );
+            setUploadingProgress(progress);
           },
-          {
-            onUploadProgress: (progressEvent) => {
-              const progress = Math.round(
-                (progressEvent.loaded / progressEvent.total) * 100
-              );
-              setUploadingProgress(progress);
-            },
-          }
-        )
+        })
         .then(() => {
           setMessage("");
           setIsLoading(false);
@@ -101,7 +100,7 @@ const ChatForm = () => {
   }, [message]);
   return (
     <div className="flex relative w-full justify-between items-center bg-gray-900 p-4 z-[50] border-t-[1px] border-solid border-gray-700 max-sm:pb-[70px]">
-      <MessageAttachmentsContainer
+      <ChatFormAttachmentContainer
         attachments={chosenFiles}
         setAttachments={setChosenFiles}
       />
@@ -198,12 +197,16 @@ const ChatForm = () => {
           <>
             <FaMicrophone
               className={`absolute inset-0 duration-200 w-full h-full flex justify-center items-center p-[10px] ${
-                message == "" ? " opacity-100" : "  opacity-0"
+                message == "" && chosenFiles.length == 0
+                  ? " opacity-100"
+                  : "  opacity-0"
               }`}
             />
             <BiSolidSend
               className={`absolute inset-0  duration-200 w-full h-full flex justify-center items-center p-[10px] ${
-                message == "" ? " opacity-0" : " opacity-100 "
+                message == "" && chosenFiles.length == 0
+                  ? " opacity-0"
+                  : " opacity-100 "
               }`}
             />
           </>
