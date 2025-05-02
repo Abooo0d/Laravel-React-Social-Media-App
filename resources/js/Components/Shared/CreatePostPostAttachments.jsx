@@ -4,8 +4,6 @@ const CreatePostPostAttachments = ({
   post,
   attachmentsErrors,
   onDelete,
-  undoDelete,
-  update,
   setImage,
   setShowImage,
   setShowPost,
@@ -42,8 +40,6 @@ const CreatePostPostAttachments = ({
                           index={index}
                           attachmentsErrors={attachmentsErrors}
                           onDelete={onDelete}
-                          undoDelete={undoDelete}
-                          update={update}
                           setImage={setImage}
                           setImageIndex={setImageIndex}
                           setShowImage={setShowImage}
@@ -58,8 +54,6 @@ const CreatePostPostAttachments = ({
                               index={index}
                               attachmentsErrors={attachmentsErrors}
                               onDelete={onDelete}
-                              undoDelete={undoDelete}
-                              update={update}
                               setImage={setImage}
                               setImageIndex={setImageIndex}
                               setShowImage={setShowImage}
@@ -90,8 +84,6 @@ const CreatePostPostAttachments = ({
                       index={index}
                       attachmentsErrors={attachmentsErrors}
                       onDelete={onDelete}
-                      undoDelete={undoDelete}
-                      update={update}
                       setImage={setImage}
                       setImageIndex={setImageIndex}
                       setShowImage={setShowImage}

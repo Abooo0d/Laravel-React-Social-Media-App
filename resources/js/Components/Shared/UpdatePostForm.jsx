@@ -1,23 +1,27 @@
 import { useEffect, useState } from "react";
 import { HiMiniXMark } from "react-icons/hi2";
 import PostOwnerInfo from "./PostOwnerInfo";
-import { router, useForm } from "@inertiajs/react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import PostPreview from "./PostPreview";
 import ImageFullView from "./ImageFullView";
-import { isImage } from "@/Functions";
 import UpdatePostPostAttachments from "./UpdatePostPostAttachments";
 import { SecondaryButton } from "./Buttons";
 import PopupCard from "./PopupCard";
 import { useMainContext } from "@/Contexts/MainContext";
-export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
+import axiosClient from "@/AxiosClient/AxiosClient";
+export default function UpdatePostForm({
+  post,
+  user,
+  showForm,
+  setShowForm,
+  refetch,
+}) {
   const { setSuccessMessage, setErrors } = useMainContext();
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState(false);
   const [showPost, setShowPost] = useState(false);
   const [postData, setPostData] = useState(post);
-  const [attachment, setAttachment] = useState();
   const [imageIndex, setImageIndex] = useState();
   const [attachmentsErrors, setAttachmentsErrors] = useState([]);
   const [finalPost, setFinalPost] = useState({
@@ -25,13 +29,11 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
     attachments: [],
     deletedFilesIds: [],
   });
-  const { setData, post: submit } = useForm({ ...finalPost });
+
   function close() {
     setShowForm(false);
   }
-  useEffect(() => {
-    setData(finalPost);
-  }, [finalPost]);
+
   useEffect(() => {
     setPostData(post);
     setFinalPost({
@@ -43,13 +45,29 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
   }, [showForm]);
 
   const handelSubmit = () => {
+    const formData = new FormData();
+    formData.append("id", finalPost.id);
+    formData.append("body", finalPost.body);
+    formData.append("user_id", finalPost.user.id);
+    formData.append("group_id", finalPost.group ? finalPost.group.id : "");
+    const ids = finalPost.deletedFilesIds;
+    ids.forEach((id) => {
+      formData.append("deletedFilesIds[]", id);
+    });
+    const attachments = finalPost.attachments;
+    attachments.forEach((attachment) => {
+      formData.append("attachments[]", attachment);
+    });
     if (post.body !== "" || post.attachments.length !== 0) {
-      submit(route("post.update", finalPost), {
-        onSuccess: () => {
+      axiosClient
+        .post(route("post.update", finalPost.id), formData)
+        .then((data) => {
+          refetch();
+          setSuccessMessage("The Post Updated Successfully");
           setShowForm(false);
-        },
-        _method: "PUT",
-        onError: (e) => {
+        })
+        .catch((err) => {
+          console.log(err);
           setAttachmentsErrors([]);
           for (const key in e) {
             setAttachmentsErrors((prevErrors) => [
@@ -60,40 +78,26 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
               },
             ]);
           }
-        },
-      });
+          setErrors([e?.response?.data?.message || "Some Thing Went Wrong"]);
+        });
     }
   };
   const HandelTheFiles = async (e) => {
-    for (const file of e.target.files) {
-      const myFile = {
-        file,
-        url: await readFile(file),
-      };
+    let files = e.target.files;
+    const updatedFiles = [...files].map((file) => {
+      return { file: file, url: URL.createObjectURL(file) };
+    });
+    for (const f of updatedFiles) {
       setPostData((prev) => ({
         ...prev,
-        attachments: [myFile, ...prev.attachments],
+        attachments: [f, ...prev.attachments],
       }));
       setFinalPost((prev) => ({
         ...prev,
-        attachments: [myFile.file, ...prev.attachments],
+        attachments: [f.file, ...prev.attachments],
       }));
     }
     e.target.value = null;
-  };
-  const readFile = async (file) => {
-    return new Promise((res, rej) => {
-      if (isImage(file)) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          res(reader.result);
-        };
-        reader.onerror = rej;
-        reader.readAsDataURL(file);
-      } else {
-        res(null);
-      }
-    });
   };
   const onDelete = (attachment, index, update) => {
     if (attachment.file) {
@@ -148,6 +152,7 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
       }));
     }
   };
+
   return (
     <>
       <PopupCard showForm={showForm}>
@@ -161,7 +166,7 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
             </SecondaryButton>
           </div>
           <PostOwnerInfo post={post} user={user} />
-          <div className="w-full max-h-[500px] flex flex-col gap-2 overflow-auto">
+          <div className="w-full max-h-[400px] flex flex-col gap-2 overflow-auto">
             <CKEditor
               editor={ClassicEditor}
               data={postData.body}
@@ -175,7 +180,6 @@ export default function UpdatePostForm({ post, user, showForm, setShowForm }) {
               setImage={setImage}
               setShowImage={setShowImage}
               setShowPost={setShowPost}
-              setAttachment={setAttachment}
               setImageIndex={setImageIndex}
               imageIndex={imageIndex}
               onDelete={onDelete}

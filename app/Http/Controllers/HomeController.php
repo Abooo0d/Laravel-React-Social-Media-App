@@ -29,7 +29,6 @@ class HomeController extends Controller
         return $friend->user_id === $myId ? $friend->friend_id : $friend->user_id;
       })->unique()->values()->toArray();
       $userAndFriendIds = array_merge($friendIds, [$myId]);
-
       $posts = Post::PostsForTimeLine($myId)->where(function ($query) use ($userAndFriendIds) {
         $query->whereIn('user_id', $userAndFriendIds)
           ->whereNull('group_id'); // personal posts only

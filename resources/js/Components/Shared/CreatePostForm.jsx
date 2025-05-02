@@ -8,15 +8,15 @@ import ImageFullView from "./ImageFullView";
 import PostPreview from "./PostPreview";
 import CreatePostPostAttachments from "./CreatePostPostAttachments";
 import { SecondaryButton, PrimaryButton } from "./Buttons";
-import { WiStars } from "react-icons/wi";
-import { BsStars } from "react-icons/bs";
 import { SiOpenai } from "react-icons/si";
 import PopupCard from "./PopupCard";
 import "./index.css";
 import { useUserContext } from "@/Contexts/UserContext";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import Spinner from "./Spinner";
-const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
+import { useMainContext } from "@/Contexts/MainContext";
+const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
+  let myFile;
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState("");
   const [showPost, setShowPost] = useState(false);
@@ -25,46 +25,45 @@ const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
   const [attachmentsErrors, setAttachmentsErrors] = useState([]);
   const [loadingAi, setLoadingAi] = useState(false);
   const { user } = useUserContext();
+  const [chosenFiles, setChosenFiles] = useState([]);
+  const { setErrors, setSuccessMessage } = useMainContext();
+
   const [post, setPost] = useState({
     body: "",
     attachments: [],
     user_id: user.id,
-    group_id: groupId,
+    group_id: groupId || "",
   });
-  const [_post, set_Post] = useState({
-    body: "",
-    attachments: [],
-    user_id: user.id,
-    group_id: groupId,
-  });
-  const { setData, post: submit } = useForm({ ..._post });
-  let myFile;
-  useEffect(() => {
-    setPost({ body: "", attachments: [], user_id: user.id, group_id: groupId });
-    setAttachmentsErrors([]);
-  }, [showForm]);
-  useEffect(() => {
-    if (post.body !== "" || post?.attachments?.length !== 0) {
-      set_Post(() => ({
-        ...post,
-        attachments: post?.attachments?.map((attachment) => attachment.file),
-      }));
-    }
-  }, [post]);
-  useEffect(() => {
-    setData(_post);
-  }, [_post]);
+
   function close() {
     setShowForm(false);
   }
+
   const handelSubmit = () => {
     try {
       if (post.body !== "" || post.attachments.length !== 0) {
-        submit(route("post.create"), {
-          onSuccess: () => {
+        const formData = new FormData();
+        formData.append("body", post.body);
+        formData.append("user_id", post.user_id);
+        formData.append("group_id", post.group_id);
+        const finalFiles = chosenFiles.map((file) => {
+          return file.file;
+        });
+        finalFiles.forEach((file) => {
+          formData.append("attachments[]", file);
+        });
+        axiosClient
+          .post(route("post.create"), formData)
+          .then((data) => {
             setShowForm(false);
-          },
-          onError: (e) => {
+            refetch();
+            setSuccessMessage(data?.data?.success);
+          })
+          .catch((err) => {
+            console.log(err);
+            setErrors([
+              err?.response?.data?.message || "Some Thing Went Wrong",
+            ]);
             setAttachmentsErrors([]);
             for (const key in e) {
               setAttachmentsErrors((prevErrors) => [
@@ -75,104 +74,59 @@ const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
                 },
               ]);
             }
-          },
-        });
+          });
       }
     } catch (error) {
       console.log(error);
     }
   };
+
   const HandelTheFiles = async (e) => {
-    try {
-      for (const file of e.target.files) {
-        myFile = {
-          file,
-          url: await readFile(file),
-        };
-        setPost((prev) => ({
-          ...prev,
-          attachments: [...prev.attachments, myFile],
-        }));
-      }
-      e.target.value = null;
-    } catch (error) {
-      console.log(error);
-    }
+    let files = e.target.files;
+    const updatedFiles = [...files].map((file) => {
+      return { file: file, url: URL.createObjectURL(file) };
+    });
+    setChosenFiles((prev) => [...prev, ...updatedFiles]);
   };
-  const readFile = async (file) => {
-    try {
-      return new Promise((res, rej) => {
-        if (isImage(file)) {
-          const reader = new FileReader();
-          reader.onload = () => {
-            res(reader.result);
-          };
-          reader.onerror = rej;
-          reader.readAsDataURL(file);
-        } else {
-          res(null);
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   const onDelete = (attachment, index, update) => {
     try {
       if (attachment.file) {
-        setPost((prevPost) => ({
-          ...prevPost,
-          attachments: prevPost.attachments.filter((f) => f !== attachment),
-        }));
-        if (update) {
-          setFinalPost((prevPost) => ({
-            ...prevPost,
-            attachments: prevPost.attachments.filter((f) => f !== attachment),
-          }));
-        }
+        setChosenFiles((prev) =>
+          prev.filter((file) => file.file !== attachment.file)
+        );
         setAttachmentsErrors((prevErrors) =>
           prevErrors.filter((f) => f.index != index)
         );
       } else {
-        setPost((prevPost) => ({
-          ...prevPost,
-          attachments: prevPost.attachments.map((f) => ({
-            ...f,
-            isDeleted: f === attachment || f.isDeleted === true ? true : false,
-          })),
-        }));
-        if (update) {
-          setFinalPost((prevPost) => ({
-            ...prevPost,
-            deletedFilesIds: [...prevPost.deletedFilesIds, attachment.id],
-          }));
-        }
+        setChosenFiles((prev) =>
+          prev.map((file) => ({
+            ...file,
+            isDeleted:
+              file == attachment || file.isDeleted == true ? true : false,
+          }))
+        );
+        setAttachmentsErrors((prevErrors) =>
+          prevErrors.filter((f) => f.index != index)
+        );
       }
     } catch (error) {
       console.log(error);
     }
   };
-  const undoDelete = (attachment, update) => {
-    try {
-      setPost((prevPost) => ({
-        ...prevPost,
-        attachments: prevPost.attachments.map((f) => ({
-          ...f,
-          isDeleted: f === attachment ? false : f.isDeleted,
-        })),
-      }));
-      if (update) {
-        setFinalPost((prevPost) => ({
-          ...prevPost,
-          deletedFilesIds: [
-            ...prevPost.deletedFilesIds.filter((f) => f !== attachment.id),
-          ],
-        }));
-      }
-    } catch (error) {
-      console.log();
-    }
-  };
+
+  // const undoDelete = (attachment, update) => {
+  //   try {
+  //     setChosenFiles((prev) =>
+  //       prev.map((file) => ({
+  //         ...file,
+  //         isDeleted: file == attachment ? false : true,
+  //       }))
+  //     );
+  //   } catch (error) {
+  //     console.log();
+  //   }
+  // };
   const aiPost = () => {
     if (post.body == "") return;
     setLoadingAi(true);
@@ -194,6 +148,21 @@ const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
       setLoadingAi(false);
     }
   };
+
+  useEffect(() => {
+    setPost({ body: "", attachments: [], user_id: user.id, group_id: groupId });
+    setChosenFiles([]);
+    setAttachmentsErrors([]);
+  }, [showForm]);
+
+  useEffect(() => {
+    setPost((prevPost) => {
+      return {
+        ...prevPost,
+        attachments: chosenFiles,
+      };
+    });
+  }, [chosenFiles]);
   return (
     <div
       className={`relative z-10 focus:outline-none delay-200 ${
@@ -210,7 +179,7 @@ const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
         <div as="h3" className="text-base/7 font-medium text-white mb-4">
           Create Post
         </div>
-        <div className="max-h-[600px] overflow-auto">
+        <div className="max-h-[400px] overflow-auto">
           <div className="relative">
             <PrimaryButton
               classes="absolute top-[50px] right-[10px] z-[100] flex justify-center items-center w-[35px] h-[35px] text-gray-400"
@@ -254,8 +223,6 @@ const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
             post={post}
             attachmentsErrors={attachmentsErrors}
             onDelete={onDelete}
-            undoDelete={undoDelete}
-            update={false}
             setImage={setImage}
             setShowImage={setShowImage}
             setShowPost={setShowPost}
@@ -290,10 +257,10 @@ const CreatePostForm = ({ showForm, setShowForm, groupId }) => {
         show={showPost}
         user={user}
         post={post}
-        update={false}
+        // update={false}
         attachmentsErrors={attachmentsErrors}
         onDelete={onDelete}
-        undoDelete={undoDelete}
+        // undoDelete={undoDelete}
         setShow={setShowPost}
         setImage={setImage}
         setShowImage={setShowImage}

@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function () {
 // Post Group
 Route::middleware('auth')->group(function () {
   Route::post('/post', [PostController::class, 'store'])->name('post.create');
-  Route::post('/post/{post}', [PostController::class, 'update'])->name('post.update');
+  Route::post('/post/{post:id}', [PostController::class, 'update'])->name('post.update');
   Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.delete');
   Route::get('/post/download/{attachment}', [PostController::class, 'downloadAttachment'])->name('post.download');
   Route::post('/post/{post}/reaction', [PostController::class, 'postReaction'])->name('post.reaction');

@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from "react";
 import CreatePost from "../Shared/CreatePost";
 import PostContainer from "./PostContainer";
-import { usePage } from "@inertiajs/react";
-import Spinner from "../Shared/Spinner";
-import { Inertia } from "@inertiajs/inertia";
-import HomeLoader from "./HomeLoader";
-import { useGetPosts } from "@/TanStackQurey/Querys";
 
-const HomeFeed = () => {
-  const { data: posts, isLoading: loadingPosts } = useGetPosts();
+const HomeFeed = ({ posts, loading, refetch }) => {
   const [allPosts, setAllPosts] = useState(posts?.posts);
   useEffect(() => {
     setAllPosts(posts?.posts);
@@ -16,8 +10,17 @@ const HomeFeed = () => {
 
   return (
     <div className="order-2 bg-gray-300 dark:bg-homeFeed lg:min-h-full min-h-[500px] max-h-barHeight flex-1 overflow-scroll">
-      <PostContainer posts={allPosts} classes="px-4" isLoading={loadingPosts}>
-        <CreatePost classes="px-3 py-3 bg-gray-900" />
+      <PostContainer
+        posts={allPosts}
+        classes="px-4"
+        isLoading={loading}
+        refetch={refetch}
+      >
+        <CreatePost
+          classes="px-3 py-3 bg-gray-900"
+          refetch={refetch}
+          groupId=""
+        />
       </PostContainer>
     </div>
   );

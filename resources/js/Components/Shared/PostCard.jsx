@@ -7,7 +7,7 @@ import PostCardPostBody from "./PostCardPostBody";
 import PostCardPostAttachments from "./PostCardPostAttachments";
 import PostCardPostActions from "./PostCardPostActions";
 import PostCommentSection from "./PostCommentSection";
-const PostCard = ({ post, currentUser }) => {
+const PostCard = ({ post, currentUser, refetch }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [showPost, setShowPost] = useState(false);
   const [image, setImage] = useState("");
@@ -36,6 +36,7 @@ const PostCard = ({ post, currentUser }) => {
           <PostOwnerInfo post={localPost} user={localPost.user} />
           <PostCardMenu
             post={localPost}
+            refetch={refetch}
             openMenu={openMenu}
             setOpenMenu={setOpenMenu}
             currentUser={currentUser}

@@ -9,12 +9,12 @@ const PostAttachmentCard = ({
   attachment,
   attachmentsErrors,
   onDelete,
-  undoDelete,
-  update,
   setImage,
   setShowImage,
   setImageIndex,
   showActions = true,
+  update = false,
+  undoDelete = () => {},
 }) => {
   const isImage = (attachment) => {
     let mime = attachment.type || attachment.mime;

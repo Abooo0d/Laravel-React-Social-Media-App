@@ -48,7 +48,7 @@ class PostController extends Controller
       /** @var UploadedFile[] $attachments */
       $attachments = $data['attachments'] ?? [];
       foreach ($attachments as $attachment) {
-        $path = $attachment->store("attachments/{$user->id}", 'public');
+        $path = $attachment->store("attachments/{$post->id}", 'public');
         $files[] = $attachment;
         PostAttachments::create([
           'post_id' => $post->id,
@@ -60,13 +60,15 @@ class PostController extends Controller
         ]);
       }
       DB::commit();
-      if ($data['group_id']) {
+      $group_id = $data['group_id'];
+      if ($group_id) {
         $group = Group::where('id', $data['group_id'])->first();
         $admins = $group->adminUsers()->where('user_id', '!=', Auth::id())->get();
         $postOwner = User::where('id', Auth::id())->first();
         Notification::send($admins, new CreatePostInGroupNotification($postOwner, $group, $post->id));
       }
-      return redirect()->back()->with('success', 'Post Created Successfully Abood');
+      return response(['success' => 'Post Created Successfully Abood']);
+      // return redirect()->back()->with('success', 'Post Created Successfully Abood');
     } catch (\Throwable $e) {
       foreach ($files as $file) {
         Storage::disk('public')->delete($file);

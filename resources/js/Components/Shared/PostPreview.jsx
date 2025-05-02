@@ -5,18 +5,19 @@ import PostOwnerInfo from "./PostOwnerInfo";
 import { SecondaryButton } from "./Buttons";
 import PopupCard from "./PopupCard";
 import PostAttachmentCard from "./PostAttachmentCard";
+import MarkdownRenderer from "./MarkdownRenderer";
 const PostPreview = ({
   user,
   post,
   show,
-  update,
+  update = false,
   attachmentsErrors,
   setShow,
   setImage,
   setShowImage,
   setImageIndex,
   onDelete,
-  undoDelete,
+  undoDelete = () => {},
 }) => {
   return (
     <PopupCard showForm={show} index="z-[600]">
@@ -29,10 +30,15 @@ const PostPreview = ({
       {/* Post Caption */}
       <div
         className="post-content dark:text-gray-300 text-gray-700 lg:text-xl text-lg"
-        dangerouslySetInnerHTML={{
-          __html: DOMPurify.sanitize(post.body),
-        }}
-      ></div>
+        // dangerouslySetInnerHTML={
+        //   {
+        //     // __html: DOMPurify.sanitize(post.body),
+        //   }
+        // }
+      >
+        {/* <markDo */}
+        <MarkdownRenderer content={post.body}>{post.body}</MarkdownRenderer>
+      </div>
       {/* Post Attachments */}
       {post.attachments && (
         <>

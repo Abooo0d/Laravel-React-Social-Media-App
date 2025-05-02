@@ -25,7 +25,7 @@ function isImage(file) {
   file = file?.file ? file?.file : file;
   let mime = file?.mime || file?.type;
   mime = mime ? mime?.split("/") : "";
-  return mime[0] ? mime[0]?.toLowerCase() : "" === "image";
+  return mime[0] && mime[0]?.toLowerCase() == "image";
 }
 function MessageIsImage(file) {
   file = file?.file ? file?.file : file;

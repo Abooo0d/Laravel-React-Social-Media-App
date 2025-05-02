@@ -89,6 +89,9 @@ pre {
   border-radius: 9999px;
   height: 6px;
 }
+.ck.ck-content {
+  max-height: 200px !important;
+}
 /* .custom-audio::-webkit-media-controls-panel {
   background-color: ;
 }

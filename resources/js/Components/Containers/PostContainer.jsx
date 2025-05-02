@@ -6,7 +6,7 @@ import { useUserContext } from "@/Contexts/UserContext";
 import Spinner from "../Shared/Spinner";
 import HomeLoader from "./HomeLoader";
 
-const PostContainer = ({ posts, classes, children, isLoading }) => {
+const PostContainer = ({ posts, classes, children, isLoading, refetch }) => {
   const [ref, inView, entry] = useInView();
   const [allPosts, setAllPosts] = useState(posts?.data);
   const [allData, setAllData] = useState(posts);
@@ -37,7 +37,12 @@ const PostContainer = ({ posts, classes, children, isLoading }) => {
               {allPosts?.length > 0 ? (
                 <>
                   {allPosts.map((post, index) => (
-                    <PostCard post={post} currentUser={user} key={index} />
+                    <PostCard
+                      post={post}
+                      currentUser={user}
+                      key={index}
+                      refetch={refetch}
+                    />
                   ))}
                   {allData?.meta?.current_page < allData?.meta?.last_page ? (
                     <Spinner ref={ref} />

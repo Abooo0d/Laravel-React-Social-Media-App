@@ -9,7 +9,13 @@ import UpdatePostForm from "./UpdatePostForm";
 import { Link, router } from "@inertiajs/react";
 import { useMainContext } from "@/Contexts/MainContext";
 
-const PostCardMenu = ({ openMenu, setOpenMenu, post, currentUser }) => {
+const PostCardMenu = ({
+  openMenu,
+  setOpenMenu,
+  post,
+  currentUser,
+  refetch,
+}) => {
   const [showForm, setShowForm] = useState(false);
   const { setSuccessMessage } = useMainContext();
   const showUpdate = () => {
@@ -94,6 +100,7 @@ const PostCardMenu = ({ openMenu, setOpenMenu, post, currentUser }) => {
           )}
         </div>
         <UpdatePostForm
+          refetch={refetch}
           post={post}
           setOpenMenu={setOpenMenu}
           user={post.user}

@@ -2,11 +2,13 @@ import HomeFeed from "@/Components/Containers/HomeFeed";
 import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
+import { useGetPosts } from "@/TanStackQurey/Querys";
 import { Head, router, usePage } from "@inertiajs/react";
 import { useEffect } from "react";
 const Home = ({ auth }) => {
   const { setUser } = useUserContext();
   const { setSuccessMessage, setErrors } = useMainContext();
+  const { data: posts, refetch, isLoading: loadingPosts } = useGetPosts();
   const { flash, errors } = usePage().props;
   useEffect(() => {
     if (flash?.success) setSuccessMessage(flash.success);
@@ -27,6 +29,7 @@ const Home = ({ auth }) => {
       if (flash?.error) setErrors([flash.error, ...messages]);
     }
   }, [errors, flash?.error]);
+
   return (
     <>
       <Head>
@@ -39,7 +42,7 @@ const Home = ({ auth }) => {
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
       <div className="flex min-h-[calc(100vh-66px)] max-h-[calc(100vh-66px)] overflow-hidden bg-gray-900">
-        <HomeFeed />
+        <HomeFeed loading={loadingPosts} posts={posts} refetch={refetch} />
       </div>
     </>
   );
