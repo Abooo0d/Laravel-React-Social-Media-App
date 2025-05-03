@@ -2,11 +2,12 @@ import { useMainContext } from "@/Contexts/MainContext";
 import { Link } from "@inertiajs/react";
 import React from "react";
 
-const FollowerCard = ({ data }) => {
+const FollowerCard = ({ data, setShowFollowerContainer }) => {
   return (
     <Link
       className={`relative min-h-[80px] w-full duration-200 hover:bg-gray-300 dark:hover:bg-gray-700 cursor-pointer bg-gray-100 dark:bg-gray-800 rounded-[10px] group overflow-hidden group border-[1px] border-solid border-gray-500/50 hover:border-gray-600`}
       href={route("profile.view", data.username)}
+      onClick={() => setShowFollowerContainer(false)}
     >
       <img
         src={data.cover_url || "/images/default_cover_image.jpg"}

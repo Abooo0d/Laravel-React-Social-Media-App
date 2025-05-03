@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
   Route::post('/profile/change_images', [ProfileController::class, 'changeImages'])->name('profile.changeImages');
   Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+  Route::get('profile/posts/{user:id}', [ProfileController::class, 'getPostsForUser'])->name('postsForUser');
 });
 // Post Group
 Route::middleware('auth')->group(function () {
@@ -67,6 +68,7 @@ Route::middleware('auth')->group(function () {
   Route::post('/group/change-role/{group:slug}', [GroupController::class, 'changeRole'])->name('group.changeRole');
   Route::delete('/group/kick-out/{group:slug}', [GroupController::class, 'kickOut'])->name('group.kickOut');
   Route::put('/group/{group:slug}', [GroupController::class, 'update'])->name('group.update');
+  Route::get('/group/getPosts/{group:id}', [GroupController::class, 'getPostsForGroup'])->name('postsForGroup');
 });
 Route::middleware('auth')->group(function () {
   Route::post('/user/search', [UserController::class, 'searchForUser'])->name('user.searchForUser');

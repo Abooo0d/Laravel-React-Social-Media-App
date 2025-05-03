@@ -17,11 +17,11 @@ import PostContainer from "@/Components/Containers/PostContainer";
 import CreatePost from "@/Components/Shared/CreatePost";
 import { useUserContext } from "@/Contexts/UserContext";
 import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
-const View = ({ auth, group, requests, users, isAdmin, posts, photos }) => {
+import { useGetPostsForGroup } from "@/TanStackQurey/Querys";
+const View = ({ auth, group, requests, users, isAdmin, photos }) => {
   const isCurrentUserJoined = !!(group.status == "approved");
   const [groupData, setGroupData] = useState(group);
   const [requestsData, setRequestsData] = useState(requests);
-  const [allPosts, setAllPosts] = useState(posts);
   const [coverImage, setCoverImage] = useState("");
   const [avatarImage, setAvatarImage] = useState("");
   const [showInviteForm, setShowInviteForm] = useState(false);
@@ -32,12 +32,18 @@ const View = ({ auth, group, requests, users, isAdmin, posts, photos }) => {
   const { setSuccessMessage, setErrors } = useMainContext();
   const { flash, errors } = usePage().props;
   const { setUser } = useUserContext();
+  const {
+    data: posts,
+    refetch,
+    isLoading: loadingPosts,
+  } = useGetPostsForGroup(group.id);
+
   const { setData, post } = useForm({
     coverImage: null,
     avatarImage: null,
     group_id: groupData.id,
   });
-
+  const [allPosts, setAllPosts] = useState(posts);
   useEffect(() => {
     if (flash.success) setSuccessMessage(flash.success);
     if (flash.error) setErrors([flash.error]);
@@ -50,7 +56,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts, photos }) => {
   }, [errors]);
 
   useEffect(() => {
-    setAllPosts(posts);
+    setAllPosts(posts?.posts);
   }, [posts]);
 
   useEffect(() => {
@@ -85,8 +91,14 @@ const View = ({ auth, group, requests, users, isAdmin, posts, photos }) => {
     setIsTheAvatarChanged(false);
   };
   const submitAvatarImage = () => {
-    post(route("group.changeImages"), {});
+    post(route("group.changeImages"), {
+      onSuccess: () => {
+        refetch();
+      },
+      preserveScroll: true,
+    });
     setIsTheAvatarChanged(false);
+    // refetch();
   };
   const handelCoverChange = (e) => {
     try {
@@ -112,8 +124,14 @@ const View = ({ auth, group, requests, users, isAdmin, posts, photos }) => {
     setIsTheCoverChanged(false);
   };
   const submitCoverImage = () => {
-    post(route("group.changeImages"));
+    post(route("group.changeImages"), {
+      onSuccess: () => {
+        refetch();
+      },
+      preserveScroll: true,
+    });
     setIsTheCoverChanged(false);
+    refetch();
   };
   function requestJoin() {
     axiosClient
@@ -267,7 +285,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts, photos }) => {
         </div>
         <div className="w-full h-full max-sm:pb-[55px] ">
           <Tab.Group>
-            <Tab.List className="md:px-[40px] mb-4 px-[20px] flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
+            <Tab.List className="md:px-[40px] px-[20px] flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
               <CustomTab text="Posts" />
               <CustomTab text="Photos" />
               {isCurrentUserJoined && <CustomTab text="Members" />}
@@ -277,7 +295,11 @@ const View = ({ auth, group, requests, users, isAdmin, posts, photos }) => {
             <Tab.Panels className=" rounded-md h-full">
               <Tab.Panel className="rounded-md flex flex-col w-full">
                 <div className=" dark:bg-homeFeed rounded-md">
-                  <PostContainer posts={allPosts}>
+                  <PostContainer
+                    posts={allPosts}
+                    refetch={refetch}
+                    isLoading={loadingPosts}
+                  >
                     {group.status && (
                       <CreatePost
                         user={auth.user}
@@ -285,13 +307,14 @@ const View = ({ auth, group, requests, users, isAdmin, posts, photos }) => {
                         posts={allPosts}
                         groupId={group.id}
                         classes="bg-homeFeed px-3 py-3"
+                        refetch={refetch}
                       />
                     )}{" "}
                   </PostContainer>
                 </div>
               </Tab.Panel>
 
-              <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
+              <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
                 <div className="relative rounded-md mb-2 bg-gray-900 duration-200 flex flex-row gap-4 flex-wrap p-4">
                   {photos.length > 0 ? (
                     photos.map((photo, index) => (
@@ -321,7 +344,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts, photos }) => {
                 </div>
               </Tab.Panel>
               {isCurrentUserJoined && (
-                <Tab.Panel className="rounded-md  gap-1 w-full h-full ">
+                <Tab.Panel className="rounded-md  gap-1 w-full h-full mt-4">
                   <div className="relative rounded-md p-3 mb-2 h-full dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
                     {users.map((user, index) => (
                       <UserMemberCard
@@ -335,7 +358,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts, photos }) => {
                 </Tab.Panel>
               )}
               {isAdmin && (
-                <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
+                <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
                   {requestsData.length > 0 ? (
                     <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
                       {requestsData.map((request, index) => (
@@ -357,7 +380,7 @@ const View = ({ auth, group, requests, users, isAdmin, posts, photos }) => {
                 </Tab.Panel>
               )}
               {isAdmin && (
-                <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
+                <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
                   <GroupAboutForm group={group} />
                 </Tab.Panel>
               )}

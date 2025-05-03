@@ -40,33 +40,63 @@ class GroupController extends Controller
 {
   public function index(Request $request, Group $group)
   {
-    $users = User::query()
-      ->select(['users.*', 'gu.role', 'gu.status', 'gu.group_id'])
-      ->join('group_users AS gu', 'gu.user_id', 'users.id')
-      ->orderBy('users.name')
-      ->where('group_id', $group->id)
-      ->get();
-    $posts = Post::PostsForTimeLine(Auth::id())
-      ->where('group_id', $group->id)
-      ->latest()
-      ->paginate(perPage: 15);
-    $posts_ids = Post::where('group_id', $group->id)->pluck('id')->toArray();
-    $photos = PostAttachments::whereIn('post_id', $posts_ids)->where('mime', 'like', 'image/%')->get();
-    if ($request->wantsJson()) {
-      return response([
-        'posts' => PostResource::collection($posts)
+    try {
+      $users = User::query()
+        ->select(['users.*', 'gu.role', 'gu.status', 'gu.group_id'])
+        ->join('group_users AS gu', 'gu.user_id', 'users.id')
+        ->orderBy('users.name')
+        ->where('group_id', $group->id)
+        ->get();
+      $posts = Post::PostsForTimeLine(Auth::id())
+        ->where('group_id', $group->id)
+        ->latest()
+        ->paginate(perPage: 15);
+      $posts_ids = Post::where('group_id', $group->id)->pluck('id')->toArray();
+      $photos = PostAttachments::whereIn('post_id', $posts_ids)->where('mime', 'like', 'image/%')->get();
+      if ($request->wantsJson()) {
+        return response([
+          'posts' => PostResource::collection($posts)
+        ]);
+      }
+      return Inertia::render('Group/View', [
+        'group' => new GroupResource(resource: $group),
+        'requests' => UserResource::collection($group->requestUsers()->get()),
+        'users' => GroupUserResource::collection($users),
+        'isAdmin' => $group->isAdmin(Auth::id()),
+        'photos' => PostAttachmentResource::collection($photos),
+        'posts' => [],
       ]);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-    $notifications = Auth::user()->notifications()->paginate(20);
-    return Inertia::render('Group/View', [
-      'group' => new GroupResource(resource: $group),
-      'requests' => UserResource::collection($group->requestUsers()->get()),
-      'users' => GroupUserResource::collection($users),
-      'isAdmin' => $group->isAdmin(Auth::id()),
-      'posts' => PostResource::collection($posts),
-      'notifications' => $notifications,
-      'photos' => PostAttachmentResource::collection($photos)
-    ]);
+  }
+  public function getPostsForGroup(Group $group)
+  {
+    try {
+      $posts = Post::PostsForTimeLine(Auth::id())
+        ->where('group_id', $group->id)
+        ->latest()
+        ->paginate(perPage: 15);
+      return response([
+        'posts' => [
+          'data' => PostResource::collection($posts),
+          'links' => [
+            'first' => $posts->url(1),
+            'last' => $posts->url($posts->lastPage()),
+            'prev' => $posts->previousPageUrl(),
+            'next' => $posts->nextPageUrl(),
+          ],
+          'meta' => [
+            'current_page' => $posts->currentPage(),
+            'last_page' => $posts->lastPage(),
+            'per_page' => $posts->perPage(),
+            'total' => $posts->total(),
+          ]
+        ]
+      ], 200);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
   }
   public function store(StoreGroupRequest $request)
   {
@@ -104,10 +134,6 @@ class GroupController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
-  public function destroy(Group $group)
-  {
-    //
-  }
   public function changeImages(Request $request)
   {
     try {
@@ -139,7 +165,7 @@ class GroupController extends Controller
         }
         $coverPath = $cover->store("groups/{$group->id}", 'public');
         $group->update(['cover_path' => $coverPath]);
-        $message = 'Cover Image Updated Successfully';
+        $message = 'Cover Changed Image Updated Successfully';
       }
       if ($thumbnail) {
         $image = 'thumbnail';
@@ -365,6 +391,5 @@ class GroupController extends Controller
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-
   }
 }

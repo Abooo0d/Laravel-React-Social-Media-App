@@ -2,11 +2,12 @@ import React from "react";
 import { capitalizeFirstLetter } from "@/Hooks/Functions";
 import { Link } from "@inertiajs/react";
 import { useMainContext } from "@/Contexts/MainContext";
-const GroupeCard = ({ data }) => {
+const GroupeCard = ({ data, setShowGroupContainer }) => {
   return (
     <Link
       className={`min-h-[100px] w-full relative gap-3 duration-200 hover:bg-gray-300 dark:hover:bg-gray-700 cursor-pointer bg-gray-100 dark:bg-gray-800 rounded-[10px] group overflow-hidden `}
       href={route("group.profile", data.slug)}
+      onClick={() => setShowGroupContainer}
     >
       <img
         src={data.cover_url || "/images/default_cover_image.jpg"}

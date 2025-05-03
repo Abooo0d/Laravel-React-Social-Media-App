@@ -46,3 +46,21 @@ export const useGetMoreMessages = (messageId) => {
       }),
   });
 };
+export const useGetPostsForGroup = (groupId) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_POSTS_FOR_GROUP],
+    queryFn: () =>
+      axiosClient.get(route("postsForGroup", groupId)).then(({ data }) => {
+        return data;
+      }),
+  });
+};
+export const useGetPostsForUser = (userId) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_POSTS_FOR_USER],
+    queryFn: () =>
+      axiosClient.get(route("postsForGroup", userId)).then(({ data }) => {
+        return data;
+      }),
+  });
+};

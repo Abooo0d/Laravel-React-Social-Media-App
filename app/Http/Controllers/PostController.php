@@ -285,24 +285,49 @@ class PostController extends Controller
   }
   public function publicView(Post $post)
   {
-    return Inertia::render('Post/View', ['post' => new PostResource($post)]);
+    try {
+      $userId = auth()->id();
+      $post = Post::where('id', $post->id)
+        ->withCount('reactions')
+        ->withCount('comments')
+        ->with([
+          'latest5Comments',
+          'comments' => function ($query) {
+            $query->whereNull('parent_id');
+          },
+          'reactions' => function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+          },
+          'comments.postCommentsReactions' => function ($query) use ($userId) {
+            // Load reactions for each comment and filter by user
+            $query->where('user_id', $userId);
+          }
+        ])->first();
+      return Inertia::render('Post/View', ['post' => new PostResource(resource: $post)]);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
   }
   public function aiPost(Request $request)
   {
 
-    $data = $request->get('message');
-    $message = Gemini::geminiFlash()->generateContent("Generate a creative and engaging social media post based on the following idea: '{$data}'.
+    try {
+      $data = $request->get('message');
+      $message = Gemini::geminiFlash()->generateContent("Generate a creative and engaging social media post based on the following idea: '{$data}'.
         Make it friendly, relatable, and around 5-10 sentences. If relevant, include a question or call to action at the end to boost engagement.
         Avoid hashtags and keep the tone casual.");
 
-    // $result = OpenAI::chat()->create([
-    //   'model' => 'gpt-4o-mini',
-    //   'messages' => [
-    //     ['role' => 'user', 'content' => $data],
-    //   ],
-    // ]);
+      // $result = OpenAI::chat()->create([
+      //   'model' => 'gpt-4o-mini',
+      //   'messages' => [
+      //     ['role' => 'user', 'content' => $data],
+      //   ],
+      // ]);
 
-    return response(['message' => $message->candidates[0]->content->parts[0]->text]);
+      return response(['message' => $message->candidates[0]->content->parts[0]->text]);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
   }
 
 }

@@ -211,12 +211,14 @@ export default function Authenticated({ children }) {
         <FollowersBar
           followers={followers}
           showFollowerContainer={showFollowerContainer}
+          setShowFollowerContainer={setShowFollowerContainer}
         />
       )}
       {notifications && (
         <NotificationsBar
           notifications={notifications.notifications}
           showNotificationsForm={showNotificationsForm}
+          setShowNotificationsForm={setShowNotificationsForm}
           isLoading={LoadingNotifications}
         />
       )}
@@ -224,6 +226,7 @@ export default function Authenticated({ children }) {
         <GroupsBar
           groups={groups.groups}
           showGroupContainer={showGroupContainer}
+          setShowGroupContainer={setShowGroupContainer}
           isLoading={loadingGroups}
         />
       )}

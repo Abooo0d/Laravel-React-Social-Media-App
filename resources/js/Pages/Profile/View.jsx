@@ -93,18 +93,18 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
         </div>
         <div className="w-full h-full max-sm:pb-[55px] ">
           <Tab.Group>
-            <Tab.List className="md:px-[40px] px-[20px] mb-4 flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
+            <Tab.List className="md:px-[40px] px-[20px] flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
               <CustomTab text="Posts" />
               <CustomTab text="Photos" />
               <CustomTab text="Friends" />
             </Tab.List>
-            <Tab.Panels className=" py-2 rounded-md mt-2">
+            <Tab.Panels className=" py-2 rounded-md">
               <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
                 <div className="bg-homeFeed rounded-md">
                   <PostContainer posts={posts} />
                 </div>
               </Tab.Panel>
-              <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
+              <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
                 <div className="relative rounded-md mb-2 bg-gray-900 duration-200 flex flex-row gap-4 flex-wrap p-4">
                   {photos.length > 0 ? (
                     photos.map((photo, index) => (
@@ -133,7 +133,7 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
                   />
                 </div>
               </Tab.Panel>
-              <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
+              <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
                 <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
                   {user.friends?.map((friend, index) => (
                     <UserFriendCard user={friend} key={index} />

@@ -9,6 +9,8 @@ const Home = ({ auth }) => {
   const { setUser } = useUserContext();
   const { setSuccessMessage, setErrors } = useMainContext();
   const { data: posts, refetch, isLoading: loadingPosts } = useGetPosts();
+  console.log(posts);
+
   const { flash, errors } = usePage().props;
   useEffect(() => {
     if (flash?.success) setSuccessMessage(flash.success);
@@ -22,6 +24,7 @@ const Home = ({ auth }) => {
       setUser(auth.user);
     }
   }, [auth]);
+
   useEffect(() => {
     if (!!errors || !!flash?.error) {
       let messages = [];

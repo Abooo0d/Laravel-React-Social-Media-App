@@ -5,4 +5,6 @@ export const QUERY_KEYS = {
   GET_CHAT_GROUPS: "getChatGroups",
   GET_CHAT: "getChat",
   GET_MORE_MESSAGES: "getMoreMessages",
+  GET_POSTS_FOR_GROUP: "getPostsForGroup",
+  GET_POSTS_FOR_USER: "getPostsForUser",
 };

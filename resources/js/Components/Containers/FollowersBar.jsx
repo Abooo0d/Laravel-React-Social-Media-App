@@ -3,7 +3,11 @@ import { FaUserGroup } from "react-icons/fa6";
 import FollowerCard from "../Shared/FollowerCard";
 import { PrimaryButton } from "../Shared/Buttons";
 import SearchForFriendsForm from "../Shared/SearchForFriendsForm";
-const FollowersBar = ({ followers, showFollowerContainer }) => {
+const FollowersBar = ({
+  followers,
+  showFollowerContainer,
+  setShowFollowerContainer,
+}) => {
   const [followersData, setFollowersData] = useState(followers);
   const [showFriendsForm, setShowFriendsForm] = useState(false);
   return (
@@ -35,7 +39,11 @@ const FollowersBar = ({ followers, showFollowerContainer }) => {
             {followersData.length > 0 ? (
               <>
                 {followersData.map((follower, index) => (
-                  <FollowerCard data={follower} key={index} />
+                  <FollowerCard
+                    data={follower}
+                    key={index}
+                    setShowFollowerContainer={setShowFollowerContainer}
+                  />
                 ))}
               </>
             ) : (

@@ -3,7 +3,12 @@ import GroupeCard from "../Shared/GroupeCard";
 import CreateGroupForm from "../Shared/CreateGroupForm";
 import { PrimaryButton } from "../Shared/Buttons";
 import Spinner from "../Shared/Spinner";
-const GroupsBar = ({ groups, showGroupContainer, isLoading }) => {
+const GroupsBar = ({
+  groups,
+  showGroupContainer,
+  setShowGroupContainer,
+  isLoading,
+}) => {
   const [groupData, setGroupsData] = useState(groups);
   const [showCreateForm, setShowCreateForm] = useState(false);
   useEffect(() => {
@@ -44,7 +49,11 @@ const GroupsBar = ({ groups, showGroupContainer, isLoading }) => {
                 {groupData.length > 0 ? (
                   <>
                     {groupData.map((group, index) => (
-                      <GroupeCard data={group} key={index} />
+                      <GroupeCard
+                        data={group}
+                        key={index}
+                        setShowGroupContainer={setShowGroupContainer}
+                      />
                     ))}
                   </>
                 ) : (

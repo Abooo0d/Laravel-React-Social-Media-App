@@ -36,7 +36,6 @@ class UserController extends Controller
       $currentUser = Auth::user();
       if ($user->id == $currentUser->id) {
         return redirect()->back()->with('error', "You Can`t Send Friend Request To Your Self");
-
       }
       $follower = Friends::query()->where('user_id', Auth::id())->where('friend_id', $user->id)->first();
       switch ($data['type']) {

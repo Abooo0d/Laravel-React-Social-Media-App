@@ -4,6 +4,7 @@ import Spinner from "../Shared/Spinner";
 const NotificationsBar = ({
   notifications,
   showNotificationsForm,
+  setShowNotificationsForm,
   isLoading,
 }) => {
   return (
@@ -30,7 +31,10 @@ const NotificationsBar = ({
                   {notifications?.length > 0 ? (
                     notifications?.map((notify, index) => (
                       <div className="flex flex-col gap-1" key={index}>
-                        <NotificationCard notification={notify} />
+                        <NotificationCard
+                          notification={notify}
+                          setShowNotificationsForm={setShowNotificationsForm}
+                        />
                         <div className="w-[80%] h-[1px] relative bg-gray-700/20 mx-auto" />
                       </div>
                     ))

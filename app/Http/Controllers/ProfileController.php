@@ -24,158 +24,197 @@ class ProfileController extends Controller
 {
   public function myProfile(Request $request)
   {
-    $user = User::query()->where('id', Auth::id())->first();
-    $posts = Post::PostsForTimeLine($user->id)
-      ->where('user_id', $user->id)
-      ->latest()
-      ->paginate(15);
-    if ($request->wantsJson()) {
-      return response([
-        'posts' => PostResource::collection($posts)
+    try {
+      $user = User::query()->where('id', Auth::id())->first();
+      $posts_ids = $user->posts($user->id)->pluck('id')->toArray();
+      $photos = PostAttachments::whereIn('post_id', $posts_ids)->where('mime', 'like', 'image/%')->get();
+      $notifications = Auth::user()->notifications()->paginate(20);
+      return Inertia::render('MyProfile/View', props: [
+        'mustVerifyEmail' => !!!$request->user()->email_verified_at,
+        'status' => session('status'),
+        'notifications' => $notifications,
+        'photos' => PostAttachmentResource::collection($photos)
       ]);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-    $posts_ids = $user->posts($user->id)->pluck('id')->toArray();
-    $photos = PostAttachments::whereIn('post_id', $posts_ids)->where('mime', 'like', 'image/%')->get();
-    $notifications = Auth::user()->notifications()->paginate(20);
-    return Inertia::render('MyProfile/View', props: [
-      'posts' => PostResource::collection($posts),
-      'mustVerifyEmail' => !!!$request->user()->email_verified_at,
-      'status' => session('status'),
-      'notifications' => $notifications,
-      'photos' => PostAttachmentResource::collection($photos)
-    ]);
-
+  }
+  public function getPostsForUser(User $user)
+  {
+    try {
+      $posts = Post::PostsForTimeLine($user->id)
+        ->where('user_id', $user->id)
+        ->latest()
+        ->paginate(15);
+      return response([
+        'posts' => [
+          'data' => PostResource::collection($posts),
+          'links' => [
+            'first' => $posts->url(1),
+            'last' => $posts->url($posts->lastPage()),
+            'prev' => $posts->previousPageUrl(),
+            'next' => $posts->nextPageUrl(),
+          ],
+          'meta' => [
+            'current_page' => $posts->currentPage(),
+            'last_page' => $posts->lastPage(),
+            'per_page' => $posts->perPage(),
+            'total' => $posts->total(),
+          ]
+        ]
+      ], 200);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
   }
   public function index(Request $request, User $user)
   {
-    $userId = Auth::id();
-    if (!$userId) {
-      return redirect()->route('login');
-    }
-    $posts = Post::PostsForTimeLine($user->id)
-      ->where('user_id', $user->id)
-      ->latest()
-      ->paginate(15);
-    $posts_ids = $user->posts($user->id)->pluck('id')->toArray();
-    $photos = PostAttachments::whereIn('post_id', $posts_ids)->where('mime', 'like', 'image/%')->get();
-    if ($user->id === Auth::id())
-      return Redirect::route('profile.myProfile', $user->slug);
-    if ($request->wantsJson()) {
-      return response([
-        'posts' => PostResource::collection($posts)
+    try {
+      $userId = Auth::id();
+      if (!$userId) {
+        return redirect()->route('login');
+      }
+      $posts = Post::PostsForTimeLine($user->id)
+        ->where('user_id', $user->id)
+        ->latest()
+        ->paginate(15);
+      $posts_ids = $user->posts($user->id)->pluck('id')->toArray();
+      $photos = PostAttachments::whereIn('post_id', $posts_ids)->where('mime', 'like', 'image/%')->get();
+      if ($user->id === Auth::id())
+        return Redirect::route('profile.myProfile', $user->slug);
+      if ($request->wantsJson()) {
+        return response([
+          'posts' => PostResource::collection($posts)
+        ]);
+      }
+      $notifications = Auth::user()->notifications()->paginate(20);
+      $isFriend = auth()->user()->isFriend($user->id);
+      return Inertia::render('Profile/View', [
+        'user' => new UserResource($user),
+        'posts' => PostResource::collection($posts),
+        'isFriend' => $isFriend,
+        'notifications' => $notifications,
+        'photos' => PostAttachmentResource::collection($photos)
       ]);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-    $notifications = Auth::user()->notifications()->paginate(20);
-    $isFriend = auth()->user()->isFriend($user->id);
-    return Inertia::render('Profile/View', [
-      'user' => new UserResource($user),
-      'posts' => PostResource::collection($posts),
-      'isFriend' => $isFriend,
-      'notifications' => $notifications,
-      'photos' => PostAttachmentResource::collection($photos)
-    ]);
   }
   /**
    * Display the user's profile form.
    */
-  public function edit(Request $request): Response
+  public function edit(Request $request)
   {
-    return Inertia::render('Profile/Edit', [
-      'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
-      'status' => session('status'),
-    ]);
+    try {
+      return Inertia::render('Profile/Edit', [
+        'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+        'status' => session('status'),
+      ]);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
   }
 
   /**
    * Update the user's profile information.
    */
-  public function update(ProfileUpdateRequest $request): RedirectResponse
+  public function update(ProfileUpdateRequest $request)
   {
-    $request->user()->fill($request->validated());
-    if ($request->user()->isDirty('email')) {
-      $request->user()->email_verified_at = null;
-    }
-    $request->user()->save();
+    try {
+      $request->user()->fill($request->validated());
+      if ($request->user()->isDirty('email')) {
+        $request->user()->email_verified_at = null;
+      }
+      $request->user()->save();
 
-    return redirect()->back()->with('success', 'Profile Updated Successfully');
+      return redirect()->back()->with('success', 'Profile Updated Successfully');
+
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
   }
 
   /**
    * Delete the user's account.
    */
-  public function destroy(Request $request): RedirectResponse
+  public function destroy(Request $request)
   {
-    $request->validate([
-      'password' => ['required', 'current_password'],
-    ]);
+    try {
+      $request->validate([
+        'password' => ['required', 'current_password'],
+      ]);
 
-    $user = $request->user();
+      $user = $request->user();
 
-    Auth::logout();
+      Auth::logout();
 
-    $user->delete();
+      $user->delete();
 
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
+      $request->session()->invalidate();
+      $request->session()->regenerateToken();
 
-    return Redirect::to('/');
+      return Redirect::to('/');
+
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
   }
   public function changeImages(Request $request, User $user)
   {
-    $message = '';
-    $data = $request->validate([
-      'coverImage' => ['nullable', 'file', 'mimes:jpg,png'],
-      'avatarImage' => ['nullable', 'file', 'mimes:jpg,png']
-    ]);
-    /**
-     * @var UploadedFile $cover
-     */
-    $cover = $data['coverImage'] ?? null;
-    /**
-     * @var UploadedFile $avatar
-     */
-    $avatar = $data['avatarImage'] ?? null;
-    $user = $request->user();
-    if ($cover) {
-      if ($user->cover_path) {
-        Storage::disk('public')->delete($user->cover_path);
+    try {
+      $message = '';
+      $data = $request->validate([
+        'coverImage' => ['nullable', 'file', 'mimes:jpg,png'],
+        'avatarImage' => ['nullable', 'file', 'mimes:jpg,png']
+      ]);
+      /**
+       * @var UploadedFile $cover
+       */
+      $cover = $data['coverImage'] ?? null;
+      /**
+       * @var UploadedFile $avatar
+       */
+      $avatar = $data['avatarImage'] ?? null;
+      $user = $request->user();
+      if ($cover) {
+        if ($user->cover_path) {
+          Storage::disk('public')->delete($user->cover_path);
+        }
+        $coverPath = $cover->store("users/{$user->id}", 'public');
+        $user->update(['cover_path' => $coverPath]);
+        $message = 'Cover Image Updated Successfully';
       }
-      $coverPath = $cover->store("users/{$user->id}", 'public');
-      $user->update(['cover_path' => $coverPath]);
-      $message = 'Cover Image Updated Successfully';
-    }
-    if ($avatar) {
-      if ($user->avatar_path) {
-        Storage::disk('public')->delete($user->avatar_path);
+      if ($avatar) {
+        if ($user->avatar_path) {
+          Storage::disk('public')->delete($user->avatar_path);
+        }
+        $avatarPath = $avatar->store("users/{$user->id}", 'public');
+        $user->update(['avatar_path' => $avatarPath]);
+        $message = 'Avatar Image Updated Successfully';
       }
-      $avatarPath = $avatar->store("users/{$user->id}", 'public');
-      $user->update(['avatar_path' => $avatarPath]);
-      $message = 'Avatar Image Updated Successfully';
+      DB::beginTransaction();
+      $files = [];
+      $attachment = $cover ?: $avatar;
+      $post = Post::create(
+        [
+          'user_id' => $user->id,
+          'attachments' => $cover ?: $avatar,
+          'body' => $cover ? "{$user->name} Changed His Cover Image" : "{$user->name} Changed His Avatar Image"
+        ]
+      );
+      $path = $attachment->store("attachments/{$post->id}", 'public');
+      PostAttachments::create([
+        'post_id' => $post->id,
+        'name' => $attachment->getClientOriginalName(),
+        'path' => $path,
+        'mime' => $attachment->getMimeType(),
+        'size' => $attachment->getSize(),
+        'created_by' => $user->id
+      ]);
+      DB::commit();
+      return redirect()->back()->with('success', $message);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
-
-
-    DB::beginTransaction();
-    $files = [];
-    $attachment = $cover ?: $avatar;
-    $post = Post::create(
-      [
-        'user_id' => $user->id,
-        'attachments' => $cover ?: $avatar,
-        'body' => $cover ? "{$user->name} Changed His Cover Image" : "{$user->name} Changed His Avatar Image"
-      ]
-    );
-    $path = $attachment->store("attachments/{$post->id}", 'public');
-    PostAttachments::create([
-      'post_id' => $post->id,
-      'name' => $attachment->getClientOriginalName(),
-      'path' => $path,
-      'mime' => $attachment->getMimeType(),
-      'size' => $attachment->getSize(),
-      'created_by' => $user->id
-    ]);
-    DB::commit();
-
-
-    return redirect()->back()->with('success', $message);
   }
 }

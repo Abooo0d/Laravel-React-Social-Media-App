@@ -15,7 +15,8 @@ import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
 import { useUserContext } from "@/Contexts/UserContext";
 import React, { useEffect, useState } from "react";
 import Edit from "./Edit";
-const View = ({ auth, posts, mustVerifyEmail, status, photos }) => {
+import { useGetPostsForUser } from "@/TanStackQurey/Querys";
+const View = ({ auth, mustVerifyEmail, status, photos }) => {
   const { setUser, user } = useUserContext(auth?.user);
   const { flash, errors } = usePage().props;
   const { setErrors, setSuccessMessage } = useMainContext();
@@ -23,14 +24,18 @@ const View = ({ auth, posts, mustVerifyEmail, status, photos }) => {
     coverImage: null,
     avatarImage: null,
   });
-
-  const [allPosts, setAllPosts] = useState(posts);
+  const [allPosts, setAllPosts] = useState([]);
   const [coverImage, setCoverImage] = useState("");
   const [avatarImage, setAvatarImage] = useState("");
   const [isTheCoverChanged, setIsTheCoverChanged] = useState(false);
   const [isTheAvatarChanged, setIsTheAvatarChanged] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
   const [showImage, setShowImage] = useState(false);
+  const {
+    data: posts,
+    refetch,
+    isLoading: loadingPosts,
+  } = useGetPostsForUser(auth.user.id);
   useEffect(() => {
     let messages = [];
     Object.keys(errors).map((key) => messages.push(errors[key]));
@@ -47,6 +52,11 @@ const View = ({ auth, posts, mustVerifyEmail, status, photos }) => {
       setUser(auth?.user);
     }
   }, [auth]);
+
+  useEffect(() => {
+    setAllPosts(posts?.posts);
+  }, [posts]);
+
   const handelAvatarChange = (e) => {
     try {
       const file = e.target.files[0];
@@ -73,6 +83,9 @@ const View = ({ auth, posts, mustVerifyEmail, status, photos }) => {
   const submitAvatarImage = () => {
     try {
       post(route("profile.changeImages"), {
+        onSuccess: () => {
+          refetch();
+        },
         preserveScroll: true,
       });
       setIsTheAvatarChanged(false);
@@ -106,6 +119,9 @@ const View = ({ auth, posts, mustVerifyEmail, status, photos }) => {
   const submitCoverImage = () => {
     try {
       post(route("profile.changeImages"), {
+        onSuccess: () => {
+          refetch();
+        },
         preserveScroll: true,
       });
       setIsTheCoverChanged(false);
@@ -221,7 +237,7 @@ const View = ({ auth, posts, mustVerifyEmail, status, photos }) => {
         </div>
         <div className="w-full h-full max-sm:pb-[55px] ">
           <Tab.Group>
-            <Tab.List className="md:px-[40px] px-[20px] mb-4 flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
+            <Tab.List className="md:px-[40px] px-[20px] flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
               <CustomTab text="Posts" />
               <CustomTab text="Photos" />
               <CustomTab text="Friends" />
@@ -231,17 +247,18 @@ const View = ({ auth, posts, mustVerifyEmail, status, photos }) => {
             <Tab.Panels className="rounded-md">
               <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
                 <div className=" dark:bg-homeFeed rounded-md">
-                  <PostContainer posts={posts}>
+                  <PostContainer posts={allPosts} refetch={refetch}>
                     <CreatePost
                       user={user}
                       setPosts={setAllPosts}
                       posts={allPosts}
                       classes="px-3 py-3 bg-homeFeed "
+                      refetch={refetch}
                     />
                   </PostContainer>
                 </div>
               </Tab.Panel>
-              <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
+              <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
                 <div className="relative rounded-md mb-2 bg-gray-900 duration-200 flex flex-row gap-4 flex-wrap p-4">
                   {photos.length > 0 ? (
                     photos.map((photo, index) => (
@@ -270,7 +287,7 @@ const View = ({ auth, posts, mustVerifyEmail, status, photos }) => {
                   />
                 </div>
               </Tab.Panel>
-              <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
+              <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
                 {auth.user.friends.length > 0 ? (
                   <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
                     {auth.user.friends?.map((friend, index) => (
@@ -283,7 +300,7 @@ const View = ({ auth, posts, mustVerifyEmail, status, photos }) => {
                   </div>
                 )}
               </Tab.Panel>
-              <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
+              <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
                 {auth.user?.pending_requests.length > 0 ? (
                   <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2">
                     {auth.user.pending_requests?.map((request, index) => (
@@ -296,7 +313,7 @@ const View = ({ auth, posts, mustVerifyEmail, status, photos }) => {
                   </div>
                 )}
               </Tab.Panel>
-              <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
+              <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
                 <Edit mustVerifyEmail={mustVerifyEmail} status={status} />
               </Tab.Panel>
             </Tab.Panels>
