@@ -125,7 +125,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { FaPause, FaPlay } from "react-icons/fa6";
 import { HiMiniXMark } from "react-icons/hi2";
 
-const CustomAudioPlayer = ({ attachment, controls, remove = () => {} }) => {
+const CustomAudioPlayer = ({
+  attachment,
+  controls = false,
+  remove = () => {},
+}) => {
   const audioRef = useRef();
   const [isPlay, setIsPlay] = useState(false);
   const [duration, setDuration] = useState(0);

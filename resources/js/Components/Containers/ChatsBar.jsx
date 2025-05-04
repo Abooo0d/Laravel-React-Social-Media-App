@@ -1,27 +1,84 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextInput from "../TextInput";
 import ChatsContainer from "./ChatsContainer";
 import { PiChatsCircle } from "react-icons/pi";
+import SearchForChatForm from "../Shared/SearchForChatForm";
+import { PrimaryButton } from "../Shared/Buttons";
+import axiosClient from "@/AxiosClient/AxiosClient";
+import Spinner from "../Shared/Spinner";
+import { FaSearch } from "react-icons/fa";
 const ChatsBar = ({ setIsLoading }) => {
-  const [search, setSearch] = useState("");
   const [showChats, setShowChats] = useState(false);
+  const [searchName, setSearchName] = useState("");
+  const [searchResults, setSearchResult] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState();
+  const [didSearch, setDidSearch] = useState(false);
+
+  const search = () => {
+    setLoading(true);
+    setDidSearch(true);
+    setSearchResult([]);
+    setMessage("");
+    axiosClient
+      .post(route("chat.searchForChat"), { name: searchName })
+      .then((data) => {
+        setSearchResult(data.data.chats);
+        console.log(data.data.chats, "Abood");
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
+      })
+      .catch((e) => {
+        setMessage("An error occurred");
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
+      });
+  };
+  useEffect(() => {
+    if (searchName?.trim() == "") {
+      setDidSearch(false);
+    }
+  }, [searchName]);
+
   return (
     <div className="relative">
       <div className="lg:block hidden shadow-lg rounded-xl m-0 lg:rounded-none order-first max-w-full min-w-full py-2 bg-gray-200 dark:bg-gray-900 max-h-barHeight min-h-barHeight h-full overflow-hidden border-r-2 dark:border-gray-800 border-gray-300 border-solid">
-        <h2 className="block max-lg-hidden text-xl font-bold dark:text-gray-100 ">
+        <h2 className="block max-lg-hidden text-xl font-bold dark:text-gray-100 pl-4 pt-2">
           My Chats:
         </h2>
-        <TextInput
-          placeholder="Type To Search"
-          classes="w-full mt-4 font-lg"
-          value={search}
-          setValue={setSearch}
-        />
-        <ChatsContainer setShow={setShowChats} setIsLoading={setIsLoading} />
+        <div className="min-w-full h-fit flex justify-center items-center px-2 gap-2">
+          <TextInput
+            placeholder="Type To Search"
+            classes="w-full font-lg"
+            value={searchName}
+            setValue={setSearchName}
+          />
+          <PrimaryButton
+            classes="min-w-[40px] min-h-[40px] text-gray-400"
+            event={search}
+          >
+            <FaSearch />
+          </PrimaryButton>
+        </div>
+        {loading ? (
+          <div className="w-full h-fit flex justify-center items-center py-4">
+            <Spinner />
+          </div>
+        ) : (
+          <ChatsContainer
+            setShow={setShowChats}
+            setIsLoading={setIsLoading}
+            searchResults={searchResults}
+            searchName={searchName}
+            didSearch={didSearch}
+          />
+        )}
       </div>
       <div className="block lg:hidden">
         <button
-          className={`p-[4px] cursor-pointer z-[100] absolute top-[100px] duration-200 backdrop-blur-lg w-[40px] h-[50px] text-sm flex justify-center items-center flex-col bg-gray-800/80 border-[1px] border-gray-600/70 border-solid rounded-r-md border-l-0 text-gray-400
+          className={`p-[4px] cursor-pointer z-[50] absolute top-[100px] duration-200 backdrop-blur-lg w-[40px] h-[50px] text-sm flex justify-center items-center flex-col bg-gray-800/80 border-[1px] border-gray-600/70 border-solid rounded-r-md border-l-0 text-gray-400
             ${showChats ? "left-[250px]" : "left-[0px]"}`}
           onClick={() => {
             setShowChats((prev) => !prev);
@@ -36,13 +93,33 @@ const ChatsBar = ({ setIsLoading }) => {
           <h2 className="block max-lg:hidden text-xl font-bold dark:text-gray-100 ">
             My Chats:
           </h2>
-          <TextInput
-            placeholder="Type To Search"
-            classes=" mt-3 font-lg flex-1 mx-2 max-h-[50px]"
-            value={search}
-            setValue={setSearch}
-          />
-          <ChatsContainer setShow={setShowChats} setIsLoading={setIsLoading} />
+          <div className="min-w-full h-fit flex justify-center items-center px-2 gap-2">
+            <TextInput
+              placeholder="Type To Search"
+              classes="w-full font-lg"
+              value={searchName}
+              setValue={setSearchName}
+            />
+            <PrimaryButton
+              classes="min-w-[40px] min-h-[40px] text-gray-400"
+              event={search}
+            >
+              <FaSearch />
+            </PrimaryButton>
+          </div>
+          {loading ? (
+            <div className="w-full h-fit flex justify-center items-center py-4">
+              <Spinner />
+            </div>
+          ) : (
+            <ChatsContainer
+              setShow={setShowChats}
+              setIsLoading={setIsLoading}
+              searchResults={searchResults}
+              searchName={searchName}
+              didSearch={didSearch}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HiMiniXMark } from "react-icons/hi2";
 import PostOwnerInfo from "./PostOwnerInfo";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -24,6 +24,7 @@ export default function UpdatePostForm({
   const [postData, setPostData] = useState(post);
   const [imageIndex, setImageIndex] = useState();
   const [attachmentsErrors, setAttachmentsErrors] = useState([]);
+  const inputRef = useRef();
   const [finalPost, setFinalPost] = useState({
     ...post,
     attachments: [],
@@ -33,7 +34,13 @@ export default function UpdatePostForm({
   function close() {
     setShowForm(false);
   }
-
+  const handleInput = () => {
+    const textarea = inputRef.current;
+    if (textarea) {
+      textarea.style.height = "80px";
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  };
   useEffect(() => {
     setPostData(post);
     setFinalPost({
@@ -42,6 +49,7 @@ export default function UpdatePostForm({
       deletedFilesIds: [],
     });
     setAttachmentsErrors([]);
+    handleInput();
   }, [showForm]);
 
   const handelSubmit = () => {
@@ -81,6 +89,7 @@ export default function UpdatePostForm({
           setErrors([e?.response?.data?.message || "Some Thing Went Wrong"]);
         });
     }
+    handleInput();
   };
   const HandelTheFiles = async (e) => {
     let files = e.target.files;
@@ -152,7 +161,9 @@ export default function UpdatePostForm({
       }));
     }
   };
-
+  useEffect(() => {
+    handleInput();
+  }, [postData]);
   return (
     <>
       <PopupCard showForm={showForm}>
@@ -166,28 +177,42 @@ export default function UpdatePostForm({
             </SecondaryButton>
           </div>
           <PostOwnerInfo post={post} user={user} />
-          <div className="w-full max-h-[400px] flex flex-col gap-2 overflow-auto">
-            <CKEditor
+          {/* <div className="flex flex-col gap-2 bg-red-500"> */}
+          <textarea
+            className="bg-gray-800 flex-1 w-full rounded-md outline-none border-none focus:outline-none focus:border-none ring-0 focus:ring-0 text-gray-300 resize-none min-h-[80px] max-h-[150px] "
+            ref={inputRef}
+            name="message"
+            value={postData.body}
+            placeholder="What On You Mind"
+            onChange={(e) => {
+              setPostData({ ...postData, body: e.target.value });
+              setFinalPost({ ...finalPost, body: e.target.value });
+            }}
+          ></textarea>
+          {/* <div className="w-full max-h-[400px] flex flex-col gap-2 h-full"> */}
+          {/* <CKEditor
               editor={ClassicEditor}
               data={postData.body}
               onChange={(event, editor) => {
                 setPostData({ ...postData, body: editor.getData() });
                 setFinalPost({ ...finalPost, body: editor.getData() });
               }}
-            />
-            <UpdatePostPostAttachments
-              post={postData}
-              setImage={setImage}
-              setShowImage={setShowImage}
-              setShowPost={setShowPost}
-              setImageIndex={setImageIndex}
-              imageIndex={imageIndex}
-              onDelete={onDelete}
-              undoDelete={undoDelete}
-              update={true}
-              attachmentsErrors={attachmentsErrors}
-            />
-          </div>
+            /> */}
+
+          <UpdatePostPostAttachments
+            post={postData}
+            setImage={setImage}
+            setShowImage={setShowImage}
+            setShowPost={setShowPost}
+            setImageIndex={setImageIndex}
+            imageIndex={imageIndex}
+            onDelete={onDelete}
+            undoDelete={undoDelete}
+            update={true}
+            attachmentsErrors={attachmentsErrors}
+          />
+          {/* </div> */}
+          {/* </div> */}
           <div className="mt-4 gap-2 flex justify-end items-center">
             <button className="cursor-pointer relative inline-flex items-center gap-2 rounded-md bg-gray-800/70 hover:bg-gray-800 duration-200 py-1.5 px-3 border-[1px] border-gray-700 border-solid text-sm/6 font-semibold text-white  focus:outline-none ">
               Add Files

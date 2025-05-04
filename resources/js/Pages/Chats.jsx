@@ -17,19 +17,23 @@ function Chats({ auth, groupsChat, allChats }) {
     if (flash?.success) setSuccessMessage(flash.success);
     if (flash?.error) setErrors([flash.error]);
   }, [flash]);
+
   useEffect(() => {
     setUser(auth.user);
   }, [auth]);
+
   useEffect(() => {
     let messages = [];
     Object.keys(errors).map((key) => messages.push(errors[key]));
     setErrors(messages);
   }, [errors]);
+
   useEffect(() => {
     if (!auth?.user) {
       router.get(route("login"));
     }
   }, [auth]);
+
   useEffect(() => {
     setCurrentChat(null);
     setAllChats(allChats);

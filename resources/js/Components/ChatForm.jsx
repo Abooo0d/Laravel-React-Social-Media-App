@@ -99,7 +99,7 @@ const ChatForm = () => {
     handleInput();
   }, [message]);
   return (
-    <div className="flex relative w-full justify-between items-center bg-gray-900 p-4 z-[50] border-t-[1px] border-solid border-gray-700 max-sm:pb-[70px]">
+    <div className="flex relative w-full justify-between items-center bg-gray-900 p-4 border-t-[1px] border-solid border-gray-700 max-sm:pb-[70px]">
       <ChatFormAttachmentContainer
         attachments={chosenFiles}
         setAttachments={setChosenFiles}

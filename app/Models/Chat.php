@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Chat extends Model
 {
-  protected $fillable = ['last_message_id', 'last_message'];
+  protected $fillable = ['last_message_id', 'last_message', 'last_message_date'];
 
   use HasFactory;
   public function users()
   {
-    return $this->belongsToMany(User::class)->withTimestamps();
+    return $this->belongsToMany(User::class, 'chat_users')->withTimestamps();
   }
   public function messages()
   {

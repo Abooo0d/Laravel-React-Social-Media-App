@@ -35,6 +35,7 @@ const PostCardMenu = ({
         onSuccess: () => {
           setOpenMenu(false);
           setSuccessMessage("Post Deleted Successfully");
+          refetch();
         },
       });
     }

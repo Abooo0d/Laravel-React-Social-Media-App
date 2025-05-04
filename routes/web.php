@@ -69,6 +69,7 @@ Route::middleware('auth')->group(function () {
   Route::delete('/group/kick-out/{group:slug}', [GroupController::class, 'kickOut'])->name('group.kickOut');
   Route::put('/group/{group:slug}', [GroupController::class, 'update'])->name('group.update');
   Route::get('/group/getPosts/{group:id}', [GroupController::class, 'getPostsForGroup'])->name('postsForGroup');
+  Route::post('/group/search', [GrouPController::class, 'searchForGroups'])->name('group.searchForGroup');
 });
 Route::middleware('auth')->group(function () {
   Route::post('/user/search', [UserController::class, 'searchForUser'])->name('user.searchForUser');
@@ -80,5 +81,7 @@ Route::middleware('auth')->group(function () {
   Route::post('/chats', [ChatsController::class, 'getChat'])->name('getChat');
   Route::post('/chat/new_message/{chat:id}', [chatsController::class, 'newMessage'])->name('newMessage');
   Route::get('/chat/get_more_messages/{message:id}', [ChatsController::class, 'getMoreMessages'])->name('getMoreMessages');
+  Route::post('/chat/search', [ChatsController::class, 'searchForChat'])->name('chat.searchForChat');
+  Route::get('/chat/download/{attachment}', [ChatsController::class, 'downloadAttachment'])->name('chat.download');
 });
 require __DIR__ . '/auth.php';

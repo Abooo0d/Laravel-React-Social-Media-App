@@ -66,13 +66,14 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
       </div>
       <div className="flex flex-col bg-blue-1 flex-1">
         <div className="flex flex-1 gap-1 justify-between items-center w-full ">
-          <h3 className="text-[16px] w-full text-nowrap overflow-hidden">
+          <h3 className="text-[15px] w-full text-nowrap overflow-hidden">
             {chatData.name.length > 20
               ? chatData.name.substr(0, 20) + "..."
               : chatData.name}
           </h3>
-          <p className="text-[12px] text-gray-600 w-fit flex break-keep ">
-            {chatData?.last_message_date}
+          <p className="text-[10px] text-gray-600 w-fit flex flex-col  justify-center items-end">
+            <span>{chatData?.last_message_date.split("-")[0]}</span>
+            <span>{chatData?.last_message_date.split("-")[1]}</span>
           </p>
         </div>
         <p className="text-gray-600 text-sm">

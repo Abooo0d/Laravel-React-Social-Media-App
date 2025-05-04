@@ -2,20 +2,19 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
+use App\Models\Group;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class SearchUserRequest extends FormRequest
+class SearchGroupRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
    */
-  /** @var User[] $user */
-  public $user = null;
+  /** @var Group[] $group */
+  public $group = null;
   public function authorize(): bool
   {
-
     return !!Auth::id();
   }
 
@@ -30,12 +29,11 @@ class SearchUserRequest extends FormRequest
       'name' => [
         'required',
         function ($attribute, $value, \Closure $fail) {
-          $this->user = User::query()
+          $this->group = Group::query()
             ->where('name', 'LIKE', "%{$value}%")
-            ->orWhere('username', 'LIKE', "%{$value}%")
-            ->orWhere('email', 'LIKE', "%{$value}%")
-            ->get()->where('id', '!=', Auth::id());
-          if (!$this->user) {
+            ->orWhere('slug', 'LIKE', "%{$value}%")
+            ->get();
+          if (!$this->group) {
             $fail('User Don`t Exist');
           }
         }

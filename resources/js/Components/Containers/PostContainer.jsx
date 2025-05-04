@@ -23,6 +23,7 @@ const PostContainer = ({ posts, classes, children, isLoading, refetch }) => {
     setAllPosts(posts?.data);
     setAllData(posts);
   }, [posts]);
+
   return (
     <>
       <>
@@ -53,7 +54,8 @@ const PostContainer = ({ posts, classes, children, isLoading, refetch }) => {
                   )}
                 </>
               ) : (
-                <div className="text-gray-600 text-sm">No Posts To Show</div>
+                <HomeLoader />
+                // <div className="text-gray-600 text-sm">No Posts To Show</div>
               )}
             </>
           )}

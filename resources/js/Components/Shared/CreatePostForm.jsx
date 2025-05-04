@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { HiMiniXMark } from "react-icons/hi2";
@@ -27,7 +27,7 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
   const { user } = useUserContext();
   const [chosenFiles, setChosenFiles] = useState([]);
   const { setErrors, setSuccessMessage } = useMainContext();
-
+  const inputRef = useRef();
   const [post, setPost] = useState({
     body: "",
     attachments: [],
@@ -39,6 +39,13 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
     setShowForm(false);
   }
 
+  const handleInput = () => {
+    const textarea = inputRef.current;
+    if (textarea) {
+      textarea.style.height = "80px";
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  };
   const handelSubmit = () => {
     try {
       if (post.body !== "" || post.attachments.length !== 0) {
@@ -114,19 +121,6 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
       console.log(error);
     }
   };
-
-  // const undoDelete = (attachment, update) => {
-  //   try {
-  //     setChosenFiles((prev) =>
-  //       prev.map((file) => ({
-  //         ...file,
-  //         isDeleted: file == attachment ? false : true,
-  //       }))
-  //     );
-  //   } catch (error) {
-  //     console.log();
-  //   }
-  // };
   const aiPost = () => {
     if (post.body == "") return;
     setLoadingAi(true);
@@ -153,7 +147,12 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
     setPost({ body: "", attachments: [], user_id: user.id, group_id: groupId });
     setChosenFiles([]);
     setAttachmentsErrors([]);
+    handleInput();
   }, [showForm]);
+
+  useEffect(() => {
+    handleInput();
+  }, [post]);
 
   useEffect(() => {
     setPost((prevPost) => {
@@ -179,10 +178,10 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
         <div as="h3" className="text-base/7 font-medium text-white mb-4">
           Create Post
         </div>
-        <div className="max-h-[400px] overflow-auto">
+        <div className="max-h-[400px] h-fit overflow-auto">
           <div className="relative">
             <PrimaryButton
-              classes="absolute top-[50px] right-[10px] z-[100] flex justify-center items-center w-[35px] h-[35px] text-gray-400"
+              classes="absolute top-[10px] right-[10px] z-[100] flex justify-center items-center w-[35px] h-[35px] text-gray-400"
               event={aiPost}
             >
               {loadingAi ? (
@@ -191,7 +190,17 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
                 <SiOpenai className="absolute w-[25px] h-[25px] top-[5px] left-[5px]" />
               )}
             </PrimaryButton>
-            <CKEditor
+            <textarea
+              className="bg-gray-800 flex-1 w-full rounded-md outline-none border-none focus:outline-none focus:border-none ring-0 focus:ring-0 text-gray-300 resize-none h-auto min-h-[40px] max-h-[150px] "
+              ref={inputRef}
+              name="message"
+              value={post.body}
+              placeholder="What On You Mind"
+              onChange={(e) => {
+                setPost((prev) => ({ ...prev, body: e.target.value }));
+              }}
+            ></textarea>
+            {/* <CKEditor
               editor={ClassicEditor}
               data={post.body}
               config={{
@@ -217,7 +226,7 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
               onChange={(event, editor) => {
                 setPost({ ...post, body: editor.getData() });
               }}
-            />
+            /> */}
           </div>
           <CreatePostPostAttachments
             post={post}

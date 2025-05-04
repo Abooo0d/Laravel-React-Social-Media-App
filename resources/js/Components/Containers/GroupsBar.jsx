@@ -3,6 +3,7 @@ import GroupeCard from "../Shared/GroupeCard";
 import CreateGroupForm from "../Shared/CreateGroupForm";
 import { PrimaryButton } from "../Shared/Buttons";
 import Spinner from "../Shared/Spinner";
+import SearchForGroupsForm from "../Shared/SearchForGroupsForm";
 const GroupsBar = ({
   groups,
   showGroupContainer,
@@ -11,6 +12,7 @@ const GroupsBar = ({
 }) => {
   const [groupData, setGroupsData] = useState(groups);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showSearchForm, setShowSearchForm] = useState(false);
   useEffect(() => {
     setGroupsData(groups);
   }, [groups]);
@@ -29,14 +31,24 @@ const GroupsBar = ({
             <h2 className="text-gray-400  w-full py-3  text-xl font-bold cursor-default">
               Groups:
             </h2>
-            <PrimaryButton
-              classes="px-3 py-1.5"
-              event={() => {
-                setShowCreateForm(true);
-              }}
-            >
-              New
-            </PrimaryButton>
+            <div className="flex gap-2 items-center justify-between">
+              <PrimaryButton
+                classes="px-3 py-1.5"
+                event={() => {
+                  setShowCreateForm(true);
+                }}
+              >
+                New
+              </PrimaryButton>
+              <PrimaryButton
+                classes="text-[15px] w-fit py-1.5 px-3"
+                event={() => {
+                  setShowSearchForm(true);
+                }}
+              >
+                Search
+              </PrimaryButton>
+            </div>
           </div>
           <div
             className={`flex flex-col gap-4 max-h-[500px] h-fit overflow-auto px-4 py-2`}
@@ -45,7 +57,6 @@ const GroupsBar = ({
               <Spinner size="large" />
             ) : (
               <>
-                {" "}
                 {groupData.length > 0 ? (
                   <>
                     {groupData.map((group, index) => (
@@ -70,6 +81,10 @@ const GroupsBar = ({
         showForm={showCreateForm}
         setShowForm={setShowCreateForm}
         setGroups={setGroupsData}
+      />
+      <SearchForGroupsForm
+        showForm={showSearchForm}
+        setShowForm={setShowSearchForm}
       />
     </>
   );

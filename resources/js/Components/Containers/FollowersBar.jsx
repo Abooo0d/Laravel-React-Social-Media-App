@@ -30,7 +30,7 @@ const FollowersBar = ({
                 setShowFriendsForm(true);
               }}
             >
-              Add Friends
+              Search
             </PrimaryButton>
           </div>
           <div

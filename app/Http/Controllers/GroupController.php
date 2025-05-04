@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Enums\GroupUserRuleEnum;
 use App\Http\Enums\GroupUserStatusEnum;
 use App\Http\Requests\InviteUserRequest;
+use App\Http\Requests\SearchGroupRequest;
 use App\Http\Resources\PostAttachmentResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
@@ -388,6 +389,18 @@ class GroupController extends Controller
         $groupUser->user->notify(new GroupUsersActionNotification($admin, $group, 'KickOut'));
         return redirect()->back()->with('success', 'Member Kicked Out Successfully');
       }
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+
+  public function searchForGroups(SearchGroupRequest $request)
+  {
+    try {
+      $data = $request->Validated();
+      $groupsData = $request->group;
+      if ($request->wantsJson())
+        return response()->json(['groups' => GroupResource::collection($groupsData)]);
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }

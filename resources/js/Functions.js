@@ -1,25 +1,41 @@
 function formatRelativeTime(dateString) {
+  // console.log(dateString);
+
+  // const date = new Date(dateString);
+  // const now = new Date();
+
+  // const diffInSeconds = Math.floor((now - date) / 1000);
+
+  // if (diffInSeconds < 60) {
+  //   return "now";
+  // }
+
+  // const diffInMinutes = Math.floor(diffInSeconds / 60);
+  // if (diffInMinutes < 60) {
+  //   return `${diffInMinutes} minutes ago`;
+  // }
+
+  // const diffInHours = Math.floor(diffInMinutes / 60);
+  // if (diffInHours < 24) {
+  //   return `${diffInHours} hours ago`;
+  // }
+
+  // const diffInDays = Math.floor(diffInHours / 24);
+  // return `${diffInDays} days ago`;
+
   const date = new Date(dateString);
   const now = new Date();
+  const diffHours = Math.floor((now - date) / (1000 * 60 * 60));
 
-  const diffInSeconds = Math.floor((now - date) / 1000);
-
-  if (diffInSeconds < 60) {
-    return "now";
+  if (date.toDateString() === now.toDateString()) {
+    return "today";
+  } else if (diffHours < 24) {
+    return `${diffHours} hour${diffHours !== 1 ? "s" : ""} ago`;
+  } else if (diffHours < 48) {
+    return "yesterday";
+  } else {
+    return date.toLocaleDateString();
   }
-
-  const diffInMinutes = Math.floor(diffInSeconds / 60);
-  if (diffInMinutes < 60) {
-    return `${diffInMinutes} minutes ago`;
-  }
-
-  const diffInHours = Math.floor(diffInMinutes / 60);
-  if (diffInHours < 24) {
-    return `${diffInHours} hours ago`;
-  }
-
-  const diffInDays = Math.floor(diffInHours / 24);
-  return `${diffInDays} days ago`;
 }
 function isImage(file) {
   file = file?.file ? file?.file : file;

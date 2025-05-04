@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Events\NewMessageSent;
 use App\Http\Requests\NewMessageRequest;
+use App\Http\Requests\SearchForChatRequest;
+use App\Http\Requests\SearchUserRequest;
 use App\Http\Resources\ChatResource;
 use App\Http\Resources\MessageResource;
 use App\Models\Chat;
+use App\Models\ChatUser;
 use App\Models\Message;
 use App\Models\MessageAttachment;
 use App\Models\MessageStatus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -51,18 +55,33 @@ class ChatsController extends Controller
         'chat_id' => ['nullable', 'exists:chats,id'],
         'is_group' => ['nullable', 'boolean']
       ]);
+      $user = Auth::user();
       $chat_id = $data['chat_id'] ?? null;
-      $chat = Chat::where('id', $chat_id)->first();
-      if (!!$chat) {
-        return response(
-          [
-            'chat_with_friend' => $chat ? new ChatResource($chat) : null,
-          ],
-          200
-        );
-      } else
-        return redirect()->back()->with('error', 'Some Thing Went Wrong');
-
+      $chat = Chat::find($chat_id);
+      if (!$chat) {
+        return response()->json([
+          'message' => 'Chat not found'
+        ], 404);
+      }
+      // Check if user is already a member
+      $isChatUser = ChatUser::where('chat_id', $chat->id)
+        ->where('user_id', $user->id)
+        ->exists();
+      // If not a member, add them
+      if (!$isChatUser) {
+        ChatUser::create([
+          'chat_id' => $chat->id,
+          'user_id' => $user->id,
+        ]);
+        // Refresh chat data with new user
+        $chat->refresh();
+      }
+      return response(
+        [
+          'chat_with_friend' => $chat ? new ChatResource($chat) : null,
+        ],
+        200
+      );
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
@@ -75,7 +94,6 @@ class ChatsController extends Controller
         ->limit(20)
         ->get();
       return response(['messages' => MessageResource::collection($messages)]);
-
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
@@ -114,7 +132,6 @@ class ChatsController extends Controller
         'is_read' => '1'
       ]);
       $lastMessageBody = $message->body;
-
       // If message is longer than 100 chars, truncate it with ellipsis
       if (strlen($message->body) > 20) {
         $lastMessageBody = substr($message->body, 0, 20) . '...';
@@ -127,7 +144,28 @@ class ChatsController extends Controller
       $chat->save();
       broadcast(new NewMessageSent($message));
       return response(['message' => new MessageResource($message)], 200);
-
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function searchForChat(SearchForChatRequest $request)
+  {
+    try {
+      $data = $request->Validated();
+      $chatsData = $request->chats;
+      // $userChats = $request->user()->chats()->where('id');
+      // dd($userChats);
+      return response()->json(['chats' => ChatResource::collection($chatsData)]);
+      // if ($request->wantsJson())
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function downloadAttachment(MessageAttachment $attachment)
+  {
+    try {
+      return response()
+        ->download(Storage::disk('public')->path($attachment->path), $attachment->name);
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }

@@ -1,6 +1,7 @@
 import { Disclosure } from "@headlessui/react";
 import DOMPurify from "dompurify";
 import React from "react";
+import MarkdownRenderer from "./MarkdownRenderer";
 
 const PostCardPostBody = ({ post }) => {
   return (
@@ -8,12 +9,12 @@ const PostCardPostBody = ({ post }) => {
       {post.body && (
         <Disclosure>
           {({ open }) => (
-            <div className="post-content">
+            <div className="post-content text-gray-400">
               {post.body.length > 150 ? (
                 <>
                   {!open ? (
                     <>
-                      <div
+                      {/* <div
                         className="ch-content-output dark:text-gray-400 text-gray-700 lg:text-xl md:text-lg"
                         dangerouslySetInnerHTML={{
                           __html: DOMPurify.sanitize(
@@ -21,28 +22,38 @@ const PostCardPostBody = ({ post }) => {
                           ),
                         }}
                       ></div>
+                       */}
+                      <MarkdownRenderer content={post.body}>
+                        {post.body}
+                      </MarkdownRenderer>
                     </>
                   ) : (
-                    <Disclosure.Panel>
-                      <div
-                        className="ch-content-output dark:text-gray-400 text-gray-700 lg:text-xl md:text-lg"
-                        dangerouslySetInnerHTML={{
-                          __html: DOMPurify.sanitize(post.body),
-                        }}
-                      ></div>
-                    </Disclosure.Panel>
+                    // <Disclosure.Panel>
+                    //   <div
+                    //     className="ch-content-output dark:text-gray-400 text-gray-700 lg:text-xl md:text-lg"
+                    //     dangerouslySetInnerHTML={{
+                    //       __html: DOMPurify.sanitize(post.body),
+                    //     }}
+                    //   ></div>
+                    // </Disclosure.Panel>
+                    <MarkdownRenderer content={post.body}>
+                      {post.body}
+                    </MarkdownRenderer>
                   )}
                   <Disclosure.Button className="text-gray-500 w-full flex justify-end mt-2 underline max-md:text-[14px]">
                     {open ? "Read Less" : "Read more"}
                   </Disclosure.Button>
                 </>
               ) : (
-                <div
-                  className="dark:text-gray-400 text-gray-700 lg:text-xl md:text-lg"
-                  dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(post.body),
-                  }}
-                ></div>
+                // <div
+                //   className="dark:text-gray-400 text-gray-700 lg:text-xl md:text-lg"
+                //   dangerouslySetInnerHTML={{
+                //     __html: DOMPurify.sanitize(post.body),
+                //   }}
+                // ></div>
+                <MarkdownRenderer content={post.body}>
+                  {post.body}
+                </MarkdownRenderer>
               )}
             </div>
           )}

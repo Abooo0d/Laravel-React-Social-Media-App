@@ -2,20 +2,22 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
+use App\Models\Chat;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class SearchUserRequest extends FormRequest
+class SearchForChatRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
    */
-  /** @var User[] $user */
-  public $user = null;
+  /**
+   * Summary of chat
+   * @var  \App\Models\Chat[] $chats
+   */
+  public $chats = null;
   public function authorize(): bool
   {
-
     return !!Auth::id();
   }
 
@@ -30,13 +32,11 @@ class SearchUserRequest extends FormRequest
       'name' => [
         'required',
         function ($attribute, $value, \Closure $fail) {
-          $this->user = User::query()
+          $this->chats = Chat::query()
             ->where('name', 'LIKE', "%{$value}%")
-            ->orWhere('username', 'LIKE', "%{$value}%")
-            ->orWhere('email', 'LIKE', "%{$value}%")
-            ->get()->where('id', '!=', Auth::id());
-          if (!$this->user) {
-            $fail('User Don`t Exist');
+            ->get();
+          if (!$this->chats) {
+            $fail('There Is No Chat With This Name');
           }
         }
       ]

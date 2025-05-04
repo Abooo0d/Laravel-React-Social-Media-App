@@ -7,7 +7,8 @@ import { useForm } from "@inertiajs/react";
 import { IoSearchOutline } from "react-icons/io5";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import UserFriendCard from "./UserFriendCard";
-const SearchForFriendsForm = ({ showForm, setShowForm }) => {
+import ChatCard from "./ChatCard";
+const SearchForChatForm = ({ showForm, setShowForm }) => {
   const [name, setName] = useState("");
   const [searchResults, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -20,16 +21,18 @@ const SearchForFriendsForm = ({ showForm, setShowForm }) => {
   useEffect(() => {
     setData({ name: name });
   }, [name]);
+
   const close = () => {
     setShowForm(false);
   };
+
   const search = () => {
     setLoading(true);
     setDidSearch(true);
     setSearchResult([]);
     setMessage("");
     axiosClient
-      .post(route("user.searchForUser"), data)
+      .post(route("chat.searchForChat"), data)
       .then((data) => {
         setSearchResult(data.data.followers);
         setTimeout(() => {
@@ -86,13 +89,13 @@ const SearchForFriendsForm = ({ showForm, setShowForm }) => {
               <>
                 {searchResults.length > 0 ? (
                   <div className="w-full grid gap-2 col md:grid-cols-2 grid-cols-1 p-4 max-h-[300px] overflow-auto">
-                    {searchResults?.map((user, index) => (
-                      <UserFriendCard key={index} user={user} />
+                    {searchResults?.map((chat, index) => (
+                      <ChatCard key={index} chat={chat} />
                     ))}
                   </div>
                 ) : (
                   <div className="w-full text-gray-500 text-center p-4">
-                    No One With This Name
+                    No Chat With This Name
                   </div>
                 )}
               </>
@@ -107,4 +110,4 @@ const SearchForFriendsForm = ({ showForm, setShowForm }) => {
   );
 };
 
-export default SearchForFriendsForm;
+export default SearchForChatForm;

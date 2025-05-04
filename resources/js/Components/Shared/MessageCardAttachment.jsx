@@ -9,10 +9,19 @@ import React, { useEffect } from "react";
 import CustomAudioPlayer from "./CustomAudioPlayer";
 import CustomVideoPlayer from "./CustomVideoPlayer";
 import { FaFile } from "react-icons/fa";
-const MessageCardAttachment = ({ attachment }) => {
+const MessageCardAttachment = ({
+  attachment,
+  setIndex,
+  attachmentIndex,
+  setShow,
+}) => {
   return (
     <div
-      className={`relative max-w-[300px] rounded-md overflow-hidden flex justify-start items-enter cursor-pointer duration-200 border-transparent group`}
+      className={`relative max-w-[250px] rounded-md overflow-hidden flex justify-end items-enter cursor-pointer duration-200 border-transparent group`}
+      onClick={() => {
+        setIndex(attachmentIndex);
+        setShow(true);
+      }}
     >
       {MessageIsImage(attachment) && (
         <img

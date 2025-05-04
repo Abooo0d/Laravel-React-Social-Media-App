@@ -2,7 +2,11 @@ import React, { useRef, useState } from "react";
 import { HiMiniXMark } from "react-icons/hi2";
 import { FaPause, FaPlay } from "react-icons/fa6";
 
-const CustomVideoPlayer = ({ attachment, controls, remove }) => {
+const CustomVideoPlayer = ({
+  attachment,
+  controls = false,
+  remove = () => {},
+}) => {
   const videoRef = useRef();
   const [isPlay, setIspLay] = useState(false);
   const handelPlay = () => {

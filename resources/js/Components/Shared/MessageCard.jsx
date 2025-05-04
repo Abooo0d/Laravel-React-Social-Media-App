@@ -1,11 +1,13 @@
 import { useUserContext } from "@/Contexts/UserContext";
-import React from "react";
+import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import MarkdownRenderer from "./MarkdownRenderer";
 import MessageAttachmentContainer from "./MessageAttachmentContainer";
+import AttachmentFullView from "./AttachmentFullView";
 const MessageCard = ({ message }) => {
   const { user } = useUserContext();
-
+  const [showAttachmentView, setShowAttachmentView] = useState(false);
+  const [attachmentIndex, setAttachmentIndex] = useState(0);
   return (
     <div
       className={`w-full flex gap-1 flex-col justify-end ${
@@ -22,14 +24,18 @@ const MessageCard = ({ message }) => {
         }`}
       >
         <div
-          className={`backdrop-blur-sm w-fit px-4 py-2 rounded-md text-gray-400 word-wrap cursor-default max-w-[80%] flex justify-center items-start flex-col break-all  ${
+          className={`backdrop-blur-sm w-fit px-4 py-2 rounded-md text-gray-400 word-wrap cursor-default max-w-[80%] overflow-auto flex justify-center items-start flex-col break-all  ${
             message.user.id != user.id
               ? "bg-[rgba(46,59,78,100%)]"
               : "bg-[rgba(12,36,51,100%)]"
           }`}
         >
           {message?.attachments.length > 0 && (
-            <MessageAttachmentContainer attachments={message.attachments} />
+            <MessageAttachmentContainer
+              attachments={message.attachments}
+              setIndex={setAttachmentIndex}
+              setShow={setShowAttachmentView}
+            />
           )}
           <MarkdownRenderer content={message.body}>
             {message.body}
@@ -48,6 +54,13 @@ const MessageCard = ({ message }) => {
         />
       </div>
       <span className="text-xs text-gray-500 opacity-50">Delivered</span>
+      <AttachmentFullView
+        attachments={message?.attachments}
+        show={showAttachmentView}
+        setShow={setShowAttachmentView}
+        index={attachmentIndex}
+        setIndex={setAttachmentIndex}
+      />
     </div>
   );
 };

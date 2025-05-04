@@ -6,15 +6,15 @@ import TextInput from "../TextInput";
 import { useForm } from "@inertiajs/react";
 import { IoSearchOutline } from "react-icons/io5";
 import axiosClient from "@/AxiosClient/AxiosClient";
-import UserFriendCard from "./UserFriendCard";
-const SearchForFriendsForm = ({ showForm, setShowForm }) => {
+import GroupeCard from "./GroupeCard";
+const SearchForGroupsForm = ({ showForm, setShowForm }) => {
   const [name, setName] = useState("");
   const [searchResults, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState();
   const [didSearch, setDidSearch] = useState(false);
 
-  const { data, post, get, processing, setData } = useForm({
+  const { data, setData } = useForm({
     name: name,
   });
   useEffect(() => {
@@ -29,9 +29,9 @@ const SearchForFriendsForm = ({ showForm, setShowForm }) => {
     setSearchResult([]);
     setMessage("");
     axiosClient
-      .post(route("user.searchForUser"), data)
+      .post(route("group.searchForGroup"), data)
       .then((data) => {
-        setSearchResult(data.data.followers);
+        setSearchResult(data.data.groups);
         setTimeout(() => {
           setLoading(false);
         }, 500);
@@ -60,9 +60,9 @@ const SearchForFriendsForm = ({ showForm, setShowForm }) => {
         <HiMiniXMark className="w-5 h-5 text-gray-200" />
       </SecondaryButton>
       <div as="h3" className="text-base/7 font-medium text-white mb-4">
-        Add Friends
+        Search For Groups
       </div>
-      <h2 className="text-gray-400 mb-2">Search For Friends</h2>
+      <h2 className="text-gray-400 mb-2">Search For Groups</h2>
       <div className="relative w-full">
         <TextInput
           placeholder="Name Or Email:"
@@ -86,13 +86,13 @@ const SearchForFriendsForm = ({ showForm, setShowForm }) => {
               <>
                 {searchResults.length > 0 ? (
                   <div className="w-full grid gap-2 col md:grid-cols-2 grid-cols-1 p-4 max-h-[300px] overflow-auto">
-                    {searchResults?.map((user, index) => (
-                      <UserFriendCard key={index} user={user} />
+                    {searchResults?.map((group, index) => (
+                      <GroupeCard key={index} data={group} />
                     ))}
                   </div>
                 ) : (
                   <div className="w-full text-gray-500 text-center p-4">
-                    No One With This Name
+                    No Groups With This Name
                   </div>
                 )}
               </>
@@ -107,4 +107,4 @@ const SearchForFriendsForm = ({ showForm, setShowForm }) => {
   );
 };
 
-export default SearchForFriendsForm;
+export default SearchForGroupsForm;

@@ -36,15 +36,22 @@ export const ChatsContext = ({ children }) => {
   }, [groupChats, allChats]);
 
   useEffect(() => {
-    if (currentChat == null) return;
-    else {
-      setCombinedChats((prevChats) => {
-        const array = prevChats.map((chat) =>
-          chat.id == currentChat.id ? currentChat : chat
-        );
-        return array.sort((a, b) => b.last_message_id - a.last_message_id);
+    if (!currentChat) return;
+    setCombinedChats((prevChats) => {
+      // Update the chat if it exists
+      const updatedChats = prevChats.map((chat) =>
+        chat.id === currentChat.id ? currentChat : chat
+      );
+      // Sort chats: groups first, then private chats, both by last_message_id
+      return updatedChats.sort((a, b) => {
+        // If both are groups or both are private chats
+        if (a.is_group === b.is_group) {
+          return b.last_message_id - a.last_message_id;
+        }
+        // Put groups before private chats
+        return a.is_group ? -1 : 1;
       });
-    }
+    });
   }, [currentChat]);
 
   useEffect(() => {
@@ -64,65 +71,12 @@ export const ChatsContext = ({ children }) => {
       });
   }, []);
 
-  // useEffect(() => {
-  //   if (!!currentChat?.id) {
-  //     window.Echo.private(`chat.${currentChat?.id}`).listen(
-  //       "NewMessageSent",
-  //       (e) => {
-  //         // if (e.message.user_id != user.id) {
-  //         if (e.message.chat_id == currentChat.id) {
-  //           setCurrentChat((prev) => {
-  //             if (prev.id === e.message.chat_id) {
-  //               // Check if message already exists
-  //               const messageExists = prev.messages.some(
-  //                 (msg) => msg.id === e.message.id
-  //               );
-
-  //               if (messageExists) return prev;
-
-  //               return {
-  //                 ...prev,
-  //                 messages: [e.message, ...prev.messages],
-  //                 last_message: e.message.body,
-  //                 last_message_id: e.message.id,
-  //               };
-  //             }
-  //           });
-  //         } else {
-  //           setCombinedChats((prev) =>
-  //             prev.map((chat) => {
-  //               if (chat.id === e.message.chat_id) {
-  //                 // Check if message already exists
-  //                 const messageExists = chat.messages.some(
-  //                   (msg) => msg.id === e.message.id
-  //                 );
-
-  //                 if (messageExists) return chat;
-
-  //                 return {
-  //                   ...chat,
-  //                   messages: [e.message, ...chat.messages],
-  //                   last_message: e.message.body,
-  //                   last_message_id: e.message.id,
-  //                 };
-  //               }
-  //               return chat;
-  //             })
-  //           );
-  //         }
-  //         // }
-  //       },
-  //       [currentChat?.id]
-  //     );
-  //   }
-  // }, [currentChat?.id]);
   useEffect(() => {
     if (!!currentChat?.id) {
       window.Echo.private(`chat.${currentChat?.id}`).listen(
         "NewMessageSent",
         (e) => {
           const message = e.message;
-
           // 1. Update combinedChats
           setCombinedChats((prevChats) =>
             prevChats.map((chat) => {
@@ -132,7 +86,6 @@ export const ChatsContext = ({ children }) => {
                   (msg) => msg.id === message.id
                 );
                 if (alreadyExists) return chat;
-
                 return {
                   ...chat,
                   messages: [message, ...chat.messages],
@@ -144,16 +97,13 @@ export const ChatsContext = ({ children }) => {
               return chat;
             })
           );
-
           // 2. Update currentChat (if it's the same chat)
           setCurrentChat((prevChat) => {
             if (prevChat.id !== message.chat_id) return prevChat;
-
             const alreadyExists = prevChat.messages.some(
               (msg) => msg.id === message.id
             );
             if (alreadyExists) return prevChat;
-
             return {
               ...prevChat,
               messages: [message, ...prevChat.messages],
