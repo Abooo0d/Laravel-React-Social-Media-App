@@ -8,8 +8,8 @@ import { FaUser } from "react-icons/fa";
 import { useMainContext } from "@/Contexts/MainContext";
 const NotificationCard = ({ notification, setShowNotificationsForm }) => {
   const Icon = () => {
-    if (notification.data?.type?.split("|")[0] == "postReaction") return "like";
-    switch (notification.data?.type?.split("|")[1]) {
+    if (notification?.type?.split("|")[0] == "postReaction") return "like";
+    switch (notification?.type?.split("|")[1]) {
       case "postActions":
         return "post";
       case "commentActions":
@@ -21,7 +21,7 @@ const NotificationCard = ({ notification, setShowNotificationsForm }) => {
     }
   };
   const Message = () => {
-    let me = notification.data?.type?.split("|");
+    let me = notification?.type?.split("|");
     if (me[1] == "groupAction") return "Click Here To Visit The Group.";
     else if (me[1] == "userAction") return "click Here To Visit.";
     else {
@@ -32,14 +32,13 @@ const NotificationCard = ({ notification, setShowNotificationsForm }) => {
   return (
     <Link
       className="bg-gray-900 rounded-lg px-4 py-2 flex gap-4 justify-start items-center hover:bg-gray-800/70 duration-200"
-      href={notification.data.link}
+      href={notification.link}
       onClick={() => setShowNotificationsForm(false)}
     >
       <div className="relative min-w-[50px] min-h-[50px]">
         <img
           src={
-            notification.data.actor?.avatar ||
-            "/images/default_avatar_image.png"
+            notification.actor?.avatar_url || "/images/default_avatar_image.png"
           }
           alt="user Image"
           className="w-[50px] h-[50px] object-cover rounded-full "
@@ -61,9 +60,8 @@ const NotificationCard = ({ notification, setShowNotificationsForm }) => {
         </span>
       </div>
       <p className="text-gray-300 text-[14px]">
-        {notification.data.message}
+        {notification.message}
         <br />
-
         <span className="text-gray-500 text-[13px]">{Message()}</span>
       </p>
     </Link>

@@ -43,7 +43,8 @@ class JoinRequestNotification extends Notification
       'type' => NotificationTypeEnum::JOINGROUPREQUEST->value,
       'message' => "'{$this->user->name}' Requested To Join '{$this->group->name}' Group.",
       'link' => route('group.profile', $this->group->slug),
-      'actor' => ['name' => $this->user->name, 'avatar' => $this->user->avatar_path ? Storage::url($this->user->avatar_path) : asset('images/default_avatar_image.png')]
+      // 'actor' => ['name' => $this->user->name, 'avatar' => $this->user->avatar_path ? Storage::url($this->user->avatar_path) : asset('images/default_avatar_image.png')],
+      'actor_id' => $this->user->id
 
     ];
   }

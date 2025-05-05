@@ -16,7 +16,7 @@ const NotificationsBar = ({
             : "invisible opacity-0 scale-90 "
         } `}
       >
-        <h2 className="text-gray-400 bg-gray-800 w-full py-3 px-4 text-xl font-bold cursor-default">
+        <h2 className="text-gray-400 bg-gray-800 w-full py-3 px-4 lg:text-xl font-bold cursor-default">
           Notifications:
         </h2>
         <div

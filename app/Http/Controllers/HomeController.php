@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ChatResource;
 use App\Http\Resources\GroupResource;
+use App\Http\Resources\NotificationResource;
 use App\Http\Resources\PostResource;
 use App\Models\Group;
 use App\Models\Post;
@@ -87,7 +88,7 @@ class HomeController extends Controller
     try {
       if (auth()->id()) {
         $notifications = Auth::user()->notifications;
-        return response(['notifications' => $notifications ?? []], 200);
+        return response(['notifications' => NotificationResource::collection($notifications)], 200);
       }
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');

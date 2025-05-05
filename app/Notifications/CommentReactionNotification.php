@@ -42,7 +42,8 @@ class CommentReactionNotification extends Notification
         ? "'" . $this->user->name . "' Reacted To You Comment"
         : "'" . $this->user->name . "' Removed His Reaction From Your Comment",
       'link' => route('post.publicView', $this->postId),
-      'actor' => ['name' => $this->user->name, 'avatar' => $this->user->avatar_path ? Storage::url($this->user->avatar_path) : asset('images/default_avatar_image.png')]
+      // 'actor' => ['name' => $this->user->name, 'avatar' => $this->user->avatar_path ? Storage::url($this->user->avatar_path) : asset('images/default_avatar_image.png')],
+      'actor_id' => $this->user->id
     ];
   }
 

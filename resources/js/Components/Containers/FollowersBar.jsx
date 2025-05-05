@@ -21,7 +21,7 @@ const FollowersBar = ({
           } `}
         >
           <div className="flex justify-between items-center bg-gray-800 px-4">
-            <h2 className="text-gray-400 bg-gray-800 py-3  text-xl font-bold cursor-default">
+            <h2 className="text-gray-400 bg-gray-800 py-3 lg:text-xl font-bold cursor-default">
               Followers:
             </h2>
             <PrimaryButton

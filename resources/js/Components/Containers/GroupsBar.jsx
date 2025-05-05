@@ -28,7 +28,7 @@ const GroupsBar = ({
           } `}
         >
           <div className="flex justify-between items-center bg-gray-800 px-4">
-            <h2 className="text-gray-400  w-full py-3  text-xl font-bold cursor-default">
+            <h2 className="text-gray-400  w-full py-3 lg:text-xl font-bold cursor-default">
               Groups:
             </h2>
             <div className="flex gap-2 items-center justify-between">

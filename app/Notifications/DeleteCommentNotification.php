@@ -41,7 +41,8 @@ class DeleteCommentNotification extends Notification
       'type' => NotificationTypeEnum::DELETECOMMENT->value,
       'message' => "'" . $this->user->name . "'Commented On your Post",
       'link' => route('post.publicView', $this->postId),
-      'actor' => ['name' => $this->user->name, 'avatar' => $this->user->avatar_path ? Storage::url($this->user->avatar_path) : asset('images/default_avatar_image.png')]
+      // 'actor' => ['name' => $this->user->name, 'avatar' => $this->user->avatar_path ? Storage::url($this->user->avatar_path) : asset('images/default_avatar_image.png')],
+      'actor_id' => $this->user->id
     ];
   }
 
