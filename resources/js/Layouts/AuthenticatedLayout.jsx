@@ -21,17 +21,20 @@ export default function Authenticated({ children }) {
   const [showFollowerContainer, setShowFollowerContainer] = useState(false);
   const [showNotificationsForm, setShowNotificationsForm] = useState(false);
   const [showGroupContainer, setShowGroupContainer] = useState(false);
+  const [notificationsCount, setNotificationsCount] = useState(0);
   const [currentUser, setCurrentUser] = useState(auth?.user);
   const [followers, setFollowers] = useState(auth?.user.friends);
-  const { data: notifications, isLoading: LoadingNotifications } =
-    useGetNotifications();
+  const {
+    data: notifications,
+    isLoading: LoadingNotifications,
+    refetch: refetchNotifications,
+  } = useGetNotifications();
   const { data: groups, isLoading: loadingGroups } = useGetGroups();
   const hideAll = () => {
     setShowFollowerContainer(false);
     setShowGroupContainer(false);
     setShowNotificationsForm(false);
   };
-
   useEffect(() => {
     if (showFollowerContainer) {
       setShowGroupContainer(false);
@@ -50,6 +53,18 @@ export default function Authenticated({ children }) {
       setShowGroupContainer(false);
     }
   }, [showNotificationsForm]);
+  useEffect(() => {
+    if (!LoadingNotifications) {
+      if (notifications?.notifications?.length > 0) {
+        let count = 0;
+        notifications?.notifications?.map((notification) => {
+          if (!!notification.read_at) return;
+          count++;
+        });
+        setNotificationsCount(count);
+      }
+    }
+  }, [notifications, LoadingNotifications]);
 
   return (
     <div className="min-h-screen bg-gray-300/80 dark:bg-homeFeed">
@@ -76,14 +91,20 @@ export default function Authenticated({ children }) {
                   }}
                   show={showFollowerContainer}
                 >
-                  <FaUserGroup className="text-gray-400 text-lg w-[20px] h-[20px]" />
+                  <FaUserGroup className="text-gray-400 text-lg w-[20px] h-[20px] relative" />
                 </MenuButton>
                 <MenuButton
+                  classes="relative"
                   event={() => {
                     setShowNotificationsForm(!showNotificationsForm);
                   }}
                   show={showNotificationsForm}
                 >
+                  {notificationsCount > 0 && (
+                    <span className="w-4 h-4 bg-red-500/40 border-[1px] border-solid border-red-500 backdrop-blur-sm absolute top-[-5px] right-0 text-[12px] flex justify-center items-center rounded-md text-gray-300  p-0">
+                      {notificationsCount}
+                    </span>
+                  )}
                   <IoMdNotifications className="text-gray-400 text-lg w-[20px] h-[20px]" />
                 </MenuButton>
                 <MenuButton
@@ -96,7 +117,6 @@ export default function Authenticated({ children }) {
                 </MenuButton>
                 <MenuButton
                   event={() => {
-                    hideAll();
                     router.get(route("chats"));
                   }}
                   show={false}
@@ -220,6 +240,7 @@ export default function Authenticated({ children }) {
           showNotificationsForm={showNotificationsForm}
           setShowNotificationsForm={setShowNotificationsForm}
           isLoading={LoadingNotifications}
+          refetch={refetchNotifications}
         />
       )}
       {groups && (

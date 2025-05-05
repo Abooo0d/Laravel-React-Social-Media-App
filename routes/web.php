@@ -27,7 +27,9 @@ Route::middleware('auth')->group(function () {
   Route::get('/get-posts', [HomeController::class, 'getPosts'])->name('getPosts');
   Route::get('/get-groups', [HomeController::class, 'getGroups'])->name('getGroups');
   Route::get('/get-notifications', [HomeController::class, 'getNotifications'])->name('getNotifications');
-  ROute::get('/get-chat-groups', [HomeController::class, 'getChatGroups'])->name('getChatGroups');
+  Route::get('/get-chat-groups', [HomeController::class, 'getChatGroups'])->name('getChatGroups');
+  Route::post('/notification/read/{notificationId}', [HomeController::class, 'readNotification'])->name('read.notification');
+  Route::post('/notification/readAll', [HomeController::class, 'readAllNotifications'])->name('read.allNotifications');
 });
 // Profile Group
 Route::middleware('auth')->group(function () {

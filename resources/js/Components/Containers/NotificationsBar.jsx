@@ -1,12 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NotificationCard from "../Shared/NotificationCard";
 import Spinner from "../Shared/Spinner";
+import { PrimaryButton } from "../Shared/Buttons";
+import axiosClient from "@/AxiosClient/AxiosClient";
 const NotificationsBar = ({
   notifications,
   showNotificationsForm,
   setShowNotificationsForm,
   isLoading,
+  refetch,
 }) => {
+  const [notificationsCount, setNotificationsCount] = useState(0);
+  useEffect(() => {
+    if (!isLoading) {
+      if (notifications.length > 0) {
+        let count = 0;
+        notifications.map((notification) => {
+          if (!!notification.read_at) return;
+          count++;
+        });
+        setNotificationsCount(count);
+      }
+    }
+  }, [notifications, isLoading]);
+  useEffect(() => {
+    console.log("Count", notificationsCount);
+  }, [notificationsCount]);
+
   return (
     <div className="relative">
       <div
@@ -16,9 +36,20 @@ const NotificationsBar = ({
             : "invisible opacity-0 scale-90 "
         } `}
       >
-        <h2 className="text-gray-400 bg-gray-800 w-full py-3 px-4 lg:text-xl font-bold cursor-default">
-          Notifications:
-        </h2>
+        <div className="w-full flex justify-between items-center bg-gray-800 px-2">
+          <h2 className="text-gray-400 bg-gray-800 w-fit py-3 px-4 lg:text-xl font-bold cursor-default">
+            Notifications:
+          </h2>
+          <PrimaryButton
+            classes="py-1 px-1.5"
+            event={() => {
+              axiosClient.post(route("read.allNotifications"));
+              refetch();
+            }}
+          >
+            Read All
+          </PrimaryButton>
+        </div>
         <div
           className={`flex flex-col gap-1 max-h-[500px] h-fit overflow-auto px-4 py-2`}
         >
@@ -34,6 +65,7 @@ const NotificationsBar = ({
                         <NotificationCard
                           notification={notify}
                           setShowNotificationsForm={setShowNotificationsForm}
+                          refetch={refetch}
                         />
                         <div className="w-[80%] h-[1px] relative bg-gray-700/20 mx-auto" />
                       </div>

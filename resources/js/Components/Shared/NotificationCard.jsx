@@ -5,8 +5,12 @@ import { AiFillLike } from "react-icons/ai";
 import { FaCommentAlt } from "react-icons/fa";
 import { FaRegCommentDots } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
-import { useMainContext } from "@/Contexts/MainContext";
-const NotificationCard = ({ notification, setShowNotificationsForm }) => {
+import axiosClient from "@/AxiosClient/AxiosClient";
+const NotificationCard = ({
+  notification,
+  setShowNotificationsForm,
+  refetch,
+}) => {
   const Icon = () => {
     if (notification?.type?.split("|")[0] == "postReaction") return "like";
     switch (notification?.type?.split("|")[1]) {
@@ -31,9 +35,18 @@ const NotificationCard = ({ notification, setShowNotificationsForm }) => {
   };
   return (
     <Link
-      className="bg-gray-900 rounded-lg px-4 py-2 flex gap-4 justify-start items-center hover:bg-gray-800/70 duration-200"
+      className={` rounded-lg px-4 py-2 flex gap-4 justify-start items-center duration-200
+        ${
+          notification.read_at
+            ? "bg-gray-900/40"
+            : "bg-gray-800 hover:bg-gray-800/70"
+        }`}
       href={notification.link}
-      onClick={() => setShowNotificationsForm(false)}
+      onClick={() => {
+        setShowNotificationsForm(false);
+        axiosClient.post(route("read.notification", notification.id));
+        refetch();
+      }}
     >
       <div className="relative min-w-[50px] min-h-[50px]">
         <img

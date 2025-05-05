@@ -7,7 +7,9 @@ use App\Http\Resources\GroupResource;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\PostResource;
 use App\Models\Group;
+use App\Models\Notification;
 use App\Models\Post;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -105,5 +107,30 @@ class HomeController extends Controller
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
+  }
+  // public function readNotification(Notification $notification)
+  // {
+  //   // dd($notification);
+  //   $notification->update(['read_at' => Carbon::now()]);
+  //   dd($notification);
+  //   $notification->save();
+  //   return response(200);
+  // }
+
+  public function readNotification($notificationId)
+  {
+    $notification = auth()->user()->notifications()
+      ->where('id', $notificationId)
+      ->first();
+    if ($notification) {
+      $notification->markAsRead();
+      return response()->json(['success' => true]);
+    }
+    return response()->json(['error' => 'Notification not found'], 404);
+  }
+  public function readAllNotifications()
+  {
+    auth()->user()->unreadNotifications->markAsRead();
+    return response()->json(['success' => true]);
   }
 }
