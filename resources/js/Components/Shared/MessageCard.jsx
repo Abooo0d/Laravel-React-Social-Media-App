@@ -4,7 +4,10 @@ import ReactMarkdown from "react-markdown";
 import MarkdownRenderer from "./MarkdownRenderer";
 import MessageAttachmentContainer from "./MessageAttachmentContainer";
 import AttachmentFullView from "./AttachmentFullView";
+import { IoCheckmarkDoneSharp } from "react-icons/io5";
 const MessageCard = ({ message }) => {
+  console.log(message);
+
   const { user } = useUserContext();
   const [showAttachmentView, setShowAttachmentView] = useState(false);
   const [attachmentIndex, setAttachmentIndex] = useState(0);
@@ -14,7 +17,6 @@ const MessageCard = ({ message }) => {
         message.user.id != user.id ? "items-start" : " items-end"
       }`}
     >
-      <span className="text-gray-400 text-[11px]">{message.created_at}</span>
       <div
         className={`flex items-center justify-end gap-4 w-full
         ${
@@ -24,7 +26,7 @@ const MessageCard = ({ message }) => {
         }`}
       >
         <div
-          className={`backdrop-blur-sm w-fit px-4 py-2 rounded-md text-gray-400 word-wrap cursor-default max-w-[80%] overflow-auto flex justify-center items-start flex-col break-all  ${
+          className={`backdrop-blur-sm relative w-fit px-4 py-2 rounded-md text-gray-400 word-wrap cursor-default max-w-[80%] overflow-auto flex justify-center items-start flex-col break-all  ${
             message.user.id != user.id
               ? "bg-[rgba(46,59,78,100%)]"
               : "bg-[rgba(12,36,51,100%)]"
@@ -39,7 +41,18 @@ const MessageCard = ({ message }) => {
           )}
           <MarkdownRenderer content={message.body}>
             {message.body}
+            {message?.status}
           </MarkdownRenderer>
+          <div className={`flex justify-start items-center gap-2 ml-auto  `}>
+            <span className="text-gray-400 text-[8px]">
+              {message.created_at}
+            </span>
+            <IoCheckmarkDoneSharp
+              className={`${message.user.id != user.id && "hidden"} ${
+                !!message?.status ? "text-blue-500" : "text-gray-600"
+              }`}
+            />
+          </div>
           <div
             className={`absolute bottom-0 ${
               message.user.id != user.id

@@ -43,7 +43,7 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
 
   return (
     <div
-      className="min-h-[50px] w-[250px] flex items-center justify-start gap-2 py-2 px-4 text-gray-400 duration-200 rounded-md hover:bg-gray-800/60 cursor-pointer"
+      className="min-h-[50px] w-[250px] relative flex items-center justify-start gap-2 py-2 px-4 text-gray-400 duration-200 rounded-md hover:bg-gray-800/60 cursor-pointer"
       onClick={() => {
         setShow(false);
         getChat();
@@ -65,6 +65,12 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
         )}
       </div>
       <div className="flex flex-col bg-blue-1 flex-1">
+        {chat.unread_count > 0 && (
+          // <span className="absolute bottom-4 right-4 w-4 h-4 rounded-md bg-blue-500/50 flex justify-center items-center">
+          <span className="w-4 h-4 bg-blue-500/40 border-[1px] border-solid border-blue-500 backdrop-blur-sm absolute bottom-2 right-4 text-[12px] flex justify-center items-center rounded-md text-gray-300  p-0">
+            {chat.unread_count}
+          </span>
+        )}
         <div className="flex flex-1 gap-1 justify-between items-center w-full ">
           <h3 className="text-[15px] w-full text-nowrap overflow-hidden">
             {chatData.name.length > 20
@@ -72,8 +78,8 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
               : chatData.name}
           </h3>
           <p className="text-[10px] text-gray-600 w-fit flex flex-col  justify-center items-end">
-            <span>{chatData?.last_message_date.split("-")[0]}</span>
-            <span>{chatData?.last_message_date.split("-")[1]}</span>
+            <span>{chatData?.last_message_date?.split("-")[0]}</span>
+            <span>{chatData?.last_message_date?.split("-")[1]}</span>
           </p>
         </div>
         <p className="text-gray-600 text-sm">

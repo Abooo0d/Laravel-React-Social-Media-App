@@ -24,23 +24,39 @@ class ChatsController extends Controller
   public function index(Request $request)
   {
     try {
-      $chats = auth()
-        ->user()
-        ->chats()
-        ->where('is_group', true)
-        ->with('users', 'messages')
-        ->orderBy('last_message_id', "desc")
-        ->get();
-      $allChats = auth()
-        ->user()
+      // $chats = auth()
+      //   ->user()
+      //   ->chats()
+      //   ->where('is_group', true)
+      //   ->with('users', 'messages')
+      //   ->orderBy('last_message_id', "desc")
+      //   ->get();
+
+      // $allChats = auth()
+      //   ->user()
+      //   ->chats()
+      //   ->where('is_group', false)
+      //   ->withCount(['unreadMessages as unread_count']) // Add unread_count field
+      //   ->orderBy('last_message_id', "desc")
+      //   ->get();
+      $authUserId = auth()->id();
+      $allChats = auth()->user()
         ->chats()
         ->where('is_group', false)
-        ->orderBy('last_message_id', "desc")
+        ->withCount([
+          'messages as unread_count' => function ($query) use ($authUserId) {
+            $query->where('user_id', '!=', $authUserId)
+              ->whereDoesntHave('statuses', function ($q) use ($authUserId) {
+                $q->where('user_id', $authUserId);
+              });
+          }
+        ])
+        ->orderBy('last_message_id', 'desc')
         ->get();
       return Inertia::render(
         'Chats',
         [
-          'groupsChat' => $chats ? ChatResource::collection($chats) : [],
+          // 'groupsChat' => $chats ? ChatResource::collection($chats) : [],
           "allChats" => ChatResource::collection($allChats)
         ]
       );
@@ -76,6 +92,29 @@ class ChatsController extends Controller
         // Refresh chat data with new user
         $chat->refresh();
       }
+
+      $unreadMessages = Message::where('chat_id', $chat->id)
+        ->whereDoesntHave('statuses', function ($q) use ($user) {
+          $q->where('user_id', $user->id);
+        })
+        ->get();
+
+      $now = now();
+
+      $statusRows = $unreadMessages->map(function ($message) use ($user, $now) {
+        return [
+          'message_id' => $message->id,
+          'user_id' => $user->id,
+          'is_read' => true,
+          'created_at' => $now,
+          'updated_at' => $now,
+        ];
+      })->toArray();
+
+      if (!empty($statusRows)) {
+        MessageStatus::insert($statusRows); // bulk insert
+      }
+
       return response(
         [
           'chat_with_friend' => $chat ? new ChatResource($chat) : null,
@@ -129,7 +168,7 @@ class ChatsController extends Controller
       MessageStatus::create([
         'message_id' => $message->id,
         'user_id' => auth()->id(),
-        'is_read' => '1'
+        'is_read' => true
       ]);
       $lastMessageBody = $message->body;
       // If message is longer than 100 chars, truncate it with ellipsis
@@ -153,8 +192,6 @@ class ChatsController extends Controller
     try {
       $data = $request->Validated();
       $chatsData = $request->chats;
-      // $userChats = $request->user()->chats()->where('id');
-      // dd($userChats);
       return response()->json(['chats' => ChatResource::collection($chatsData)]);
       // if ($request->wantsJson())
     } catch (e) {

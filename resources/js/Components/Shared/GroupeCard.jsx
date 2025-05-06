@@ -7,7 +7,7 @@ const GroupeCard = ({ data, setShowGroupContainer }) => {
     <Link
       className={`min-h-[100px] w-full relative gap-3 duration-200 hover:bg-gray-300 dark:hover:bg-gray-700 cursor-pointer bg-gray-100 dark:bg-gray-800 rounded-[10px] group overflow-hidden `}
       href={route("group.profile", data.slug)}
-      onClick={() => setShowGroupContainer}
+      onClick={() => setShowGroupContainer(false)}
     >
       <img
         src={data.cover_url || "/images/default_cover_image.jpg"}

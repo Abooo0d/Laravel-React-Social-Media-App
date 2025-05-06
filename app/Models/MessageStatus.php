@@ -8,5 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class MessageStatus extends Model
 {
   use HasFactory;
-  protected $fillable = ['message_id', 'user_id'];
+  protected $fillable = ['message_id', 'user_id', "is_read"];
+  public function message()
+  {
+    return $this->belongsTo(Message::class);
+  }
+
+  public function user()
+  {
+    return $this->belongsTo(User::class);
+  }
 }

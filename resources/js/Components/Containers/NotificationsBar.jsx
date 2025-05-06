@@ -23,9 +23,6 @@ const NotificationsBar = ({
       }
     }
   }, [notifications, isLoading]);
-  useEffect(() => {
-    console.log("Count", notificationsCount);
-  }, [notificationsCount]);
 
   return (
     <div className="relative">
