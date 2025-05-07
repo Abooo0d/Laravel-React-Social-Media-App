@@ -51,7 +51,7 @@ const PostContainer = ({ posts, classes, children, isLoading, refetch }) => {
                   ))}
                   {allData?.meta?.current_page < allData?.meta?.last_page ? (
                     <Spinner ref={ref} />
-                  ) : (x
+                  ) : (
                     <div className="text-gray-600 text-sm pb-4">
                       No More Posts
                     </div>
