@@ -24,6 +24,10 @@ const PostContainer = ({ posts, classes, children, isLoading, refetch }) => {
     setAllData(posts);
   }, [posts]);
 
+  useEffect(() => {
+    console.log(isLoading);
+  }, [isLoading]);
+
   return (
     <>
       <>
@@ -47,15 +51,15 @@ const PostContainer = ({ posts, classes, children, isLoading, refetch }) => {
                   ))}
                   {allData?.meta?.current_page < allData?.meta?.last_page ? (
                     <Spinner ref={ref} />
-                  ) : (
+                  ) : (x
                     <div className="text-gray-600 text-sm pb-4">
                       No More Posts
                     </div>
                   )}
                 </>
               ) : (
-                <HomeLoader />
-                // <div className="text-gray-600 text-sm">No Posts To Show</div>
+                // <HomeLoader />
+                <div className="text-gray-600 text-sm">No Posts To Show</div>
               )}
             </>
           )}

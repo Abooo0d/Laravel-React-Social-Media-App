@@ -3,7 +3,7 @@ import React from "react";
 const HomeLoader = () => {
   return (
     <div className=" flex justify-start items-center w-full">
-      <div className="w-full min-h-barHeight flex justify-center items-center flex-col gap-3">
+      <div className="w-full min-h-barHeight flex justify-start items-center flex-col gap-3 py-4">
         <div
           className={`max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg pt-4 pb-0 lg:px-6 px-4 flex flex-col duration-500 shadow-md `}
         >

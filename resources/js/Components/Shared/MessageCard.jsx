@@ -6,8 +6,6 @@ import MessageAttachmentContainer from "./MessageAttachmentContainer";
 import AttachmentFullView from "./AttachmentFullView";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 const MessageCard = ({ message }) => {
-  console.log(message);
-
   const { user } = useUserContext();
   const [showAttachmentView, setShowAttachmentView] = useState(false);
   const [attachmentIndex, setAttachmentIndex] = useState(0);
@@ -47,11 +45,13 @@ const MessageCard = ({ message }) => {
             <span className="text-gray-400 text-[8px]">
               {message.created_at}
             </span>
-            <IoCheckmarkDoneSharp
-              className={`${message.user.id != user.id && "hidden"} ${
-                !!message?.status ? "text-blue-500" : "text-gray-600"
-              }`}
-            />
+            {message.user.id == user.id && (
+              <IoCheckmarkDoneSharp
+                className={`${message.user.id != user.id && "hidden"} ${
+                  !!message?.is_read ? "text-blue-500" : "text-gray-600"
+                }`}
+              />
+            )}
           </div>
           <div
             className={`absolute bottom-0 ${

@@ -15,6 +15,14 @@ class Message extends Model
       ->where('message_id', $this->id)
       ->where('user_id', auth()->id());
   }
+  public function unreadFor($userId)
+  {
+    return $this->hasOne(MessageStatus::class)
+      ->where('message_id', $this->id)
+      ->where('user_id', $userId)
+      ->where('is_read', true)
+      ->first();
+  }
   public function user()
   {
     return $this->belongsTo(User::class);

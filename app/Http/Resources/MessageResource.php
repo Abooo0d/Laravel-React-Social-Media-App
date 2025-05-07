@@ -29,6 +29,10 @@ class MessageResource extends JsonResource
    */
   public function toArray(Request $request): array
   {
+    // dd($this->targetUserId, $this->id);
+    // dd($this->unreadFor($this->targetUserId));
+    $unRead = $this->unreadFor($this->targetUserId);
+    // dd($unRead->is_read);
     return [
       'id' => $this->id,
       'body' => $this->body,
@@ -43,7 +47,7 @@ class MessageResource extends JsonResource
           : asset('images/default_avatar_image.png'),
       ],
       'chat_id' => $this->chat_id,
-      'status' => $this->status
+      'is_read' => $unRead?->is_read
     ];
   }
 }
