@@ -19,12 +19,12 @@ const GroupsBar = ({
 
   return (
     <>
-      <div className="relative">
+      <div className="relative z-[200]">
         <div
-          className={`flex flex-col max-h-[500px] h-fit absolute top-[-10px] w-[400px] right-[50%] max-w-[90%] md:right-[318px] translate-x-[50%] z-[100] overflow-hidden rounded-xl bg-gray-900/80 border-[2px] border-solid border-gray-700 backdrop-blur-2xl duration-200 ${
+          className={`flex flex-col max-h-[400px] absolute md:top-[96px] top-[-10px] w-[400px] max-w-[90%] right-[50%] translate-x-[50%] md:left-[0px] z-[100] overflow-hidden rounded-xl md:rounded-l-none bg-gray-900/60 border-[1px] border-solid border-gray-500/50 backdrop-blur-md duration-200 ${
             showGroupContainer
-              ? "visible opacity-100"
-              : "invisible opacity-0 scale-90 "
+              ? "visible opacity-100 "
+              : "invisible opacity-0 scale-90"
           } `}
         >
           <div className="flex justify-between items-center bg-gray-800 px-4">
@@ -33,7 +33,7 @@ const GroupsBar = ({
             </h2>
             <div className="flex gap-2 items-center justify-between">
               <PrimaryButton
-                classes="px-3 py-1.5"
+                classes="py-1 px-2 "
                 event={() => {
                   setShowCreateForm(true);
                 }}
@@ -41,7 +41,7 @@ const GroupsBar = ({
                 New
               </PrimaryButton>
               <PrimaryButton
-                classes="text-[15px] w-fit py-1.5 px-3"
+                classes="text-[15px] w-fit py-1 px-2 "
                 event={() => {
                   setShowSearchForm(true);
                 }}

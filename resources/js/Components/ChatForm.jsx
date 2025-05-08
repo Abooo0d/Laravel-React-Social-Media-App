@@ -13,6 +13,7 @@ import { AiFillLike } from "react-icons/ai";
 import { useMainContext } from "@/Contexts/MainContext";
 import { useForm } from "@inertiajs/inertia-react";
 import ChatFormAttachmentContainer from "./Shared/ChatFormAttachmentContainer";
+import AudioRecorder from "./AudioRecorder";
 const ChatForm = () => {
   const { currentChat } = useChatsContext();
   const { user } = useUserContext();
@@ -22,6 +23,7 @@ const ChatForm = () => {
   const [chosenFiles, setChosenFiles] = useState([]);
   const [uploadingProgress, setUploadingProgress] = useState(0);
   const { setErrors } = useMainContext();
+  const [showRecorder, setShowRecorder] = useState(true);
   const onFileChange = (ev) => {
     const files = ev.target.files;
     const updatedFiles = [...files].map((file) => {
@@ -98,6 +100,13 @@ const ChatForm = () => {
   useEffect(() => {
     handleInput();
   }, [message]);
+  useEffect(() => {
+    if (message == "" && chosenFiles.length == 0) setShowRecorder(true);
+    else setShowRecorder(false);
+  }, [message, chosenFiles]);
+  const AudioFileReady = (file, url) => {
+    setChosenFiles((prev) => [...prev, { file: file, url: url }]);
+  };
   return (
     <div className="flex relative w-full justify-between items-center bg-gray-900 p-4 border-t-[1px] border-solid border-gray-700 ]">
       <ChatFormAttachmentContainer
@@ -186,32 +195,23 @@ const ChatForm = () => {
           </div>
         </div>
       </div>
-      <button
-        className="relative px-3 py-1.5 w-[40px] h-[40px] bg-blue-700 hover:bg-blue-600 rounded-full text-gray-300 ml-2 duration-200"
-        // event={newMessage}
-        onClick={() => newMessage()}
-      >
-        {isLoading ? (
-          <Spinner size="small" />
-        ) : (
-          <>
-            <FaMicrophone
-              className={`absolute inset-0 duration-200 w-full h-full flex justify-center items-center p-[10px] ${
-                message == "" && chosenFiles.length == 0
-                  ? " opacity-100"
-                  : "  opacity-0"
-              }`}
-            />
+      <div className="relative w-[40px] h-[40px] ml-2">
+        <AudioRecorder show={showRecorder} fileReady={AudioFileReady} />
+        <button
+          className={`absolute top-0 right-0 px-3 py-1.5 w-full h-full bg-blue-700 hover:bg-blue-600 rounded-full text-gray-300 ml-2 duration-200 ${
+            !showRecorder ? "opacity-100 visible" : "opacity-0 invisible"
+          } `}
+          onClick={() => newMessage()}
+        >
+          {isLoading ? (
+            <Spinner size="small" />
+          ) : (
             <BiSolidSend
-              className={`absolute inset-0  duration-200 w-full h-full flex justify-center items-center p-[10px] ${
-                message == "" && chosenFiles.length == 0
-                  ? " opacity-0"
-                  : " opacity-100 "
-              }`}
+              className={`absolute inset-0  duration-200 w-full h-full flex justify-center items-center p-[10px] `}
             />
-          </>
-        )}
-      </button>
+          )}
+        </button>
+      </div>
     </div>
   );
 };

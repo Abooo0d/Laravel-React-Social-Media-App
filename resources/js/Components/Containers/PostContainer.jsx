@@ -23,11 +23,6 @@ const PostContainer = ({ posts, classes, children, isLoading, refetch }) => {
     setAllPosts(posts?.data);
     setAllData(posts);
   }, [posts]);
-
-  useEffect(() => {
-    console.log(isLoading);
-  }, [isLoading]);
-
   return (
     <>
       <>
@@ -58,7 +53,6 @@ const PostContainer = ({ posts, classes, children, isLoading, refetch }) => {
                   )}
                 </>
               ) : (
-                // <HomeLoader />
                 <div className="text-gray-600 text-sm">No Posts To Show</div>
               )}
             </>

@@ -14,6 +14,9 @@ import GroupsBar from "@/Components/Containers/GroupsBar";
 import { PiChatsCircle } from "react-icons/pi";
 import { useMainContext } from "@/Contexts/MainContext";
 import { useGetGroups, useGetNotifications } from "@/TanStackQurey/Querys";
+import { MdLogout } from "react-icons/md";
+import SideBarButton from "@/Components/Shared/SideBarButton";
+import FollowersContainer from "@/Components/Containers/FollowersContainer";
 export default function Authenticated({ children }) {
   const { auth } = usePage().props;
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -84,7 +87,7 @@ export default function Authenticated({ children }) {
               </div>
             </div>
             <div className="flex justify-end items-center flex-1">
-              <div className="flex justify-center items-center md:justify-end gap-2 flex-1">
+              <div className="flex justify-center items-center  gap-2 flex-1 md:hidden">
                 <MenuButton
                   event={() => {
                     setShowFollowerContainer(!showFollowerContainer);
@@ -200,7 +203,7 @@ export default function Authenticated({ children }) {
           className={`absolute top-[100%] left-[0px] bg-gray-900/80 w-full backdrop-blur-md duration-200 border-b-[1px] border-solid border-gray-700 ${
             showingNavigationDropdown
               ? " opacity-100 visible z-[200] "
-              : " opacity-0 invisible z-[0]"
+              : " opacity-0 invisible z-[0] "
           }`}
         >
           <div className="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
@@ -252,7 +255,52 @@ export default function Authenticated({ children }) {
         />
       )}
 
-      <main>{children}</main>
+      <div className="flex justify-between items-start">
+        <div className="flex flex-col justify-between items-start h-full flex-1 max-w-[200px] bg-gray-900 min-h-barHeight max-md:hidden border-solid border-r-[1px] border-gray-500/50">
+          <div className="flex flex-col justify-start items-start min-w-full h-fit">
+            <SideBarButton
+              show={showFollowerContainer}
+              event={() => setShowFollowerContainer(!showFollowerContainer)}
+              text="Followers"
+            >
+              <FaUserGroup className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />
+            </SideBarButton>
+            <SideBarButton
+              show={showNotificationsForm}
+              event={() => setShowNotificationsForm(!showNotificationsForm)}
+              text="Notifications"
+            >
+              <IoMdNotifications className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />
+            </SideBarButton>
+            <SideBarButton
+              show={showGroupContainer}
+              event={() => setShowGroupContainer(!showGroupContainer)}
+              text="Groups"
+            >
+              <MdGroups2 className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />
+            </SideBarButton>
+
+            <SideBarButton
+              event={() => router.get(route("chats"))}
+              text="Chats"
+            >
+              <PiChatsCircle className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />
+            </SideBarButton>
+            <SideBarButton event={() => router.reload()} text="Reload">
+              <IoReloadOutline className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />
+            </SideBarButton>
+          </div>
+          <div className="flex flex-col gap-2 justify-start items-start min-w-full h-fit">
+            <SideBarButton
+              event={() => router.post(route("logout"))}
+              text="logout"
+            >
+              <MdLogout className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />
+            </SideBarButton>
+          </div>
+        </div>
+        <main className="flex-[3]">{children}</main>
+      </div>
     </div>
   );
 }

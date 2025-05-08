@@ -25,9 +25,9 @@ const NotificationsBar = ({
   }, [notifications, isLoading]);
 
   return (
-    <div className="relative">
+    <div className="relative z-[200]">
       <div
-        className={`flex flex-col max-h-[500px] h-fit absolute top-[-10px] w-[400px] max-w-[90%] right-[50%] translate-x-[50%] md:right-[363px] z-[100] overflow-hidden rounded-xl bg-gray-900/80 border-[2px] border-solid border-gray-700 backdrop-blur-2xl duration-200 ${
+        className={`flex flex-col max-h-[500px] absolute md:top-[48px] top-[-10px] w-[400px] max-w-[90%] right-[50%] translate-x-[50%] md:left-[0px] z-[100] overflow-hidden rounded-xl md:rounded-l-none bg-gray-900/60 border-[1px] border-solid border-gray-500/50 backdrop-blur-md duration-200 ${
           showNotificationsForm
             ? "visible opacity-100"
             : "invisible opacity-0 scale-90 "
@@ -38,7 +38,7 @@ const NotificationsBar = ({
             Notifications:
           </h2>
           <PrimaryButton
-            classes="py-1 px-1.5"
+            classes="py-1 px-2 "
             event={() => {
               axiosClient.post(route("read.allNotifications"));
               refetch();
