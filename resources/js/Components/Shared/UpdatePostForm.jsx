@@ -182,7 +182,7 @@ export default function UpdatePostForm({
             className="bg-gray-800 flex-1 w-full rounded-md outline-none border-none focus:outline-none focus:border-none ring-0 focus:ring-0 text-gray-300 resize-none min-h-[80px] max-h-[150px] "
             ref={inputRef}
             name="message"
-            value={postData.body}
+            value={postData?.body || ""}
             placeholder="What On You Mind"
             onChange={(e) => {
               setPostData({ ...postData, body: e.target.value });
@@ -211,8 +211,6 @@ export default function UpdatePostForm({
             update={true}
             attachmentsErrors={attachmentsErrors}
           />
-          {/* </div> */}
-          {/* </div> */}
           <div className="mt-4 gap-2 flex justify-end items-center">
             <button className="cursor-pointer relative inline-flex items-center gap-2 rounded-md bg-gray-800/70 hover:bg-gray-800 duration-200 py-1.5 px-3 border-[1px] border-gray-700 border-solid text-sm/6 font-semibold text-white  focus:outline-none ">
               Add Files

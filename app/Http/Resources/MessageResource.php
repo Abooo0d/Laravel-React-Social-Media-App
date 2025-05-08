@@ -47,7 +47,9 @@ class MessageResource extends JsonResource
           : asset('images/default_avatar_image.png'),
       ],
       'chat_id' => $this->chat_id,
-      'is_read' => $unRead?->is_read
+      'is_read' => $unRead?->is_read,
+      'my_status' => !!$this->status
+
     ];
   }
 }

@@ -45,22 +45,27 @@ const ChatsBar = ({ setIsLoading }) => {
   return (
     <div className="relative">
       <div className="lg:block hidden shadow-lg rounded-xl m-0 lg:rounded-none order-first max-w-full min-w-full py-2 bg-gray-200 dark:bg-gray-900 max-h-barHeight min-h-barHeight h-full overflow-hidden border-r-2 dark:border-gray-800 border-gray-300 border-solid">
-        <h2 className="block max-lg-hidden text-xl font-bold dark:text-gray-100 pl-4 pt-2">
+        <h2 className="block max-lg-hidden text-xl font-bold dark:text-gray-300 pl-4 pt-2 cursor-default">
           My Chats:
         </h2>
+
         <div className="min-w-full h-fit flex justify-center items-center px-2 gap-2">
-          <TextInput
-            placeholder="Type To Search"
-            classes="w-full font-lg"
-            value={searchName}
-            setValue={setSearchName}
-          />
-          <PrimaryButton
-            classes="min-w-[40px] min-h-[40px] text-gray-400"
-            event={search}
-          >
-            <FaSearch />
-          </PrimaryButton>
+          <div className="flex justify-between items-center bg-gray-700 rounded-md mt-1">
+            <input
+              type="text"
+              name="search"
+              placeholder="Type To Search"
+              className="bg-transparent flex-3 text-gray-300 outline-none ring-0 border-none hover:ring-0 focus:ring-0 max-w-[200px]"
+              value={searchName}
+              onChange={(e) => setSearchName(e.target.value)}
+            />
+            <button
+              className="min-w-[40px] max-w-[40px] min-h-[40px] flex-1 flex justify-center items-center text-gray-300"
+              onClick={() => search()}
+            >
+              <FaSearch />
+            </button>
+          </div>
         </div>
         {loading ? (
           <div className="w-full h-fit flex justify-center items-center py-4">
@@ -79,7 +84,7 @@ const ChatsBar = ({ setIsLoading }) => {
       <div className="block lg:hidden">
         <button
           className={`p-[4px] cursor-pointer z-[100] absolute top-[100px] duration-200 backdrop-blur-lg w-[40px] h-[50px] text-sm flex justify-center items-center flex-col bg-gray-800/80 border-[1px] border-gray-600/70 border-solid rounded-r-md border-l-0 text-gray-400
-            ${showChats ? "left-[250px]" : "left-[0px]"}`}
+            ${showChats ? "left-[255px]" : "left-[0px]"}`}
           onClick={() => {
             setShowChats((prev) => !prev);
           }}
@@ -88,24 +93,28 @@ const ChatsBar = ({ setIsLoading }) => {
         </button>
         <div
           className={`flex flex-col absolute top-0 py-2 z-[100] left-0 h-full min-w-[250px] duration-200 bg-gray-900/80 backdrop-blur-lg border-r-[1px] border-solid border-t-[1px] border-gray-600/70
-          ${showChats ? "left-0 " : "left-[-250px]"}`}
+          ${showChats ? "left-0 " : "left-[-260px]"}`}
         >
           <h2 className="block max-lg:hidden text-xl font-bold dark:text-gray-100 ">
             My Chats:
           </h2>
           <div className="min-w-full h-fit flex justify-center items-center px-2 gap-2">
-            <TextInput
-              placeholder="Type To Search"
-              classes="w-full font-lg"
-              value={searchName}
-              setValue={setSearchName}
-            />
-            <PrimaryButton
-              classes="min-w-[40px] min-h-[40px] text-gray-400"
-              event={search}
-            >
-              <FaSearch />
-            </PrimaryButton>
+            <div className="flex justify-between items-center bg-gray-700 rounded-md mt-1">
+              <input
+                type="text"
+                name="search"
+                placeholder="Type To Search"
+                className="bg-transparent flex-3 text-gray-300 outline-none ring-0 border-none hover:ring-0 focus:ring-0 max-w-[200px]"
+                value={searchName}
+                onChange={(e) => setSearchName(e.target.value)}
+              />
+              <button
+                className="min-w-[40px] max-w-[40px] min-h-[40px] flex-1 flex justify-center items-center text-gray-300"
+                onClick={() => search()}
+              >
+                <FaSearch />
+              </button>
+            </div>
           </div>
           {loading ? (
             <div className="w-full h-fit flex justify-center items-center py-4">

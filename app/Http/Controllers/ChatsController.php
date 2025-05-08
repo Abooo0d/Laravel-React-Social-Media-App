@@ -29,14 +29,14 @@ class ChatsController extends Controller
         ->user()
         ->chats()
         ->where('is_group', true)
-        ->withCount([
-          'messages as unread_count' => function ($query) use ($authUserId) {
-            $query->where('user_id', '!=', $authUserId)
-              ->whereDoesntHave('statuses', function ($q) use ($authUserId) {
-                $q->where('user_id', $authUserId);
-              });
-          }
-        ])
+        // ->withCount([
+        //   'messages as unread_count' => function ($query) use ($authUserId) {
+        //     $query->where('user_id', '!=', $authUserId)
+        //       ->whereDoesntHave('statuses', function ($q) use ($authUserId) {
+        //         $q->where('user_id', $authUserId);
+        //       });
+        //   }
+        // ])
         ->with('users', 'messages')
         ->orderBy('last_message_id', "desc")
         ->get();
@@ -44,14 +44,14 @@ class ChatsController extends Controller
       $allChats = auth()->user()
         ->chats()
         ->where('is_group', false)
-        ->withCount([
-          'messages as unread_count' => function ($query) use ($authUserId) {
-            $query->where('user_id', '!=', $authUserId)
-              ->whereDoesntHave('statuses', function ($q) use ($authUserId) {
-                $q->where('user_id', $authUserId);
-              });
-          }
-        ])
+        // ->withCount([
+        //   'messages as unread_count' => function ($query) use ($authUserId) {
+        //     $query->where('user_id', '!=', $authUserId)
+        //       ->whereDoesntHave('statuses', function ($q) use ($authUserId) {
+        //         $q->where('user_id', $authUserId);
+        //       });
+        //   }
+        // ])
         ->orderBy('last_message_id', 'desc')
         ->get();
       return Inertia::render(

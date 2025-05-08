@@ -14,7 +14,7 @@ import GroupsBar from "@/Components/Containers/GroupsBar";
 import { PiChatsCircle } from "react-icons/pi";
 import { useMainContext } from "@/Contexts/MainContext";
 import { useGetGroups, useGetNotifications } from "@/TanStackQurey/Querys";
-import { MdLogout } from "react-icons/md";
+import { MdLogout, MdLogin } from "react-icons/md";
 import SideBarButton from "@/Components/Shared/SideBarButton";
 import FollowersContainer from "@/Components/Containers/FollowersContainer";
 export default function Authenticated({ children }) {
@@ -291,12 +291,21 @@ export default function Authenticated({ children }) {
             </SideBarButton>
           </div>
           <div className="flex flex-col gap-2 justify-start items-start min-w-full h-fit">
-            <SideBarButton
-              event={() => router.post(route("logout"))}
-              text="logout"
-            >
-              <MdLogout className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />
-            </SideBarButton>
+            {currentUser ? (
+              <SideBarButton
+                event={() => router.post(route("logout"))}
+                text="logout"
+              >
+                <MdLogout className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />
+              </SideBarButton>
+            ) : (
+              <SideBarButton
+                event={() => router.post(route("login"))}
+                text="Login"
+              >
+                <MdLogin className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />
+              </SideBarButton>
+            )}
           </div>
         </div>
         <main className="flex-[3]">{children}</main>

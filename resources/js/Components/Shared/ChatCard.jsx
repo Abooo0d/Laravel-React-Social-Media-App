@@ -7,11 +7,18 @@ import { useChatsContext } from "@/Contexts/ChatsContext";
 const ChatCard = ({ chat, setShow, setIsLoading }) => {
   const { setCurrentChat, onlineUsersIds } = useChatsContext();
   const [chatData, setChatData] = useState(chat);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [online, setOnline] = useState(
     !!onlineUsersIds.includes(chatData.user_id)
   );
   const [isGroup, setIsGroup] = useState(chatData.is_group);
   const getChat = () => {
+    setChatData((prev) => ({
+      ...prev,
+      messages: [
+        ...prev.messages?.map((message) => ({ ...message, my_status: true })),
+      ],
+    }));
     setIsLoading(true);
     let props = !!isGroup
       ? { is_group: !!isGroup, chat_id: chatData.id }
@@ -20,7 +27,14 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
       axiosClient
         .post(route("getChat"), props)
         .then(({ data }) => {
-          setCurrentChat(data.chat_with_friend);
+          let newChat = {
+            ...data.chat_with_friend,
+            messages: data?.chat_with_friend.messages?.map((message) => ({
+              ...message,
+              my_status: true,
+            })),
+          };
+          setCurrentChat(newChat);
           setIsLoading(false);
         })
         .catch((err) => {
@@ -29,6 +43,7 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
         });
     }
   };
+
   useEffect(() => {
     setOnline(onlineUsersIds.includes(chatData.user_id));
   }, [onlineUsersIds]);
@@ -39,6 +54,13 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
 
   useEffect(() => {
     setOnline(!!onlineUsersIds.includes(chatData.user_id));
+  }, [chatData]);
+  useEffect(() => {
+    let unread = 0;
+    chatData.messages.map((message) => {
+      !message?.my_status && unread++;
+    });
+    setUnreadCount(unread);
   }, [chatData]);
 
   return (
@@ -65,10 +87,10 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
         )}
       </div>
       <div className="flex flex-col bg-blue-1 flex-1">
-        {chat.unread_count > 0 && (
+        {unreadCount > 0 && (
           // <span className="absolute bottom-4 right-4 w-4 h-4 rounded-md bg-blue-500/50 flex justify-center items-center">
           <span className="w-4 h-4 bg-blue-500/40 border-[1px] border-solid border-blue-500 backdrop-blur-sm absolute bottom-2 right-4 text-[12px] flex justify-center items-center rounded-md text-gray-300  p-0">
-            {chat.unread_count}
+            {unreadCount}
           </span>
         )}
         <div className="flex flex-1 gap-1 justify-between items-center w-full ">

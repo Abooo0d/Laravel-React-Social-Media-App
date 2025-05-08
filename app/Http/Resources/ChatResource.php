@@ -49,7 +49,7 @@ class ChatResource extends JsonResource
       'last_message_id' => $this->last_message_id,
       'last_message_date' => $this->last_message_date,
       // 'unread_messages_count' => $this->unread_messages_count
-      'unread_count' => $this->unreadMessagesCountFor(auth()->id()),
+      // 'unread_count' => $this?->unreadMessagesCountFor(auth()->id()),
     ];
   }
 }
