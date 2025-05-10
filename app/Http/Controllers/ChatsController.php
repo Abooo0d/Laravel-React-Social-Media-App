@@ -6,6 +6,7 @@ use App\Events\NewMessageSent;
 use App\Http\Requests\NewMessageRequest;
 use App\Http\Requests\SearchForChatRequest;
 use App\Http\Requests\SearchUserRequest;
+use App\Http\Requests\UpdateMessageRequest;
 use App\Http\Resources\ChatResource;
 use App\Http\Resources\MessageResource;
 use App\Models\Chat;
@@ -207,5 +208,22 @@ class ChatsController extends Controller
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
+  }
+  public function UpdateMessage(UpdateMessageRequest $request, Message $message)
+  {
+
+  }
+  public function deleteMessage(Message $message)
+  {
+    $userId = Auth::id();
+    if ($userId != $message->user_id) {
+      return response(['message' => 'You Don`t have Permission To Delete This Post']);
+    }
+    $attachments = $message->attachments;
+    foreach ($attachments as $attachment) {
+      Storage::disk('public')->delete($attachment->path);
+    }
+    $message->delete();
+    return response(['message' => 'message Deleted Successfully']);
   }
 }

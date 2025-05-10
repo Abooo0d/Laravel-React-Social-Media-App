@@ -67,8 +67,7 @@ class PostController extends Controller
         $postOwner = User::where('id', Auth::id())->first();
         Notification::send($admins, new CreatePostInGroupNotification($postOwner, $group, $post->id));
       }
-      return response(['success' => 'Post Created Successfully Abood']);
-      // return redirect()->back()->with('success', 'Post Created Successfully Abood');
+      return response(['success' => 'Post Created Successfully']);
     } catch (\Throwable $e) {
       foreach ($files as $file) {
         Storage::disk('public')->delete($file);

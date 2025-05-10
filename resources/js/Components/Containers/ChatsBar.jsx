@@ -55,12 +55,12 @@ const ChatsBar = ({ setIsLoading }) => {
               type="text"
               name="search"
               placeholder="Type To Search"
-              className="bg-transparent flex-3 text-gray-300 outline-none ring-0 border-none hover:ring-0 focus:ring-0 max-w-[200px]"
+              className="bg-transparent flex-3 text-gray-400 outline-none ring-0 border-none hover:ring-0 focus:ring-0 max-w-[200px]"
               value={searchName}
               onChange={(e) => setSearchName(e.target.value)}
             />
             <button
-              className="min-w-[40px] max-w-[40px] min-h-[40px] flex-1 flex justify-center items-center text-gray-300"
+              className="min-w-[40px] max-w-[40px] min-h-[40px] flex-1 flex justify-center items-center text-gray-400"
               onClick={() => search()}
             >
               <FaSearch />
@@ -104,12 +104,12 @@ const ChatsBar = ({ setIsLoading }) => {
                 type="text"
                 name="search"
                 placeholder="Type To Search"
-                className="bg-transparent flex-3 text-gray-300 outline-none ring-0 border-none hover:ring-0 focus:ring-0 max-w-[200px]"
+                className="bg-transparent flex-3 text-gray-400 outline-none ring-0 border-none hover:ring-0 focus:ring-0 max-w-[200px]"
                 value={searchName}
                 onChange={(e) => setSearchName(e.target.value)}
               />
               <button
-                className="min-w-[40px] max-w-[40px] min-h-[40px] flex-1 flex justify-center items-center text-gray-300"
+                className="min-w-[40px] max-w-[40px] min-h-[40px] flex-1 flex justify-center items-center text-gray-400"
                 onClick={() => search()}
               >
                 <FaSearch />

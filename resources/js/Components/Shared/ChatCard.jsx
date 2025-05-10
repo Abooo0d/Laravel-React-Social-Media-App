@@ -99,18 +99,18 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
               ? chatData.name.substr(0, 20) + "..."
               : chatData.name}
           </h3>
-          <p className="text-[10px] text-gray-600 w-fit flex flex-col  justify-center items-end">
+          <p className="text-[10px] text-gray-600 w-fit flex flex-col justify-center items-end">
             <span>{chatData?.last_message_date?.split("-")[0]}</span>
             <span>{chatData?.last_message_date?.split("-")[1]}</span>
           </p>
         </div>
-        <p className="text-gray-600 text-sm">
-          {chatData?.last_message
-            ? chatData.last_message.length > 25
-              ? chatData.last_message.substr(0, 25) + "..."
-              : chatData.last_message
-            : "New Chat"}
-        </p>
+        {chat.messages.length > 0 && (
+          <p className="text-gray-600 text-sm">
+            {chat?.messages[0]?.body.length > 25
+              ? chat?.messages[0]?.body.substr(0, 25) + "..."
+              : chat?.messages[0]?.body}
+          </p>
+        )}
       </div>
     </div>
   );

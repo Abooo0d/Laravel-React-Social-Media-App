@@ -12,11 +12,10 @@ import { MdGroups2 } from "react-icons/md";
 import FollowersBar from "@/Components/Containers/FollowersBar";
 import GroupsBar from "@/Components/Containers/GroupsBar";
 import { PiChatsCircle } from "react-icons/pi";
-import { useMainContext } from "@/Contexts/MainContext";
 import { useGetGroups, useGetNotifications } from "@/TanStackQurey/Querys";
 import { MdLogout, MdLogin } from "react-icons/md";
 import SideBarButton from "@/Components/Shared/SideBarButton";
-import FollowersContainer from "@/Components/Containers/FollowersContainer";
+import { IoHome } from "react-icons/io5";
 export default function Authenticated({ children }) {
   const { auth } = usePage().props;
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -87,7 +86,7 @@ export default function Authenticated({ children }) {
               </div>
             </div>
             <div className="flex justify-end items-center flex-1">
-              <div className="flex justify-center items-center  gap-2 flex-1 md:hidden">
+              <div className="flex justify-center items-center gap-2 flex-1 md:hidden">
                 <MenuButton
                   event={() => {
                     setShowFollowerContainer(!showFollowerContainer);
@@ -258,6 +257,13 @@ export default function Authenticated({ children }) {
       <div className="flex justify-between items-start">
         <div className="flex flex-col justify-between items-start h-full flex-1 max-w-[200px] bg-gray-900 min-h-barHeight max-md:hidden border-solid border-r-[1px] border-gray-500/50">
           <div className="flex flex-col justify-start items-start min-w-full h-fit">
+            <SideBarButton
+              // show={showFollowerContainer}
+              event={() => router.get("/")}
+              text="Home"
+            >
+              <IoHome className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />
+            </SideBarButton>
             <SideBarButton
               show={showFollowerContainer}
               event={() => setShowFollowerContainer(!showFollowerContainer)}
