@@ -6,7 +6,7 @@ import { HiMiniXMark } from "react-icons/hi2";
 const ChatFormAttachmentContainer = ({ attachments, setAttachments }) => {
   return (
     <div
-      className={`absolute bottom-[calc(100%+10px)] left-[10px] bg-gray-800 rounded-md border-[1px] border-solid border-gray-500 flex flex-col justify-start items-start gap-2 py-2 px-4 max-sm:p-2 w-[300px] max-h-[350px] overflow-hidden
+      className={`absolute z-[100] bottom-[calc(100%+10px)] left-[10px] bg-gray-800 rounded-md border-[1px] border-solid border-gray-500 flex flex-col justify-start items-start gap-2 py-2 px-4 max-sm:p-2 w-[300px] max-h-[350px] overflow-hidden
         ${
           attachments.length > 0
             ? "opacity-100 visible z-100"

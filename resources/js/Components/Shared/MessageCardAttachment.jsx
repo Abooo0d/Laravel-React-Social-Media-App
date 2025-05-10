@@ -17,9 +17,9 @@ const MessageCardAttachment = ({ attachment, index, message }) => {
     <div
       className={`relative max-w-[250px] rounded-md overflow-hidden flex justify-end items-enter cursor-pointer duration-200 border-transparent group`}
       onClick={() => {
+        setMessage(message);
         setAttachmentIndex(index);
         setShowAttachmentFullView(true);
-        setMessage(message);
       }}
     >
       {MessageIsImage(attachment) && (

@@ -106,8 +106,8 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
         </div>
         {chat.messages.length > 0 && (
           <p className="text-gray-600 text-sm">
-            {chat?.messages[0]?.body.length > 25
-              ? chat?.messages[0]?.body.substr(0, 25) + "..."
+            {chat?.messages[0]?.body?.length > 25
+              ? chat?.messages[0]?.body?.substr(0, 25) + "..."
               : chat?.messages[0]?.body}
           </p>
         )}

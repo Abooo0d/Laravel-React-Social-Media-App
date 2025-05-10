@@ -7,16 +7,16 @@ import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import MessageMenu from "./MessageMenu";
 const MessageCard = ({ message }) => {
   const { user } = useUserContext();
-
-  // const [showAttachmentView, setShowAttachmentView] = useState(false);
-  // const [attachmentIndex, setAttachmentIndex] = useState(0);
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
   return (
     <div
       className={`w-full flex gap-1 flex-col justify-end relative ${
         message.user.id != user.id ? "items-start" : " items-end"
       }`}
     >
-      {message.user.id == user.id && <MessageMenu message={message} />}
+      {message.user.id == user.id && (
+        <MessageMenu message={message} setShowUpdateForm={setShowUpdateForm} />
+      )}
       <div
         className={`flex items-center justify-end gap-4 w-full
         ${
@@ -25,40 +25,48 @@ const MessageCard = ({ message }) => {
             : " justify-end flex-row"
         }`}
       >
-        <div
-          className={`backdrop-blur-sm relative w-fit p-2 rounded-md text-gray-400 word-wrap cursor-default max-w-[80%] ove flex justify-center items-start flex-col break-all  ${
-            message.user.id != user.id
-              ? "bg-[rgba(46,59,78,100%)]"
-              : "bg-gray-800 pr-8"
-          }`}
-        >
-          {message?.attachments.length > 0 && (
-            <MessageAttachmentContainer message={message} />
-          )}
-          <MarkdownRenderer content={message.body}>
-            {message.body}
-            {message?.status}
-          </MarkdownRenderer>
-          <div className={`flex justify-start items-center gap-2 ml-auto  `}>
-            <span className="text-gray-400 text-[8px]">
-              {message.created_at}
-            </span>
-            {message.user.id == user.id && (
-              <IoCheckmarkDoneSharp
-                className={`${message.user.id != user.id && "hidden"} ${
-                  !!message?.is_read ? "text-blue-500" : "text-gray-600"
+        {showUpdateForm ? (
+          <>Abood</>
+        ) : (
+          <>
+            <div
+              className={`backdrop-blur-sm relative w-fit p-2 rounded-md text-gray-400 word-wrap cursor-default max-w-[80%] ove flex justify-center items-start flex-col break-all  ${
+                message.user.id != user.id
+                  ? "bg-[rgba(46,59,78,100%)]"
+                  : "bg-gray-800 pr-8"
+              }`}
+            >
+              {message?.attachments.length > 0 && (
+                <MessageAttachmentContainer message={message} />
+              )}
+              <MarkdownRenderer content={message.body}>
+                {message.body}
+                {message?.status}
+              </MarkdownRenderer>
+              <div
+                className={`flex justify-start items-center gap-2 ml-auto  `}
+              >
+                <span className="text-gray-400 text-[8px]">
+                  {message.created_at}
+                </span>
+                {message.user.id == user.id && (
+                  <IoCheckmarkDoneSharp
+                    className={`${message.user.id != user.id && "hidden"} ${
+                      !!message?.is_read ? "text-blue-500" : "text-gray-600"
+                    }`}
+                  />
+                )}
+              </div>
+              <div
+                className={`absolute bottom-0 ${
+                  message.user.id != user.id
+                    ? "left-[-10px] w-[20px] h-[20px] border-[10px] border-solid border-transparent border-b-[rgba(46,59,78,100%)] z-10"
+                    : "right-[-10px] w-[20px] h-[20px] border-[10px] border-solid border-transparent border-b-gray-800 z-10"
                 }`}
               />
-            )}
-          </div>
-          <div
-            className={`absolute bottom-0 ${
-              message.user.id != user.id
-                ? "left-[-10px] w-[20px] h-[20px] border-[10px] border-solid border-transparent border-b-[rgba(46,59,78,100%)] z-10"
-                : "right-[-10px] w-[20px] h-[20px] border-[10px] border-solid border-transparent border-b-gray-800 z-10"
-            }`}
-          />
-        </div>
+            </div>
+          </>
+        )}
         <img
           src={message.user.avatar_url}
           className="w-[30px] h-[30px] rounded-full mt-auto"

@@ -89,13 +89,7 @@ const MessagesContainer = ({ isLoading }) => {
           )}
         </>
       )}
-      <AttachmentFullView
-      // attachments={message?.attachments}
-      // show={showFullView}
-      // setShow={setShowFullView}
-      // index={attachmentIndex}
-      // setIndex={setAttachmentIndex}
-      />
+      <AttachmentFullView />
     </div>
   );
 };

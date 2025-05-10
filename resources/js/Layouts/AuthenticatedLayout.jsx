@@ -134,8 +134,8 @@ export default function Authenticated({ children }) {
                   <IoReloadOutline />
                 </button>
               </div>
-              <div className="hidden sm:flex sm:items-center">
-                <div className="relative">
+              <div className="hidden sm:flex sm:items-center z-[100]">
+                <div className="relative ">
                   {currentUser ? (
                     <Dropdown>
                       <Dropdown.Trigger>
