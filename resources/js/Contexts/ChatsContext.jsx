@@ -14,6 +14,12 @@ const INITIAL_DATA = {
   setGroupChats: () => {},
   combinedChats: [],
   setCombinedChats: () => {},
+  message: {},
+  setMessage: () => {},
+  attachmentIndex: 0,
+  setAttachmentIndex: () => {},
+  showAttachmentFullView: false,
+  setShowAttachmentFullView: () => {},
 };
 const Context = createContext(INITIAL_DATA);
 export const ChatsContext = ({ children }) => {
@@ -23,6 +29,10 @@ export const ChatsContext = ({ children }) => {
   const [allChats, setAllChats] = useState([]);
   const [groupChats, setGroupChats] = useState([]);
   const [combinedChats, setCombinedChats] = useState();
+  const [message, setMessage] = useState({});
+  const [attachmentIndex, setAttachmentIndex] = useState(0);
+  const [showAttachmentFullView, setShowAttachmentFullView] = useState(false);
+
   const { user } = useUserContext();
   useEffect(() => {
     let array = onlineUsers.map((user) => user.id);
@@ -133,6 +143,12 @@ export const ChatsContext = ({ children }) => {
         setGroupChats,
         combinedChats,
         setCombinedChats,
+        message,
+        setMessage,
+        showAttachmentFullView,
+        setShowAttachmentFullView,
+        attachmentIndex,
+        setAttachmentIndex,
       }}
     >
       {children}

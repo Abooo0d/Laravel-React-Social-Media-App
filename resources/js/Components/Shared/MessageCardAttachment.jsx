@@ -9,18 +9,17 @@ import React, { useEffect } from "react";
 import CustomAudioPlayer from "./CustomAudioPlayer";
 import CustomVideoPlayer from "./CustomVideoPlayer";
 import { FaFile } from "react-icons/fa";
-const MessageCardAttachment = ({
-  attachment,
-  setIndex,
-  attachmentIndex,
-  setShow,
-}) => {
+import { useChatsContext } from "@/Contexts/ChatsContext";
+const MessageCardAttachment = ({ attachment, index, message }) => {
+  const { setAttachmentIndex, setShowAttachmentFullView, setMessage } =
+    useChatsContext();
   return (
     <div
       className={`relative max-w-[250px] rounded-md overflow-hidden flex justify-end items-enter cursor-pointer duration-200 border-transparent group`}
       onClick={() => {
-        setIndex(attachmentIndex);
-        setShow(true);
+        setAttachmentIndex(index);
+        setShowAttachmentFullView(true);
+        setMessage(message);
       }}
     >
       {MessageIsImage(attachment) && (

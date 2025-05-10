@@ -52,8 +52,8 @@ function Chats({ auth, groupsChat, allChats }) {
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
       <div className="flex min-h-barHeight overflow-hidden">
-        <ChatsBar setIsLoading={setIsLoading} />
         <MessagesContainer isLoading={isLoading} />
+        <ChatsBar setIsLoading={setIsLoading} />
       </div>
     </>
   );

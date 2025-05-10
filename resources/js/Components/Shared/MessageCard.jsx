@@ -7,11 +7,12 @@ import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import MessageMenu from "./MessageMenu";
 const MessageCard = ({ message }) => {
   const { user } = useUserContext();
-  const [showAttachmentView, setShowAttachmentView] = useState(false);
-  const [attachmentIndex, setAttachmentIndex] = useState(0);
+
+  // const [showAttachmentView, setShowAttachmentView] = useState(false);
+  // const [attachmentIndex, setAttachmentIndex] = useState(0);
   return (
     <div
-      className={`w-full flex gap-1 flex-col justify-end  relative${
+      className={`w-full flex gap-1 flex-col justify-end relative ${
         message.user.id != user.id ? "items-start" : " items-end"
       }`}
     >
@@ -32,11 +33,7 @@ const MessageCard = ({ message }) => {
           }`}
         >
           {message?.attachments.length > 0 && (
-            <MessageAttachmentContainer
-              attachments={message.attachments}
-              setIndex={setAttachmentIndex}
-              setShow={setShowAttachmentView}
-            />
+            <MessageAttachmentContainer message={message} />
           )}
           <MarkdownRenderer content={message.body}>
             {message.body}
@@ -68,13 +65,13 @@ const MessageCard = ({ message }) => {
         />
       </div>
       <span className="text-xs text-gray-500 opacity-50">Delivered</span>
-      <AttachmentFullView
+      {/* <AttachmentFullView
         attachments={message?.attachments}
         show={showAttachmentView}
         setShow={setShowAttachmentView}
         index={attachmentIndex}
         setIndex={setAttachmentIndex}
-      />
+      /> */}
     </div>
   );
 };

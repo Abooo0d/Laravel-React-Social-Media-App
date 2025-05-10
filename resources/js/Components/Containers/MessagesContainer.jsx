@@ -7,12 +7,14 @@ import Spinner from "../Shared/Spinner";
 import { useInView } from "react-intersection-observer";
 import { useGetMoreMessages } from "@/TanStackQurey/Querys";
 import axiosClient from "@/AxiosClient/AxiosClient";
+import AttachmentFullView from "../Shared/AttachmentFullView";
 const MessagesContainer = ({ isLoading }) => {
   const containerRef = useRef();
 
   const [ref, inView, entry] = useInView();
   const { currentChat, setCurrentChat } = useChatsContext();
   const [thereIsMore, setThereIsMore] = useState(true);
+
   const getMore = () => {
     axiosClient
       .get(
@@ -45,7 +47,7 @@ const MessagesContainer = ({ isLoading }) => {
   }, [currentChat]);
 
   return (
-    <div className="order-2 relative bg-gray-300 dark:bg-homeFeed bg-chat-pattern bg-cover min-h-full max-h-barHeight flex-1 overflow-scroll flex flex-col justify-between items-center gap-2 z-0">
+    <div className="order-2 relative bg-gray-300 dark:bg-homeFeed bg-chat-pattern bg-cover min-h-full max-h-barHeight flex-1 overflow-scroll flex flex-col justify-between items-center gap-2">
       <div className="absolute inset-0 w-full h-full bg-[rgba(17,24,39,58%)]" />
       {isLoading ? (
         <div className="flex w-full min-h-barHeight justify-center items-center">
@@ -57,7 +59,7 @@ const MessagesContainer = ({ isLoading }) => {
           {!!currentChat && (
             <>
               <div
-                className="w-full max-h-[calc(100dvh-225px)] relative z-[50] p-4 overflow-auto flex flex-col-reverse flex-1"
+                className="w-full max-h-[calc(100dvh-225px)] relative z-[100] p-4 overflow-auto flex flex-col-reverse flex-1"
                 ref={containerRef}
               >
                 {currentChat?.messages?.map((message, index) => (
@@ -87,6 +89,13 @@ const MessagesContainer = ({ isLoading }) => {
           )}
         </>
       )}
+      <AttachmentFullView
+      // attachments={message?.attachments}
+      // show={showFullView}
+      // setShow={setShowFullView}
+      // index={attachmentIndex}
+      // setIndex={setAttachmentIndex}
+      />
     </div>
   );
 };
