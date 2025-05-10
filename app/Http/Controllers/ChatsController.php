@@ -211,19 +211,21 @@ class ChatsController extends Controller
   }
   public function UpdateMessage(UpdateMessageRequest $request, Message $message)
   {
-
+    $data = $request->validated();
+    $message->update(['body' => $data['body']]);
+    return response(['message' => 'Message Updated Successfully']);
   }
   public function deleteMessage(Message $message)
   {
     $userId = Auth::id();
     if ($userId != $message->user_id) {
+      $message->delete();
       return response(['message' => 'You Don`t have Permission To Delete This Post']);
     }
     $attachments = $message->attachments;
     foreach ($attachments as $attachment) {
       Storage::disk('public')->delete($attachment->path);
     }
-    $message->delete();
     return response(['message' => 'message Deleted Successfully']);
   }
 }

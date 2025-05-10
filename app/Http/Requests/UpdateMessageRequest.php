@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Message;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateMessageRequest extends FormRequest
 {
@@ -11,9 +13,8 @@ class UpdateMessageRequest extends FormRequest
    */
   public function authorize(): bool
   {
-    dd($this);
-    // $message = Message::where('id',$this->)
-    return false;
+    $message = Message::where('id', $this->message->id)->where('user_id', Auth::id())->first();
+    return !!$message;
   }
 
   /**
@@ -24,7 +25,7 @@ class UpdateMessageRequest extends FormRequest
   public function rules(): array
   {
     return [
-      //
+      'body' => ['required', 'string']
     ];
   }
 }

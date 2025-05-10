@@ -36,13 +36,16 @@ const MessageMenu = ({ message, setShowUpdateForm }) => {
         <HiDotsVertical />
       </div>
       <div
-        className={`w-40 h-10 top-[10px] rounded-md overflow-hidden min-h-fit absolute right-[50px] bg-[rgba(12,36,51,100%)] duration-200 z-10 max-w-[100px]  ${
+        className={`w-40 h-10 top-[10px] rounded-md overflow-hidden min-h-fit absolute right-[80px] bg-[rgba(12,36,51,100%)] duration-200 z-10 max-w-[100px]  ${
           showMenu ? "opacity-100 visible" : "opacity-0 invisible "
         }`}
       >
         <button
           className="bg-gray-700 duration-300 flex gap-2 justify-start items-center hover:bg-gray-600 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
-          onClick={() => setShowUpdateForm(true)}
+          onClick={() => {
+            setShowUpdateForm(true);
+            setShowMenu(false);
+          }}
         >
           Update
         </button>
