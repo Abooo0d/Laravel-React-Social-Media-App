@@ -23,7 +23,7 @@ const GroupsBar = ({
     <>
       <div className="relative z-[200]">
         <div
-          className={`flex flex-col max-h-[400px] absolute md:top-[144px] top-[-10px] w-[400px] max-w-[90%] right-[50%] translate-x-[50%] md:left-[0px] z-[100] overflow-hidden rounded-xl md:rounded-l-none bg-gray-900/60 border-[1px] border-solid border-gray-500/50 backdrop-blur-md duration-200 ${
+          className={`flex flex-col max-h-[350px] absolute md:top-[144px] top-[-10px] w-[400px] max-w-[90%] right-[50%] translate-x-[50%] md:left-[0px] z-[100] overflow-hidden rounded-xl md:rounded-l-none bg-gray-900/60 border-[1px] border-solid border-gray-500/50 backdrop-blur-md duration-200 ${
             showGroupContainer
               ? "visible opacity-100 "
               : "invisible opacity-0 scale-90"

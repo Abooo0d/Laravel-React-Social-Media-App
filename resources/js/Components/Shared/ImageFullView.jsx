@@ -42,13 +42,14 @@ const ImageFullView = ({
       }`}
     >
       <div className="animate-scaleUp h-full  w-full rounded-lg relative flex justify-between items-center bg-gray-900/60 border-solid border-[1px] border-gray-700 backdrop-blur-md p-4">
-        <div className="absolute top-[30px] right-[12px] h-20 flex justify-center items-center gap-2 flex-col">
+        <div className="absolute top-[30px] right-[12px] h-20 flex justify-center items-center gap-2 flex-col z-[100]">
           <SecondaryButton
             classes="py-1.5 px-3 right-0"
             event={() => setShowImage(false)}
           >
             <RiArrowGoBackFill className="w-5 h-5 text-gray-200" />
           </SecondaryButton>
+
           {update && (
             <>
               {attachmentId !== 0 && (
@@ -67,20 +68,22 @@ const ImageFullView = ({
             </>
           )}
           <SecondaryButton
-            classes=" py-1.5 px-3 right-0 w-[46px] cursor-default"
+            classes=" py-1.5 px-3 right-0 w-[46px] cursor-default z-10"
             event={() => {}}
           >
             {imageIndex ? imageIndex + 1 : 1}
           </SecondaryButton>
         </div>
-        <SecondaryButton
-          event={() => back(imageIndex)}
-          classes="h-[100px] w-[35px]"
-        >
-          <FaAngleLeft className="w-6 h-6 flex justify-center items-center" />
-        </SecondaryButton>
+        {post?.attachments.length > 1 && (
+          <SecondaryButton
+            event={() => back(imageIndex)}
+            classes="h-[100px] w-[35px]"
+          >
+            <FaAngleLeft className="w-6 h-6 flex justify-center items-center" />
+          </SecondaryButton>
+        )}
         {show && (
-          <div className="relative w-full h-full flex ">
+          <div className="relative w-full h-full flex z-0">
             {post?.attachments?.map((attachment, index) => (
               <React.Fragment key={index}>
                 {isImage(attachment) ? (
@@ -114,14 +117,16 @@ const ImageFullView = ({
             ))}
           </div>
         )}
-        <SecondaryButton
-          event={() => {
-            next(imageIndex);
-          }}
-          classes="h-[100px] w-[35px]"
-        >
-          <FaAngleRight className="w-6 h-6" />
-        </SecondaryButton>
+        {post?.attachments.length > 1 && (
+          <SecondaryButton
+            event={() => {
+              next(imageIndex);
+            }}
+            classes="h-[100px] w-[35px]"
+          >
+            <FaAngleRight className="w-6 h-6" />
+          </SecondaryButton>
+        )}
       </div>
     </div>
   );
