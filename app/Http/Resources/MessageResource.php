@@ -9,18 +9,20 @@ use Illuminate\Support\Facades\Storage;
 class MessageResource extends JsonResource
 {
   protected $targetUserId;
+  protected $isGroup;
 
-  public static function collectionWithTarget($resourceCollection, $targetUserId)
+  public static function collectionWithTarget($resourceCollection, $targetUserId, $isGroup)
   {
-    return $resourceCollection->map(function ($item) use ($targetUserId) {
-      return new self($item, $targetUserId);
-    });
+    return $resourceCollection->map(
+      fn($item) => new self($item, $targetUserId, $isGroup)
+    );
   }
-  public function __construct($resource, $targetUserId = null)
+  public function __construct($resource, $targetUserId = null, $isGroup = false)
   {
     // dd($this->targetUserId, 'Abood');
     parent::__construct($resource);
     $this->targetUserId = $targetUserId;
+    $this->isGroup = $isGroup;
   }
   /**
    * Transform the resource into an array.
@@ -29,10 +31,7 @@ class MessageResource extends JsonResource
    */
   public function toArray(Request $request): array
   {
-    // dd($this->targetUserId, $this->id);
-    // dd($this->unreadFor($this->targetUserId));
     $unRead = $this->unreadFor($this->targetUserId);
-    // dd($unRead->is_read);
     return [
       'id' => $this->id,
       'body' => $this->body,
@@ -47,9 +46,8 @@ class MessageResource extends JsonResource
           : asset('images/default_avatar_image.png'),
       ],
       'chat_id' => $this->chat_id,
-      'is_read' => $unRead?->is_read,
+      'is_read' => $this->isGroup ? 'group' : $unRead?->is_read,
       'my_status' => !!$this->status
-
     ];
   }
 }

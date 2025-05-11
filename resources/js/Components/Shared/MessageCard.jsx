@@ -2,7 +2,6 @@ import { useUserContext } from "@/Contexts/UserContext";
 import React, { useEffect, useRef, useState } from "react";
 import MarkdownRenderer from "./MarkdownRenderer";
 import MessageAttachmentContainer from "./MessageAttachmentContainer";
-import AttachmentFullView from "./AttachmentFullView";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import MessageMenu from "./MessageMenu";
 import { FaCheck } from "react-icons/fa";
@@ -114,12 +113,16 @@ const MessageCard = ({ message }) => {
             <span className="text-gray-400 text-[8px]">
               {message.created_at}
             </span>
-            {message.user.id == user.id && (
-              <IoCheckmarkDoneSharp
-                className={`${message.user.id != user.id && "hidden"} ${
-                  !!message?.is_read ? "text-blue-500" : "text-gray-600"
-                }`}
-              />
+            {message?.is_read != "group" && (
+              <>
+                {message.user.id == user.id && (
+                  <IoCheckmarkDoneSharp
+                    className={`${message.user.id != user.id && "hidden"} ${
+                      !!message?.is_read ? "text-blue-500" : "text-gray-600"
+                    }`}
+                  />
+                )}
+              </>
             )}
           </div>
           <div

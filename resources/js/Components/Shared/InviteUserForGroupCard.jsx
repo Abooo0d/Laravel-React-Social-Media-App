@@ -4,12 +4,18 @@ import { Link } from "@inertiajs/react";
 import React, { useState } from "react";
 import { PrimaryButton } from "./Buttons";
 import { FiUserPlus } from "react-icons/fi";
-const InviteUserCard = ({ user, group, data, setShowForm, setErrors }) => {
+const InviteUserForGroupCard = ({
+  user,
+  group,
+  data,
+  setShowForm,
+  setErrors,
+}) => {
   const { setSuccessMessage } = useMainContext();
   const inviteUser = () => {
     axiosClient
       .post(route("group.inviteUser", group.slug), { user_id: user.id })
-      .then((res) => {
+      .then(() => {
         setSuccessMessage("User Has Been Invited Successfully");
         setShowForm(false);
       })
@@ -51,4 +57,4 @@ const InviteUserCard = ({ user, group, data, setShowForm, setErrors }) => {
   );
 };
 
-export default InviteUserCard;
+export default InviteUserForGroupCard;

@@ -4,6 +4,8 @@ import CreateGroupForm from "../Shared/CreateGroupForm";
 import { PrimaryButton } from "../Shared/Buttons";
 import Spinner from "../Shared/Spinner";
 import SearchForGroupsForm from "../Shared/SearchForGroupsForm";
+import { FaSearch } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa6";
 const GroupsBar = ({
   groups,
   showGroupContainer,
@@ -21,32 +23,32 @@ const GroupsBar = ({
     <>
       <div className="relative z-[200]">
         <div
-          className={`flex flex-col max-h-[400px] absolute md:top-[96px] top-[-10px] w-[400px] max-w-[90%] right-[50%] translate-x-[50%] md:left-[0px] z-[100] overflow-hidden rounded-xl md:rounded-l-none bg-gray-900/60 border-[1px] border-solid border-gray-500/50 backdrop-blur-md duration-200 ${
+          className={`flex flex-col max-h-[400px] absolute md:top-[144px] top-[-10px] w-[400px] max-w-[90%] right-[50%] translate-x-[50%] md:left-[0px] z-[100] overflow-hidden rounded-xl md:rounded-l-none bg-gray-900/60 border-[1px] border-solid border-gray-500/50 backdrop-blur-md duration-200 ${
             showGroupContainer
               ? "visible opacity-100 "
               : "invisible opacity-0 scale-90"
           } `}
         >
-          <div className="flex justify-between items-center bg-gray-800 px-4">
-            <h2 className="text-gray-400  w-full py-3 lg:text-xl font-bold cursor-default">
+          <div className="flex justify-between items-center bg-gray-800 px-4 h-[48px]">
+            <h2 className="text-gray-400  w-full py-3 lg:text-xl font-bold cursor-default max-h-full">
               Groups:
             </h2>
             <div className="flex gap-2 items-center justify-between">
               <PrimaryButton
-                classes="py-1 px-2 "
+                classes="py-2 px-2 "
                 event={() => {
                   setShowCreateForm(true);
                 }}
               >
-                New
+                <FaPlus />
               </PrimaryButton>
               <PrimaryButton
-                classes="text-[15px] w-fit py-1 px-2 "
+                classes="text-[15px] w-fit py-2 px-2 "
                 event={() => {
                   setShowSearchForm(true);
                 }}
               >
-                Search
+                <FaSearch />
               </PrimaryButton>
             </div>
           </div>

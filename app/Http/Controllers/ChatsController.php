@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewMessageSent;
+use App\Http\Requests\CreateChatGroupRequest;
 use App\Http\Requests\NewMessageRequest;
 use App\Http\Requests\SearchForChatRequest;
 use App\Http\Requests\SearchUserRequest;
@@ -24,35 +25,17 @@ class ChatsController extends Controller
 {
   public function index(Request $request)
   {
-    $authUserId = auth()->id();
     try {
       $chats = auth()
         ->user()
         ->chats()
         ->where('is_group', true)
-        // ->withCount([
-        //   'messages as unread_count' => function ($query) use ($authUserId) {
-        //     $query->where('user_id', '!=', $authUserId)
-        //       ->whereDoesntHave('statuses', function ($q) use ($authUserId) {
-        //         $q->where('user_id', $authUserId);
-        //       });
-        //   }
-        // ])
         ->with('users', 'messages')
         ->orderBy('last_message_id', "desc")
         ->get();
-      $authUserId = auth()->id();
       $allChats = auth()->user()
         ->chats()
         ->where('is_group', false)
-        // ->withCount([
-        //   'messages as unread_count' => function ($query) use ($authUserId) {
-        //     $query->where('user_id', '!=', $authUserId)
-        //       ->whereDoesntHave('statuses', function ($q) use ($authUserId) {
-        //         $q->where('user_id', $authUserId);
-        //       });
-        //   }
-        // ])
         ->orderBy('last_message_id', 'desc')
         ->get();
       return Inertia::render(
@@ -172,17 +155,7 @@ class ChatsController extends Controller
         'user_id' => auth()->id(),
         'is_read' => true
       ]);
-      $lastMessageBody = $message->body;
-      // If message is longer than 100 chars, truncate it with ellipsis
-      if (strlen($message->body) > 20) {
-        $lastMessageBody = substr($message->body, 0, 20) . '...';
-      }
-      $chat->update([
-        'last_massage_id' => $message->id,
-        'last_message' => $lastMessageBody,
-        'last_message_date' => $message->created_at->format('M:d - H:i')
-      ]);
-      $chat->save();
+      $chat->update(['last_message_id' => $message->id]);
       broadcast(new NewMessageSent($message));
       return response(['message' => new MessageResource($message)], 200);
     } catch (e) {
@@ -227,5 +200,32 @@ class ChatsController extends Controller
       Storage::disk('public')->delete($attachment->path);
     }
     return response(['message' => 'message Deleted Successfully']);
+  }
+  public function createChatGroup(CreateChatGroupRequest $request)
+  {
+    try {
+      $data = $request->validated();
+      if ($data['chat_name'] !== '') {
+        $chat = Chat::create([
+          'name' => $data['chat_name'],
+          'is_group' => true
+        ]);
+        $users = $data['users'];
+        $users[] = auth()->id();
+        foreach ($users as $user) {
+          ChatUser::create([
+            'chat_id' => $chat->id,
+            'user_id' => $user,
+          ]);
+        }
+        $chat->refresh();
+        return response([
+          'message' => 'Chat Created Successfully',
+          'chat' => new ChatResource($chat)
+        ], 200);
+      }
+    } catch (\Throwable $th) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
   }
 }

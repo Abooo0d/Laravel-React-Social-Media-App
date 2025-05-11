@@ -7,6 +7,8 @@
 // Set A Loading When Sending Invitation To Group
 
 /************** TOday *************/
+// Get The ChatCard Data From The Chat  Messages Not From The Chat Fields
+// Format The ChatCard Data Correctly
 /************** Working On *************/
 
 /************** Done *************/

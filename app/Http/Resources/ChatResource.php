@@ -42,12 +42,16 @@ class ChatResource extends JsonResource
       'user_id' => $user_id,
       'avatar_url' => $image,
       'is_group' => !!$this->is_group,
-      'messages' => MessageResource::collectionWithTarget($this->messages, targetUserId: $user_id),
+      'messages' => MessageResource::collectionWithTarget(
+        resourceCollection: $this->messages,
+        targetUserId: $user_id,
+        isGroup: !!$this->is_group
+      ),
       'created_at' => $this->created_at,
       'updated_at' => $this->updated_at,
-      'last_message' => $this->last_message,
-      'last_message_id' => $this->last_message_id,
-      'last_message_date' => $this->last_message_date,
+      // 'last_message' => $this->last_message,
+      // 'last_message_id' => $this->last_message_id,
+      // 'last_message_date' => $this->last_message_date,
       // 'unread_messages_count' => $this->unread_messages_count
       // 'unread_count' => $this?->unreadMessagesCountFor(auth()->id()),
     ];

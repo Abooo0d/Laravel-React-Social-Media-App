@@ -1,9 +1,12 @@
 import { Link } from "@inertiajs/react";
 import React, { useState } from "react";
 
-const UserFriendCard = ({ user }) => {
+const UserFriendCard = ({ user, setShowForm = () => {} }) => {
   return (
-    <Link href={route("profile.view", user.username)}>
+    <Link
+      href={route("profile.view", user.username)}
+      onClick={() => setShowForm(false)}
+    >
       <div className="group relative bg-gray-700/30 backdrop-blur-sm rounded-[8px] border-[1px] border-solid border-gray-500/50  flex flex-col justify-between items-center cursor-pointer duration-200 hover:bg-gray-600/50 hover:border-gray-500 overflow-hidden drop-shadow-2xl">
         <img
           src={user.avatar_url || "/images/default_avatar_image.png"}

@@ -87,7 +87,11 @@ const SearchForFriendsForm = ({ showForm, setShowForm }) => {
                 {searchResults.length > 0 ? (
                   <div className="w-full grid gap-2 col md:grid-cols-2 grid-cols-1 p-4 max-h-[300px] overflow-auto">
                     {searchResults?.map((user, index) => (
-                      <UserFriendCard key={index} user={user} />
+                      <UserFriendCard
+                        key={index}
+                        user={user}
+                        setShowForm={setShowForm}
+                      />
                     ))}
                   </div>
                 ) : (

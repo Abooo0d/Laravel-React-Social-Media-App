@@ -6,7 +6,7 @@ import { HiMiniXMark } from "react-icons/hi2";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import { useForm } from "@inertiajs/react";
 import { IoSearchOutline } from "react-icons/io5";
-import InviteUserCard from "./InviteUserCard";
+import InviteUserForGroupCard from "./InviteUserForGroupCard";
 const InviteUserForm = ({ showForm, setShowForm, group }) => {
   const [name, setName] = useState("");
   const [searchResults, setSearchResult] = useState([]);
@@ -91,7 +91,7 @@ const InviteUserForm = ({ showForm, setShowForm, group }) => {
                   {searchResults.length > 0 ? (
                     <div className="w-full grid gap-2 col md:grid-cols-2 grid-cols-1 p-4 max-h-[300px] overflow-auto">
                       {searchResults?.map((user, index) => (
-                        <InviteUserCard
+                        <InviteUserForGroupCard
                           key={index}
                           user={user}
                           data={data}

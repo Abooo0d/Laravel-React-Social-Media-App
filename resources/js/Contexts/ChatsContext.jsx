@@ -33,7 +33,6 @@ export const ChatsContext = ({ children }) => {
   const [attachmentIndex, setAttachmentIndex] = useState(0);
   const [showAttachmentFullView, setShowAttachmentFullView] = useState(false);
 
-  const { user } = useUserContext();
   useEffect(() => {
     let array = onlineUsers.map((user) => user.id);
     setOnlineUsersIds(array);

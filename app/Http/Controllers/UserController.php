@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Enums\FriendsRequestEnum;
 use App\Http\Requests\SearchUserRequest;
 use App\Http\Resources\UserResource;
+use App\Models\Chat;
+use App\Models\ChatUser;
 use App\Models\Followers;
 use App\Models\Friends;
 use App\Models\User;
@@ -19,7 +21,7 @@ class UserController extends Controller
   public function searchForUser(SearchUserRequest $request)
   {
     try {
-      $data = $request->Validated();
+      $request->Validated();
       $followerData = $request->user;
       if ($request->wantsJson())
         return response()->json(['followers' => UserResource::collection($followerData)]);
@@ -84,6 +86,15 @@ class UserController extends Controller
         $friendRequest->status = FriendsRequestEnum::ACCEPTED->value;
         $friendRequest->save();
         $user->notify(new FriendRequestNotification($currentUser, 'accept'));
+        $chat = Chat::create();
+        ChatUser::create([
+          'chat_id' => $chat->id,
+          'user_id' => $user->id,
+        ]);
+        ChatUser::create([
+          'chat_id' => $chat->id,
+          'user_id' => Auth::id()
+        ]);
         return redirect()->back()->with('success', "Friend Request Is Accepted");
       } else
         return response()->json(['message' => "There Is An Error With The Request"], 400);

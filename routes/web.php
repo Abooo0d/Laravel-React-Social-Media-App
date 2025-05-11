@@ -87,5 +87,6 @@ Route::middleware('auth')->group(function () {
   Route::get('/chat/download/{attachment}', [ChatsController::class, 'downloadAttachment'])->name('chat.download');
   Route::post('/chat/update-message/{message:id}', [ChatsController::class, 'UpdateMessage'])->name('chat.updateMessage');
   Route::delete('/chat/delete-message/{message:id}', [ChatsController::class, 'deleteMessage'])->name('chat.deleteMessage');
+  Route::post('/chat/create-groupChat', [ChatsController::class, 'createChatGroup'])->name('chat.createGroupChat');
 });
 require __DIR__ . '/auth.php';

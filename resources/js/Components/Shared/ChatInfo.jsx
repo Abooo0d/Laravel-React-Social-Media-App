@@ -18,7 +18,7 @@ const ChatInfo = () => {
           className="w-[50px] h-[50px] rounded-full object-cover border-solid border-[1px] border-gray-600"
         />
         {online && (
-          <span className="absolute top-0 right-0 w-[15px] h-[15px] rounded-full bg-green-500 animate-pulse" />
+          <span className="absolute top-0 right-0 w-[15px] h-[15px] rounded-full bg-green-500 backdrop-blur-md animate-pulse" />
         )}
       </div>
       <h2 className="text-gray-400 text-xl cursor-default">

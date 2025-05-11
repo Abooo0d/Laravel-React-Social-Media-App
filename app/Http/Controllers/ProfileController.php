@@ -100,9 +100,6 @@ class ProfileController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
-  /**
-   * Display the user's profile form.
-   */
   public function edit(Request $request)
   {
     try {
@@ -114,10 +111,6 @@ class ProfileController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
-
-  /**
-   * Update the user's profile information.
-   */
   public function update(ProfileUpdateRequest $request)
   {
     try {
@@ -133,10 +126,6 @@ class ProfileController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
-
-  /**
-   * Delete the user's account.
-   */
   public function destroy(Request $request)
   {
     try {

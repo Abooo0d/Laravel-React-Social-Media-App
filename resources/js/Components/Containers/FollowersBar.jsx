@@ -3,6 +3,8 @@ import { FaUserGroup } from "react-icons/fa6";
 import FollowerCard from "../Shared/FollowerCard";
 import { PrimaryButton } from "../Shared/Buttons";
 import SearchForFriendsForm from "../Shared/SearchForFriendsForm";
+import { FaSearch } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa6";
 const FollowersBar = ({
   followers,
   showFollowerContainer,
@@ -14,23 +16,24 @@ const FollowersBar = ({
     <>
       <div className="relative z-[200]">
         <div
-          className={`flex flex-col max-h-[500px] absolute md:top-[0px] top-[-10px] w-[400px] max-w-[90%] right-[50%] translate-x-[50%] md:left-[0px] z-[100] overflow-hidden rounded-xl md:rounded-l-none md:rounded-t-none bg-gray-900/60 border-[1px] border-solid border-gray-500/50 backdrop-blur-md duration-200 ${
+          className={`flex flex-col max-h-[500px] absolute md:top-[48px] top-[-10px] w-[400px] max-w-[90%] right-[50%] translate-x-[50%] md:left-[0px] z-[100] overflow-hidden rounded-xl md:rounded-l-none bg-gray-900/60 border-[1px] border-solid border-gray-500/50 backdrop-blur-md duration-200 ${
             showFollowerContainer
               ? "visible opacity-100"
               : "invisible opacity-0 scale-90 "
           } `}
         >
-          <div className="flex justify-between items-center bg-gray-800 px-4">
-            <h2 className="text-gray-400 bg-gray-800 py-3 lg:text-xl font-bold cursor-default">
+          <div className="flex justify-between items-center bg-gray-800 px-4 h-[48px]">
+            <h2 className="text-gray-400 bg-gray-800 py-3 lg:text-xl font-bold cursor-default max-h-full">
               Followers:
             </h2>
             <PrimaryButton
-              classes="text-[15px] w-fit py-1 px-2 "
+              classes="text-[15px] w-fit py-2 px-2 "
               event={() => {
                 setShowFriendsForm(true);
+                setShowFollowerContainer(false);
               }}
             >
-              Search
+              <FaSearch />
             </PrimaryButton>
           </div>
           <div
