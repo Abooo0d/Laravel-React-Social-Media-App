@@ -10,10 +10,10 @@ export default defineConfig({
     react(),
   ],
   server: {
-    host: "192.168.1.104",
+    host: "192.168.1.107",
     port: 3000,
     cors: {
-      origin: "http://192.168.1.104:8000",
+      origin: "http://192.168.1.107:8000",
       credentials: true,
     },
   },

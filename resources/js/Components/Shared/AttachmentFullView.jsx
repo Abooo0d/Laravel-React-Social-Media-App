@@ -22,11 +22,13 @@ const AttachmentFullView = () => {
     attachmentIndex,
     setAttachmentIndex,
   } = useChatsContext();
+
   const [attachmentId, setAttachmentId] = useState(0);
   const [attachments, setAttachments] = useState([]);
   useEffect(() => {
-    setAttachmentId(attachments[attachmentIndex]?.id);
-  }, [showAttachmentFullView]);
+    attachments?.length > 0 &&
+      setAttachmentId(attachments[attachmentIndex]?.id);
+  }, [attachments]);
 
   useEffect(() => {
     setAttachments(message?.attachments);
@@ -101,10 +103,12 @@ const AttachmentFullView = () => {
             <FaAngleLeft className="w-6 h-6 flex justify-center items-center" />
           </SecondaryButton>
         )}
-        {showAttachmentFullView && (
-          <div className="relative h-full flex justify-center items-center flex-1 max-w-[80%]">
-            <div
-              className={`relative rounded-md overflow-hidden flex justify-start items-enter cursor-pointer duration-200 border-transparent border-[1px] border-solid hover:border-gray-500 hover:scale-105 group
+        {attachments?.length > 0 && (
+          <>
+            {showAttachmentFullView && (
+              <div className="relative h-full flex justify-center items-center flex-1 max-w-[80%]">
+                <div
+                  className={`relative rounded-md overflow-hidden flex justify-start items-enter cursor-pointer duration-200 border-transparent border-[1px] border-solid hover:border-gray-500 hover:scale-105 group
                       ${
                         MessageIsAudio(attachments[attachmentIndex])
                           ? "w-80 h-20 max-w-[70%]"
@@ -116,43 +120,49 @@ const AttachmentFullView = () => {
                           ? "w-96 h-96 max-h-[80%] max-w-[70%]"
                           : "w-20 h-20 max-h-[80%] max-w-[70%]"
                       }`}
-            >
-              {MessageIsImage(attachments[attachmentIndex]) && (
-                <>
-                  <img
-                    src={attachments[attachmentIndex]?.url}
-                    alt="attachment"
-                    className="min-w-20 min-h-20 rounded-md object-cover"
-                  />
-                </>
-              )}
-              {MessageIsVideo(attachments[attachmentIndex]) && (
-                <CustomVideoPlayer attachment={attachments[attachmentIndex]} />
-              )}
-              {MessageIsAudio(attachments[attachmentIndex]) && (
-                <CustomAudioPlayer attachment={attachments[attachmentIndex]} />
-              )}
-              {MessageIsPDF(attachments[attachmentIndex]) && (
-                <iframe
-                  src={attachments[attachmentIndex].url}
-                  className="min-w-20 min-h-40 overflow-hidden"
-                ></iframe>
-              )}
-              {!isPreviewAble(attachments[attachmentIndex]) && (
-                <>
-                  <span className="absolute top-1 right-1 w-5 h-5  rounded-md flex justify-center items-center bg-gray-300/20 text-gray-300 group-hover:opacity-100 opacity-0 duration-200 z-10"></span>
-                  <div className="w-full h-full  flex justify-between items-center gap-2 p-2">
-                    <span className="min-w-10 h-10 rounded-md flex justify-center items-center bg-gray-600 text-gray-300">
-                      <FaFile />
-                    </span>
-                    <h3 className="flex-1 text-[15px] text-gray-400 break-all">
-                      {attachments[attachmentIndex]?.name}
-                    </h3>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
+                >
+                  {MessageIsImage(attachments[attachmentIndex]) && (
+                    <>
+                      <img
+                        src={attachments[attachmentIndex]?.url}
+                        alt="attachment"
+                        className="min-w-20 min-h-20 rounded-md object-cover"
+                      />
+                    </>
+                  )}
+                  {MessageIsVideo(attachments[attachmentIndex]) && (
+                    <CustomVideoPlayer
+                      attachment={attachments[attachmentIndex]}
+                    />
+                  )}
+                  {MessageIsAudio(attachments[attachmentIndex]) && (
+                    <CustomAudioPlayer
+                      attachment={attachments[attachmentIndex]}
+                    />
+                  )}
+                  {MessageIsPDF(attachments[attachmentIndex]) && (
+                    <iframe
+                      src={attachments[attachmentIndex].url}
+                      className="min-w-20 min-h-40 overflow-hidden"
+                    ></iframe>
+                  )}
+                  {!isPreviewAble(attachments[attachmentIndex]) && (
+                    <>
+                      <span className="absolute top-1 right-1 w-5 h-5  rounded-md flex justify-center items-center bg-gray-300/20 text-gray-300 group-hover:opacity-100 opacity-0 duration-200 z-10"></span>
+                      <div className="w-full h-full  flex justify-between items-center gap-2 p-2">
+                        <span className="min-w-10 h-10 rounded-md flex justify-center items-center bg-gray-600 text-gray-300">
+                          <FaFile />
+                        </span>
+                        <h3 className="flex-1 text-[15px] text-gray-400 break-all">
+                          {attachments[attachmentIndex]?.name}
+                        </h3>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+          </>
         )}
         {attachments?.length > 1 && (
           <SecondaryButton

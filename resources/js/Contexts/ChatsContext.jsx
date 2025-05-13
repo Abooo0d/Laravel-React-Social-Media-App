@@ -82,7 +82,8 @@ export const ChatsContext = ({ children }) => {
 
   useEffect(() => {
     if (!!currentChat?.id) {
-      window.Echo.private(`chat.${currentChat?.id}`).listen(
+      const newMessageChannel = window.Echo.private(`chat.${currentChat.id}`);
+      newMessageChannel.listen(
         "NewMessageSent",
         (e) => {
           const message = e.message;
@@ -124,6 +125,43 @@ export const ChatsContext = ({ children }) => {
         },
         [currentChat?.id]
       );
+      newMessageChannel.listen("MessageUpdated", (e) => {
+        const newMessage = e.message;
+        if (message.chat_id == currentChat.id) {
+          setCurrentChat((prev) => ({
+            ...prev,
+            messages: prev.messages.map((message) => {
+              message.id == newMessage.id ? newMessage : message;
+            }),
+          }));
+        } else {
+          setCombinedChats((prev) =>
+            prev.map((chat) => {
+              chat.id == newMessage.chat_id
+                ? {
+                    ...chat,
+                    messages: chat.messages.map((message) => {
+                      message.id == newMessage.id ? newMessage : message;
+                    }),
+                  }
+                : chat;
+            })
+          );
+        }
+      });
+      newMessageChannel.listen("MessageDeleted", (e) => {
+        let deletedMessageData = e;
+        if ((currentChat.id = deletedMessageData.chat_id)) {
+          setCurrentChat((prev) => ({
+            ...prev,
+            messages: prev.messages.filter(
+              (message) => message.id != deletedMessageData.message_id
+            ),
+          }));
+        } else {
+        }
+        console.log(e);
+      });
     }
   }, [currentChat?.id]);
 

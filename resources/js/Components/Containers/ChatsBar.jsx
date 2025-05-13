@@ -43,7 +43,7 @@ const ChatsBar = ({ setIsLoading }) => {
   }, [searchName]);
 
   return (
-    <div className="relative">
+    <div className="relative z-[101]">
       <div className=" max-h-barHeight h-full w-[270px] lg:flex hidden flex-col gap-2 py-2 bg-gray-900 px-2 border-r-solid border-r-gray-500/50 border-r-[1px]">
         <h2 className="block max-lg-hidden text-xl font-bold dark:text-gray-300 pl-4 pt-2 cursor-default">
           My Chats:
@@ -142,52 +142,6 @@ const ChatsBar = ({ setIsLoading }) => {
         </div>
       </div>
 
-      {/* <div
-          className={`flex flex-col max-w-[270px] absolute top-0 py-2 z-[101] left-0 h-full bg-blue-500 min-w-[250px] duration-200 bg-gray-900/80 backdrop-blur-lg border-r-[1px] border-solid border-t-[1px] border-gray-600/70
-          ${showChats ? "left-0 " : "left-[-270px]"}`}
-        >
-          <h2 className="block max-lg:hidden text-xl font-bold dark:text-gray-100 ">
-            My Chats:
-          </h2>
-          <div className="min-w-full h-fit flex justify-center items-center px-2 gap-2">
-            <div className="flex justify-between items-center bg-gray-700 rounded-md mt-1">
-              <input
-                type="text"
-                name="search"
-                placeholder="Type To Search"
-                className="bg-transparent flex-3 text-gray-400 outline-none ring-0 border-none hover:ring-0 focus:ring-0 max-w-[200px]"
-                value={searchName}
-                onChange={(e) => setSearchName(e.target.value)}
-              />
-              <button
-                className="min-w-[30px] max-w-[30px] min-h-[40px] flex-1 flex justify-center items-center text-gray-400"
-                onClick={() => search()}
-              >
-                <FaSearch />
-              </button>
-              <button
-                className="min-w-[30px] max-w-[30px] min-h-[40px] flex-1 flex justify-center items-center text-gray-400"
-                onClick={() => setShowCreateGroupForm(true)}
-              >
-                <FaPlus />
-              </button>
-            </div>
-          </div>
-          {loading ? (
-            <div className="w-full h-fit flex justify-center items-center py-4">
-              <Spinner />
-            </div>
-          ) : (
-            <ChatsContainer
-              setShow={setShowChats}
-              setIsLoading={setIsLoading}
-              searchResults={searchResults}
-              searchName={searchName}
-              didSearch={didSearch}
-            />
-          )}
-        </div> */}
-      {/* </div> */}
       <CreateChatGroupForm
         showForm={showCreateGroupForm}
         setShowForm={setShowCreateGroupForm}

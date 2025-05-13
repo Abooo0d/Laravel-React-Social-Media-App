@@ -15,9 +15,11 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
-  return Chat::find($chatId)->users->contains($user->id);
-});
+Broadcast::channel(
+  'chat.{chatId}',
+  fn($user, $chatId) =>
+  Chat::find($chatId)->users->contains($user->id)
+);
 
 
 Broadcast::channel('online', function ($user) {

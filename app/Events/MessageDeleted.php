@@ -11,12 +11,11 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewMessageSent implements ShouldBroadcast
+class MessageDeleted implements ShouldBroadcast
 {
   use Dispatchable, InteractsWithSockets, SerializesModels;
 
-  public $message;
-
+  protected $message;
   /**
    * Create a new event instance.
    */
@@ -24,17 +23,17 @@ class NewMessageSent implements ShouldBroadcast
   {
     $this->message = new MessageResource($message);
   }
-
   public function broadcastOn()
   {
     return [
-      new PrivateChannel('chat.' . $this->message->chat_id)
+      new PrivateChannel('chat.' . $this->message->chat_id),
     ];
   }
   public function broadcastWith()
   {
     return [
-      'message' => $this->message,
+      'message_id' => $this->message->id,
+      'chat_id' => $this->message->chat_id
     ];
   }
 }

@@ -11,12 +11,11 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewMessageSent implements ShouldBroadcast
+class MessageUpdated implements ShouldBroadcast
 {
   use Dispatchable, InteractsWithSockets, SerializesModels;
 
   public $message;
-
   /**
    * Create a new event instance.
    */
@@ -25,16 +24,21 @@ class NewMessageSent implements ShouldBroadcast
     $this->message = new MessageResource($message);
   }
 
-  public function broadcastOn()
+  /**
+   * Get the channels the event should broadcast on.
+   *
+   * @return array<int, \Illuminate\Broadcasting\Channel>
+   */
+  public function broadcastOn(): array
   {
     return [
-      new PrivateChannel('chat.' . $this->message->chat_id)
+      new PrivateChannel('chat.' . $this->message->chat_id),
     ];
   }
   public function broadcastWith()
   {
     return [
-      'message' => $this->message,
+      'message' => $this->message
     ];
   }
 }

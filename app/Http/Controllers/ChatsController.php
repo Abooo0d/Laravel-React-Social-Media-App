@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageDeleted;
+use App\Events\MessageUpdated;
 use App\Events\NewMessageSent;
 use App\Http\Requests\CreateChatGroupRequest;
 use App\Http\Requests\NewMessageRequest;
@@ -186,19 +188,23 @@ class ChatsController extends Controller
   {
     $data = $request->validated();
     $message->update(['body' => $data['body']]);
+
+    broadcast(new MessageUpdated($message));
     return response(['message' => 'Message Updated Successfully']);
   }
   public function deleteMessage(Message $message)
   {
+    dd('Abood');
     $userId = Auth::id();
     if ($userId != $message->user_id) {
-      $message->delete();
       return response(['message' => 'You Don`t have Permission To Delete This Post']);
     }
+    $message->delete();
     $attachments = $message->attachments;
     foreach ($attachments as $attachment) {
       Storage::disk('public')->delete($attachment->path);
     }
+    broadcast(new MessageDeleted($message));
     return response(['message' => 'message Deleted Successfully']);
   }
   public function createChatGroup(CreateChatGroupRequest $request)

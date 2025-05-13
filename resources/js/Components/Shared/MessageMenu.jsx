@@ -14,12 +14,11 @@ const MessageMenu = ({ message, setShowUpdateForm }) => {
     if (window.confirm("Are You Sure You Want To Delete The Message?")) {
       axiosClient
         .delete(route("chat.deleteMessage", message.id))
-        .then(({ data }) => {
-          console.log(data);
-          setCurrentChat((prev) => ({
-            ...prev,
-            messages: prev.messages.filter((me) => me.id != message.id),
-          }));
+        .then(() => {
+          // setCurrentChat((prev) => ({
+          //   ...prev,
+          //   messages: prev.messages.filter((me) => me.id != message.id),
+          // }));
           setShowMenu(false);
         })
         .catch((err) => {

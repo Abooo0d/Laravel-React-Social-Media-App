@@ -50,7 +50,7 @@ window.Echo = new Echo({
   broadcaster: "pusher",
   key: import.meta.env.VITE_PUSHER_APP_KEY, // must match PUSHER_APP_KEY
   cluster: "mt1",
-  wsHost: "192.168.1.104", // or your IP if you're testing on another device
+  wsHost: "192.168.1.107", // or your IP if you're testing on another device
   wsPort: 6001,
   forceTLS: false,
   enabledTransports: ["ws"],
