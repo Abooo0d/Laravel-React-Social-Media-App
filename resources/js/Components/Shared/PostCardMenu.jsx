@@ -41,7 +41,9 @@ const PostCardMenu = ({
     }
   };
   const copyToClipBoard = () => {
+    console.log(route("post.publicView", post));
     navigator.clipboard.writeText(route("post.publicView", post));
+    // navigator.clipboard.writeText(route("post.publicView", post));
   };
   return (
     <>

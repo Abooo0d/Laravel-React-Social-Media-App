@@ -16,8 +16,9 @@ import GroupAboutForm from "@/Components/Shared/GroupAboutForm";
 import PostContainer from "@/Components/Containers/PostContainer";
 import CreatePost from "@/Components/Shared/CreatePost";
 import { useUserContext } from "@/Contexts/UserContext";
-import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
+import ProfilePhotosFullView from "@/Components/Shared/ProfilePhotosFullView";
 import { useGetPostsForGroup } from "@/TanStackQurey/Querys";
+import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
 const View = ({ auth, group, requests, users, isAdmin, photos }) => {
   const isCurrentUserJoined = !!(group.status == "approved");
   const [groupData, setGroupData] = useState(group);
@@ -32,6 +33,8 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
   const { setSuccessMessage, setErrors } = useMainContext();
   const { flash, errors } = usePage().props;
   const { setUser } = useUserContext();
+  const [showProfileImage, setShowProfileImage] = useState(false);
+  const [profileImage, setProfileImage] = useState("");
   const {
     data: posts,
     refetch,
@@ -98,7 +101,6 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
       preserveScroll: true,
     });
     setIsTheAvatarChanged(false);
-    // refetch();
   };
   const handelCoverChange = (e) => {
     try {
@@ -166,7 +168,11 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
                 "/images/default_cover_image.jpg"
               }
               alt="cover Image"
-              className="h-[300px] max-md:h-[220px] w-full object-cover "
+              className="h-[300px] max-md:h-[220px] w-full object-cover cursor-pointer"
+              onClick={() => {
+                setProfileImage(groupData.cover_url);
+                setShowProfileImage(true);
+              }}
             />
             {isAdmin && (
               <>
@@ -210,11 +216,15 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
                 "/images/default_group_avatar_image.png"
               }
               alt="AvatarImage"
-              className=" rounded-full w-full h-full object-cover"
+              className=" rounded-full w-full h-full object-cover cursor-pointer"
+              onClick={(e) => {
+                setProfileImage(groupData.thumbnail_url);
+                setShowProfileImage(true);
+              }}
             />
             {isAdmin && (
               <>
-                <div className="absolute rounded-full bg-black/50 backdrop-blur-[3px] top-0 left-0 right-0 bottom-0 duration-300 group-hover:opacity-100 opacity-0 flex justify-center items-center">
+                <div className="absolute rounded-full bg-black/50 backdrop-blur-[3px] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] duration-300 group-hover:opacity-100 opacity-0 flex justify-center items-center">
                   {!isTheAvatarChanged ? (
                     <button className="cursor-pointer z-10 overflow-hidden rounded-md relative py-2 px-2 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center">
                       <CiCamera className="text-gray-800 w-[30px] h-[30px]" />
@@ -334,7 +344,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
                       There Is No Photos
                     </div>
                   )}
-                  <ProfileImageFullView
+                  <ProfilePhotosFullView
                     photos={photos}
                     setShowImage={setShowImage}
                     showImage={showImage}
@@ -392,6 +402,11 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
         showForm={showInviteForm}
         setShowForm={setShowInviteForm}
         group={group}
+      />
+      <ProfileImageFullView
+        show={showProfileImage}
+        setShowImage={setShowProfileImage}
+        image={profileImage}
       />
     </>
   );

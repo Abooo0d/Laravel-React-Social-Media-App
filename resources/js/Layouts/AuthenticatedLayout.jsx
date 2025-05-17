@@ -276,6 +276,11 @@ export default function Authenticated({ children }) {
               event={() => setShowNotificationsForm(!showNotificationsForm)}
               text="Notifications"
             >
+              {notificationsCount > 0 && (
+                <span className="w-4 h-4 bg-red-500/40 border-[1px] border-solid border-red-500 backdrop-blur-sm absolute top-[8px] left-[30px] text-[12px] flex justify-center items-center rounded-md text-gray-300  p-0">
+                  {notificationsCount}
+                </span>
+              )}
               <IoMdNotifications className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />
             </SideBarButton>
             <SideBarButton

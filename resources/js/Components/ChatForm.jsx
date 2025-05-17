@@ -6,12 +6,10 @@ import { useChatsContext } from "@/Contexts/ChatsContext";
 import { FiPaperclip } from "react-icons/fi";
 import { FaImage } from "react-icons/fa";
 import { BsFillEmojiSmileFill } from "react-icons/bs";
-import { FaMicrophone } from "react-icons/fa";
 import Spinner from "./Shared/Spinner";
 import EmojiPicker from "emoji-picker-react";
 import { AiFillLike } from "react-icons/ai";
 import { useMainContext } from "@/Contexts/MainContext";
-import { useForm } from "@inertiajs/inertia-react";
 import ChatFormAttachmentContainer from "./Shared/ChatFormAttachmentContainer";
 import AudioRecorder from "./AudioRecorder";
 const ChatForm = () => {
@@ -144,15 +142,19 @@ const ChatForm = () => {
             }}
           />
         </span>
-        {!!uploadingProgress && (
-          <div className="absolute top-[-10px] left-0 w-full h-[5px] bg-gray-800 flex justify-start items-center rounded-full overflow-hidden">
-            <span
-              className={`absolute top-0 left-0 h-full bg-blue-700 duration-500 max-w-full`}
-              style={{
-                width: uploadingProgress + "%",
-              }}
-            ></span>
-          </div>
+        {chosenFiles.length > 0 && (
+          <>
+            {!!uploadingProgress && (
+              <div className="absolute top-[-10px] left-0 w-full h-[5px] bg-gray-800 flex justify-start items-center rounded-full overflow-hidden">
+                <span
+                  className={`absolute top-0 left-0 h-full bg-blue-700 duration-500 max-w-full`}
+                  style={{
+                    width: uploadingProgress + "%",
+                  }}
+                ></span>
+              </div>
+            )}
+          </>
         )}
         <textarea
           className="flex-1 bg-transparent outline-none border-none focus:outline-none focus:border-none ring-0 focus:ring-0 text-gray-300 resize-none h-auto min-h-[40px] max-h-[150px] "

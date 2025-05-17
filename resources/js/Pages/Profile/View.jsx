@@ -10,6 +10,7 @@ import { useMainContext } from "@/Contexts/MainContext";
 import { PrimaryButton } from "@/Components/Shared/Buttons";
 import { FiUserPlus } from "react-icons/fi";
 import { useUserContext } from "@/Contexts/UserContext";
+import ProfilePhotosFullView from "@/Components/Shared/ProfilePhotosFullView";
 import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
 
 const View = ({ auth, user, posts, isFriend, photos }) => {
@@ -18,6 +19,8 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
   const { setSuccessMessage, setErrors } = useMainContext();
   const { setUser } = useUserContext();
   const { flash } = usePage().props;
+  const [showProfileImage, setShowProfileImage] = useState(false);
+  const [profileImage, setProfileImage] = useState("");
   const { post } = useForm({
     type: "add",
   });
@@ -55,13 +58,21 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
           <img
             src={user.cover_url || "/images/default_cover_image.jpg"}
             alt="cover Image"
-            className="h-[300px] w-full object-cover "
+            className="h-[300px] w-full object-cover cursor-pointer"
+            onClick={() => {
+              setProfileImage(user.cover_url);
+              setShowProfileImage(true);
+            }}
           />
           <div className="absolute lg:w-[200px] lg:h-[200px] md:w-[160px] md:h-[160px] w-[100px] h-[100px] md:-bottom-[50px] md:left-20 left-4 -bottom-[40px] group overflow-hidden">
             <img
               src={user.avatar_url || "/images/default_avatar_image.png"}
               alt="AvatarImage"
-              className=" rounded-full w-full h-full object-cover"
+              className=" rounded-full w-full h-full object-cover cursor-pointer"
+              onClick={(e) => {
+                setProfileImage(user.avatar_url);
+                setShowProfileImage(true);
+              }}
             />
           </div>
         </div>
@@ -124,7 +135,7 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
                       There Is No Photos
                     </div>
                   )}
-                  <ProfileImageFullView
+                  <ProfilePhotosFullView
                     photos={photos}
                     setShowImage={setShowImage}
                     showImage={showImage}
@@ -143,6 +154,11 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
             </Tab.Panels>
           </Tab.Group>
         </div>
+        <ProfileImageFullView
+          show={showProfileImage}
+          setShowImage={setShowProfileImage}
+          image={profileImage}
+        />
       </div>
     </>
   );

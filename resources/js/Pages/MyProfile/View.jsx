@@ -11,11 +11,12 @@ import PostContainer from "@/Components/Containers/PostContainer";
 import CreatePost from "@/Components/Shared/CreatePost";
 import UserFriendCard from "@/Components/Shared/UserFriendCard";
 import UserFriendRequestCard from "@/Components/Shared/UserFriendRequestCard";
-import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
+import ProfilePhotosFullView from "@/Components/Shared/ProfilePhotosFullView";
 import { useUserContext } from "@/Contexts/UserContext";
 import React, { useEffect, useState } from "react";
 import Edit from "./Edit";
 import { useGetPostsForUser } from "@/TanStackQurey/Querys";
+import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
 const View = ({ auth, mustVerifyEmail, status, photos }) => {
   const { setUser, user } = useUserContext(auth?.user);
   const { flash, errors } = usePage().props;
@@ -31,6 +32,8 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
   const [isTheAvatarChanged, setIsTheAvatarChanged] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
   const [showImage, setShowImage] = useState(false);
+  const [showProfileImage, setShowProfileImage] = useState(false);
+  const [profileImage, setProfileImage] = useState("");
   const {
     data: posts,
     refetch,
@@ -150,7 +153,11 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
                 "/images/default_cover_image.jpg"
               }
               alt="cover Image"
-              className="h-[300px] w-full object-cover"
+              className="h-[300px] w-full object-cover cursor-pointer"
+              onClick={() => {
+                setProfileImage(user.cover_url);
+                setShowProfileImage(true);
+              }}
             />
             {!isTheCoverChanged ? (
               <button className="group-hover:opacity-100 opacity-0 rounded-md absolute top-2 right-2 py-1 px-4 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center">
@@ -160,7 +167,9 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
                   type="file"
                   name="cover_image"
                   className="absolute top-0 left-0 bottom-0 right-0 opacity-0 cursor-pointer"
-                  onChange={(e) => handelCoverChange(e)}
+                  onChange={(e) => {
+                    handelCoverChange(e);
+                  }}
                 />
               </button>
             ) : (
@@ -182,7 +191,7 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
               </div>
             )}
           </div>
-          <div className="absolute lg:w-[200px] lg:h-[200px] md:w-[160px] md:h-[160px] w-[130px] h-[130px] md:-bottom-[50px] md:left-20 left-4 -bottom-[80px] group overflow-hidden">
+          <div className="absolute lg:w-[200px] lg:h-[200px] md:w-[160px] md:h-[160px] w-[130px] h-[130px] md:-bottom-[50px] md:left-20 left-4 -bottom-[80px] group">
             <img
               src={
                 avatarImage ||
@@ -190,17 +199,24 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
                 "/images/default_avatar_image.png"
               }
               alt="AvatarImage"
-              className=" rounded-full w-full h-full object-cover"
+              className=" rounded-full w-full h-full object-cover cursor-pointer"
+              onClick={(e) => {
+                setProfileImage(user.avatar_url);
+                setShowProfileImage(true);
+              }}
             />
-            <div className="absolute rounded-full bg-black/50 backdrop-blur-[3px] top-0 left-0 right-0 bottom-0 duration-300 group-hover:opacity-100 opacity-0 flex justify-center items-center">
+            <div className="absolute rounded-full bg-black/50 backdrop-blur-[3px] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] duration-300 group-hover:opacity-100 opacity-0 flex justify-center items-center">
               {!isTheAvatarChanged ? (
                 <button className="cursor-pointer z-10 overflow-hidden rounded-md relative py-2 px-2 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center">
-                  <CiCamera className="text-gray-800 w-[30px] h-[30px]" />
+                  <CiCamera className="text-gray-800 w-[30px] h-[30px] cursor-pointer" />
                   <input
                     type="file"
                     name="cover_image"
                     className="absolute top-0 left-0 bottom-0 right-0 opacity-0 cursor-pointer"
-                    onChange={(e) => handelAvatarChange(e)}
+                    onChange={(e) => {
+                      e.preventDefault();
+                      setShowProfileImage(false);
+                    }}
                   />
                 </button>
               ) : (
@@ -278,7 +294,7 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
                       There Is No Photos
                     </div>
                   )}
-                  <ProfileImageFullView
+                  <ProfilePhotosFullView
                     photos={photos}
                     setShowImage={setShowImage}
                     showImage={showImage}
@@ -319,6 +335,11 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
             </Tab.Panels>
           </Tab.Group>
         </div>
+        <ProfileImageFullView
+          show={showProfileImage}
+          setShowImage={setShowProfileImage}
+          image={profileImage}
+        />
       </div>
     </>
   );

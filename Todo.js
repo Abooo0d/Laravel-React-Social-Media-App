@@ -7,11 +7,20 @@
 // Set A Loading When Sending Invitation To Group
 
 /************** TOday *************/
-// Get The ChatCard Data From The Chat  Messages Not From The Chat Fields
-// Format The ChatCard Data Correctly
+// show thee error message in the login pages
+// update All The Pages And The Requests To Show The Success Message And Error Messages
 /************** Working On *************/
 
+// http://192.168.1.107:8000/
+
 /************** Done *************/
+// Fix THe message When Sent To Group To Not Show The Check
+// update The Notification To Take A Generic Link To Store
+// fix the design in the chats bar
+// Update The Athenticated Layout Tfor The Pulic View
+// make the message desapera when Reloading
+// Format The ChatCard Data Correctly
+// Get The ChatCard Data From The Chat  Messages Not From The Chat Fields
 // FIx The Z-Index in All OverLays
 // Get The LastMessage From The Chat It Self Not From The LastMessageField
 // fix the Notification To Take The Image From The data base And Not To Save The Image In The Notifications Table

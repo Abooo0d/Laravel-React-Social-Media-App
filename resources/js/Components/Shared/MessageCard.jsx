@@ -11,7 +11,7 @@ import { useChatsContext } from "@/Contexts/ChatsContext";
 
 const MessageCard = ({ message }) => {
   const { user } = useUserContext();
-  const { setCurrentChat } = useChatsContext();
+  const { setCurrentChat, currentChat } = useChatsContext();
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [newMessage, setNewMessage] = useState(message?.body);
   const textareaRef = useRef();
@@ -113,14 +113,19 @@ const MessageCard = ({ message }) => {
             <span className="text-gray-400 text-[8px]">
               {message.created_at}
             </span>
-            {message?.is_read != "group" && (
+            {!currentChat.is_group && (
               <>
-                {message.user.id == user.id && (
-                  <IoCheckmarkDoneSharp
-                    className={`${message.user.id != user.id && "hidden"} ${
-                      !!message?.is_read ? "text-blue-500" : "text-gray-600"
-                    }`}
-                  />
+                {" "}
+                {message?.is_read != "group" && (
+                  <>
+                    {message.user.id == user.id && (
+                      <IoCheckmarkDoneSharp
+                        className={`${message.user.id != user.id && "hidden"} ${
+                          !!message?.is_read ? "text-blue-500" : "text-gray-600"
+                        }`}
+                      />
+                    )}
+                  </>
                 )}
               </>
             )}
