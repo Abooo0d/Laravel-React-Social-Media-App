@@ -6,19 +6,11 @@ import { useChatsContext } from "@/Contexts/ChatsContext";
 
 const MessageMenu = ({ message, setShowUpdateForm }) => {
   const [showMenu, setShowMenu] = useState(false);
-  const { currentChat, setCurrentChat } = useChatsContext();
-  const updateMessage = () => {
-    // axiosClient.post(route('chat.updateMessage',message.id),{body:})
-  };
   const deleteMessage = () => {
     if (window.confirm("Are You Sure You Want To Delete The Message?")) {
       axiosClient
         .delete(route("chat.deleteMessage", message.id))
         .then(() => {
-          // setCurrentChat((prev) => ({
-          //   ...prev,
-          //   messages: prev.messages.filter((me) => me.id != message.id),
-          // }));
           setShowMenu(false);
         })
         .catch((err) => {

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
   use HasFactory;
-  protected $fillable = ['body', 'chat_id', 'user_id'];
+  protected $fillable = ['body', 'chat_id', 'user_id', 'edited', 'deleted'];
   public function status()
   {
     return $this->hasOne(MessageStatus::class)

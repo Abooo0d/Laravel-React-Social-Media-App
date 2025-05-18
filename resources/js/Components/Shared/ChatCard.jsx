@@ -9,9 +9,9 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
   const [chatData, setChatData] = useState(chat);
   const [unreadCount, setUnreadCount] = useState(0);
   const [online, setOnline] = useState(
-    !!onlineUsersIds.includes(chatData.user_id)
+    !!onlineUsersIds.includes(chatData?.user_id)
   );
-  const [isGroup, setIsGroup] = useState(chatData.is_group);
+  const [isGroup, setIsGroup] = useState(chatData?.is_group);
   const getChat = () => {
     setChatData((prev) => ({
       ...prev,
@@ -45,15 +45,16 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
   };
 
   useEffect(() => {
-    setOnline(onlineUsersIds.includes(chatData.user_id));
+    setOnline(onlineUsersIds.includes(chatData?.user_id));
   }, [onlineUsersIds]);
 
   useEffect(() => {
-    setChatData(chat);
+    !!chat && setChatData(chat);
+    // setChatData(chat);
   }, [chat]);
 
   useEffect(() => {
-    setOnline(!!onlineUsersIds.includes(chatData.user_id));
+    setOnline(!!onlineUsersIds.includes(chatData?.user_id));
   }, [chatData]);
   useEffect(() => {
     let unread = 0;
@@ -73,7 +74,7 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
     >
       <div className="relative">
         <img
-          src={chatData.avatar_url}
+          src={chatData?.avatar_url}
           alt="user"
           className="w-[40px] h-[40px] rounded-full"
         />

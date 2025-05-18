@@ -34,11 +34,14 @@ const MessageCard = ({ message }) => {
       axiosClient
         .post(route("chat.updateMessage", message.id), { body: newMessage })
         .then(() => {
+          let mes = currentChat.messages;
+          let newMes = mes.map((m) =>
+            m.id !== message.id ? m : { ...m, body: newMessage, edited: true }
+          );
+          console.log(newMes);
           setCurrentChat((prev) => ({
             ...prev,
-            messages: prev.messages.map((m) =>
-              m.id != message.id ? m : { ...m, body: newMessage }
-            ),
+            messages: newMes,
           }));
           setShowUpdateForm(false);
         })
@@ -96,7 +99,6 @@ const MessageCard = ({ message }) => {
               <button
                 className="w-8 h-8 rounded-md flex justify-center items-center bg-red-500/40 hover:bg-red-500/80 border-[1px] duration-200 border-solid border-red-500 text-gray-300"
                 onClick={() => {
-                  // setNewMessage(message.body)
                   setShowUpdateForm(false);
                 }}
               >
@@ -115,7 +117,6 @@ const MessageCard = ({ message }) => {
             </span>
             {!currentChat.is_group && (
               <>
-                {" "}
                 {message?.is_read != "group" && (
                   <>
                     {message.user.id == user.id && (
@@ -129,6 +130,7 @@ const MessageCard = ({ message }) => {
                 )}
               </>
             )}
+            {message.edited && <span className="text-[10px]">edited</span>}
           </div>
           <div
             className={`absolute bottom-0 ${
@@ -138,20 +140,12 @@ const MessageCard = ({ message }) => {
             }`}
           />
         </div>
-
         <img
           src={message.user.avatar_url}
           className="w-[30px] h-[30px] rounded-full mt-auto"
         />
       </div>
       <span className="text-xs text-gray-500 opacity-50">Delivered</span>
-      {/* <AttachmentFullView
-        attachments={message?.attachments}
-        show={showAttachmentView}
-        setShow={setShowAttachmentView}
-        index={attachmentIndex}
-        setIndex={setAttachmentIndex}
-      /> */}
     </div>
   );
 };

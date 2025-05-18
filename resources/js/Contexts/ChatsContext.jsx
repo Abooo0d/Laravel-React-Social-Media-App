@@ -52,7 +52,7 @@ export const ChatsContext = ({ children }) => {
     setCombinedChats((prevChats) => {
       // Update the chat if it exists
       const updatedChats = prevChats.map((chat) =>
-        chat.id === currentChat.id ? currentChat : chat
+        chat?.id === currentChat.id ? currentChat : chat
       );
       // Sort chats: groups first, then private chats, both by last_message_id
       return updatedChats.sort((a, b) => {

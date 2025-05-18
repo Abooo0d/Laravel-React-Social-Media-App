@@ -125,7 +125,7 @@ const ChatsBar = ({ setIsLoading }) => {
             <FaPlus />
           </button>
         </div>
-        <div className="flex-1 overflow-auto flex justify-center items-start">
+        <div className="flex-1 overflow-auto flex justify-start items-start">
           {loading ? (
             <div className="w-full h-fit flex justify-center items-center py-4">
               <Spinner />

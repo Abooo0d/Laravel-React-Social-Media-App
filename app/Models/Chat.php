@@ -17,6 +17,7 @@ class Chat extends Model
   public function messages()
   {
     return $this->hasMany(Message::class)
+      ->where('deleted', '0')
       ->orderBy('created_at', 'desc')
       ->limit(20);
   }

@@ -113,6 +113,7 @@ const ChatInfoForm = () => {
             </div>
           )}
         </div>
+        s
         <div className="flex justify-center items-center gap-4 w-full pb-4">
           {currentChat?.is_group ? (
             <button className="bg-red-500/30 border-[1px] border-solid border-red-500 px-4 py-2 text-gray-200 rounded-md w-[150px] hover:bg-red-500/50 duration-200">

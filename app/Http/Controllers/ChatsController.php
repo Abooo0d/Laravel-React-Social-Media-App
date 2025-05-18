@@ -8,7 +8,6 @@ use App\Events\NewMessageSent;
 use App\Http\Requests\CreateChatGroupRequest;
 use App\Http\Requests\NewMessageRequest;
 use App\Http\Requests\SearchForChatRequest;
-use App\Http\Requests\SearchUserRequest;
 use App\Http\Requests\UpdateMessageRequest;
 use App\Http\Resources\ChatResource;
 use App\Http\Resources\MessageResource;
@@ -187,19 +186,17 @@ class ChatsController extends Controller
   public function UpdateMessage(UpdateMessageRequest $request, Message $message)
   {
     $data = $request->validated();
-    $message->update(['body' => $data['body']]);
-
+    $message->update(['body' => $data['body'], 'edited' => true]);
     broadcast(new MessageUpdated($message));
     return response(['message' => 'Message Updated Successfully']);
   }
   public function deleteMessage(Message $message)
   {
-    dd('Abood');
     $userId = Auth::id();
     if ($userId != $message->user_id) {
       return response(['message' => 'You Don`t have Permission To Delete This Post']);
     }
-    $message->delete();
+    $message->update(['deleted' => true]);
     $attachments = $message->attachments;
     foreach ($attachments as $attachment) {
       Storage::disk('public')->delete($attachment->path);
