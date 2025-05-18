@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 
 const ChatInfo = () => {
-  const { currentChat } = useChatsContext();
+  const { currentChat, setShowChatInfo } = useChatsContext();
   const { onlineUsersIds } = useChatsContext();
   const { user } = useUserContext();
   const [online, setOnline] = useState();
@@ -27,7 +27,10 @@ const ChatInfo = () => {
     setOnline(onlineUsersIds.includes(currentChat.user_id));
   }, [onlineUsersIds]);
   return (
-    <div className="w-full bg-gray-900 z-[50] py-2 px-8 gap-4 border-b-solid border-b-[1px] border-gray-600/50 backdrop-blur-md cursor-pointer flex justify-between items-center">
+    <div
+      className="w-full bg-gray-900 z-[50] py-2 px-8 gap-4 border-b-solid border-b-[1px] border-gray-600/50 backdrop-blur-md cursor-pointer flex justify-between items-center"
+      onClick={() => setShowChatInfo(true)}
+    >
       <div className="flex justify-start items-center gap-4">
         <div className="relative ">
           <img

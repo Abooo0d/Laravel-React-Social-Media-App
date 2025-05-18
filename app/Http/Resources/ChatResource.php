@@ -15,10 +15,15 @@ class ChatResource extends JsonResource
    */
   public function toArray(Request $request): array
   {
+    // dd($this);
     $user_id = !(bool) $this->is_group ? $this->users()->where(function ($q) {
       $q->where('user_id', '!=', auth()->id());
     })->first()->id : null;
     $image = '';
+    $data = '';
+    if (!(bool) $this->is_group) {
+      $data = $this->users->firstWhere('id', '!=', auth()->id())->first();
+    }
     if ((bool) $this->is_group) {
       $image = $this->avatar_path
         ? Storage::url($this->avatar_path)
@@ -47,8 +52,9 @@ class ChatResource extends JsonResource
         targetUserId: $user_id,
         isGroup: !!$this->is_group
       ),
-      'created_at' => $this->created_at,
-      'updated_at' => $this->updated_at,
+      'created_at' => $this->created_at?->format('Y-m-d'),
+      'updated_at' => $this->updated_at?->format('Y-m-d'),
+      'data' => !$this->is_group ? new UserResource($data) : ''
       // 'last_message' => $this->last_message,
       // 'last_message_id' => $this->last_message_id,
       // 'last_message_date' => $this->last_message_date,

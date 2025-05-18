@@ -1,6 +1,7 @@
 import ChatsBar from "@/Components/Containers/ChatsBar";
 import MessagesContainer from "@/Components/Containers/MessagesContainer";
 import AttachmentFullView from "@/Components/Shared/AttachmentFullView";
+import ChatInfoForm from "@/Components/Shared/ChatInfoForm";
 import { useChatsContext } from "@/Contexts/ChatsContext";
 import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";
@@ -56,6 +57,7 @@ function Chats({ auth, groupsChat, allChats }) {
         <MessagesContainer isLoading={isLoading} />
         <ChatsBar setIsLoading={setIsLoading} />
         <AttachmentFullView />
+        <ChatInfoForm />
       </div>
     </>
   );

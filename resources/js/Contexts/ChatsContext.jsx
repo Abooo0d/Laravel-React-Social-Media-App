@@ -20,6 +20,8 @@ const INITIAL_DATA = {
   setAttachmentIndex: () => {},
   showAttachmentFullView: false,
   setShowAttachmentFullView: () => {},
+  showChatInfo: false,
+  setShowChatInfo: () => {},
 };
 const Context = createContext(INITIAL_DATA);
 export const ChatsContext = ({ children }) => {
@@ -32,6 +34,7 @@ export const ChatsContext = ({ children }) => {
   const [message, setMessage] = useState({});
   const [attachmentIndex, setAttachmentIndex] = useState(0);
   const [showAttachmentFullView, setShowAttachmentFullView] = useState(false);
+  const [showChatInfo, setShowChatInfo] = useState(false);
 
   useEffect(() => {
     let array = onlineUsers.map((user) => user.id);
@@ -186,6 +189,8 @@ export const ChatsContext = ({ children }) => {
         setShowAttachmentFullView,
         attachmentIndex,
         setAttachmentIndex,
+        showChatInfo,
+        setShowChatInfo,
       }}
     >
       {children}
