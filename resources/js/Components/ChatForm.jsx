@@ -111,7 +111,7 @@ const ChatForm = () => {
         attachments={chosenFiles}
         setAttachments={setChosenFiles}
       />
-      <div className=" relative flex justify-between items-center w-full bg-gray-700 rounded-md max-sm:h-[60px] px-2">
+      <div className=" relative flex justify-between items-center w-full bg-gray-700 rounded-md max-sm:h-[50px] px-2">
         <div
           className={`absolute -top-[320px] left-0 duration-200 ${
             openEmoji ? "opacity-100 visible z-10" : " opacity-0 invisible z-0"

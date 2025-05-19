@@ -115,6 +115,7 @@ const MessageCard = ({ message }) => {
             <span className="text-gray-400 text-[8px]">
               {message.created_at}
             </span>
+            {message.edited && <span className="text-[10px]">edited</span>}
             {!currentChat.is_group && (
               <>
                 {message?.is_read != "group" && (
@@ -130,7 +131,6 @@ const MessageCard = ({ message }) => {
                 )}
               </>
             )}
-            {message.edited && <span className="text-[10px]">edited</span>}
           </div>
           <div
             className={`absolute bottom-0 ${

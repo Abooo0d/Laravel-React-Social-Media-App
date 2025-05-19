@@ -3,9 +3,11 @@ import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";
 import React, { useEffect, useState } from "react";
 import { HiDotsVertical } from "react-icons/hi";
+import ChatInfoMenu from "./ChatInfoMenu";
 
 const ChatInfo = () => {
   const { currentChat, setShowChatInfo } = useChatsContext();
+
   const { onlineUsersIds } = useChatsContext();
   const { user } = useUserContext();
   const [online, setOnline] = useState();
@@ -27,11 +29,14 @@ const ChatInfo = () => {
     setOnline(onlineUsersIds.includes(currentChat.user_id));
   }, [onlineUsersIds]);
   return (
-    <div
-      className="w-full bg-gray-900 z-[50] py-2 px-8 gap-4 border-b-solid border-b-[1px] border-gray-600/50 backdrop-blur-md cursor-pointer flex justify-between items-center"
-      onClick={() => setShowChatInfo(true)}
-    >
-      <div className="flex justify-start items-center gap-4">
+    <div className="w-full bg-gray-900 z-[50] py-2 px-8 gap-4 border-b-solid border-b-[1px] border-gray-600/50 backdrop-blur-md cursor-pointer flex justify-between items-center">
+      <div
+        className="flex justify-start items-center gap-4 flex-1 hover:bg-gray-800/50 duration-200 rounded-md px-2"
+        onClick={(e) => {
+          setShowChatInfo(true);
+          console.log(e.target);
+        }}
+      >
         <div className="relative ">
           <img
             src={currentChat?.avatar_url}
@@ -46,15 +51,12 @@ const ChatInfo = () => {
           <h2 className="text-gray-400 text-xl cursor-default">
             {currentChat?.name}
           </h2>
-          <div className="text-gray-500 text-sm">{showUsers()}</div>
+          <div className="text-gray-500 text-sm">
+            {currentChat.is_group ? showUsers() : currentChat?.data?.email}
+          </div>
         </div>
       </div>
-      <div
-        className=" text-gray-400 w-8 h-8 flex justify-center items-center cursor-pointer duration-200 hover:bg-white/5 rounded-md"
-        // onClick={() => setShowMenu(!showMenu)}
-      >
-        <HiDotsVertical className="w-5 h-5" />
-      </div>
+      <ChatInfoMenu swtShowChatInfo={setShowChatInfo} />
     </div>
   );
 };

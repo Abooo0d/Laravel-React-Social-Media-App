@@ -6,6 +6,9 @@ import { HiMiniXMark } from "react-icons/hi2";
 import { useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "@inertiajs/react";
+import { TbLock } from "react-icons/tb";
+import { MdLogout } from "react-icons/md";
+import { IoVolumeMute } from "react-icons/io5";
 
 const ChatInfoForm = () => {
   const { currentChat, showChatInfo, setShowChatInfo } = useChatsContext();
@@ -41,7 +44,7 @@ const ChatInfoForm = () => {
           </h2>
           {currentChat?.is_group ? (
             <h2 className="w-fit text-gray-500 text-lg p-0 m-0">
-              Group {currentChat?.users.length} members
+              Group: {currentChat?.users.length} members
             </h2>
           ) : (
             <h2 className="w-fit text-gray-500 text-lg p-0 m-0">
@@ -113,17 +116,20 @@ const ChatInfoForm = () => {
             </div>
           )}
         </div>
-        s
         <div className="flex justify-center items-center gap-4 w-full pb-4">
           {currentChat?.is_group ? (
-            <button className="bg-red-500/30 border-[1px] border-solid border-red-500 px-4 py-2 text-gray-200 rounded-md w-[150px] hover:bg-red-500/50 duration-200">
+            <button className="bg-red-500/30 border-[1px] border-solid border-red-500 px-4 py-2 text-gray-200 rounded-md w-[120px] hover:bg-red-500/50 duration-200 flex justify-center items-center gap-4">
               Leave
+              <MdLogout className="w-4 h-4" />
             </button>
           ) : (
-            <button className="bg-red-500/30 border-[1px] border-solid border-red-500 px-4 py-2 text-gray-200 rounded-md w-[150px] hover:bg-red-500/50 duration-200">
-              Block
+            <button className="bg-red-500/30 border-[1px] border-solid border-red-500 px-4 py-2 text-gray-200 rounded-md w-[120px] hover:bg-red-500/50 duration-200 flex justify-center items-center gap-4">
+              Block <TbLock className="w-4 h-4" />
             </button>
           )}
+          <button className="bg-red-500/30 border-[1px] border-solid border-red-500 px-4 py-2 text-gray-200 rounded-md w-[120px] hover:bg-red-500/50 duration-200 flex justify-center items-center gap-4">
+            Mute <IoVolumeMute className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </div>

@@ -7,13 +7,18 @@
 // Set A Loading When Sending Invitation To Group
 
 /************** TOday *************/
-// Add THe Download Button To The Profile Image Full View
+// Implementing The Block  And Un Block For User
+// Implementing The Leave And Group
+// / Implementing The  Mute For User And Group
+// Implementing Deleting The Group
+// Adding Permeations  Fo The Group
+// ALlowing The Change The Data Of THe Group For Admins Only
+// SHowing The Attachments For The Chat In The Chat Info
 
 /************** Working On *************/
 
-// http://192.168.1.107:8000/
-
 /************** Done *************/
+// Add THe Download Button To The Profile Image Full View
 // show thee error message in the login pages
 // Fix The Add Friend  Button In The Profile View
 // update All The Pages And The Requests To Show The Success Message And Error Messages

@@ -22,7 +22,7 @@ class ChatResource extends JsonResource
     $image = '';
     $data = '';
     if (!(bool) $this->is_group) {
-      $data = $this->users->firstWhere('id', '!=', auth()->id())->first();
+      $data = $this->users->firstWhere('id', '!=', auth()->id());
     }
     if ((bool) $this->is_group) {
       $image = $this->avatar_path
