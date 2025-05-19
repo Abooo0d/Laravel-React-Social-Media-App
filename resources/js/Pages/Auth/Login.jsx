@@ -9,16 +9,18 @@ import { useUserContext } from "@/Contexts/UserContext";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { Switch } from "@headlessui/react";
 import { PrimaryButton } from "@/Components/Shared/Buttons";
+import { useMainContext } from "@/Contexts/MainContext";
 export default function Login({ status, canResetPassword }) {
   const { setUser } = useUserContext();
   const [hidePassword, setHidePassword] = useState(true);
-  const { data, setData, post, processing, errors, reset } = useForm({
+  const { setErrors } = useMainContext();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { data, setData, post, errors, reset } = useForm({
     email: "",
     password: "",
     remember: true,
   });
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   useEffect(() => {
     setUser({});
     return () => {
@@ -28,7 +30,11 @@ export default function Login({ status, canResetPassword }) {
 
   const submit = (e) => {
     e.preventDefault();
-    post(route("login"));
+    post(route("login"), {
+      onError: (error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
+      },
+    });
   };
 
   useEffect(() => {
@@ -38,15 +44,12 @@ export default function Login({ status, canResetPassword }) {
   return (
     <GuestLayout>
       <Head title="Log in" />
-
       {status && (
         <div className="mb-4 font-medium text-sm text-green-600">{status}</div>
       )}
-
       <form onSubmit={submit}>
         <div>
           <InputLabel htmlFor="email" value="Email" />
-
           <TextInput
             id="email"
             type="email"

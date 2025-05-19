@@ -75,7 +75,6 @@ export default function UpdatePostForm({
           setShowForm(false);
         })
         .catch((err) => {
-          console.log(err);
           setAttachmentsErrors([]);
           for (const key in e) {
             setAttachmentsErrors((prevErrors) => [

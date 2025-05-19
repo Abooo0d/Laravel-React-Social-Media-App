@@ -35,6 +35,8 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
   const { setUser } = useUserContext();
   const [showProfileImage, setShowProfileImage] = useState(false);
   const [profileImage, setProfileImage] = useState("");
+  const [imageType, setImageType] = useState("cover");
+
   const {
     data: posts,
     refetch,
@@ -98,6 +100,9 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
       onSuccess: () => {
         refetch();
       },
+      onError: (error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
+      },
       preserveScroll: true,
     });
     setIsTheAvatarChanged(false);
@@ -130,6 +135,9 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
       onSuccess: () => {
         refetch();
       },
+      onError: (error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
+      },
       preserveScroll: true,
     });
     setIsTheCoverChanged(false);
@@ -145,6 +153,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
       })
       .catch((e) => {
         console.log(e);
+        setErrors([e?.response?.data?.message || "Some Thing Went Wrong"]);
       });
   }
   return (
@@ -172,6 +181,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
               onClick={() => {
                 setProfileImage(groupData.cover_url);
                 setShowProfileImage(true);
+                setImageType("cover");
               }}
             />
             {isAdmin && (
@@ -220,6 +230,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
               onClick={(e) => {
                 setProfileImage(groupData.thumbnail_url);
                 setShowProfileImage(true);
+                setImageType("thumbnail");
               }}
             />
             {isAdmin && (
@@ -319,7 +330,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
                         classes="bg-homeFeed px-3 py-3"
                         refetch={refetch}
                       />
-                    )}{" "}
+                    )}
                   </PostContainer>
                 </div>
               </Tab.Panel>
@@ -407,6 +418,10 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
         show={showProfileImage}
         setShowImage={setShowProfileImage}
         image={profileImage}
+        downloadUrl={route("download.groupImage", {
+          group: group.id,
+          type: imageType,
+        })}
       />
     </>
   );

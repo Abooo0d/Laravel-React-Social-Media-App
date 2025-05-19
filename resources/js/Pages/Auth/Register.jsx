@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import GuestLayout from "@/Layouts/GuestLayout";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
-// import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { PrimaryButton } from "@/Components/Shared/Buttons";
+import { useMainContext } from "@/Contexts/MainContext";
 
 export default function Register() {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -21,6 +21,7 @@ export default function Register() {
   const [conformation, setConformation] = useState("");
   const [hidePassword, setHidePassword] = useState(true);
   const [hideConfirm, setHideConfirm] = useState(true);
+  const { setErrors } = useMainContext();
   useEffect(() => {
     return () => {
       reset("password", "password_confirmation");
@@ -36,7 +37,11 @@ export default function Register() {
   }, [name, email, password, conformation]);
   const submit = (e) => {
     e.preventDefault();
-    post(route("register"));
+    post(route("register"), {
+      onError: (error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
+      },
+    });
   };
   return (
     <GuestLayout>

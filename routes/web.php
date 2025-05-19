@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
   Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
   Route::get('profile/posts/{user:id}', [ProfileController::class, 'getPostsForUser'])->name('postsForUser');
+  Route::get('/profile/download/{user:id}/{type}', [ProfileController::class, 'downloadImage'])->name('download.userImage');
 });
 // Post Group
 Route::middleware('auth')->group(function () {
@@ -72,6 +73,8 @@ Route::middleware('auth')->group(function () {
   Route::put('/group/{group:slug}', [GroupController::class, 'update'])->name('group.update');
   Route::get('/group/getPosts/{group:id}', [GroupController::class, 'getPostsForGroup'])->name('postsForGroup');
   Route::post('/group/search', [GrouPController::class, 'searchForGroups'])->name('group.searchForGroup');
+  Route::get('/group/download/{group:id}/{type}', [GroupController::class, 'downloadImage'])->name('download.groupImage');
+
 });
 Route::middleware('auth')->group(function () {
   Route::post('/user/search', [UserController::class, 'searchForUser'])->name('user.searchForUser');

@@ -405,4 +405,17 @@ class GroupController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
+  public function downloadImage(Request $request, Group $group)
+  {
+    try {
+      $image = $request->type === 'cover' ? $group->cover_path : $group->thumbnail_path;
+      if (!$image || !Storage::disk('public')->exists($image)) {
+        return response(['error' => 'Image not found.'], 404);
+      }
+      $filePath = Storage::disk('public')->path($image);
+      return response()->download($filePath, basename($image));
+    } catch (e) {
+      return redirect()->back()->with('error', 'Something went wrong while downloading the image.');
+    }
+  }
 }

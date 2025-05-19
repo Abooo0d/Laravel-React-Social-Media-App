@@ -34,6 +34,7 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
   const [showImage, setShowImage] = useState(false);
   const [showProfileImage, setShowProfileImage] = useState(false);
   const [profileImage, setProfileImage] = useState("");
+  const [imageType, setImageType] = useState("cover");
   const {
     data: posts,
     refetch,
@@ -89,11 +90,16 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
         onSuccess: () => {
           refetch();
         },
+        onError: (error) => {
+          setErrors([
+            error?.response?.data?.message || "Some Thing Went Wrong",
+          ]);
+        },
         preserveScroll: true,
       });
       setIsTheAvatarChanged(false);
     } catch (error) {
-      console.log(error);
+      setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
     }
   };
   const handelCoverChange = (e) => {
@@ -125,12 +131,20 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
         onSuccess: () => {
           refetch();
         },
+        onError: (error) => {
+          setErrors([
+            error?.response?.data?.message || "Some Thing Went Wrong",
+          ]);
+        },
         preserveScroll: true,
       });
       setIsTheCoverChanged(false);
     } catch (error) {
-      console.log(error);
+      setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
     }
+  };
+  const setDownloadLink = () => {
+    return route("download.userImage", { user: auth.user.id, type: imageType });
   };
   return (
     <>
@@ -145,6 +159,7 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
       </Head>
       <div className="container mx-auto ">
         <div className="max-h-[350px] w-full relative">
+          s
           <div className="relative max-h-[350px] w-full group">
             <img
               src={
@@ -157,6 +172,7 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
               onClick={() => {
                 setProfileImage(user.cover_url);
                 setShowProfileImage(true);
+                setImageType("cover");
               }}
             />
             {!isTheCoverChanged ? (
@@ -200,8 +216,9 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
               }
               alt="AvatarImage"
               className=" rounded-full w-full h-full object-cover cursor-pointer"
-              onClick={(e) => {
+              onClick={() => {
                 setProfileImage(user.avatar_url);
+                setImageType("avatar");
                 setShowProfileImage(true);
               }}
             />
@@ -214,8 +231,7 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
                     name="cover_image"
                     className="absolute top-0 left-0 bottom-0 right-0 opacity-0 cursor-pointer"
                     onChange={(e) => {
-                      e.preventDefault();
-                      setShowProfileImage(false);
+                      handelAvatarChange(e);
                     }}
                   />
                 </button>
@@ -339,6 +355,10 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
           show={showProfileImage}
           setShowImage={setShowProfileImage}
           image={profileImage}
+          downloadUrl={route("download.userImage", {
+            user: auth.user.id,
+            type: imageType,
+          })}
         />
       </div>
     </>

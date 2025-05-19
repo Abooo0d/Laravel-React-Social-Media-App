@@ -5,9 +5,11 @@ import { SecondaryButton } from "./Buttons";
 import { BiSolidSend } from "react-icons/bi";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import { useUserContext } from "@/Contexts/UserContext";
+import { useMainContext } from "@/Contexts/MainContext";
 
 const SubCommentsSection = ({ show, comments, post, comment, setComment }) => {
   const { user } = useUserContext();
+  const { setSuccessMessage, setErrors } = useMainContext();
   const [newComment, setNewComment] = useState("");
   const createComment = () => {
     axiosClient
@@ -22,7 +24,10 @@ const SubCommentsSection = ({ show, comments, post, comment, setComment }) => {
           num_of_comments: prevComment.num_of_comments + 1,
         }));
         setNewComment("");
-        // setSuccessMessage("Comment Posted Successfully");
+        setSuccessMessage("Comment Posted Successfully");
+      })
+      .catch((error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
       });
   };
   return (

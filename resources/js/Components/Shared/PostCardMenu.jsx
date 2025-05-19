@@ -17,7 +17,7 @@ const PostCardMenu = ({
   refetch,
 }) => {
   const [showForm, setShowForm] = useState(false);
-  const { setSuccessMessage } = useMainContext();
+  const { setSuccessMessage, setErrors } = useMainContext();
   const showUpdate = () => {
     return post.user.id === currentUser?.id ? true : false;
   };
@@ -37,13 +37,17 @@ const PostCardMenu = ({
           setSuccessMessage("Post Deleted Successfully");
           refetch();
         },
+        onError: (error) => {
+          setErrors([
+            error?.response?.data?.message || "Some Thing Went Wrong",
+          ]);
+        },
       });
     }
   };
   const copyToClipBoard = () => {
     console.log(route("post.publicView", post));
     navigator.clipboard.writeText(route("post.publicView", post));
-    // navigator.clipboard.writeText(route("post.publicView", post));
   };
   return (
     <>

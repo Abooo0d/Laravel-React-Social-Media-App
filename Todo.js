@@ -7,13 +7,30 @@
 // Set A Loading When Sending Invitation To Group
 
 /************** TOday *************/
-// show thee error message in the login pages
-// update All The Pages And The Requests To Show The Success Message And Error Messages
+// Add THe Download Button To The Profile Image Full View
+
 /************** Working On *************/
 
 // http://192.168.1.107:8000/
 
 /************** Done *************/
+// show thee error message in the login pages
+// Fix The Add Friend  Button In The Profile View
+// update All The Pages And The Requests To Show The Success Message And Error Messages
+// create Post  [d]
+// Update pOst  [d]
+// Delete Post  [d]
+// Ai Post  [d]
+// post Reactions [d]
+// Post Comment [d]
+// COmment Reaction [d]
+// Update Comment [d]
+// Delete Comment  [d]
+//Download Attachment [d]
+//  Home  [d]
+// Group View [d]
+// profile View [d]
+// My Profile View [d]
 // Fix THe message When Sent To Group To Not Show The Check
 // update The Notification To Take A Generic Link To Store
 // fix the design in the chats bar

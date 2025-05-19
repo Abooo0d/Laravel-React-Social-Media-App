@@ -13,10 +13,17 @@ const PostContainer = ({ posts, classes, children, isLoading, refetch }) => {
   const { user } = useUserContext();
   useEffect(() => {
     if (inView && allData?.meta?.current_page < allData?.meta?.last_page) {
-      axiosClient.get(allData.links.next).then(({ data }) => {
-        setAllPosts((prevPosts) => [...prevPosts, ...data?.posts?.data]);
-        setAllData(data?.posts);
-      });
+      axiosClient
+        .get(allData.links.next)
+        .then(({ data }) => {
+          setAllPosts((prevPosts) => [...prevPosts, ...data?.posts?.data]);
+          setAllData(data?.posts);
+        })
+        .catch((error) => {
+          setErrors([
+            error?.response?.data?.message || "Some Thing Went Wrong",
+          ]);
+        });
     }
   }, [inView]);
   useEffect(() => {

@@ -17,6 +17,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -143,7 +144,6 @@ class ProfileController extends Controller
       $request->session()->regenerateToken();
 
       return Redirect::to('/');
-
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
@@ -204,6 +204,21 @@ class ProfileController extends Controller
       return redirect()->back()->with('success', $message);
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function downloadImage(Request $request, User $user)
+  {
+    try {
+      $image = $request->type === 'cover' ? $user->cover_path : $user->avatar_path;
+
+      if (!$image || !Storage::disk('public')->exists($image)) {
+        return back()->with('error', 'Image not found.');
+      }
+
+      $filePath = Storage::disk('public')->path($image);
+      return response()->download($filePath, basename($image));
+    } catch (\Exception $e) {
+      return back()->with('error', 'Something went wrong while downloading the image.');
     }
   }
 }

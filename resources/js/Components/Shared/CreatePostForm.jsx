@@ -67,7 +67,6 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
             setSuccessMessage(data?.data?.success);
           })
           .catch((err) => {
-            console.log(err);
             setErrors([
               err?.response?.data?.message || "Some Thing Went Wrong",
             ]);
@@ -134,11 +133,13 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
           setLoadingAi(false);
         })
         .catch((error) => {
-          console.log(error);
+          setErrors([
+            error?.response?.data?.message || "Some Thing Went Wrong",
+          ]);
           setLoadingAi(false);
         });
     } catch (error) {
-      console.log(error);
+      setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
       setLoadingAi(false);
     }
   };

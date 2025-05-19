@@ -14,7 +14,7 @@ const SubCommentCard = ({ comment, setMainComment }) => {
   const [currentComment, setCurrentComment] = useState(comment);
   const [showMenu, setShowMenu] = useState(false);
   const { user } = useUserContext();
-  const { setSuccessMessage } = useMainContext();
+  const { setSuccessMessage, setErrors } = useMainContext();
   const [editingComment, setEditingComment] = useState({
     ...currentComment,
     comment: currentComment.comment.replace(/<br\s*\/?>/gi, "\n"),
@@ -28,15 +28,11 @@ const SubCommentCard = ({ comment, setMainComment }) => {
         setShowMenu(false);
         setEditing(false);
         setCurrentComment(data.data);
-        // setPost((prevPost) => ({
-        //   ...prevPost,
-        //   comments: prevPost.comments.map((com, index) => {
-        //     if (com.id !== data.data.id) return com;
-        //     else return data.data;
-        //   }),
-        // }));
         setEditingComment(data.data);
         setSuccessMessage("Comment Updated Successfully");
+      })
+      .catch((error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
       });
   };
   const sendCommentReaction = () => {
@@ -50,6 +46,9 @@ const SubCommentCard = ({ comment, setMainComment }) => {
           user_has_reactions: data.user_has_reactions,
           num_of_reactions: data.num_of_reactions,
         }));
+      })
+      .catch((error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
       });
   };
   return (

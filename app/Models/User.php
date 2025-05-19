@@ -102,8 +102,7 @@ class User extends Authenticatable
   }
   public function isFriend($user_id)
   {
-    return Friends
-      ::where('user_id', $user_id)
+    return Friends::where('user_id', $user_id)
       ->where('friend_id', Auth::id())
       ->orWhere('user_id', Auth::id())
       ->Where('friend_id', $user_id)

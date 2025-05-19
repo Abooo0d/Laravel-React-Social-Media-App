@@ -14,6 +14,8 @@ import ProfilePhotosFullView from "@/Components/Shared/ProfilePhotosFullView";
 import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
 
 const View = ({ auth, user, posts, isFriend, photos }) => {
+  console.log(isFriend);
+
   const [imageIndex, setImageIndex] = useState(0);
   const [showImage, setShowImage] = useState(false);
   const { setSuccessMessage, setErrors } = useMainContext();
@@ -21,6 +23,8 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
   const { flash } = usePage().props;
   const [showProfileImage, setShowProfileImage] = useState(false);
   const [profileImage, setProfileImage] = useState("");
+  const [imageType, setImageType] = useState("cover");
+
   const { post } = useForm({
     type: "add",
   });
@@ -39,7 +43,11 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
   }, [flash]);
 
   const addFriend = () => {
-    post(route("user.addFriend", user.id));
+    post(route("user.addFriend", user.id), {
+      onError: (error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
+      },
+    });
   };
 
   return (
@@ -62,6 +70,7 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
             onClick={() => {
               setProfileImage(user.cover_url);
               setShowProfileImage(true);
+              setImageType("cover");
             }}
           />
           <div className="absolute lg:w-[200px] lg:h-[200px] md:w-[160px] md:h-[160px] w-[100px] h-[100px] md:-bottom-[50px] md:left-20 left-4 -bottom-[40px] group overflow-hidden">
@@ -72,6 +81,7 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
               onClick={(e) => {
                 setProfileImage(user.avatar_url);
                 setShowProfileImage(true);
+                setImageType("avatar");
               }}
             />
           </div>
@@ -158,6 +168,10 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
           show={showProfileImage}
           setShowImage={setShowProfileImage}
           image={profileImage}
+          downloadUrl={route("download.userImage", {
+            user: auth.user.id,
+            type: imageType,
+          })}
         />
       </div>
     </>

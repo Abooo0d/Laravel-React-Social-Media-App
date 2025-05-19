@@ -2,7 +2,9 @@ import axiosClient from "@/AxiosClient/AxiosClient";
 import React from "react";
 import { FaRegCommentDots } from "react-icons/fa";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
+import { useMainContext } from "@/Contexts/MainContext";
 const PostCardPostActions = ({ post, setPost, setShowCommentSection }) => {
+  const { setErrors } = useMainContext();
   const sendReaction = () => {
     axiosClient
       .post(route("post.reaction", post), {
@@ -14,6 +16,9 @@ const PostCardPostActions = ({ post, setPost, setShowCommentSection }) => {
           user_has_reaction: data.user_has_reaction,
           num_of_reactions: data.num_of_reactions,
         });
+      })
+      .catch((error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
       });
   };
   return (

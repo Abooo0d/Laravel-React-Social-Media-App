@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
-import UpdatePostForm from "./UpdatePostForm";
-import { router } from "@inertiajs/react";
 import { useMainContext } from "@/Contexts/MainContext";
 import axiosClient from "@/AxiosClient/AxiosClient";
 
@@ -12,18 +10,24 @@ const CommentMenu = ({
   setPost,
   setEditing,
 }) => {
-  const [, setShowForm] = useState(false);
-  const { setSuccessMessage } = useMainContext();
+  const { setSuccessMessage, setErrors } = useMainContext();
   const onDelete = () => {
     if (window.confirm("Are You Sure To Delete This Comment!?")) {
-      axiosClient.delete(route("comment.delete", comment.id)).then(() => {
-        setPost((prevPost) => ({
-          ...prevPost,
-          comments: prevPost.comments.filter((c) => c.id !== comment.id),
-        }));
-        setSuccessMessage("Comment Deleted Successfully");
-        setOpenMenu(false);
-      });
+      axiosClient
+        .delete(route("comment.delete", comment.id))
+        .then(() => {
+          setPost((prevPost) => ({
+            ...prevPost,
+            comments: prevPost.comments.filter((c) => c.id !== comment.id),
+          }));
+          setSuccessMessage("Comment Deleted Successfully");
+          setOpenMenu(false);
+        })
+        .catch((error) => {
+          setErrors([
+            error?.response?.data?.message || "Some Thing Went Wrong",
+          ]);
+        });
     }
   };
   return (
@@ -47,7 +51,6 @@ const CommentMenu = ({
       >
         <button
           onClick={() => {
-            setShowForm(true);
             setOpenMenu(false);
             setEditing(true);
           }}

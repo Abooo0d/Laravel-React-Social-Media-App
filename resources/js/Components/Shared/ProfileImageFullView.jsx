@@ -3,7 +3,11 @@ import { RiArrowGoBackFill } from "react-icons/ri";
 import { SecondaryButton } from "./Buttons";
 import { useState } from "react";
 import { useEffect } from "react";
-const ProfileImageFullView = ({ show, setShowImage, image }) => {
+import { GoDownload } from "react-icons/go";
+import axiosClient from "@/AxiosClient/AxiosClient";
+import { useMainContext } from "@/Contexts/MainContext";
+const ProfileImageFullView = ({ show, setShowImage, image, downloadUrl }) => {
+  const { setErrors } = useMainContext();
   const [profileImage, setProfileImage] = useState("");
   useEffect(() => {
     setProfileImage(image);
@@ -14,14 +18,28 @@ const ProfileImageFullView = ({ show, setShowImage, image }) => {
         show ? `visible opacity-100` : `invisible opacity-0 scale-[95%]`
       }`}
     >
-      <div className="animate-scaleUp h-full  w-full rounded-lg relative flex justify-between items-center bg-gray-900/60 border-solid border-[1px] border-gray-700 backdrop-blur-md p-4">
-        <div className="absolute top-[0px] right-[12px] h-20 flex justify-center items-center gap-2 flex-col z-[100]">
+      <div className="animate-scaleUp h-full w-full rounded-lg relative flex justify-between items-center bg-gray-900/60 border-solid border-[1px] border-gray-700 backdrop-blur-md p-4">
+        <div className="absolute top-[12px] right-[12px] h-20 flex justify-center items-center gap-2 flex-col z-[100]">
           <SecondaryButton
-            classes="py-1.5 px-3 right-0"
+            classes="py-1.5 px-3"
             event={() => setShowImage(false)}
           >
             <RiArrowGoBackFill className="w-5 h-5 text-gray-200" />
           </SecondaryButton>
+          <SecondaryButton
+            classes="relative py-1.5 px-3"
+            event={() => {
+              axiosClient.get(downloadUrl).catch((error) => {
+                console.log(error);
+                setErrors([
+                  error?.response?.data?.message || "Some Thing Went Wrong",
+                ]);
+              });
+            }}
+          >
+            <GoDownload className="w-5 h-5 text-gray-200" />
+          </SecondaryButton>
+          {/* </a> */}
         </div>
         {show && (
           <div className="relative w-full h-full flex z-0">

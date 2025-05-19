@@ -18,7 +18,7 @@ const CommentCard = ({ currentComment, post, setPost }) => {
     comment: currentComment.comment.replace(/<br\s*\/?>/gi, "\n"),
   });
   const { user } = useUserContext();
-  const { setSuccessMessage } = useMainContext();
+  const { setSuccessMessage, setErrors } = useMainContext();
   const [showSubComments, setShowSubComments] = useState(false);
   const UpdateComment = () => {
     axiosClient
@@ -38,6 +38,9 @@ const CommentCard = ({ currentComment, post, setPost }) => {
         }));
         setEditingComment(data.data);
         setSuccessMessage("Comment Updated Successfully");
+      })
+      .catch((error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
       });
   };
   const sendCommentReaction = () => {
@@ -51,6 +54,9 @@ const CommentCard = ({ currentComment, post, setPost }) => {
           user_has_reactions: data.user_has_reactions,
           num_of_reactions: data.num_of_reactions,
         }));
+      })
+      .catch((error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
       });
   };
 

@@ -8,7 +8,7 @@ import { useMainContext } from "@/Contexts/MainContext";
 const PostCommentSection = ({ show, post, setPost, currentUser }) => {
   const { user } = useUserContext();
   const [comment, setComment] = useState("");
-  const { setSuccessMessage } = useMainContext();
+  const { setSuccessMessage, setErrors } = useMainContext();
   const createComment = () => {
     axiosClient
       .post(route("post.commentCreate", post), {
@@ -23,6 +23,9 @@ const PostCommentSection = ({ show, post, setPost, currentUser }) => {
         }));
         setComment("");
         setSuccessMessage("Comment Posted Successfully");
+      })
+      .catch((error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
       });
   };
   return (
