@@ -9,7 +9,7 @@
 /************** TOday *************/
 // Implementing The Block  And Un Block For User
 // Implementing The Leave And Group
-// / Implementing The  Mute For User And Group
+// Implementing The  Mute For User And Group
 // Implementing Deleting The Group
 // Adding Permeations  Fo The Group
 // ALlowing The Change The Data Of THe Group For Admins Only
@@ -39,14 +39,14 @@
 // Fix THe message When Sent To Group To Not Show The Check
 // update The Notification To Take A Generic Link To Store
 // fix the design in the chats bar
-// Update The Athenticated Layout Tfor The Pulic View
+// Update The Authenticated Layout Tfor The Pulic View
 // make the message desapera when Reloading
 // Format The ChatCard Data Correctly
 // Get The ChatCard Data From The Chat  Messages Not From The Chat Fields
 // FIx The Z-Index in All OverLays
 // Get The LastMessage From The Chat It Self Not From The LastMessageField
 // fix the Notification To Take The Image From The data base And Not To Save The Image In The Notifications Table
-// add trycatch toAll New Api End Points
+// add try catch toAll New Api End Points
 // Paginate The Data Coming From The Backend
 // send the data from a custom request from The frontend not with the page loading
 // Fix The Design In The Post CArd For Small Screens

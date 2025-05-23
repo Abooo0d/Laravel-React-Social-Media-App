@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "@/AxiosClient/AxiosClient";
-import { useMainContext } from "@/Contexts/MainContext";
 import { MdGroups2 } from "react-icons/md";
 import { useChatsContext } from "@/Contexts/ChatsContext";
+import { IoVolumeMute } from "react-icons/io5";
+import { TbLock } from "react-icons/tb";
 
 const ChatCard = ({ chat, setShow, setIsLoading }) => {
   const { setCurrentChat, onlineUsersIds } = useChatsContext();
@@ -11,6 +12,7 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
   const [online, setOnline] = useState(
     !!onlineUsersIds.includes(chatData?.user_id)
   );
+
   const [isGroup, setIsGroup] = useState(chatData?.is_group);
   const getChat = () => {
     setChatData((prev) => ({
@@ -50,7 +52,6 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
 
   useEffect(() => {
     !!chat && setChatData(chat);
-    // setChatData(chat);
   }, [chat]);
 
   useEffect(() => {
@@ -72,6 +73,14 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
         getChat();
       }}
     >
+      <div className="flex justify-end items-center gap-2 absolute bottom-[10px] right-[20px] w-[40px]">
+        {chat.status?.muted && (
+          <IoVolumeMute className=" w-4 h-4 rounded-md text-gray-500" />
+        )}
+        {chat.status?.blocked && (
+          <TbLock className=" w-4 h-4 rounded-md text-gray-500" />
+        )}
+      </div>
       <div className="relative">
         <img
           src={chatData?.avatar_url}
@@ -88,11 +97,15 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
         )}
       </div>
       <div className="flex flex-col bg-blue-1 flex-1">
-        {unreadCount > 0 && (
-          // <span className="absolute bottom-4 right-4 w-4 h-4 rounded-md bg-blue-500/50 flex justify-center items-center">
-          <span className="w-4 h-4 bg-blue-500/40 border-[1px] border-solid border-blue-500 backdrop-blur-sm absolute bottom-2 right-4 text-[12px] flex justify-center items-center rounded-md text-gray-300  p-0">
-            {unreadCount}
-          </span>
+        {!chatData.status.muted && (
+          <>
+            {unreadCount > 0 && (
+              // <span className="absolute bottom-4 right-4 w-4 h-4 rounded-md bg-blue-500/50 flex justify-center items-center">
+              <span className="w-4 h-4 bg-blue-500/40 border-[1px] border-solid border-blue-500 backdrop-blur-sm absolute bottom-2 right-4 text-[12px] flex justify-center items-center rounded-md text-gray-300  p-0">
+                {unreadCount}
+              </span>
+            )}
+          </>
         )}
         <div className="flex flex-1 gap-1 justify-between items-center w-full ">
           <h3 className="text-[15px] w-full text-nowrap overflow-hidden">

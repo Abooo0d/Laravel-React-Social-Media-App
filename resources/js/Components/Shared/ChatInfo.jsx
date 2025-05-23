@@ -1,13 +1,12 @@
 import { useChatsContext } from "@/Contexts/ChatsContext";
-import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";
 import React, { useEffect, useState } from "react";
-import { HiDotsVertical } from "react-icons/hi";
 import ChatInfoMenu from "./ChatInfoMenu";
+import { IoVolumeMute } from "react-icons/io5";
+import { TbLock } from "react-icons/tb";
 
 const ChatInfo = () => {
   const { currentChat, setShowChatInfo } = useChatsContext();
-
   const { onlineUsersIds } = useChatsContext();
   const { user } = useUserContext();
   const [online, setOnline] = useState();
@@ -20,7 +19,9 @@ const ChatInfo = () => {
       users = users?.join(", ");
       users = users + ", and " + `${currentChat.users.length - 3}` + " others";
     } else {
-      users = currentChat?.users?.map((user) => user.name);
+      users = currentChat?.users?.map((u) =>
+        u.name == user.name ? "You" : u.name
+      );
       users = users?.join(", ");
     }
     return users;
@@ -34,7 +35,6 @@ const ChatInfo = () => {
         className="flex justify-start items-center gap-4 flex-1 hover:bg-gray-800/50 duration-200 rounded-md px-2"
         onClick={(e) => {
           setShowChatInfo(true);
-          console.log(e.target);
         }}
       >
         <div className="relative ">
@@ -48,9 +48,23 @@ const ChatInfo = () => {
           )}
         </div>
         <div className="flex justify-start items-start flex-col">
-          <h2 className="text-gray-400 text-xl cursor-default">
-            {currentChat?.name}
-          </h2>
+          <div className="flex justify-start items-center w-full gap-6">
+            <h2 className="text-gray-400 text-xl cursor-default">
+              {currentChat?.name}
+            </h2>
+            <div className="flex justify-end items-center gap-2 w-[40px]">
+              {currentChat.status?.muted && (
+                <span className="w-6 h-6 flex justify-center items-center bg-gray-800 rounded-md p-1">
+                  <IoVolumeMute className="w-6 h-6 text-gray-500" />
+                </span>
+              )}
+              {currentChat.status?.blocked && (
+                <span className="w-6 h-6 flex justify-center items-center bg-gray-800 rounded-md p-1">
+                  <TbLock className="w-6 h-6 text-gray-500" />
+                </span>
+              )}
+            </div>
+          </div>
           <div className="text-gray-500 text-sm">
             {currentChat.is_group ? showUsers() : currentChat?.data?.email}
           </div>

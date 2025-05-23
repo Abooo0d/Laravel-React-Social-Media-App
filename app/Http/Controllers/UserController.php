@@ -6,6 +6,7 @@ use App\Http\Enums\FriendsRequestEnum;
 use App\Http\Requests\SearchUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Chat;
+use App\Models\ChatsStatus;
 use App\Models\ChatUser;
 use App\Models\Followers;
 use App\Models\Friends;
@@ -90,10 +91,12 @@ class UserController extends Controller
         ChatUser::create([
           'chat_id' => $chat->id,
           'user_id' => $user->id,
+          'admin' => true
         ]);
         ChatUser::create([
           'chat_id' => $chat->id,
-          'user_id' => Auth::id()
+          'user_id' => Auth::id(),
+          'admin' => true
         ]);
         return redirect()->back()->with('success', "Friend Request Is Accepted");
       } else

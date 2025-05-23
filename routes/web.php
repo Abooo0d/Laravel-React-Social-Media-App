@@ -91,5 +91,7 @@ Route::middleware('auth')->group(function () {
   Route::post('/chat/update-message/{message:id}', [ChatsController::class, 'UpdateMessage'])->name('chat.updateMessage');
   Route::delete('/chat/delete-message/{message:id}', [ChatsController::class, 'deleteMessage'])->name('chat.deleteMessage');
   Route::post('/chat/create-groupChat', [ChatsController::class, 'createChatGroup'])->name('chat.createGroupChat');
+  Route::post('/chat/{chat:id}/mute', [ChatsController::class, 'muteChat'])->name('chat.mute');
+  Route::post('/chat/{chat:id}/block', [ChatsController::class, 'blockChat'])->name('chat.block');
 });
 require __DIR__ . '/auth.php';

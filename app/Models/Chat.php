@@ -12,8 +12,10 @@ class Chat extends Model
   use HasFactory;
   public function users()
   {
-    return $this->belongsToMany(User::class, 'chat_users')->withTimestamps();
+    return $this->belongsToMany(User::class, 'chat_users')->withPivot('admin');
+    ;
   }
+
   public function messages()
   {
     return $this->hasMany(Message::class)
@@ -54,5 +56,17 @@ class Chat extends Model
         $query->where('user_id', $userId);
       })
       ->count();
+  }
+  public function status()
+  {
+    return $this->hasOne(ChatsStatus::class);
+  }
+  public function isCurrentUserAdmin()
+  {
+    return $this->hasOne(ChatUser::class)
+      ->where('chat_id', $this->id)
+      ->where('user_id', auth()->id())
+      ->where('admin', 1);
+    // ->first();
   }
 }

@@ -10,11 +10,9 @@ import axiosClient from "@/AxiosClient/AxiosClient";
 import AttachmentFullView from "../Shared/AttachmentFullView";
 const MessagesContainer = ({ isLoading }) => {
   const containerRef = useRef();
-
   const [ref, inView, entry] = useInView();
   const { currentChat, setCurrentChat } = useChatsContext();
   const [thereIsMore, setThereIsMore] = useState(true);
-
   const getMore = () => {
     axiosClient
       .get(

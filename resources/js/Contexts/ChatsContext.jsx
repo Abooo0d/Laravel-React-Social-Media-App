@@ -163,7 +163,6 @@ export const ChatsContext = ({ children }) => {
           }));
         } else {
         }
-        console.log(e);
       });
     }
   }, [currentChat?.id]);

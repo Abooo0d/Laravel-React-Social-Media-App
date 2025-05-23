@@ -12,6 +12,7 @@ use App\Http\Requests\UpdateMessageRequest;
 use App\Http\Resources\ChatResource;
 use App\Http\Resources\MessageResource;
 use App\Models\Chat;
+use App\Models\ChatsStatus;
 use App\Models\ChatUser;
 use App\Models\Message;
 use App\Models\MessageAttachment;
@@ -213,13 +214,21 @@ class ChatsController extends Controller
           'name' => $data['chat_name'],
           'is_group' => true
         ]);
-        $users = $data['users'];
-        $users[] = auth()->id();
+        $users = $data['users']; // assume this is an array
+        array_unshift($users, auth()->id());
         foreach ($users as $user) {
-          ChatUser::create([
-            'chat_id' => $chat->id,
-            'user_id' => $user,
-          ]);
+          if ($user == auth()->id()) {
+            ChatUser::create([
+              'chat_id' => $chat->id,
+              'user_id' => $user,
+              'admin' => true
+            ]);
+          } else {
+            ChatUser::create([
+              'chat_id' => $chat->id,
+              'user_id' => $user,
+            ]);
+          }
         }
         $chat->refresh();
         return response([
@@ -227,6 +236,62 @@ class ChatsController extends Controller
           'chat' => new ChatResource($chat)
         ], 200);
       }
+    } catch (\Throwable $th) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function muteChat(Request $request, Chat $chat)
+  {
+    try {
+      $data = $request->validate([
+        'mute' => ['boolean', 'required']
+      ]);
+      $status = $data['mute'];
+      $chatStatus = ChatsStatus::where('chat_id', $chat->id)
+        ->where('user_id', auth()->id())
+        ->first();
+      if ($chatStatus) {
+        $chatStatus->update([
+          'mute' => $status
+        ]);
+      } else {
+        $chatStatus = ChatsStatus::create([
+          'chat_id' => $chat->id,
+          'user_id' => auth()->id(),
+          'mute' => $status
+        ]);
+      }
+      $message = !!$status
+        ? 'The Chat Muted Successfully'
+        : 'The Chat Unmuted Successfully';
+      return response(['message' => $message], 200);
+    } catch (\Throwable $th) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function BlockChat(Request $request, Chat $chat)
+  {
+    try {
+      $data = $request->validate([
+        'block' => ['boolean', 'required']
+      ]);
+      $status = $data['block'];
+      $chatStatus = ChatsStatus::where('chat_id', $chat->id)
+        ->where('user_id', auth()->id())
+        ->first();
+      if ($chatStatus) {
+        $chatStatus->update([
+          'blocked' => $status
+        ]);
+      } else {
+        $chatStatus = ChatsStatus::create([
+          'chat_id' => $chat->id,
+          'user_id' => auth()->id(),
+          'blocked' => $status
+        ]);
+      }
+      $message = !!$status ? 'The Chat Blocked Successfully' : 'The Chat Unblocked Successfully';
+      return response(['message' => $message], 200);
     } catch (\Throwable $th) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }

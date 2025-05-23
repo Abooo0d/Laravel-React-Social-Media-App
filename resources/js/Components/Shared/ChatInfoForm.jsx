@@ -9,17 +9,69 @@ import { Link } from "@inertiajs/react";
 import { TbLock } from "react-icons/tb";
 import { MdLogout } from "react-icons/md";
 import { IoVolumeMute } from "react-icons/io5";
-
+import { HiUserAdd } from "react-icons/hi";
+import axiosClient from "@/AxiosClient/AxiosClient";
+import { useMainContext } from "@/Contexts/MainContext";
+import { FaLock, FaLockOpen } from "react-icons/fa";
+import {
+  PiSpeakerSimpleSlashFill,
+  PiSpeakerSimpleHighFill,
+} from "react-icons/pi";
 const ChatInfoForm = () => {
-  const { currentChat, showChatInfo, setShowChatInfo } = useChatsContext();
+  const { currentChat, setCurrentChat, showChatInfo, setShowChatInfo } =
+    useChatsContext();
   const [showMembers, setShowMembers] = useState(false);
   const [showAttachments, setShowAttachments] = useState(false);
+  const { setSuccessMessage, setErrors } = useMainContext();
+  const [muteStatus, setMuteStatus] = useState(currentChat?.status?.muted);
+  const [blockStatus, setBlockStatus] = useState(currentChat?.status?.blocked);
   const [attachments, setAttachments] = useState(
     currentChat?.messages
       ?.filter((message) => message.attachments.length > 0)
       ?.flatMap((message) => message.attachments)
   );
   const close = () => setShowChatInfo(false);
+  const muteChat = () => {
+    axiosClient
+      .post(route("chat.mute", currentChat?.id), {
+        mute: !muteStatus,
+      })
+      .then((data) => {
+        setSuccessMessage(data.data.message);
+        setCurrentChat((prev) => ({
+          ...prev,
+          status: {
+            ...prev.status,
+            muted: !prev.status.muted,
+          },
+        }));
+        setMuteStatus((prev) => !prev);
+      })
+      .catch((error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
+      });
+  };
+  const blockChat = () => {
+    axiosClient
+      .post(route("chat.block", currentChat.id), {
+        block: !blockStatus,
+      })
+      .then((data) => {
+        console.log(data);
+        setSuccessMessage(data.data.message);
+        setCurrentChat((prev) => ({
+          ...prev,
+          status: {
+            ...prev.status,
+            blocked: !prev.status.blocked,
+          },
+        }));
+        setBlockStatus((prev) => !prev);
+      })
+      .catch((error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
+      });
+  };
   return (
     <div
       className={`fixed inset-0 z-[800] w-screen overflow-y-auto flex min-h-full items-center justify-center bg-gray-950/60 backdrop-blur-sm duration-200 ${
@@ -100,7 +152,7 @@ const ChatInfoForm = () => {
               >
                 {currentChat?.users?.map((user, index) => (
                   <Link
-                    className="w-full flex justify-start gap-4 items-center hover:bg-gray-800/50 duration-200 rounded-md px-2 py-2"
+                    className="w-full flex justify-start gap-4 items-center relative hover:bg-gray-800/50 duration-200 rounded-md px-2 py-2"
                     key={index}
                     href={route("profile.view", user?.name)}
                   >
@@ -110,26 +162,69 @@ const ChatInfoForm = () => {
                       className="w-12 h-12 rounded-full"
                     />
                     <h2>{user.name}</h2>
+                    {!!user.is_admin ? (
+                      <span className="absolute top-[50%] translate-y-[-50%] right-[20px] text-[10px] bg-emerald-600/40 border-solid border-[1px] border-emerald-600 rounded-sm text-gray-300 px-1 py-[2px]">
+                        Admin
+                      </span>
+                    ) : (
+                      <></>
+                    )}
                   </Link>
                 ))}
               </div>
             </div>
           )}
         </div>
-        <div className="flex justify-center items-center gap-4 w-full pb-4">
-          {currentChat?.is_group ? (
-            <button className="bg-red-500/30 border-[1px] border-solid border-red-500 px-4 py-2 text-gray-200 rounded-md w-[120px] hover:bg-red-500/50 duration-200 flex justify-center items-center gap-4">
-              Leave
-              <MdLogout className="w-4 h-4" />
-            </button>
-          ) : (
-            <button className="bg-red-500/30 border-[1px] border-solid border-red-500 px-4 py-2 text-gray-200 rounded-md w-[120px] hover:bg-red-500/50 duration-200 flex justify-center items-center gap-4">
-              Block <TbLock className="w-4 h-4" />
+        <div className="flex flex-col gap-2">
+          {currentChat?.is_group && (
+            <button className="bg-sky-500/30 border-[1px] border-solid border-sky-500 px-4 py-2 text-gray-200 rounded-md w-full hover:bg-sky-500/50 duration-200 flex justify-center items-center gap-4">
+              Add Users
+              <HiUserAdd className="w-4 h-4" />
             </button>
           )}
-          <button className="bg-red-500/30 border-[1px] border-solid border-red-500 px-4 py-2 text-gray-200 rounded-md w-[120px] hover:bg-red-500/50 duration-200 flex justify-center items-center gap-4">
-            Mute <IoVolumeMute className="w-4 h-4" />
-          </button>
+          <div className="flex justify-center items-center gap-2 w-full pb-4">
+            {currentChat?.is_group ? (
+              <button className="bg-red-500/30 border-[1px] border-solid border-red-500 px-4 py-2 text-gray-200 rounded-md w-[120px] hover:bg-red-500/50 duration-200 flex justify-center items-center gap-4">
+                Leave
+                <MdLogout className="w-4 h-4" />
+              </button>
+            ) : (
+              <button
+                className="bg-red-500/30 border-[1px] border-solid border-red-500 px-4 py-2 text-gray-200 rounded-md w-[120px] hover:bg-red-500/50 duration-200 flex justify-center items-center gap-4"
+                onClick={() => {
+                  blockChat();
+                }}
+              >
+                {blockStatus ? (
+                  <>
+                    Unblock <FaLockOpen className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    Block <FaLock className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            )}
+            <button
+              className="bg-red-500/30 border-[1px] border-solid border-red-500 px-4 py-2 text-gray-200 rounded-md w-[120px] hover:bg-red-500/50 duration-200 flex justify-center items-center gap-4"
+              onClick={() => {
+                muteChat();
+              }}
+            >
+              {muteStatus ? (
+                <>
+                  UnMute
+                  <PiSpeakerSimpleHighFill className="w-4 h-4" />
+                </>
+              ) : (
+                <>
+                  Mute
+                  <PiSpeakerSimpleSlashFill className="w-4 h-4" />
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>
