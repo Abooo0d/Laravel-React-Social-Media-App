@@ -208,11 +208,13 @@ class ChatsController extends Controller
   public function createChatGroup(CreateChatGroupRequest $request)
   {
     try {
+      // dd('Abood');
       $data = $request->validated();
       if ($data['chat_name'] !== '') {
         $chat = Chat::create([
           'name' => $data['chat_name'],
-          'is_group' => true
+          'is_group' => true,
+          'owner' => auth()->id()
         ]);
         $users = $data['users']; // assume this is an array
         array_unshift($users, auth()->id());
@@ -293,6 +295,37 @@ class ChatsController extends Controller
       $message = !!$status ? 'The Chat Blocked Successfully' : 'The Chat Unblocked Successfully';
       return response(['message' => $message], 200);
     } catch (\Throwable $th) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function leaveChatGroup(Chat $chat)
+  {
+    try {
+      if ($chat->owner == auth()->id()) {
+        return response(['message' => 'The Owner Can`t Leave The Group'], 401);
+      }
+      if (!!$chat->is_group) {
+        $chatUser = ChatUser::where('chat_id', $chat->id)
+          ->where('user_id', auth()->id())
+          ->first();
+        if ($chatUser) {
+          $chatUser->delete();
+          return response(['message' => 'You Have Left The Group'], 200);
+        }
+      }
+    } catch (\Throwable $th) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function deleteChat(Chat $chat)
+  {
+    try {
+      if ($chat->owner !== auth()->id()) {
+        return response(['message' => 'You Don`t have Permission To Delete This chat Group'], 401);
+      }
+      $chat->delete();
+      return response(['message' => 'The Chat Group Was Deleted Successfully'], 200);
+    } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }

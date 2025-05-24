@@ -74,10 +74,10 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
       }}
     >
       <div className="flex justify-end items-center gap-2 absolute bottom-[10px] right-[20px] w-[40px]">
-        {chat.status?.muted && (
+        {chat?.status?.muted && (
           <IoVolumeMute className=" w-4 h-4 rounded-md text-gray-500" />
         )}
-        {chat.status?.blocked && (
+        {chat?.status?.blocked && (
           <TbLock className=" w-4 h-4 rounded-md text-gray-500" />
         )}
       </div>

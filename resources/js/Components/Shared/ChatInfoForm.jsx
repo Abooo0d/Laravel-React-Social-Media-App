@@ -12,14 +12,21 @@ import { IoVolumeMute } from "react-icons/io5";
 import { HiUserAdd } from "react-icons/hi";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import { useMainContext } from "@/Contexts/MainContext";
-import { FaLock, FaLockOpen } from "react-icons/fa";
+import { FaLock, FaLockOpen, FaRegTrashAlt } from "react-icons/fa";
 import {
   PiSpeakerSimpleSlashFill,
   PiSpeakerSimpleHighFill,
 } from "react-icons/pi";
+import { useUserContext } from "@/Contexts/UserContext";
 const ChatInfoForm = () => {
-  const { currentChat, setCurrentChat, showChatInfo, setShowChatInfo } =
-    useChatsContext();
+  const { user } = useUserContext();
+  const {
+    currentChat,
+    setCurrentChat,
+    showChatInfo,
+    setShowChatInfo,
+    setCombinedChats,
+  } = useChatsContext();
   const [showMembers, setShowMembers] = useState(false);
   const [showAttachments, setShowAttachments] = useState(false);
   const { setSuccessMessage, setErrors } = useMainContext();
@@ -30,6 +37,7 @@ const ChatInfoForm = () => {
       ?.filter((message) => message.attachments.length > 0)
       ?.flatMap((message) => message.attachments)
   );
+
   const close = () => setShowChatInfo(false);
   const muteChat = () => {
     axiosClient
@@ -71,6 +79,37 @@ const ChatInfoForm = () => {
       .catch((error) => {
         setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
       });
+  };
+  const leaveChatGroup = () => {
+    axiosClient
+      .post(route("chat.leave", currentChat.id))
+      .then((data) => {
+        setSuccessMessage(data.data.message);
+        setCurrentChat({});
+        setShowChatInfo(false);
+      })
+      .catch((error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
+      });
+  };
+  const deleteChat = () => {
+    if (window.confirm("Are You Sure You Want To Delete This Chat Group")) {
+      axiosClient
+        .delete(route("chat.delete", currentChat.id))
+        .then((data) => {
+          setCombinedChats((prev) =>
+            prev.filter((c) => c.id !== currentChat.id)
+          );
+          setCurrentChat(null);
+          setShowChatInfo(false);
+          setSuccessMessage(data.data.message);
+        })
+        .catch((error) => {
+          setErrors([
+            error?.response?.data?.message || "Some Thing Went Wrong",
+          ]);
+        });
+    }
   };
   return (
     <div
@@ -184,10 +223,29 @@ const ChatInfoForm = () => {
           )}
           <div className="flex justify-center items-center gap-2 w-full pb-4">
             {currentChat?.is_group ? (
-              <button className="bg-red-500/30 border-[1px] border-solid border-red-500 px-4 py-2 text-gray-200 rounded-md w-[120px] hover:bg-red-500/50 duration-200 flex justify-center items-center gap-4">
-                Leave
-                <MdLogout className="w-4 h-4" />
-              </button>
+              <>
+                {currentChat?.owner == user.id ? (
+                  <button
+                    className="bg-red-500/30 border-[1px] border-solid border-red-500 px-4 py-2 text-gray-200 rounded-md w-[120px] hover:bg-red-500/50 duration-200 flex justify-center items-center gap-4"
+                    onClick={() => {
+                      deleteChat();
+                    }}
+                  >
+                    Delete
+                    <FaRegTrashAlt className="w-4 h-4" />
+                  </button>
+                ) : (
+                  <button
+                    className="bg-red-500/30 border-[1px] border-solid border-red-500 px-4 py-2 text-gray-200 rounded-md w-[120px] hover:bg-red-500/50 duration-200 flex justify-center items-center gap-4"
+                    onClick={() => {
+                      leaveChatGroup();
+                    }}
+                  >
+                    Leave
+                    <MdLogout className="w-4 h-4" />
+                  </button>
+                )}
+              </>
             ) : (
               <button
                 className="bg-red-500/30 border-[1px] border-solid border-red-500 px-4 py-2 text-gray-200 rounded-md w-[120px] hover:bg-red-500/50 duration-200 flex justify-center items-center gap-4"

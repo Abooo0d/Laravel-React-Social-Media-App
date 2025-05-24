@@ -60,7 +60,8 @@ class ChatResource extends JsonResource
         'blocked' => !!$this->status?->blocked,
         'muted' => !!$this->status?->mute
       ],
-      'is_current_user_admin' => !!$this->isCurrentUserAdmin
+      'is_current_user_admin' => !!$this->isCurrentUserAdmin,
+      'owner' => $this->owner
       // 'last_message' => $this->last_message,
       // 'last_message_id' => $this->last_message_id,
       // 'last_message_date' => $this->last_message_date,

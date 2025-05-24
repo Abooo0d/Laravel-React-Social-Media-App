@@ -41,7 +41,7 @@ const ChatsContainer = ({
             </>
           ) : (
             <>
-              {combinedChats?.length > 0 && (
+              {combinedChats?.length > 0 ? (
                 <>
                   {combinedChats?.map((chat, index) => (
                     <div
@@ -57,6 +57,10 @@ const ChatsContainer = ({
                     </div>
                   ))}
                 </>
+              ) : (
+                <div className="w-full text-gray-500 text-center p-4">
+                  You Have No Chats yet
+                </div>
               )}
             </>
           )}

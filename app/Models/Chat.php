@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Chat extends Model
 {
-  protected $fillable = ['last_message_id', 'last_message', 'last_message_date', 'name', 'is_group'];
+  protected $fillable = ['last_message_id', 'last_message', 'last_message_date', 'name', 'is_group', 'owner'];
 
   use HasFactory;
   public function users()
