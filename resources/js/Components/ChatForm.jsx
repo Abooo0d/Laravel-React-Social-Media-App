@@ -22,11 +22,18 @@ const ChatForm = () => {
   const [uploadingProgress, setUploadingProgress] = useState(0);
   const { setErrors } = useMainContext();
   const [showRecorder, setShowRecorder] = useState(true);
+  const [attachmentsError, setAttachmentsErrors] = useState([]);
   const onFileChange = (ev) => {
+    let maxSize = 20 * 1024 * 1024;
     const files = ev.target.files;
-    const updatedFiles = [...files].map((file) => {
-      return { file: file, url: URL.createObjectURL(file) };
-    });
+    let updatedFiles = [];
+    for (const file of files) {
+      if (file.size < maxSize) {
+        updatedFiles.push({ file: file, url: URL.createObjectURL(file) });
+      } else {
+        setErrors(["On Of The Files Is Larger Than 20 MB."]);
+      }
+    }
     setChosenFiles((prev) => {
       return [...prev, ...updatedFiles];
     });
@@ -62,7 +69,6 @@ const ChatForm = () => {
           setChosenFiles([]);
         })
         .catch((err) => {
-          console.log(err);
           setIsLoading(false);
           setChosenFiles([]);
           let message = err?.response?.data?.message;
@@ -200,7 +206,7 @@ const ChatForm = () => {
       <div className="relative w-[40px] h-[40px] ml-2">
         <AudioRecorder show={showRecorder} fileReady={AudioFileReady} />
         <button
-          className={`absolute top-0 right-0 px-3 py-1.5 w-full h-full bg-blue-700 hover:bg-blue-600 rounded-full text-gray-300 ml-2 duration-200 ${
+          className={`absolute top-0 right-0 flex justify-center items-center w-full h-full bg-blue-700 hover:bg-blue-600 rounded-full text-gray-300 ml-2 duration-200 ${
             !showRecorder ? "opacity-100 visible" : "opacity-0 invisible"
           } `}
           onClick={() => newMessage()}
@@ -209,7 +215,7 @@ const ChatForm = () => {
             <Spinner size="small" />
           ) : (
             <BiSolidSend
-              className={`absolute inset-0  duration-200 w-full h-full flex justify-center items-center p-[10px] `}
+              className={`absolute inset-0 duration-200 w-full h-full flex justify-center items-center p-[10px] `}
             />
           )}
         </button>

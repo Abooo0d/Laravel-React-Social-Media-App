@@ -28,7 +28,7 @@ class NewMessageRequest extends FormRequest
       'chat_id' => ['required', 'exists:chats,id'],
       'user_id' => ['required', 'exists:users,id'],
       'attachments' => ['array', 'nullable', 'max:10', 'required_without:body'],
-      'attachment.*' => ['file', 'max:1024000']
+      'attachments.*' => ['file', 'max:20480']
     ];
   }
 }

@@ -40,7 +40,6 @@ const ChatInfoForm = () => {
     let att = currentChat?.messages?.filter(
       (message) => message.attachments.length > 0
     );
-    console.log(att);
     let allFiles = [];
     att?.map((me) => {
       me?.attachments?.map((attachment) => {
@@ -76,7 +75,6 @@ const ChatInfoForm = () => {
         block: !blockStatus,
       })
       .then((data) => {
-        console.log(data);
         setSuccessMessage(data.data.message);
         setCurrentChat((prev) => ({
           ...prev,
