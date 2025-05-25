@@ -7,17 +7,21 @@
 // Set A Loading When Sending Invitation To Group
 
 /************** TOday *************/
+// Adding Permeations  Fo The Group
+// delete All The Attachment Of The Group When Deleting The ChatGroup
+// show The Admin In The Chats Members
+// send notifications For The users When They Are Added Or Removed From The Group
+// ALlowing The Change The Data Of THe Group For Admins Only
+// SHowing The Attachments For The Chat In The Chat Info
+// make sure when sending a large file to show the Errors message
+// Add Validation When Sending A large File To Check The File size and show the correct error MEssage From The Backend
+/************** Working On *************/
+
+/************** Done *************/
 // Implementing The Block  And Un Block For User
 // Implementing The Leave And Group
 // Implementing The  Mute For User And Group
 // Implementing Deleting The Group
-// Adding Permeations  Fo The Group
-// ALlowing The Change The Data Of THe Group For Admins Only
-// SHowing The Attachments For The Chat In The Chat Info
-
-/************** Working On *************/
-
-/************** Done *************/
 // Add THe Download Button To The Profile Image Full View
 // show thee error message in the login pages
 // Fix The Add Friend  Button In The Profile View

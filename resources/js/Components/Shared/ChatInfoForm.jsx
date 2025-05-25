@@ -18,6 +18,8 @@ import {
   PiSpeakerSimpleHighFill,
 } from "react-icons/pi";
 import { useUserContext } from "@/Contexts/UserContext";
+import { useEffect } from "react";
+import ChatInfoAttachments from "./ChatInfoAttachments";
 const ChatInfoForm = () => {
   const { user } = useUserContext();
   const {
@@ -32,12 +34,21 @@ const ChatInfoForm = () => {
   const { setSuccessMessage, setErrors } = useMainContext();
   const [muteStatus, setMuteStatus] = useState(currentChat?.status?.muted);
   const [blockStatus, setBlockStatus] = useState(currentChat?.status?.blocked);
-  const [attachments, setAttachments] = useState(
-    currentChat?.messages
-      ?.filter((message) => message.attachments.length > 0)
-      ?.flatMap((message) => message.attachments)
-  );
+  const [attachments, setAttachments] = useState([]);
 
+  useEffect(() => {
+    let att = currentChat?.messages?.filter(
+      (message) => message.attachments.length > 0
+    );
+    console.log(att);
+    let allFiles = [];
+    att?.map((me) => {
+      me?.attachments?.map((attachment) => {
+        allFiles.push(attachment);
+      });
+    });
+    setAttachments(allFiles);
+  }, [currentChat]);
   const close = () => setShowChatInfo(false);
   const muteChat = () => {
     axiosClient
@@ -157,13 +168,9 @@ const ChatInfoForm = () => {
             <h2>Messages:</h2>
             <h2>{currentChat?.messages?.length}</h2>
           </div>
-          <div className="flex flex-col justify-start items-center w-full text-gray-500 px-4 border-t-solid border-b-0 border-[1px] border-gray-500/50 border-x-0 py-4 bg-gray-800/50">
-            <div className="flex justify-between items-center w-full">
-              <h2>Attachments:</h2>
-              <h2>{attachments?.length > 0 ? attachments.length : 0}</h2>
-            </div>
-            <div></div>
-          </div>
+
+          <ChatInfoAttachments attachments={attachments} />
+
           {currentChat?.is_group && (
             <div
               className="flex flex-col justify-start items-center w-full text-gray-500 px-4 border-t-solid border-b-0 border-[1px] border-gray-500/50 border-x-0 py-4 bg-gray-800/50 cursor-pointer duration-200"
