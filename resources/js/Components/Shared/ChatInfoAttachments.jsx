@@ -46,7 +46,7 @@ const ChatInfoAttachments = ({ attachments }) => {
   }, [showAttachments]);
 
   return (
-    <div className="flex flex-col justify-start items-center w-full text-gray-500 px-4 border-t-solid border-b-0 border-[1px] border-gray-500/50 border-x-0 bg-gray-800/50 cursor-pointer">
+    <div className="flex flex-col justify-start items-center w-full text-gray-500 px-4 border-t-solid border-b-0 border-[1px] border-gray-500/50 border-x-0cursor-pointer bg-gray-800/50">
       <div
         className="flex justify-between items-center w-full py-4"
         onClick={() => {
@@ -64,7 +64,7 @@ const ChatInfoAttachments = ({ attachments }) => {
         </div>
       </div>
       <div
-        className={`w-full px-4 flex flex-col justify-start items-center gap-2 duration-200 overflow-hidden max-h-[200px]  ${
+        className={`w-full px-4 flex flex-col justify-start items-center gap-2 duration-200 overflow-hidden max-h-[300px] ${
           showAttachments ? "h-[300px] opacity-100 py-2 " : " h-0 opacity-0 "
         }`}
       >
@@ -113,7 +113,7 @@ const ChatInfoAttachments = ({ attachments }) => {
         <div className="w-full h-fit relative">
           <div
             className={`absolute top-0 left-0 duration-200 w-full overflow-scroll flex justify-center items-center gap-2 flex-wrap ${
-              formToShow == "image" ? "h-[140px] opacity-100" : "h-0 opacity-0"
+              formToShow == "image" ? "h-[240px] opacity-100" : "h-0 opacity-0"
             }`}
           >
             {images.length > 0 ? (
@@ -132,23 +132,15 @@ const ChatInfoAttachments = ({ attachments }) => {
             )}
           </div>
           <div
-            className={`absolute top-0 left-0 duration-200 w-full overflow-scroll flex flex-wrap justify-center items-center gap-2 ${
-              formToShow == "audio" ? "h-[140px] opacity-100" : "h-0 opacity-0"
+            className={`absolute top-0 left-0 duration-200 w-full overflow-scroll flex flex-wrap justify-center items-start gap-2 ${
+              formToShow == "audio" ? "h-[240px] opacity-100" : "h-0 opacity-0"
             }`}
           >
             {audios.length > 0 ? (
               audios.map((audio, index) => (
-                // <CustomAudioPlayer
-                //   attachment={audio}
-                //   controls={false}
-                //   key={index}
-                // />
-                <audio
-                  src={audio.url}
-                  key={index}
-                  controls
-                  className="max-w-full"
-                />
+                <div className="flex justify-start items-center w-full h-[60px] bg-gray-700/50 rounded-md px-2 gap-2">
+                  <CustomAudioPlayer attachment={audio} controls={false} />
+                </div>
               ))
             ) : (
               <div className="h-[40px] w-[50%] rounded-md text-gray-300 bg-gray-700 border-solid border-[1px] border-gray-500/50 flex gap-2 justify-center items-center">
@@ -158,7 +150,7 @@ const ChatInfoAttachments = ({ attachments }) => {
           </div>
           <div
             className={`absolute top-0 left-0 duration-200 w-full overflow-scroll flex flex-wrap justify-center items-center gap-2 ${
-              formToShow == "video" ? "h-[140px] opacity-100" : "h-0 opacity-0"
+              formToShow == "video" ? "h-[240px] opacity-100" : "h-0 opacity-0"
             }`}
           >
             {videos.length > 0 ? (
@@ -176,15 +168,15 @@ const ChatInfoAttachments = ({ attachments }) => {
             )}
           </div>
           <div
-            className={`absolute top-0 left-0 duration-200 w-full overflow-scroll flex flex-wrap justify-center items-center gap-2 ${
-              formToShow == "file" ? "h-[140px] opacity-100" : "h-0 opacity-0"
+            className={`absolute top-0 left-0 duration-200 w-full overflow-scroll flex flex-wrap justify-center items-start gap-2 ${
+              formToShow == "file" ? "h-[240px] opacity-100" : "h-0 opacity-0"
             }`}
           >
             {files.length > 0 ? (
               files.map((file, index) => (
-                <div className="h-[60px] w-[50%] rounded-md bg-gray-700 border-solid border-[1px] border-gray-500/50 flex gap-2 justify-center items-center">
+                <div className="h-[60px] flex-1 rounded-md bg-gray-700 border-solid border-[1px] border-gray-500/50 flex gap-2 justify-start items-center px-4">
                   <FaFile className="w-10 h-10 text-gray-400" />
-                  {file.name}
+                  <span className="flex-1">{file.name.slice(0, 30)}</span>
                 </div>
               ))
             ) : (
