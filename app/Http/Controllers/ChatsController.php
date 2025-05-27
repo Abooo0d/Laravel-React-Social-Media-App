@@ -356,4 +356,18 @@ class ChatsController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
+  public function ChangeChatName(Request $request, Chat $chat)
+  {
+    try {
+      if (!$chat->isCurrentUserAdmin)
+        return response(['message' => 'You Don`t have Permission Change Group Name'], 401);
+      $data = $request->validate([
+        'name' => ['string', 'required']
+      ]);
+      $chat->update(['name' => $data['name']]);
+      return response(["message" => 'The Chat Group Name Was Updated Successfully'], 200);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
 }

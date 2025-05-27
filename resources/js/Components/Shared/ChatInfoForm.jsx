@@ -21,6 +21,8 @@ import { useUserContext } from "@/Contexts/UserContext";
 import { useEffect } from "react";
 import ChatInfoAttachments from "./ChatInfoAttachments";
 import { CiCamera } from "react-icons/ci";
+import ChatInfoFormMenu from "./ChatInfoFormMenu";
+import ChangeChatGroupName from "./ChangeChatGroupName";
 const ChatInfoForm = () => {
   const { user } = useUserContext();
   const {
@@ -36,6 +38,7 @@ const ChatInfoForm = () => {
   const [blockStatus, setBlockStatus] = useState(currentChat?.status?.blocked);
   const [attachments, setAttachments] = useState([]);
   const [chatImage, setChatImage] = useState(null);
+  const [showChangeGroupNameForm, setShowChangeGroupNameForm] = useState(false);
 
   useEffect(() => {
     let att = currentChat?.messages?.filter(
@@ -166,6 +169,15 @@ const ChatInfoForm = () => {
         >
           <HiMiniXMark className="w-5 h-5 text-gray-200" />
         </SecondaryButton>
+        {currentChat?.is_group && (
+          <>
+            {currentChat?.is_current_user_admin && (
+              <ChatInfoFormMenu
+                setShowChangeGroupNameForm={setShowChangeGroupNameForm}
+              />
+            )}
+          </>
+        )}
         <div className=" relative flex flex-col items-center justify-start pt-8 w-full z-0">
           <div className="w-[100px] h-[100px] group rounded-full overflow-auto border-solid border-[1px] border-gray-500/50 flex justify-center items-end relative">
             {currentChat?.is_group && (
@@ -399,6 +411,10 @@ const ChatInfoForm = () => {
           </div>
         </div>
       </div>
+      <ChangeChatGroupName
+        showForm={showChangeGroupNameForm}
+        setShowForm={setShowChangeGroupNameForm}
+      />
     </div>
   );
 };

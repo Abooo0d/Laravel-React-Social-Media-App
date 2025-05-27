@@ -75,9 +75,12 @@ const CreateChatGroupForm = ({ showForm, setShowForm }) => {
             setShowForm(false);
             setSuccessMessage(`Chat '${name}' has Been Created Successfully`);
           })
-          .catch((err) => {
-            console.log(err);
+          .catch((error) => {
+            console.log(error);
             setCreating(false);
+            setErrors([
+              error?.response?.data?.message || "Some Thing Went Wrong",
+            ]);
           });
       }
     }
@@ -100,7 +103,7 @@ const CreateChatGroupForm = ({ showForm, setShowForm }) => {
         <HiMiniXMark className="w-5 h-5 text-gray-200" />
       </SecondaryButton>
       <div as="h3" className="text-base/7 font-medium text-white mb-4">
-        Create New GroupChat:
+        Create New GroupChat
       </div>
       <h2 className="text-gray-400 mb-2">Group Name:</h2>
       <div className="relative w-full">

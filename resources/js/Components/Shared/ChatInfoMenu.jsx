@@ -6,8 +6,7 @@ import { FaLock, FaLockOpen } from "react-icons/fa";
 import { HiDotsVertical } from "react-icons/hi";
 import { HiUserAdd } from "react-icons/hi";
 import { IoInformationCircleSharp } from "react-icons/io5";
-import { IoVolumeMute } from "react-icons/io5";
-import { MdDeleteOutline, MdLogout } from "react-icons/md";
+import { MdLogout } from "react-icons/md";
 import {
   PiSpeakerSimpleHighFill,
   PiSpeakerSimpleSlashFill,
