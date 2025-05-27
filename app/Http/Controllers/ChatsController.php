@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\MessageDeleted;
 use App\Events\MessageUpdated;
 use App\Events\NewMessageSent;
+use App\Http\Requests\ChangeChatGroupImage;
 use App\Http\Requests\CreateChatGroupRequest;
 use App\Http\Requests\NewMessageRequest;
 use App\Http\Requests\SearchForChatRequest;
@@ -326,6 +327,31 @@ class ChatsController extends Controller
       }
       $chat->delete();
       return response(['message' => 'The Chat Group Was Deleted Successfully'], 200);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function ChangeChatGroupImage(ChangeChatGroupImage $request, Chat $chat)
+  {
+    try {
+      $data = $request->validated();
+      /**
+       * @var \Illuminate\Http\UploadedFile $image
+       */
+      $image = $data['image'];
+      if ($chat->avatar_path) {
+        Storage::disk('public')->delete($chat->avatar_path);
+      }
+      $avatarPath = $image->store("chats/{$chat->id}", 'public');
+      $chat->update([
+        'avatar_path' => $avatarPath
+      ]);
+      return response(
+        [
+          'message' => 'Chat Image Updated Successfully',
+          'image' => Storage::url($avatarPath)
+        ]
+      );
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }

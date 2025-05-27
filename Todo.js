@@ -11,6 +11,7 @@
 // delete All The Attachment Of The Group When Deleting The ChatGroup
 // send notifications For The users When They Are Added Or Removed From The Group
 // ALlowing The Change The Data Of THe Group For Admins Only
+// fix the design of The Message Attachments
 /************** Working On *************/
 
 /************** Done *************/

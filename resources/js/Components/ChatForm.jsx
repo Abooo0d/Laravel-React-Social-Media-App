@@ -22,7 +22,6 @@ const ChatForm = () => {
   const [uploadingProgress, setUploadingProgress] = useState(0);
   const { setErrors } = useMainContext();
   const [showRecorder, setShowRecorder] = useState(true);
-  const [attachmentsError, setAttachmentsErrors] = useState([]);
   const onFileChange = (ev) => {
     let maxSize = 20 * 1024 * 1024;
     const files = ev.target.files;

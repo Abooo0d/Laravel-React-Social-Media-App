@@ -4,7 +4,7 @@ import PopupCard from "./PopupCard";
 import { PrimaryButton, SecondaryButton } from "./Buttons";
 import { HiMiniXMark } from "react-icons/hi2";
 import { useState } from "react";
-import { FaAngleRight } from "react-icons/fa";
+import { FaAngleRight, FaCheck } from "react-icons/fa";
 import { Link } from "@inertiajs/react";
 import { TbLock } from "react-icons/tb";
 import { MdLogout } from "react-icons/md";
@@ -20,6 +20,7 @@ import {
 import { useUserContext } from "@/Contexts/UserContext";
 import { useEffect } from "react";
 import ChatInfoAttachments from "./ChatInfoAttachments";
+import { CiCamera } from "react-icons/ci";
 const ChatInfoForm = () => {
   const { user } = useUserContext();
   const {
@@ -30,11 +31,11 @@ const ChatInfoForm = () => {
     setCombinedChats,
   } = useChatsContext();
   const [showMembers, setShowMembers] = useState(false);
-  const [showAttachments, setShowAttachments] = useState(false);
   const { setSuccessMessage, setErrors } = useMainContext();
   const [muteStatus, setMuteStatus] = useState(currentChat?.status?.muted);
   const [blockStatus, setBlockStatus] = useState(currentChat?.status?.blocked);
   const [attachments, setAttachments] = useState([]);
+  const [chatImage, setChatImage] = useState(null);
 
   useEffect(() => {
     let att = currentChat?.messages?.filter(
@@ -47,7 +48,9 @@ const ChatInfoForm = () => {
       });
     });
     setAttachments(allFiles);
+    setChatImage(null);
   }, [currentChat]);
+
   const close = () => setShowChatInfo(false);
   const muteChat = () => {
     axiosClient
@@ -120,6 +123,36 @@ const ChatInfoForm = () => {
         });
     }
   };
+  const onChangeImage = (ev) => {
+    let file = ev.target.files[0];
+    setChatImage({ file: file, url: URL.createObjectURL(file) });
+  };
+  const resetAvatarImage = () => {
+    setChatImage(null);
+  };
+  const submitAvatarImage = () => {
+    try {
+      let formData = new FormData();
+      formData.append("image", chatImage.file);
+      axiosClient
+        .post(route("chat.changeImage", currentChat.id), formData)
+        .then((data) => {
+          setSuccessMessage(data.data.message);
+          setCurrentChat((prev) => ({
+            ...prev,
+            avatar_url: data.data.image,
+          }));
+          setChatImage(null);
+        })
+        .catch((error) => {
+          setErrors([
+            error?.response?.data?.message || "Some Thing Went Wrong",
+          ]);
+        });
+    } catch (error) {
+      setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
+    }
+  };
   return (
     <div
       className={`fixed inset-0 z-[800] w-screen overflow-y-auto flex min-h-full items-center justify-center bg-gray-950/60 backdrop-blur-sm duration-200 ${
@@ -134,11 +167,81 @@ const ChatInfoForm = () => {
           <HiMiniXMark className="w-5 h-5 text-gray-200" />
         </SecondaryButton>
         <div className=" relative flex flex-col items-center justify-start pt-8 w-full z-0">
-          <img
-            src={currentChat?.avatar_url}
-            alt=""
-            className="w-[100px] h-[100px] rounded-full border-solid border-[1px] border-gray-500/50"
-          />
+          <div className="w-[100px] h-[100px] group rounded-full overflow-auto border-solid border-[1px] border-gray-500/50 flex justify-center items-end relative">
+            {currentChat?.is_group && (
+              <>
+                {currentChat.is_current_user_admin && (
+                  <>
+                    {chatImage == {} ||
+                    chatImage == undefined ||
+                    chatImage == null ? (
+                      <button className="group-hover:opacity-100 opacity-0 rounded-md absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-10 h-10 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex justify-center items-center">
+                        <CiCamera className="text-gray-800 w-[20px] h-[20px]" />
+                        <input
+                          type="file"
+                          name="cover_image"
+                          accept="image/*"
+                          className="absolute top-0 left-0 bottom-0 right-0 opacity-0 cursor-pointer"
+                          onChange={(e) => {
+                            onChangeImage(e);
+                          }}
+                        />
+                      </button>
+                    ) : (
+                      <div className="group-hover:opacity-100 opacity-0 rounded-md absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-15 h-10 duration-300 text-gray-800 flex gap-1 justify-center items-center">
+                        <button
+                          onClick={resetAvatarImage}
+                          className="cursor-pointer z-10 overflow-hidden rounded-md relative py-2 px-2 bg-gray-800/80 hover:bg-gray-800 text-gray-200 duration-300  flex gap-2 justify-center items-center"
+                        >
+                          <HiMiniXMark />
+                        </button>
+                        <button
+                          onClick={submitAvatarImage}
+                          className="cursor-pointer z-10 overflow-hidden rounded-md relative py-2 px-2 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center"
+                        >
+                          <FaCheck />
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+                {/* {currentChat.is_current_user_admin  ? (
+                  <button className="group-hover:opacity-100 opacity-0 rounded-md absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-10 h-10 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex justify-center items-center">
+                    <CiCamera className="text-gray-800 w-[20px] h-[20px]" />
+                    <input
+                      type="file"
+                      name="cover_image"
+                      accept="image/*"
+                      className="absolute top-0 left-0 bottom-0 right-0 opacity-0 cursor-pointer"
+                      onChange={(e) => {
+                        onChangeImage(e);
+                      }}
+                    />
+                  </button>
+                ) : (
+                  <div className="group-hover:opacity-100 opacity-0 rounded-md absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-15 h-10 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-1 justify-center items-center">
+                    <button
+                      //  onClick={resetAvatarImage}
+                      className="cursor-pointer z-10 overflow-hidden rounded-md relative py-2 px-2 bg-gray-800/80 hover:bg-gray-800 text-gray-200 duration-300  flex gap-2 justify-center items-center"
+                    >
+                      <HiMiniXMark />
+                    </button>
+                    <button
+                      //  onClick={submitAvatarImage}
+                      className="cursor-pointer z-10 overflow-hidden rounded-md relative py-2 px-2 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center"
+                    >
+                      <FaCheck />
+                    </button>
+                  </div>
+                )} */}
+              </>
+            )}
+            <img
+              src={!!chatImage?.url ? chatImage.url : currentChat?.avatar_url}
+              alt=""
+              className="w-[100px] h-[100px] rounded-full object-cover"
+            />
+          </div>
           <h2 className="w-fit text-gray-300 text-lg px-4 py-2 m-0 ">
             {currentChat?.name}
           </h2>
@@ -166,9 +269,7 @@ const ChatInfoForm = () => {
             <h2>Messages:</h2>
             <h2>{currentChat?.messages?.length}</h2>
           </div>
-
           <ChatInfoAttachments attachments={attachments} />
-
           {currentChat?.is_group && (
             <div
               className="flex flex-col justify-start items-center w-full text-gray-500 px-4 border-t-solid border-b-0 border-[1px] border-gray-500/50 border-x-0 py-4 bg-gray-800/50 cursor-pointer duration-200"
@@ -206,12 +307,20 @@ const ChatInfoForm = () => {
                       className="w-12 h-12 rounded-full"
                     />
                     <h2>{user.name}</h2>
-                    {!!user.is_admin ? (
-                      <span className="absolute top-[50%] translate-y-[-50%] right-[20px] text-[10px] bg-emerald-600/40 border-solid border-[1px] border-emerald-600 rounded-sm text-gray-300 px-1 py-[2px]">
-                        Admin
+                    {currentChat?.owner == user.id ? (
+                      <span className="absolute top-[50%] translate-y-[-50%] right-[20px] text-[10px] bg-indigo-800/30 border-indigo-800   border-solid border-[1px]  rounded-sm text-gray-300 px-1 py-[2px]">
+                        owner
                       </span>
                     ) : (
-                      <></>
+                      <>
+                        {!!user.is_admin ? (
+                          <span className="absolute top-[50%] translate-y-[-50%] right-[20px] text-[10px] bg-emerald-600/40 border-solid border-[1px] border-emerald-600 rounded-sm text-gray-300 px-1 py-[2px]">
+                            Admin
+                          </span>
+                        ) : (
+                          <></>
+                        )}
+                      </>
                     )}
                   </Link>
                 ))}

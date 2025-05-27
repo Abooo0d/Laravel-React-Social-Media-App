@@ -95,5 +95,6 @@ Route::middleware('auth')->group(function () {
   Route::post('/chat/{chat:id}/block', [ChatsController::class, 'blockChat'])->name('chat.block');
   Route::post('/chat/{chat:id}/leave', [ChatsController::class, 'leaveChatGroup'])->name('chat.leave');
   Route::delete('/chat/{chat:id}/delete', action: [ChatsController::class, 'deleteChat'])->name('chat.delete');
+  Route::post('/chat/{chat:id}/change-image', [ChatsController::class, 'ChangeChatGroupImage'])->name('chat.changeImage');
 });
 require __DIR__ . '/auth.php';

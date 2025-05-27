@@ -36,9 +36,10 @@ const ChatInfoAttachments = ({ attachments }) => {
     });
     setImages(imageFiles);
     setAudios(audioFiles);
-    setVideos(audioFiles);
+    setVideos(videosFiles);
     setFiles(fileFiles);
   }, [attachments]);
+
   useEffect(() => {
     if (showAttachments) {
       setFormToShow("image");
@@ -112,7 +113,7 @@ const ChatInfoAttachments = ({ attachments }) => {
         </div>
         <div className="w-full h-fit relative">
           <div
-            className={`absolute top-0 left-0 duration-200 w-full overflow-scroll flex justify-center items-center gap-2 flex-wrap ${
+            className={`absolute top-0 left-0 duration-200 w-full overflow-scroll flex justify-center items-start gap-2 flex-wrap ${
               formToShow == "image" ? "h-[240px] opacity-100" : "h-0 opacity-0"
             }`}
           >
@@ -149,7 +150,7 @@ const ChatInfoAttachments = ({ attachments }) => {
             )}
           </div>
           <div
-            className={`absolute top-0 left-0 duration-200 w-full overflow-scroll flex flex-wrap justify-center items-center gap-2 ${
+            className={`absolute top-0 left-0 duration-200 w-full overflow-scroll flex flex-wrap justify-center items-startgap-2 ${
               formToShow == "video" ? "h-[240px] opacity-100" : "h-0 opacity-0"
             }`}
           >
@@ -174,7 +175,10 @@ const ChatInfoAttachments = ({ attachments }) => {
           >
             {files.length > 0 ? (
               files.map((file, index) => (
-                <div className="h-[60px] flex-1 rounded-md bg-gray-700 border-solid border-[1px] border-gray-500/50 flex gap-2 justify-start items-center px-4">
+                <div
+                  className="h-[60px] flex-1 rounded-md bg-gray-700 border-solid border-[1px] border-gray-500/50 flex gap-2 justify-start items-startpx-4"
+                  key={index}
+                >
                   <FaFile className="w-10 h-10 text-gray-400" />
                   <span className="flex-1">{file.name.slice(0, 30)}</span>
                 </div>
