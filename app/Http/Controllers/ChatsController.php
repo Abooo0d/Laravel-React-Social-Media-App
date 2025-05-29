@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\MessageDeleted;
 use App\Events\MessageUpdated;
 use App\Events\NewMessageSent;
+use App\Http\Requests\AddUsersToChatRequest;
 use App\Http\Requests\ChangeChatGroupImage;
 use App\Http\Requests\CreateChatGroupRequest;
 use App\Http\Requests\NewMessageRequest;
@@ -367,6 +368,36 @@ class ChatsController extends Controller
       $chat->update(['name' => $data['name']]);
       return response(["message" => 'The Chat Group Name Was Updated Successfully'], 200);
     } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function addUsersToChat(AddUsersToChatRequest $request, Chat $chat)
+  {
+    try {
+      $data = $request->validated();
+      $users = $data['users'];
+      foreach ($users as $user) {
+        $chatUser = ChatUser::where('user_id', $user)
+          ->where('chat_id', $chat->id)
+          ->first();
+        if (!$chatUser) {
+          ChatUser::create([
+            'chat_id' => $chat->id,
+            'user_id' => $user,
+            'admin' => false
+          ]);
+        }
+      }
+      $chat->refresh();
+      return response(
+        [
+          'message' => 'Users Were Added Successfully',
+          'chat' => new ChatResource($chat)
+        ],
+        200
+      );
+    } catch (e) {
+
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }

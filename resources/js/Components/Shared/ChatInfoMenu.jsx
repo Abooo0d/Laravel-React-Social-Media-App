@@ -11,7 +11,6 @@ import {
   PiSpeakerSimpleHighFill,
   PiSpeakerSimpleSlashFill,
 } from "react-icons/pi";
-import { TbLock } from "react-icons/tb";
 const ChatInfoMenu = ({ swtShowChatInfo }) => {
   const { currentChat, setCurrentChat } = useChatsContext();
   const { setSuccessMessage, setErrors } = useMainContext();

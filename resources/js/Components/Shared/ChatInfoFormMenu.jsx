@@ -3,7 +3,10 @@ import React from "react";
 import { useState } from "react";
 import { HiDotsVertical, HiUserAdd } from "react-icons/hi";
 import { FaEdit } from "react-icons/fa";
-const ChatInfoFormMenu = ({ setShowChangeGroupNameForm }) => {
+const ChatInfoFormMenu = ({
+  setShowChangeGroupNameForm,
+  setShowAddAUSersForm,
+}) => {
   const { currentChat } = useChatsContext();
   const [showMenu, setShowMenu] = useState(false);
   return (
@@ -31,8 +34,14 @@ const ChatInfoFormMenu = ({ setShowChangeGroupNameForm }) => {
           <span className="flex 1"> Change Group Name</span>
           <FaEdit className="w-4 h-4" />
         </button>
-        <button className=" duration-300 flex gap-2 justify-between items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left">
-          <span className="flex 1"> Add Users</span>
+        <button
+          className=" duration-300 flex gap-2 justify-between items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
+          onClick={() => {
+            setShowAddAUSersForm(true);
+            setShowMenu(false);
+          }}
+        >
+          <span className="flex 1"> Add Members</span>
           <HiUserAdd className="w-4 h-4" />
         </button>
       </div>

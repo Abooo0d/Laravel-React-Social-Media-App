@@ -74,7 +74,6 @@ Route::middleware('auth')->group(function () {
   Route::get('/group/getPosts/{group:id}', [GroupController::class, 'getPostsForGroup'])->name('postsForGroup');
   Route::post('/group/search', [GrouPController::class, 'searchForGroups'])->name('group.searchForGroup');
   Route::get('/group/download/{group:id}/{type}', [GroupController::class, 'downloadImage'])->name('download.groupImage');
-
 });
 Route::middleware('auth')->group(function () {
   Route::post('/user/search', [UserController::class, 'searchForUser'])->name('user.searchForUser');
@@ -97,5 +96,6 @@ Route::middleware('auth')->group(function () {
   Route::delete('/chat/{chat:id}/delete', action: [ChatsController::class, 'deleteChat'])->name('chat.delete');
   Route::post('/chat/{chat:id}/change-image', [ChatsController::class, 'ChangeChatGroupImage'])->name('chat.changeImage');
   Route::post('/chat/{chat:id}/change-name', [ChatsController::class, 'ChangeChatName'])->name('chat.changeName');
+  Route::post('/chat/{chat:id}/add-users', [ChatsController::class, 'addUsersToChat'])->name('chat.addMembers');
 });
 require __DIR__ . '/auth.php';

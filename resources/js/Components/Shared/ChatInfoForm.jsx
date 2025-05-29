@@ -23,6 +23,7 @@ import ChatInfoAttachments from "./ChatInfoAttachments";
 import { CiCamera } from "react-icons/ci";
 import ChatInfoFormMenu from "./ChatInfoFormMenu";
 import ChangeChatGroupName from "./ChangeChatGroupName";
+import AddUsersToChatForm from "./AddUsersToChatForm";
 const ChatInfoForm = () => {
   const { user } = useUserContext();
   const {
@@ -39,6 +40,7 @@ const ChatInfoForm = () => {
   const [attachments, setAttachments] = useState([]);
   const [chatImage, setChatImage] = useState(null);
   const [showChangeGroupNameForm, setShowChangeGroupNameForm] = useState(false);
+  const [showAddUsersForm, setShowAddUsersForm] = useState(false);
 
   useEffect(() => {
     let att = currentChat?.messages?.filter(
@@ -174,6 +176,7 @@ const ChatInfoForm = () => {
             {currentChat?.is_current_user_admin && (
               <ChatInfoFormMenu
                 setShowChangeGroupNameForm={setShowChangeGroupNameForm}
+                setShowAddAUSersForm={setShowAddUsersForm}
               />
             )}
           </>
@@ -341,12 +344,15 @@ const ChatInfoForm = () => {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          {currentChat?.is_group && (
-            <button className="bg-sky-500/30 border-[1px] border-solid border-sky-500 px-4 py-2 text-gray-200 rounded-md w-full hover:bg-sky-500/50 duration-200 flex justify-center items-center gap-4">
-              Add Users
+          {/* {currentChat?.is_group && (
+            <button
+              className="bg-sky-500/30 border-[1px] border-solid border-sky-500 px-4 py-2 text-gray-200 rounded-md w-full hover:bg-sky-500/50 duration-200 flex justify-center items-center gap-4"
+              onClick={() => {}}
+            >
+              Add Members
               <HiUserAdd className="w-4 h-4" />
             </button>
-          )}
+          )} */}
           <div className="flex justify-center items-center gap-2 w-full pb-4">
             {currentChat?.is_group ? (
               <>
@@ -414,6 +420,10 @@ const ChatInfoForm = () => {
       <ChangeChatGroupName
         showForm={showChangeGroupNameForm}
         setShowForm={setShowChangeGroupNameForm}
+      />
+      <AddUsersToChatForm
+        setShowForm={setShowAddUsersForm}
+        showForm={showAddUsersForm}
       />
     </div>
   );
