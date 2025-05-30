@@ -131,7 +131,6 @@ class ChatsController extends Controller
     try {
       $data = $request->validated();
       $files = $data['attachments'] ?? [];
-      // dd($files[0]);
       $message = Message::create([
         'chat_id' => $chat->id,
         'user_id' => auth()->id(),

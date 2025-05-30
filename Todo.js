@@ -7,14 +7,18 @@
 // Set A Loading When Sending Invitation To Group
 
 /************** TOday *************/
-// Adding Permeations For The Group
+
 // delete All The Attachment Of The Group When Deleting The ChatGroup
-// send notifications For The users When They Are Added Or Removed From The Group
-// ALlowing The Change The Data Of THe Group For Admins Only
-// fix the design of The Message Attachments
+// ADding Events For creating A Chats
+// ADding Event For Deleting A Chat
+// ADding Events For Updating The Chat
 /************** Working On *************/
 
 /************** Done *************/
+// ALlowing The Change The Data Of THe Group For Admins Only
+// fix the design of The Message Attachments
+// send notifications For The users When They Are Added Or Removed From The Group
+// Adding Permeations For The Group
 // show The Admin In The Chats Members
 // SHowing The Attachments For The Chat In The Chat Info
 // make sure when sending a large file to show the Errors message
@@ -44,8 +48,8 @@
 // Fix THe message When Sent To Group To Not Show The Check
 // update The Notification To Take A Generic Link To Store
 // fix the design in the chats bar
-// Update The Authenticated Layout Tfor The Pulic View
-// make the message desapera when Reloading
+// Update The Authenticated Layout for The Public View
+// make the message Disappear when Reloading
 // Format The ChatCard Data Correctly
 // Get The ChatCard Data From The Chat  Messages Not From The Chat Fields
 // FIx The Z-Index in All OverLays

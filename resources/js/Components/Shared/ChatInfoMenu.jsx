@@ -77,12 +77,12 @@ const ChatInfoMenu = ({ swtShowChatInfo }) => {
       >
         {currentChat.is_group ? (
           <>
-            {currentChat.is_current_user_admin && (
+            {/* {currentChat.is_current_user_admin && (
               <button className=" duration-300 flex gap-2 justify-between items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left">
                 <span className="flex 1"> Add Users</span>
                 <HiUserAdd className="w-4 h-4" />
               </button>
-            )}
+            )} */}
             <button
               className=" duration-300 flex gap-2 justify-between items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
               onClick={() => {

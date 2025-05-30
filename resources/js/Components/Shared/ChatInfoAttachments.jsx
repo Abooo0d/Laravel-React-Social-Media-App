@@ -127,8 +127,10 @@ const ChatInfoAttachments = ({ attachments }) => {
                 />
               ))
             ) : (
-              <div className="h-[40px] w-[50%] rounded-md text-gray-300 bg-gray-700 border-solid border-[1px] border-gray-500/50 flex gap-2 justify-center items-center">
-                There Is No Items
+              <div className="h-full w-full flex justify-center items-center">
+                <div className="h-[40px] w-[50%] rounded-md text-gray-300 bg-gray-700 border-solid border-[1px] border-gray-500/50 flex gap-2 justify-center items-center">
+                  There Is No Items
+                </div>
               </div>
             )}
           </div>
@@ -144,8 +146,10 @@ const ChatInfoAttachments = ({ attachments }) => {
                 </div>
               ))
             ) : (
-              <div className="h-[40px] w-[50%] rounded-md text-gray-300 bg-gray-700 border-solid border-[1px] border-gray-500/50 flex gap-2 justify-center items-center">
-                There Is No Items
+              <div className="h-full w-full flex justify-center items-center">
+                <div className="h-[40px] w-[50%] rounded-md text-gray-300 bg-gray-700 border-solid border-[1px] border-gray-500/50 flex gap-2 justify-center items-center">
+                  There Is No Items
+                </div>
               </div>
             )}
           </div>
@@ -163,8 +167,10 @@ const ChatInfoAttachments = ({ attachments }) => {
                 />
               ))
             ) : (
-              <div className="h-[40px] w-[50%] rounded-md text-gray-300 bg-gray-700 border-solid border-[1px] border-gray-500/50 flex gap-2 justify-center items-center">
-                There Is No Items
+              <div className="h-full w-full flex justify-center items-center">
+                <div className="h-[40px] w-[50%] rounded-md text-gray-300 bg-gray-700 border-solid border-[1px] border-gray-500/50 flex gap-2 justify-center items-center">
+                  There Is No Items
+                </div>
               </div>
             )}
           </div>
@@ -176,7 +182,7 @@ const ChatInfoAttachments = ({ attachments }) => {
             {files.length > 0 ? (
               files.map((file, index) => (
                 <div
-                  className="h-[60px] flex-1 rounded-md bg-gray-700 border-solid border-[1px] border-gray-500/50 flex gap-2 justify-start items-startpx-4"
+                  className="h-[60px] flex-1 rounded-md bg-gray-700 border-solid border-[1px] border-gray-500/50 flex gap-2 justify-start items-center px-4"
                   key={index}
                 >
                   <FaFile className="w-10 h-10 text-gray-400" />
@@ -184,8 +190,10 @@ const ChatInfoAttachments = ({ attachments }) => {
                 </div>
               ))
             ) : (
-              <div className="h-[40px] w-[50%] rounded-md text-gray-300 bg-gray-700 border-solid border-[1px] border-gray-500/50 flex gap-2 justify-center items-center">
-                There Is No Items
+              <div className="h-full w-full flex justify-center items-center">
+                <div className="h-[40px] w-[50%] rounded-md text-gray-300 bg-gray-700 border-solid border-[1px] border-gray-500/50 flex gap-2 justify-center items-center">
+                  There Is No Items
+                </div>
               </div>
             )}
           </div>

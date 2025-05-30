@@ -101,7 +101,10 @@ export const ChatsContext = ({ children }) => {
                 if (alreadyExists) return chat;
                 return {
                   ...chat,
-                  messages: [message, ...chat.messages],
+                  messages: [
+                    { ...message, my_status: false },
+                    ...chat.messages,
+                  ],
                   last_message: message.body,
                   last_message_id: message.id,
                   last_message_date: message.created_at,

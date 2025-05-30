@@ -13,7 +13,8 @@ class Message extends Model
   {
     return $this->hasOne(MessageStatus::class)
       ->where('message_id', $this->id)
-      ->where('user_id', auth()->id());
+      ->where('user_id', auth()->id())
+      ->exists();
   }
   public function unreadFor($userId)
   {

@@ -118,7 +118,7 @@ const AttachmentFullView = () => {
                           ? "w-40 h-60 max-h-[80%] max-w-[70%]"
                           : MessageIsImage(attachments[attachmentIndex])
                           ? "w-96 h-96 max-h-[80%] max-w-[70%]"
-                          : "w-20 h-20 max-h-[80%] max-w-[70%]"
+                          : "w-80 h-20 max-h-[80%] max-w-[70%]"
                       }`}
                 >
                   {MessageIsImage(attachments[attachmentIndex]) && (
@@ -148,7 +148,7 @@ const AttachmentFullView = () => {
                   )}
                   {!isPreviewAble(attachments[attachmentIndex]) && (
                     <>
-                      <span className="absolute top-1 right-1 w-5 h-5  rounded-md flex justify-center items-center bg-gray-300/20 text-gray-300 group-hover:opacity-100 opacity-0 duration-200 z-10"></span>
+                      {/* <span className="absolute top-1 right-1 w-5 h-5  rounded-md flex justify-center items-center bg-gray-300/20 text-gray-300 group-hover:opacity-100 opacity-0 duration-200 z-10"></span> */}
                       <div className="w-full h-full  flex justify-between items-center gap-2 p-2">
                         <span className="min-w-10 h-10 rounded-md flex justify-center items-center bg-gray-600 text-gray-300">
                           <FaFile />
