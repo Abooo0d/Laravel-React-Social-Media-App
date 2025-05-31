@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Events\ChatCreated;
+use App\Events\ChatDeleted;
+use App\Events\ChatUpdated;
 use App\Events\MessageDeleted;
 use App\Events\MessageUpdated;
 use App\Events\NewMessageSent;
@@ -313,6 +315,8 @@ class ChatsController extends Controller
           ->first();
         if ($chatUser) {
           $chatUser->delete();
+          $chat->refresh();
+          broadcast(new ChatUpdated($chat));
           return response(['message' => 'You Have Left The Group'], 200);
         }
       }
@@ -327,6 +331,7 @@ class ChatsController extends Controller
         return response(['message' => 'You Don`t have Permission To Delete This chat Group'], 401);
       }
       $chat->delete();
+      broadcast(new ChatDeleted($chat->id));
       return response(['message' => 'The Chat Group Was Deleted Successfully'], 200);
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
@@ -347,6 +352,7 @@ class ChatsController extends Controller
       $chat->update([
         'avatar_path' => $avatarPath
       ]);
+      broadcast(new ChatUpdated($chat));
       return response(
         [
           'message' => 'Chat Image Updated Successfully',
@@ -366,6 +372,7 @@ class ChatsController extends Controller
         'name' => ['string', 'required']
       ]);
       $chat->update(['name' => $data['name']]);
+      broadcast(new ChatUpdated($chat));
       return response(["message" => 'The Chat Group Name Was Updated Successfully'], 200);
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
@@ -389,6 +396,7 @@ class ChatsController extends Controller
         }
       }
       $chat->refresh();
+      broadcast(new ChatUpdated($chat));
       return response(
         [
           'message' => 'Users Were Added Successfully',

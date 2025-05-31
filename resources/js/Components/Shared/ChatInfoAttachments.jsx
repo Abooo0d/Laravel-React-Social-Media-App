@@ -45,9 +45,8 @@ const ChatInfoAttachments = ({ attachments }) => {
       setFormToShow("image");
     }
   }, [showAttachments]);
-
   return (
-    <div className="flex flex-col justify-start items-center w-full text-gray-500 px-4 border-t-solid border-t-[1px] border-gray-500/50 border-x-0cursor-pointer bg-gray-800/50">
+    <div className="flex flex-col justify-start items-center w-full text-gray-500 px-4 border-t-solid border-t-[1px] border-gray-500/50 border-x-0cursor-pointer bg-gray-800/50 cursor-pointer">
       <div
         className="flex justify-between items-center w-full py-4"
         onClick={() => {

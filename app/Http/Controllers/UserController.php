@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ChatCreated;
+use App\Events\FriendRequestAccepted;
 use App\Http\Enums\FriendsRequestEnum;
 use App\Http\Requests\SearchUserRequest;
 use App\Http\Resources\UserResource;
@@ -98,6 +100,8 @@ class UserController extends Controller
           'user_id' => Auth::id(),
           'admin' => true
         ]);
+        $chat->refresh();
+        broadcast(new FriendRequestAccepted($chat, $user->id));
         return redirect()->back()->with('success', "Friend Request Is Accepted");
       } else
         return response()->json(['message' => "There Is An Error With The Request"], 400);

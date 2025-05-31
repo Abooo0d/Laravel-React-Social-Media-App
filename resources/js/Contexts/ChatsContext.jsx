@@ -39,7 +39,7 @@ export const ChatsContext = ({ children }) => {
   const [attachmentIndex, setAttachmentIndex] = useState(0);
   const [showAttachmentFullView, setShowAttachmentFullView] = useState(false);
   const [showChatInfo, setShowChatInfo] = useState(false);
-  const { setSuccessMessage } = useMainContext();
+  const { setSuccessMessage, setErrors } = useMainContext();
   useEffect(() => {
     let array = onlineUsers.map((user) => user.id);
     setOnlineUsersIds(array);
@@ -91,8 +91,6 @@ export const ChatsContext = ({ children }) => {
     const userChannel = window.Echo.private(`user.${user?.id}`);
     userChannel.listen("ChatCreated", (e) => {
       const newChat = e.chat;
-      console.log(newChat);
-
       setSuccessMessage("You Have Been Add To New Chat");
       setCombinedChats((prev) => [...prev, newChat]);
     });
@@ -102,9 +100,7 @@ export const ChatsContext = ({ children }) => {
     combinedChats?.forEach((chat) => {
       const chatId = chat.id;
       if (subscribedChats.current.has(chatId)) return;
-
       const channel = window.Echo.private(`chat.${chatId}`);
-
       channel.listen(
         "NewMessageSent",
         (e) => {
@@ -200,6 +196,46 @@ export const ChatsContext = ({ children }) => {
           );
         }
       });
+
+      channel.listen("ChatUpdated", (e) => {
+        let updatedChatData = e;
+        if (updatedChatData.id == currentChat?.id) {
+          setCurrentChat((prev) => ({
+            ...prev,
+            name: updatedChatData.name,
+            avatar_url: updatedChatData.avatar_url,
+            users: updatedChatData.users,
+          }));
+        } else {
+          setCombinedChats((prev) =>
+            prev.map((chat) => {
+              chat.id == updatedChatData.id
+                ? {
+                    ...chat,
+                    name: updatedChatData.name,
+                    avatar_url: updatedChatData.avatar_url,
+                    users: updatedChatData.users,
+                  }
+                : chat;
+            })
+          );
+        }
+      });
+
+      channel.listen("ChatDeleted", (e) => {
+        let chatId = e.chatId;
+        let message = e.message;
+        if (currentChat.id == chatId) {
+          setCurrentChat(null);
+        }
+        setCombinedChats((prev) =>
+          prev.filter((chat) => {
+            chat.id !== chatId;
+          })
+        );
+        setErrors([message]);
+      });
+
       subscribedChats.current.add(chatId);
     });
   }, [combinedChats]);
