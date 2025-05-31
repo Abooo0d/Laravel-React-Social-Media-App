@@ -60,7 +60,7 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
 
   useEffect(() => {
     let unread = 0;
-    chatData.messages.map((message) => {
+    chatData?.messages?.map((message) => {
       !message?.my_status && unread++;
     });
     setUnreadCount(unread);
@@ -98,7 +98,7 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
         )}
       </div>
       <div className="flex flex-col bg-blue-1 flex-1">
-        {!chatData.status.muted && (
+        {!chatData?.status?.muted && (
           <>
             {unreadCount > 0 && (
               // <span className="absolute bottom-4 right-4 w-4 h-4 rounded-md bg-blue-500/50 flex justify-center items-center">
@@ -128,7 +128,7 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
             )}
           </p>
         </div>
-        {chatData.messages.length > 0 ? (
+        {chatData?.messages?.length > 0 ? (
           <p className="text-gray-600 text-sm">
             {chatData?.messages[0]?.body?.length > 25
               ? chatData?.messages[0]?.body?.substr(0, 25) + "..."

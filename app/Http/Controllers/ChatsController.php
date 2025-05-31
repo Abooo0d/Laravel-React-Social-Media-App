@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ChatCreated;
 use App\Events\MessageDeleted;
 use App\Events\MessageUpdated;
 use App\Events\NewMessageSent;
@@ -210,7 +211,6 @@ class ChatsController extends Controller
   public function createChatGroup(CreateChatGroupRequest $request)
   {
     try {
-      // dd('Abood');
       $data = $request->validated();
       if ($data['chat_name'] !== '') {
         $chat = Chat::create([
@@ -235,6 +235,7 @@ class ChatsController extends Controller
           }
         }
         $chat->refresh();
+        broadcast(new ChatCreated($chat, $users))->toOthers();
         return response([
           'message' => 'Chat Created Successfully',
           'chat' => new ChatResource($chat)

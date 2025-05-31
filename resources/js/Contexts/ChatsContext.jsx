@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useUserContext } from "./UserContext";
+import { useRef } from "react";
+import { MainContext, useMainContext } from "./MainContext";
 
 const INITIAL_DATA = {
   onlineUsers: [],
@@ -25,6 +27,8 @@ const INITIAL_DATA = {
 };
 const Context = createContext(INITIAL_DATA);
 export const ChatsContext = ({ children }) => {
+  const { user } = useUserContext();
+  const subscribedChats = useRef(new Set());
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [onlineUsersIds, setOnlineUsersIds] = useState([]);
   const [currentChat, setCurrentChat] = useState({});
@@ -35,7 +39,7 @@ export const ChatsContext = ({ children }) => {
   const [attachmentIndex, setAttachmentIndex] = useState(0);
   const [showAttachmentFullView, setShowAttachmentFullView] = useState(false);
   const [showChatInfo, setShowChatInfo] = useState(false);
-
+  const { setSuccessMessage } = useMainContext();
   useEffect(() => {
     let array = onlineUsers.map((user) => user.id);
     setOnlineUsersIds(array);
@@ -82,11 +86,26 @@ export const ChatsContext = ({ children }) => {
         );
       });
   }, []);
+  useEffect(() => {
+    if (!user?.id) return;
+    const userChannel = window.Echo.private(`user.${user?.id}`);
+    userChannel.listen("ChatCreated", (e) => {
+      const newChat = e.chat;
+      console.log(newChat);
+
+      setSuccessMessage("You Have Been Add To New Chat");
+      setCombinedChats((prev) => [...prev, newChat]);
+    });
+  }, [user?.id]);
 
   useEffect(() => {
-    if (!!currentChat?.id) {
-      const newMessageChannel = window.Echo.private(`chat.${currentChat.id}`);
-      newMessageChannel.listen(
+    combinedChats?.forEach((chat) => {
+      const chatId = chat.id;
+      if (subscribedChats.current.has(chatId)) return;
+
+      const channel = window.Echo.private(`chat.${chatId}`);
+
+      channel.listen(
         "NewMessageSent",
         (e) => {
           const message = e.message;
@@ -115,7 +134,7 @@ export const ChatsContext = ({ children }) => {
           );
           // 2. Update currentChat (if it's the same chat)
           setCurrentChat((prevChat) => {
-            if (prevChat.id !== message.chat_id) return prevChat;
+            if (prevChat?.id !== message.chat_id) return prevChat;
             const alreadyExists = prevChat.messages.some(
               (msg) => msg.id === message.id
             );
@@ -129,11 +148,12 @@ export const ChatsContext = ({ children }) => {
             };
           });
         },
-        [currentChat?.id]
+        [chatId]
       );
-      newMessageChannel.listen("MessageUpdated", (e) => {
+
+      channel.listen("MessageUpdated", (e) => {
         const newMessage = e.message;
-        if (message.chat_id == currentChat.id) {
+        if (message.chat_id == currentChat?.id) {
           setCurrentChat((prev) => ({
             ...prev,
             messages: prev.messages.map((message) => {
@@ -155,20 +175,34 @@ export const ChatsContext = ({ children }) => {
           );
         }
       });
-      newMessageChannel.listen("MessageDeleted", (e) => {
+
+      channel.listen("MessageDeleted", (e) => {
         let deletedMessageData = e;
-        if ((currentChat.id = deletedMessageData.chat_id)) {
+        if (deletedMessageData.chat_id == currentChat?.id) {
           setCurrentChat((prev) => ({
             ...prev,
             messages: prev.messages.filter(
-              (message) => message.id != deletedMessageData.message_id
+              (me) => me != deletedMessageData.messages_id
             ),
           }));
         } else {
+          setCombinedChats((prev) =>
+            prev.map((chat) => {
+              chat.id == deletedMessageData.chat_id
+                ? {
+                    ...chat,
+                    messages: chat.messages.filter(
+                      (me) => me.id != deletedMessageData.message_id
+                    ),
+                  }
+                : chat;
+            })
+          );
         }
       });
-    }
-  }, [currentChat?.id]);
+      subscribedChats.current.add(chatId);
+    });
+  }, [combinedChats]);
 
   return (
     <Context.Provider

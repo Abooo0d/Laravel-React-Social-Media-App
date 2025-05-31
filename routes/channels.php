@@ -20,8 +20,6 @@ Broadcast::channel(
   fn($user, $chatId) =>
   Chat::find($chatId)->users->contains($user->id)
 );
-
-
 Broadcast::channel('online', function ($user) {
   $authUser = Auth::user();
   if ($authUser && $authUser->isFriend($user->id)) {
@@ -29,3 +27,7 @@ Broadcast::channel('online', function ($user) {
   }
   return $authUser;
 });
+Broadcast::channel(
+  'user.{id}',
+  fn($user, $id) => (int) $user->id == (int) $id
+);
