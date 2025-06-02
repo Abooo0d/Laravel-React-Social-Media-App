@@ -102,7 +102,10 @@ const ChatInfoForm = () => {
       .post(route("chat.leave", currentChat.id))
       .then((data) => {
         setSuccessMessage(data.data.message);
-        setCurrentChat({});
+        setCombinedChats((prev) =>
+          prev.filter((chat) => chat.id !== currentChat?.id)
+        );
+        setCurrentChat(null);
         setShowChatInfo(false);
       })
       .catch((error) => {
@@ -262,7 +265,7 @@ const ChatInfoForm = () => {
           </h2>
           {currentChat?.is_group ? (
             <h2 className="w-fit text-gray-500 text-lg p-0 m-0">
-              Group: {currentChat?.users.length} members
+              Group: {currentChat?.users?.length} members
             </h2>
           ) : (
             <h2 className="w-fit text-gray-500 text-lg p-0 m-0">

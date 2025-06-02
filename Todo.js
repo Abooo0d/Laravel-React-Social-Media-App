@@ -7,14 +7,15 @@
 // Set A Loading When Sending Invitation To Group
 
 /************** TOday *************/
+// Creating Form To Change The Permeation Of The user In The Chat Group
+/************** Working On *************/
+// Adding Jobs For Heavy Work
 
+/************** Done *************/
 // delete All The Attachment Of The Group When Deleting The ChatGroup
 // ADding Events For creating A Chats
 // ADding Event For Deleting A Chat
 // ADding Events For Updating The Chat
-/************** Working On *************/
-
-/************** Done *************/
 // ALlowing The Change The Data Of THe Group For Admins Only
 // fix the design of The Message Attachments
 // send notifications For The users When They Are Added Or Removed From The Group

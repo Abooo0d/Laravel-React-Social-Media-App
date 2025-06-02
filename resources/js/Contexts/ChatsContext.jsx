@@ -92,7 +92,11 @@ export const ChatsContext = ({ children }) => {
     userChannel.listen("ChatCreated", (e) => {
       const newChat = e.chat;
       setSuccessMessage("You Have Been Add To New Chat");
-      setCombinedChats((prev) => [...prev, newChat]);
+      setCombinedChats((prev) => {
+        const exists = prev.some((chat) => chat.id === newChat.id);
+        if (exists) return prev; // Chat already exists, don't add
+        return [...prev, newChat]; // Add new chat
+      });
     });
   }, [user?.id]);
 
@@ -221,18 +225,15 @@ export const ChatsContext = ({ children }) => {
           );
         }
       });
-
       channel.listen("ChatDeleted", (e) => {
         let chatId = e.chatId;
         let message = e.message;
-        if (currentChat.id == chatId) {
+        if (currentChat?.id == chatId) {
           setCurrentChat(null);
         }
-        setCombinedChats((prev) =>
-          prev.filter((chat) => {
-            chat.id !== chatId;
-          })
-        );
+        let a = combinedChats;
+        a = a.filter((c) => c.id !== chatId);
+        setCombinedChats(a);
         setErrors([message]);
       });
 

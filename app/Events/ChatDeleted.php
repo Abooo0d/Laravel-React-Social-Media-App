@@ -18,10 +18,12 @@ class ChatDeleted implements ShouldBroadcast
   /**
    * Create a new event instance.
    */
-  public $chat;
-  public function __construct(Chat $chat)
+  public $chatId;
+  public $chatName;
+  public function __construct(int $chatId, string $chatName)
   {
-    $this->chat = $chat;
+    $this->chatId = $chatId;
+    $this->chatName = $chatName;
   }
 
   /**
@@ -32,14 +34,14 @@ class ChatDeleted implements ShouldBroadcast
   public function broadcastOn(): array
   {
     return [
-      new PrivateChannel("chat.{$this->chat->id}"),
+      new PrivateChannel("chat.{$this->chatId}"),
     ];
   }
   public function broadcastWith()
   {
     return [
-      'chatId' => $this->chat->id,
-      'message' => "'{$this->chat->name}' Group Has Been Deleted."
+      'chatId' => $this->chatId,
+      'message' => "'{$this->chatName}' Group Has Been Deleted."
     ];
   }
 }

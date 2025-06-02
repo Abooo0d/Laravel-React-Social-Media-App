@@ -110,7 +110,7 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
         )}
         <div className="flex flex-1 gap-1 justify-between items-center w-full ">
           <h3 className="text-[15px] w-full text-nowrap overflow-hidden">
-            {chatData.name.length > 16
+            {chatData?.name?.length > 16
               ? chatData.name.substr(0, 16) + "..."
               : chatData.name}
           </h3>

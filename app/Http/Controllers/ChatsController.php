@@ -16,6 +16,7 @@ use App\Http\Requests\SearchForChatRequest;
 use App\Http\Requests\UpdateMessageRequest;
 use App\Http\Resources\ChatResource;
 use App\Http\Resources\MessageResource;
+use App\Jobs\DeleteChatGroup;
 use App\Models\Chat;
 use App\Models\ChatsStatus;
 use App\Models\ChatUser;
@@ -330,9 +331,8 @@ class ChatsController extends Controller
       if ($chat->owner !== auth()->id()) {
         return response(['message' => 'You Don`t have Permission To Delete This chat Group'], 401);
       }
-      $chat->delete();
-      broadcast(new ChatDeleted($chat->id));
-      return response(['message' => 'The Chat Group Was Deleted Successfully'], 200);
+      DeleteChatGroup::dispatch($chat->id)->delay(now()->addSeconds(15));
+      return response(['message' => 'Yor Task Is In Process You Will be Notified On Success'], 200);
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }

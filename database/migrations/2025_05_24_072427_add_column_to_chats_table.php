@@ -11,7 +11,7 @@ return new class extends Migration {
   public function up(): void
   {
     Schema::table('chats', function (Blueprint $table) {
-      $table->foreignId('owner')->constrained('users', 'id')->onDelete('cascade');
+      $table->integer('owner')->nullable();
     });
   }
 

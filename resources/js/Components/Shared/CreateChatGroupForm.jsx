@@ -92,6 +92,7 @@ const CreateChatGroupForm = ({ showForm, setShowForm }) => {
     setMessage("");
     setSearchResult([]);
     setSearchName("");
+    setAddedUsers([]);
   }, [showForm]);
 
   return (
