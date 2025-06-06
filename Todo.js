@@ -10,6 +10,8 @@
 // Creating Form To Change The Permeation Of The user In The Chat Group
 // set ShowChatInfo Form To False When The View Changes
 // When Adding New Users To The ChatGroup The Data In THe Chat CArd Get Saved Wrong
+// create Action In The Chat For Changing The Chat Name Or Adding users Or Kicking Out users
+// send The Change Role For USers And Kicking Out The Users On The Private Channels For The users
 /************** Working On *************/
 // Adding Jobs For Heavy Work
 

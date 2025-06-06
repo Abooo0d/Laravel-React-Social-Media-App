@@ -440,4 +440,25 @@ class ChatsController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
+  public function kickOut(Request $request, Chat $chat)
+  {
+    try {
+      if (!$chat->isCurrentUserAdmin()) {
+        return response(['You Must Be Admin To make This Action'], 403);
+      }
+      $data = $request->validate([
+        'user_id' => ['required', 'exists:users,id']
+      ]);
+      $userId = $data['user_id'];
+      $chatUser = ChatUser::where('chat_id', $chat->id)
+        ->where('user_id', $userId)
+        ->first();
+      if (!!$chatUser) {
+        $chatUser->delete();
+        return response(['message' => 'This User Is Now Kicked Out'], 200);
+      }
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
 }

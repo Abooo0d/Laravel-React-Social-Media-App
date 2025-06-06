@@ -31,6 +31,25 @@ const ChatMemberMenu = ({ user }) => {
         setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
       });
   };
+  const kickOut = () => {
+    axiosClient
+      .post(route("chat.kickOut", currentChat.id), {
+        user_id: user.id,
+      })
+      .then((data) => {
+        setCurrentChat((prev) => ({
+          ...prev,
+          users: prev.users.filter((u) => u.id != user.id),
+        }));
+        setSuccessMessage(data.data.message);
+        setShowMenu(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
+        setShowMenu(false);
+      });
+  };
   return (
     <>
       <div
@@ -58,7 +77,9 @@ const ChatMemberMenu = ({ user }) => {
         </button>
         <button
           className=" duration-300 flex gap-2 justify-between items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
-          onClick={() => {}}
+          onClick={() => {
+            kickOut();
+          }}
         >
           <span className="flex 1">kick Out</span>
         </button>

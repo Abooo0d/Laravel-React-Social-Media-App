@@ -2,7 +2,6 @@ import { useChatsContext } from "@/Contexts/ChatsContext";
 import { Link } from "@inertiajs/react";
 import React from "react";
 import ChatMemberMenu from "./ChatMemberMenu";
-
 const ChatMemberCard = ({ user }) => {
   const { currentChat } = useChatsContext();
   return (
