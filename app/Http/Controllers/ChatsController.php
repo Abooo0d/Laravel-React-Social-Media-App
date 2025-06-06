@@ -10,6 +10,7 @@ use App\Events\MessageUpdated;
 use App\Events\NewMessageSent;
 use App\Http\Requests\AddUsersToChatRequest;
 use App\Http\Requests\ChangeChatGroupImage;
+use App\Http\Requests\ChangeRoleForChatRequest;
 use App\Http\Requests\CreateChatGroupRequest;
 use App\Http\Requests\NewMessageRequest;
 use App\Http\Requests\SearchForChatRequest;
@@ -405,7 +406,37 @@ class ChatsController extends Controller
         200
       );
     } catch (e) {
-
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function setAdmin(ChangeRoleForChatRequest $request, Chat $chat)
+  {
+    try {
+      $data = $request->validated();
+      $role = $data['role'];
+      $userId = $data['user_id'];
+      $user = ChatUser::where('user_id', $userId)
+        ->where('chat_id', $chat->id)
+        ->first();
+      if ($user) {
+        switch ($role) {
+          case 'admin':
+            $user->update([
+              'admin' => 1
+            ]);
+            break;
+          case 'user':
+            $user->update([
+              'admin' => 0
+            ]);
+            break;
+        }
+      } else {
+        return response(['message' => 'This User Is Not Member Of This Chat'], 400);
+      }
+      $message = $role == 'admin' ? 'This Member Is Now Admin' : 'This user Is Now User';
+      return response(['message' => $message], 200);
+    } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }

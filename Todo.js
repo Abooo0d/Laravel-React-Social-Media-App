@@ -8,6 +8,8 @@
 
 /************** TOday *************/
 // Creating Form To Change The Permeation Of The user In The Chat Group
+// set ShowChatInfo Form To False When The View Changes
+// When Adding New Users To The ChatGroup The Data In THe Chat CArd Get Saved Wrong
 /************** Working On *************/
 // Adding Jobs For Heavy Work
 

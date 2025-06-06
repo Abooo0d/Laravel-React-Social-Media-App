@@ -97,5 +97,6 @@ Route::middleware('auth')->group(function () {
   Route::post('/chat/{chat:id}/change-image', [ChatsController::class, 'ChangeChatGroupImage'])->name('chat.changeImage');
   Route::post('/chat/{chat:id}/change-name', [ChatsController::class, 'ChangeChatName'])->name('chat.changeName');
   Route::post('/chat/{chat:id}/add-users', [ChatsController::class, 'addUsersToChat'])->name('chat.addMembers');
+  Route::post('chat/{chat:id}/set-admin', [chatsController::class, 'setAdmin'])->name('chat.setAdmin');
 });
 require __DIR__ . '/auth.php';

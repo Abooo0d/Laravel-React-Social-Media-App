@@ -24,6 +24,7 @@ import { CiCamera } from "react-icons/ci";
 import ChatInfoFormMenu from "./ChatInfoFormMenu";
 import ChangeChatGroupName from "./ChangeChatGroupName";
 import AddUsersToChatForm from "./AddUsersToChatForm";
+import ChatMemberCard from "./ChatMemberCard";
 const ChatInfoForm = () => {
   const { user } = useUserContext();
   const {
@@ -289,73 +290,42 @@ const ChatInfoForm = () => {
           </div>
           <ChatInfoAttachments attachments={attachments} />
           {currentChat?.is_group && (
-            <div
-              className="flex flex-col justify-start items-center w-full text-gray-500 px-4 border-t-solid border-b-0 border-[1px] border-gray-500/50 border-x-0 py-4 bg-gray-800/50 cursor-pointer duration-200"
-              onClick={() => {
-                setShowMembers((prev) => !prev);
-              }}
-            >
+            <div className="flex flex-col justify-start items-center w-full text-gray-500 px-4 border-t-solid border-b-0 border-[1px] border-gray-500/50 border-x-0 py-4 bg-gray-800/50 cursor-pointer duration-200">
               <div className="flex justify-between items-center w-full">
-                <h2>Members:</h2>
-                <div className="flex justify-center items-center gap-2">
-                  <FaAngleRight
-                    className={`w-6 h-6 duration-200 ${
-                      showMembers ? "-rotate-90" : "rotate-90"
-                    }`}
-                  />
-                  <h2>{currentChat?.users?.length}</h2>
+                <div
+                  className="flex justify-between items-center w-full"
+                  onClick={() => {
+                    setShowMembers((prev) => !prev);
+                  }}
+                >
+                  <h2>Members:</h2>
+                  <div className="flex justify-center items-center gap-2">
+                    <FaAngleRight
+                      className={`w-6 h-6 duration-200 ${
+                        showMembers ? "-rotate-90" : "rotate-90"
+                      }`}
+                    />
+                    <h2>{currentChat?.users?.length}</h2>
+                  </div>
                 </div>
               </div>
               <div
-                className={`w-full px-4 flex flex-col justify-start items-center duration-200 overflow-auto max-h-[200px]  ${
+                className={`w-full px-4 flex flex-col justify-start items-center duration-200 overflow-auto ${
                   showMembers
                     ? "h-[150px] opacity-100 py-2 "
                     : " h-0 opacity-0 "
                 }`}
               >
-                {currentChat?.users?.map((user, index) => (
-                  <Link
-                    className="w-full flex justify-start gap-4 items-center relative hover:bg-gray-800/50 duration-200 rounded-md px-2 py-2"
-                    key={index}
-                    href={route("profile.view", user?.name)}
-                  >
-                    <img
-                      src={user.avatar}
-                      alt=""
-                      className="w-12 h-12 rounded-full"
-                    />
-                    <h2>{user.name}</h2>
-                    {currentChat?.owner == user.id ? (
-                      <span className="absolute top-[50%] translate-y-[-50%] right-[20px] text-[10px] bg-indigo-800/30 border-indigo-800   border-solid border-[1px]  rounded-sm text-gray-300 px-1 py-[2px]">
-                        owner
-                      </span>
-                    ) : (
-                      <>
-                        {!!user.is_admin ? (
-                          <span className="absolute top-[50%] translate-y-[-50%] right-[20px] text-[10px] bg-emerald-600/40 border-solid border-[1px] border-emerald-600 rounded-sm text-gray-300 px-1 py-[2px]">
-                            Admin
-                          </span>
-                        ) : (
-                          <></>
-                        )}
-                      </>
-                    )}
-                  </Link>
-                ))}
+                <div className="flex flex-col h-full w-full">
+                  {currentChat?.users?.map((user, index) => (
+                    <ChatMemberCard user={user} key={index} />
+                  ))}
+                </div>
               </div>
             </div>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          {/* {currentChat?.is_group && (
-            <button
-              className="bg-sky-500/30 border-[1px] border-solid border-sky-500 px-4 py-2 text-gray-200 rounded-md w-full hover:bg-sky-500/50 duration-200 flex justify-center items-center gap-4"
-              onClick={() => {}}
-            >
-              Add Members
-              <HiUserAdd className="w-4 h-4" />
-            </button>
-          )} */}
           <div className="flex justify-center items-center gap-2 w-full pb-4">
             {currentChat?.is_group ? (
               <>

@@ -117,7 +117,7 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
         );
       }
     } catch (error) {
-      console.log(error);
+      setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
     }
   };
   const aiPost = () => {
