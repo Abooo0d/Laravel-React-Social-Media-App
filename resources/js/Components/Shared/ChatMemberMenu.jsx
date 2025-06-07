@@ -31,6 +31,7 @@ const ChatMemberMenu = ({ user }) => {
         setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
       });
   };
+
   const kickOut = () => {
     axiosClient
       .post(route("chat.kickOut", currentChat.id), {
@@ -45,11 +46,11 @@ const ChatMemberMenu = ({ user }) => {
         setShowMenu(false);
       })
       .catch((error) => {
-        console.log(error);
         setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
         setShowMenu(false);
       });
   };
+
   return (
     <>
       <div

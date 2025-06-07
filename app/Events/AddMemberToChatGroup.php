@@ -12,7 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ChatCreated implements ShouldBroadcast
+class AddMemberToChatGroup implements ShouldBroadcast
 {
   use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -20,11 +20,11 @@ class ChatCreated implements ShouldBroadcast
    * Create a new event instance.
    */
   public $chat;
-  public $userIds;
-  public function __construct(Chat $chat, $userIds)
+  public $user;
+  public function __construct(Chat $chat, int $user)
   {
     $this->chat = new ChatResource($chat);
-    $this->userIds = $userIds;
+    $this->user = $user;
   }
 
   /**
@@ -34,14 +34,13 @@ class ChatCreated implements ShouldBroadcast
    */
   public function broadcastOn(): array
   {
-    return collect($this->userIds)->map(
-      fn($id) =>
-      new PrivateChannel("user.{$id}")
-    )->all();
+    return [
+      new PrivateChannel("user.{$this->user}"),
+    ];
   }
   public function broadcastWith()
   {
-    [
+    return [
       'chat' => $this->chat
     ];
   }

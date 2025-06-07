@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AddMemberToChatGroup;
 use App\Events\ChatCreated;
 use App\Events\ChatDeleted;
 use App\Events\ChatUpdated;
+use App\Events\MemberKickOutFormChat;
+use App\Events\MemberRoleChanged;
 use App\Events\MessageDeleted;
 use App\Events\MessageUpdated;
 use App\Events\NewMessageSent;
@@ -398,6 +401,7 @@ class ChatsController extends Controller
       }
       $chat->refresh();
       broadcast(new ChatUpdated($chat));
+      broadcast(new AddMemberToChatGroup($chat, $user));
       return response(
         [
           'message' => 'Users Were Added Successfully',
@@ -409,12 +413,13 @@ class ChatsController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
-  public function setAdmin(ChangeRoleForChatRequest $request, Chat $chat)
+  public function ChangeRoleInChat(ChangeRoleForChatRequest $request, Chat $chat)
   {
     try {
       $data = $request->validated();
       $role = $data['role'];
       $userId = $data['user_id'];
+      $eventMessage = '';
       $user = ChatUser::where('user_id', $userId)
         ->where('chat_id', $chat->id)
         ->first();
@@ -424,17 +429,21 @@ class ChatsController extends Controller
             $user->update([
               'admin' => 1
             ]);
+            $eventMessage = "You Have Been Promoted To Admin In {$chat->name} Chat";
             break;
           case 'user':
             $user->update([
               'admin' => 0
             ]);
+            $eventMessage = "You Have Been Demoted To Regular Member In {$chat->name} Chat";
             break;
         }
       } else {
         return response(['message' => 'This User Is Not Member Of This Chat'], 400);
       }
       $message = $role == 'admin' ? 'This Member Is Now Admin' : 'This user Is Now User';
+      broadcast(new ChatUpdated($chat));
+      broadcast(new MemberRoleChanged($chat->name, $userId, $eventMessage));
       return response(['message' => $message], 200);
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
@@ -455,6 +464,8 @@ class ChatsController extends Controller
         ->first();
       if (!!$chatUser) {
         $chatUser->delete();
+        broadcast(new ChatUpdated($chat));
+        broadcast(new MemberKickOutFormChat($chat, $userId));
         return response(['message' => 'This User Is Now Kicked Out'], 200);
       }
     } catch (e) {

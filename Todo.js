@@ -6,6 +6,12 @@
 // Put The Focus On The TextInput on The CreatePostForm And THe UpdatePostForm
 // Set A Loading When Sending Invitation To Group
 
+/************** Events To Implement s*************/
+//add user To Chat   backend Done
+// kick User Form Group backend Done
+// Set Chat Group Member As Admin backend Done
+// Set Chat Group Member As User backend Done
+
 /************** TOday *************/
 // Creating Form To Change The Permeation Of The user In The Chat Group
 // set ShowChatInfo Form To False When The View Changes

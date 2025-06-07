@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useUserContext } from "./UserContext";
 import { useRef } from "react";
-import { MainContext, useMainContext } from "./MainContext";
+import { useMainContext } from "./MainContext";
 
 const INITIAL_DATA = {
   onlineUsers: [],
@@ -89,6 +89,7 @@ export const ChatsContext = ({ children }) => {
   useEffect(() => {
     if (!user?.id) return;
     const userChannel = window.Echo.private(`user.${user?.id}`);
+
     userChannel.listen("ChatCreated", (e) => {
       const newChat = e.chat;
       setSuccessMessage("You Have Been Add To New Chat");
@@ -98,6 +99,26 @@ export const ChatsContext = ({ children }) => {
         return [...prev, newChat]; // Add new chat
       });
     });
+
+    userChannel.listen("AddMemberToChatGroup", (e) => {
+      let newChat = e.chat;
+      setCombinedChats((prev) => [...prev, newChat]);
+      setSuccessMessage("You Have Been Add To New Chat");
+    });
+
+    userChannel.listen("MemberRoleChanged", (e) => {
+      setSuccessMessage(e.message);
+    });
+
+    userChannel.listen("MemberKickOutFormChat", (e) => {
+      let chatId = e.chat_id;
+      let message = e.message;
+      if (currentChat.id == chatId) {
+        setCurrentChat(null);
+      }
+      setCombinedChats((prev) => prev.filter((c) => c.id !== chatId));
+      setErrors([message]);
+    });
   }, [user?.id]);
 
   useEffect(() => {
@@ -105,6 +126,7 @@ export const ChatsContext = ({ children }) => {
       const chatId = chat.id;
       if (subscribedChats.current.has(chatId)) return;
       const channel = window.Echo.private(`chat.${chatId}`);
+
       channel.listen(
         "NewMessageSent",
         (e) => {
@@ -225,6 +247,7 @@ export const ChatsContext = ({ children }) => {
           );
         }
       });
+
       channel.listen("ChatDeleted", (e) => {
         let chatId = e.chatId;
         let message = e.message;
@@ -236,7 +259,6 @@ export const ChatsContext = ({ children }) => {
         setCombinedChats(a);
         setErrors([message]);
       });
-
       subscribedChats.current.add(chatId);
     });
   }, [combinedChats]);

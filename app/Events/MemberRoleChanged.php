@@ -2,8 +2,6 @@
 
 namespace App\Events;
 
-use App\Http\Resources\ChatResource;
-use App\Models\Chat;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -12,19 +10,21 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ChatCreated implements ShouldBroadcast
+class MemberRoleChanged implements ShouldBroadcast
 {
   use Dispatchable, InteractsWithSockets, SerializesModels;
 
   /**
    * Create a new event instance.
    */
-  public $chat;
-  public $userIds;
-  public function __construct(Chat $chat, $userIds)
+  public $chatName;
+  public $userId;
+  public $message;
+  public function __construct(string $chatName, int $userId, string $message)
   {
-    $this->chat = new ChatResource($chat);
-    $this->userIds = $userIds;
+    $this->chatName = $chatName;
+    $this->userId = $userId;
+    $this->message = $message;
   }
 
   /**
@@ -34,15 +34,14 @@ class ChatCreated implements ShouldBroadcast
    */
   public function broadcastOn(): array
   {
-    return collect($this->userIds)->map(
-      fn($id) =>
-      new PrivateChannel("user.{$id}")
-    )->all();
+    return [
+      new PrivateChannel("user.{$this->userId}"),
+    ];
   }
   public function broadcastWith()
   {
-    [
-      'chat' => $this->chat
+    return [
+      'message' => $this->message
     ];
   }
 }
