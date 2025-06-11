@@ -74,6 +74,7 @@ Route::middleware('auth')->group(function () {
   Route::get('/group/getPosts/{group:id}', [GroupController::class, 'getPostsForGroup'])->name('postsForGroup');
   Route::post('/group/search', [GrouPController::class, 'searchForGroups'])->name('group.searchForGroup');
   Route::get('/group/download/{group:id}/{type}', [GroupController::class, 'downloadImage'])->name('download.groupImage');
+  Route::delete('/group/{group:slug}/destroy', [GroupController::class, 'destroy'])->name('group.destroy');
 });
 Route::middleware('auth')->group(function () {
   Route::post('/user/search', [UserController::class, 'searchForUser'])->name('user.searchForUser');

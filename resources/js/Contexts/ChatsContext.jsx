@@ -52,9 +52,12 @@ export const ChatsContext = ({ children }) => {
   }, [groupChats, allChats]);
 
   useEffect(() => {
-    if (!currentChat) return;
+    if (!currentChat) {
+      setShowChatInfo(false);
+      return;
+    }
+
     setCombinedChats((prevChats) => {
-      // Update the chat if it exists
       const updatedChats = prevChats.map((chat) =>
         chat?.id === currentChat.id ? currentChat : chat
       );
@@ -86,6 +89,7 @@ export const ChatsContext = ({ children }) => {
         );
       });
   }, []);
+
   useEffect(() => {
     if (!user?.id) return;
     const userChannel = window.Echo.private(`user.${user?.id}`);
@@ -119,11 +123,15 @@ export const ChatsContext = ({ children }) => {
       setCombinedChats((prev) => prev.filter((c) => c.id !== chatId));
       setErrors([message]);
     });
+
+    userChannel.listen(".GroupDeleted", (e) => {
+      console.log("ABood From The Context");
+    });
   }, [user?.id]);
 
   useEffect(() => {
     combinedChats?.forEach((chat) => {
-      const chatId = chat.id;
+      const chatId = chat?.id;
       if (subscribedChats.current.has(chatId)) return;
       const channel = window.Echo.private(`chat.${chatId}`);
 
@@ -224,27 +232,29 @@ export const ChatsContext = ({ children }) => {
       });
 
       channel.listen("ChatUpdated", (e) => {
-        let updatedChatData = e;
+        let updatedChatData = e.chat;
+        console.log(updatedChatData);
+
         if (updatedChatData.id == currentChat?.id) {
-          setCurrentChat((prev) => ({
-            ...prev,
+          let c = {
+            ...currentChat,
             name: updatedChatData.name,
             avatar_url: updatedChatData.avatar_url,
             users: updatedChatData.users,
-          }));
+          };
+          setCurrentChat(c);
         } else {
-          setCombinedChats((prev) =>
-            prev.map((chat) => {
-              chat.id == updatedChatData.id
-                ? {
-                    ...chat,
-                    name: updatedChatData.name,
-                    avatar_url: updatedChatData.avatar_url,
-                    users: updatedChatData.users,
-                  }
-                : chat;
-            })
+          let allChats = combinedChats.map((ch) =>
+            ch.id == updatedChatData.id
+              ? {
+                  ...ch,
+                  name: updatedChatData.name,
+                  avatar_url: updatedChatData.avatar_url,
+                  users: updatedChatData.users,
+                }
+              : ch
           );
+          setCombinedChats(allChats);
         }
       });
 
@@ -254,8 +264,7 @@ export const ChatsContext = ({ children }) => {
         if (currentChat?.id == chatId) {
           setCurrentChat(null);
         }
-        let a = combinedChats;
-        a = a.filter((c) => c.id !== chatId);
+        let a = combinedChats.filter((c) => c.id !== chatId);
         setCombinedChats(a);
         setErrors([message]);
       });

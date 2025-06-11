@@ -1,15 +1,10 @@
 import { useChatsContext } from "@/Contexts/ChatsContext";
 import React from "react";
-import PopupCard from "./PopupCard";
 import { PrimaryButton, SecondaryButton } from "./Buttons";
 import { HiMiniXMark } from "react-icons/hi2";
 import { useState } from "react";
 import { FaAngleRight, FaCheck } from "react-icons/fa";
-import { Link } from "@inertiajs/react";
-import { TbLock } from "react-icons/tb";
 import { MdLogout } from "react-icons/md";
-import { IoVolumeMute } from "react-icons/io5";
-import { HiUserAdd } from "react-icons/hi";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import { useMainContext } from "@/Contexts/MainContext";
 import { FaLock, FaLockOpen, FaRegTrashAlt } from "react-icons/fa";

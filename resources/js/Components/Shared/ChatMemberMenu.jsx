@@ -38,10 +38,11 @@ const ChatMemberMenu = ({ user }) => {
         user_id: user.id,
       })
       .then((data) => {
-        setCurrentChat((prev) => ({
-          ...prev,
-          users: prev.users.filter((u) => u.id != user.id),
-        }));
+        let chat = {
+          ...currentChat,
+          users: currentChat.users.filter((u) => u.id !== user.id),
+        };
+        setCurrentChat(chat);
         setSuccessMessage(data.data.message);
         setShowMenu(false);
       })

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ChatCreated;
+use App\Events\GroupDeleted;
 use App\Http\Enums\GroupUserRuleEnum;
 use App\Http\Enums\GroupUserStatusEnum;
 use App\Http\Requests\InviteUserRequest;
@@ -18,6 +20,7 @@ use App\Models\GroupUsers;
 use App\Models\Post;
 use App\Models\PostAttachments;
 use App\Models\User;
+use App\Notifications\GroupDeletedNotification;
 use App\Notifications\GroupInvitationNotification;
 use App\Notifications\GroupUpdateNotification;
 use App\Notifications\GroupUsersActionNotification;
@@ -25,6 +28,7 @@ use App\Notifications\InvitationApprovedNotification;
 use App\Notifications\JoinRequestNotification;
 use App\Notifications\RequestActionNotification;
 use Carbon\Carbon;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -416,6 +420,50 @@ class GroupController extends Controller
       return response()->download($filePath, basename($image));
     } catch (e) {
       return redirect()->back()->with('error', 'Something went wrong while downloading the image.');
+    }
+  }
+  public function destroy(Group $group)
+  {
+    try {
+      $userId = auth()->id();
+      if ($userId !== $group->user_id) {
+        return response(['message' => 'Only The Owner Of The Group Can Delete It'], 403);
+      }
+      $posts = Post::where('group_id', $group->id)
+        ->with('attachments')
+        ->get();
+      // dd($posts);
+      foreach ($posts as $post) {
+        foreach ($post->attachments as $attachment) {
+          Storage::disk('public')->delete($attachment->path);
+          // Delete DB record
+          $attachment->delete();
+        }
+      }
+      $members = User::query()
+        ->select(['users.*', 'gu.group_id'])
+        ->join('group_users AS gu', 'gu.user_id', 'users.id')
+        ->where('group_id', $group->id)
+        ->get();
+      Notification::send(
+        $members,
+        new GroupDeletedNotification($group, auth()->user())
+      );
+      // dd('Abood');
+      $usersIds = collect($members)->map(
+        fn($user) =>
+        $user->id
+      )->all();
+
+
+      // event(new GroupDeleted($group, $usersIds));
+      broadcast(new GroupDeleted($group, $usersIds));
+      // dd('ABood From Controller');
+      // $group->delete();
+      // DeleteGroup::dispatch($group)->delay(now()->addSeconds(2));
+      return response(['message' => "Your Request Has Been Received, You Will Be Notified When The Group Is Deleted"], 200);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
 }

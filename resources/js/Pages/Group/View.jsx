@@ -19,6 +19,9 @@ import { useUserContext } from "@/Contexts/UserContext";
 import ProfilePhotosFullView from "@/Components/Shared/ProfilePhotosFullView";
 import { useGetPostsForGroup } from "@/TanStackQurey/Querys";
 import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
+import { HiUserAdd } from "react-icons/hi";
+import DeleteGroupForm from "@/Components/Shared/DeleteGroupForm";
+
 const View = ({ auth, group, requests, users, isAdmin, photos }) => {
   const isCurrentUserJoined = !!(group.status == "approved");
   const [groupData, setGroupData] = useState(group);
@@ -36,7 +39,6 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
   const [showProfileImage, setShowProfileImage] = useState(false);
   const [profileImage, setProfileImage] = useState("");
   const [imageType, setImageType] = useState("cover");
-
   const {
     data: posts,
     refetch,
@@ -49,6 +51,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
     group_id: groupData.id,
   });
   const [allPosts, setAllPosts] = useState(posts);
+
   useEffect(() => {
     if (flash.success) setSuccessMessage(flash.success);
     if (flash.error) setErrors([flash.error]);
@@ -218,7 +221,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
               </>
             )}
           </div>
-          <div className="absolute lg:w-[200px] lg:h-[200px] md:w-[160px] md:h-[160px] w-[130px] h-[130px] -bottom-[50px] max-md:bottom-[50px] max-md:left-[40px] md:left-20 left-0 group overflow-hidden">
+          <div className="absolute lg:w-[200px] lg:h-[200px] md:w-[160px] md:h-[160px] w-[130px] h-[130px] bottom-[40px] max-md:left-[40px] md:left-20 left-0 group overflow-hidden">
             <img
               src={
                 avatarImage ||
@@ -235,7 +238,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
             />
             {isAdmin && (
               <>
-                <div className="absolute rounded-full bg-black/50 backdrop-blur-[3px] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] duration-300 group-hover:opacity-100 opacity-0 flex justify-center items-center">
+                <div className="absolute rounded-full bg-black/50 backdrop-blur-[3px] top-[50%] left-[50%]  translate-x-[-50%] duration-300 group-hover:opacity-100 opacity-0 flex justify-center items-center">
                   {!isTheAvatarChanged ? (
                     <button className="cursor-pointer z-10 overflow-hidden rounded-md relative py-2 px-2 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center">
                       <CiCamera className="text-gray-800 w-[30px] h-[30px]" />
@@ -267,40 +270,56 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
             )}
           </div>
         </div>
-        <div className="w-full flex justify-between items-center gap-4 bg-gray-900 py-4 px-8">
-          <h2 className="pl-[250px] max-md:pl-4 text-gray-400 text-lg max-md:text-[16px]">
-            {groupData.name}
-          </h2>
-          <div className="flex justify-start items-center gap-4">
-            {isAdmin === true && (
-              <PrimaryButton
-                classes="px-6 py-3 max-md:px-3 max-md:py-2 max-md:text-[14px]"
-                event={() => {
-                  setShowInviteForm(true);
-                }}
-              >
-                Invite Members
-              </PrimaryButton>
-            )}
-            {!groupData.status && !groupData.auto_approval && (
-              <PrimaryButton
-                classes="px-6 py-3 max-md:px-3 max-md:py-2 max-md:text-[14px]"
-                event={requestJoin}
-              >
-                Request Join
-              </PrimaryButton>
-            )}
-            {!groupData.status && groupData.auto_approval ? (
-              <PrimaryButton
-                classes="px-6 py-3 max-md:px-3 max-md:py-2 max-md:text-[14px]"
-                event={() => {
-                  requestJoin();
-                }}
-              >
-                Join To Group
-              </PrimaryButton>
-            ) : (
-              <></>
+        <div className="w-full flex justify-between items-start gap-4 bg-gray-900 py-4 px-8">
+          <div className="flex justify-start items-start flex-col w-full">
+            <div className="w-full flex justify-between items-center">
+              <h2 className=" max-md:pl-4 text-gray-300 text-2xl font-semibold max-md:text-[16px] relative">
+                {groupData.name}
+                <span className="absolute bottom-0 left-0 w-[40%] h-[3px] bg-gray-300 rounded-full" />
+                {/* <span className="absolute bottom-[-7px] left-0 w-[10%] h-[3px] bg-gray-300 rounded-full" /> */}
+              </h2>
+              <div className="flex justify-start items-center gap-4">
+                {isAdmin === true && (
+                  <PrimaryButton
+                    classes="px-6 py-3 max-md:px-3 max-md:py-2 max-md:text-[14px] gap-2"
+                    event={() => {
+                      setShowInviteForm(true);
+                    }}
+                  >
+                    <HiUserAdd />
+                    Invite Members
+                  </PrimaryButton>
+                )}
+                {!groupData.status && !groupData.auto_approval && (
+                  <PrimaryButton
+                    classes="px-6 py-3 max-md:px-3 max-md:py-2 max-md:text-[14px]"
+                    event={requestJoin}
+                  >
+                    Request Join
+                  </PrimaryButton>
+                )}
+                {!groupData.status && groupData.auto_approval ? (
+                  <PrimaryButton
+                    classes="px-6 py-3 max-md:px-3 max-md:py-2 max-md:text-[14px]"
+                    event={() => {
+                      requestJoin();
+                    }}
+                  >
+                    Join To Group
+                  </PrimaryButton>
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
+            {group?.about.length > 0 && (
+              <div className="bg-gray-900 border-ys-[1px] border-y-gray-700 border-y-solid w-full h-fit ">
+                <h2 className="text-lg w-fit text-gray-400 font-semibold pt-4 relative">
+                  About This Group
+                  <span className="absolute bottom-0 left-0 w-[40%] h-[2px] bg-gray-400 rounded-full" />
+                </h2>
+                <p className="w-full text-gray-400 pb-2">{group?.about}</p>
+              </div>
             )}
           </div>
         </div>
@@ -311,7 +330,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
               <CustomTab text="Photos" />
               {isCurrentUserJoined && <CustomTab text="Members" />}
               {isAdmin && <CustomTab text="Requests" />}
-              {isAdmin && <CustomTab text="About" />}
+              {isAdmin && <CustomTab text="Edit Group" />}
             </Tab.List>
             <Tab.Panels className=" rounded-md h-full">
               <Tab.Panel className="rounded-md flex flex-col w-full">
@@ -401,8 +420,9 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
                 </Tab.Panel>
               )}
               {isAdmin && (
-                <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
+                <Tab.Panel className="rounded-md flex flex-col gap-4 w-full my-4">
                   <GroupAboutForm group={group} />
+                  <DeleteGroupForm group={group} />
                 </Tab.Panel>
               )}
             </Tab.Panels>

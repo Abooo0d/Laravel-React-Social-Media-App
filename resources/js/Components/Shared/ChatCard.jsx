@@ -14,6 +14,7 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
   );
 
   const [isGroup, setIsGroup] = useState(chatData?.is_group);
+
   const getChat = () => {
     setChatData((prev) => ({
       ...prev,
@@ -21,6 +22,7 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
         ...prev.messages?.map((message) => ({ ...message, my_status: true })),
       ],
     }));
+
     setIsLoading(true);
     let props = !!isGroup
       ? { is_group: !!isGroup, chat_id: chatData.id }

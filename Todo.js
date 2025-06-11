@@ -6,22 +6,26 @@
 // Put The Focus On The TextInput on The CreatePostForm And THe UpdatePostForm
 // Set A Loading When Sending Invitation To Group
 
-/************** Events To Implement s*************/
+/************** TOday *************/
+// when adding New USers To Chat Group Check if the users already exist in the chat
+// When Adding New Users To The ChatGroup The Data In THe Chat CArd Get Saved Wrong
+// Add Function To Delete A group
+// When Updating The GroupName Adn The About The Data In The View Don`t Get Updated
+/************** Working On *************/
+// Update The About Section in The View Of The Group To Be THe Setting
+// ADd About Section In The View For The group
+// Add  A Delete Section I  The Setting page In The View Of THe Group
+/************** Done *************/
+
+// Adding Jobs For Heavy Work
+// send The Change Role For USers And Kicking Out The Users On The Private Channels For The users
+// create Action In The Chat For Changing The Chat Name Or Adding users Or Kicking Out users
+// set ShowChatInfo Form To False When The View Changes
+// Creating Form To Change The Permeation Of The user In The Chat Group
 //add user To Chat   backend Done
 // kick User Form Group backend Done
 // Set Chat Group Member As Admin backend Done
 // Set Chat Group Member As User backend Done
-
-/************** TOday *************/
-// Creating Form To Change The Permeation Of The user In The Chat Group
-// set ShowChatInfo Form To False When The View Changes
-// When Adding New Users To The ChatGroup The Data In THe Chat CArd Get Saved Wrong
-// create Action In The Chat For Changing The Chat Name Or Adding users Or Kicking Out users
-// send The Change Role For USers And Kicking Out The Users On The Private Channels For The users
-/************** Working On *************/
-// Adding Jobs For Heavy Work
-
-/************** Done *************/
 // delete All The Attachment Of The Group When Deleting The ChatGroup
 // ADding Events For creating A Chats
 // ADding Event For Deleting A Chat

@@ -53,18 +53,6 @@ window.Echo = new Echo({
   wsHost: "192.168.1.107", // or your IP if you're testing on another device
   wsPort: 6001,
   forceTLS: false,
+  encrypted: false,
   enabledTransports: ["ws"],
-
-  // broadcaster: "pusher",
-  // key: import.meta.env.VITE_REVERB_APP_KEY,
-  // wsHost: "192.168.1.107",
-  // wsPort: 6001,
-  // wssPort: 6001,
-  // forceTLS: false,
-  // forceTLS: true,
-  // encrypted: false,
-  // encrypted: true,
-  // disableStats: true,
-  // enabledTransports: ["ws"],
-  // enabledTransports: ["ws", "wss"],
 });

@@ -66,6 +66,7 @@ const AddUsersToChatForm = ({ showForm, setShowForm }) => {
         users: addedUsers.map((user) => user.id),
       })
       .then((data) => {
+        console.log(data);
         setCurrentChat((prev) => ({
           ...prev,
           users: data.data.chat.users,
@@ -78,6 +79,7 @@ const AddUsersToChatForm = ({ showForm, setShowForm }) => {
         setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
       });
   };
+
   useEffect(() => {
     setName("");
     setLoading(false);
