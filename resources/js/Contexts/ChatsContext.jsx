@@ -125,7 +125,16 @@ export const ChatsContext = ({ children }) => {
     });
 
     userChannel.listen(".GroupDeleted", (e) => {
-      console.log("ABood From The Context");
+      console.log(e);
+      const groupSlug = e.slug;
+
+      const groupId = e.group_id;
+      const currentPath = window.location.pathname;
+      const slugInUrl = currentPath.split("/").pop();
+
+      if (slugInUrl === groupSlug) {
+        window.location.href = "/";
+      }
     });
   }, [user?.id]);
 

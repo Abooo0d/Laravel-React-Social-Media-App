@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ChatCreated;
 use App\Events\GroupDeleted;
 use App\Http\Enums\GroupUserRuleEnum;
 use App\Http\Enums\GroupUserStatusEnum;
@@ -11,6 +10,7 @@ use App\Http\Requests\SearchGroupRequest;
 use App\Http\Resources\PostAttachmentResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
+use App\Jobs\DeleteGroup;
 use App\Models\Group;
 use App\Http\Requests\StoreGroupRequest;
 use App\Http\Requests\UpdateGroupRequest;
@@ -28,7 +28,6 @@ use App\Notifications\InvitationApprovedNotification;
 use App\Notifications\JoinRequestNotification;
 use App\Notifications\RequestActionNotification;
 use Carbon\Carbon;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -432,7 +431,6 @@ class GroupController extends Controller
       $posts = Post::where('group_id', $group->id)
         ->with('attachments')
         ->get();
-      // dd($posts);
       foreach ($posts as $post) {
         foreach ($post->attachments as $attachment) {
           Storage::disk('public')->delete($attachment->path);
@@ -449,17 +447,12 @@ class GroupController extends Controller
         $members,
         new GroupDeletedNotification($group, auth()->user())
       );
-      // dd('Abood');
       $usersIds = collect($members)->map(
         fn($user) =>
         $user->id
       )->all();
-
-
-      // event(new GroupDeleted($group, $usersIds));
       broadcast(new GroupDeleted($group, $usersIds));
-      // dd('ABood From Controller');
-      // $group->delete();
+      $group->delete();
       // DeleteGroup::dispatch($group)->delay(now()->addSeconds(2));
       return response(['message' => "Your Request Has Been Received, You Will Be Notified When The Group Is Deleted"], 200);
     } catch (e) {

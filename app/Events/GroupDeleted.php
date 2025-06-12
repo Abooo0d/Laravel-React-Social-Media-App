@@ -40,7 +40,9 @@ class GroupDeleted implements ShouldBroadcast
   public function broadcastWith()
   {
     return [
-      'group_id' => $this->group->id
+      'group' => $this->group,
+      'group_id' => $this->group->id,
+      'slug' => $this->group->slug
     ];
   }
   public function broadcastAs()

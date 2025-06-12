@@ -11,6 +11,7 @@
 // When Adding New Users To The ChatGroup The Data In THe Chat CArd Get Saved Wrong
 // Add Function To Delete A group
 // When Updating The GroupName Adn The About The Data In The View Don`t Get Updated
+// when creating a group you have to reload the b=page or re get the groups
 /************** Working On *************/
 // Update The About Section in The View Of The Group To Be THe Setting
 // ADd About Section In The View For The group
