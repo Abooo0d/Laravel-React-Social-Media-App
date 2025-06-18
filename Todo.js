@@ -1,3 +1,7 @@
+/********** T o Start The Laravel Process Over Https */
+// symfony serve --allow-all-ip --port=8000 --p12=mycert.p12
+/********** To Start The Laralve Project Over Https  */
+// php artisan serve --host 192.168.1.107
 /************** YetTo Fix *************/
 // Fix The UpdatePost Form Full Post View When DeletingAn diMage From The Full View There is NoWay ToSubmit The Post Until You Close The PostFull View ThenSubmit The Post From The updatePostForm
 // Prevent The user To Post or Update The Post With The Same attachment More Than One Time In The Post
@@ -7,17 +11,19 @@
 // Set A Loading When Sending Invitation To Group
 
 /************** TOday *************/
-// when adding New USers To Chat Group Check if the users already exist in the chat
-// When Adding New Users To The ChatGroup The Data In THe Chat CArd Get Saved Wrong
-// Add Function To Delete A group
-// When Updating The GroupName Adn The About The Data In The View Don`t Get Updated
-// when creating a group you have to reload the b=page or re get the groups
+// When New Message Comes The UnReadCount Get Still Count Even If The Chat Is Open
+// THe Text Area In The Chat Form Broken In The Small Devices
 /************** Working On *************/
-// Update The About Section in The View Of The Group To Be THe Setting
-// ADd About Section In The View For The group
-// Add  A Delete Section I  The Setting page In The View Of THe Group
-/************** Done *************/
 
+/************** Done *************/
+// when creating a group you have to reload the b=page or re get the groups
+// When Updating The GroupName Adn The About The Data In The View Don`t Get Updated
+// Add Function To Delete A group
+// When Adding New Users To The ChatGroup The Data In THe Chat CArd Get Saved Wrong
+// when adding New USers To Chat Group Check if the users already exist in the chat
+// Add  A Delete Section I  The Setting page In The View Of THe Group
+// ADd About Section In The View For The group
+// Update The About Section in The View Of The Group To Be THe Setting
 // Adding Jobs For Heavy Work
 // send The Change Role For USers And Kicking Out The Users On The Private Channels For The users
 // create Action In The Chat For Changing The Chat Name Or Adding users Or Kicking Out users

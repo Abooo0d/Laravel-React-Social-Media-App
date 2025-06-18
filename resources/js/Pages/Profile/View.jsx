@@ -14,8 +14,6 @@ import ProfilePhotosFullView from "@/Components/Shared/ProfilePhotosFullView";
 import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
 
 const View = ({ auth, user, posts, isFriend, photos }) => {
-  console.log(isFriend);
-
   const [imageIndex, setImageIndex] = useState(0);
   const [showImage, setShowImage] = useState(false);
   const { setSuccessMessage, setErrors } = useMainContext();
@@ -58,6 +56,10 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
           head-key="description"
           name="description"
           content="This is the default description"
+        />
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="upgrade-insecure-requests"
         />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>

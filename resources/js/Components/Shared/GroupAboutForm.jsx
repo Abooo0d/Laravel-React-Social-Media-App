@@ -4,40 +4,57 @@ import TextInput from "../TextInput";
 import { Switch } from "@headlessui/react";
 import { router, usePage } from "@inertiajs/react";
 import { useMainContext } from "@/Contexts/MainContext";
+import axiosClient from "@/AxiosClient/AxiosClient";
+import { useUserContext } from "@/Contexts/UserContext";
 
-const GroupAboutForm = (props) => {
+const GroupAboutForm = ({ group, setGroup }) => {
   const { flash } = usePage().props;
-  const { setSuccessMessage } = useMainContext();
-  const [group, setGroup] = useState(props.group);
+  const { setSuccessMessage, setErrors } = useMainContext();
   useEffect(() => {
     flash?.success && setSuccessMessage(flash.success);
   }, [flash]);
-
-  const [groupName, setGroupName] = useState(props.group.name);
-  const [groupAbout, setGroupAbout] = useState(props.group.about);
+  const { refetchGroups } = useUserContext();
+  const [groupName, setGroupName] = useState(group.name);
+  const [groupAbout, setGroupAbout] = useState(group.about);
   const [autoApproval, setAutoApproval] = useState(
-    !!parseInt(props.group.auto_approval)
+    !!parseInt(group.auto_approval)
   );
   const textareaRef = useRef(null);
 
   useEffect(() => {
-    setGroup(props?.group);
-    setGroupName(props?.group.name);
-    setGroupAbout(props?.group.about);
-    setAutoApproval(!!parseInt(props?.group.auto_approval));
-    handleInput();
-  }, [props?.group]);
-
-  useEffect(() => {
-    handleInput();
-  }, [groupAbout]);
+    setGroupName(group.name);
+    setGroupAbout(group.about);
+    setAutoApproval(!!parseInt(group.auto_approval));
+  }, [group]);
 
   const submit = () => {
-    router.put(route("group.update", group.slug), {
-      name: groupName,
-      about: groupAbout,
-      auto_approval: autoApproval,
-    });
+    router.put(
+      route("group.update", group.slug),
+      {
+        name: groupName,
+        about: groupAbout,
+        auto_approval: autoApproval,
+      },
+      {
+        onSuccess: () => {
+          console.log("Updated successfully");
+          setGroup({
+            ...group,
+            name: groupName,
+            about: groupAbout,
+            auto_approval: autoApproval,
+          });
+          refetchGroups();
+        },
+
+        onError: (error) => {
+          console.log("Something went wrong", error);
+          setErrors([
+            error?.response?.data?.message || "Some Thing Went Wrong",
+          ]);
+        },
+      }
+    );
   };
   const handleInput = () => {
     const textarea = textareaRef.current;
@@ -69,7 +86,7 @@ const GroupAboutForm = (props) => {
       <textarea
         ref={textareaRef}
         placeholder="Your comment"
-        // className=" px-2 py-1 bg-gray-800 text-gray-400 max-h-[300px] placeholder:text-gray-500 resize-none overflow-auto border-gray-800 rounded-md outline-none focus:border-gray-600 ring-0 focus:ring-0 duration-200 cursor-pointer w-[calc(100%-30px)] ml-4"
+        onInput={handleInput}
         className="flex-1 bg-gray-800 outline-none border-none focus:outline-none rounded-md focus:border-none ring-0 focus:ring-0 text-gray-300 resize-none h-auto min-h-[40px] max-h-[150px] "
         value={groupAbout}
         onChange={(e) => setGroupAbout(e.target.value)}
@@ -77,6 +94,7 @@ const GroupAboutForm = (props) => {
       <PrimaryButton
         classes="w-fit px-4 py-2 ml-auto mr-4"
         event={() => {
+          console.log("Abood");
           submit();
         }}
       >

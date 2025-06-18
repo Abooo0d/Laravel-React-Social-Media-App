@@ -37,13 +37,19 @@ return [
       'app_id' => env('REVERB_APP_ID'),
       'options' => [
         'host' => env('REVERB_HOST'),
-        'port' => env('REVERB_PORT', default: 443),
+        'port' => env('REVERB_PORT', 6001),
         'scheme' => env('REVERB_SCHEME', 'https'),
         'useTLS' => env('REVERB_SCHEME', 'https') === 'https',
+        'encrypted' => true,
       ],
       'client_options' => [
+        'verify' => false,
         // Guzzle client options: https://docs.guzzlephp.org/en/stable/request-options.html
       ],
+      'curl_options' => [
+        CURLOPT_SSL_VERIFYPEER => 0,
+        CURLOPT_SSL_VERIFYHOST => 0,
+      ]
     ],
 
     'pusher' => [
@@ -54,14 +60,20 @@ return [
       'options' => [
         'cluster' => env('PUSHER_APP_CLUSTER'),
         'host' => env('PUSHER_HOST') ?: 'api-' . env('PUSHER_APP_CLUSTER', 'mt1') . '.pusher.com',
-        'port' => env('PUSHER_PORT', default: 6001),
-        'scheme' => env('PUSHER_SCHEME', 'https'),
+        'port' => env('PUSHER_PORT', 6001),
+        'scheme' => 'https',
         'encrypted' => true,
-        'useTLS' => env('PUSHER_SCHEME', 'https') === 'https',
+        'useTLS' => true,
+
       ],
       'client_options' => [
+        'verify' => false,
         // Guzzle client options: https://docs.guzzlephp.org/en/stable/request-options.html
       ],
+      'curl_options' => [
+        CURLOPT_SSL_VERIFYPEER => 0,
+        CURLOPT_SSL_VERIFYHOST => 0,
+      ]
     ],
 
     'ably' => [

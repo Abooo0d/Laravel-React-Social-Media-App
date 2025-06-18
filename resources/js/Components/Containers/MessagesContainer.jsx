@@ -56,8 +56,9 @@ const MessagesContainer = ({ isLoading }) => {
           {!!currentChat && <ChatInfo />}
           {!!currentChat && (
             <>
+              {/* max-h-[calc(100dvh-225px)] */}
               <div
-                className="w-full max-h-[calc(100dvh-225px)] relative p-4 overflow-auto flex flex-col-reverse flex-1"
+                className="w-full  relative p-4 overflow-auto flex flex-col-reverse flex-1"
                 ref={containerRef}
               >
                 {currentChat?.messages?.map((message, index) => (
@@ -68,7 +69,7 @@ const MessagesContainer = ({ isLoading }) => {
                     {thereIsMore ? (
                       <Spinner size="small" ref={ref} />
                     ) : (
-                      <div className="bg-gray-900/50 backdrop-blur-sm w-fit mx-auto text-sm text-gray-500 rounded-md py-1 px-2 cursor-default border-solid border-gray-600/50 border-[1px]">
+                      <div className="bg-gray-900/50 backdrop-blur-sm w-fit mx-auto text-sm text-gray-500 rounded-md py-1 px-2 cursor-default border-solid border-gray-600/50 border-[1px] mb-4">
                         There Is No More Messages
                       </div>
                     )}

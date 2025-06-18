@@ -396,7 +396,6 @@ class GroupController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
-
   public function searchForGroups(SearchGroupRequest $request)
   {
     try {

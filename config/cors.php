@@ -21,7 +21,7 @@ return [
 
   'allowed_origins' => ['*'],
 
-  'allowed_origins_patterns' => [],
+  'allowed_origins_patterns' => ['*'],
 
   'allowed_headers' => ['*'],
 
@@ -32,7 +32,7 @@ return [
   // 'supports_credentials' => false,
 
   // 'paths' => ['api/*', 'sanctum/csrf-cookie', '*'],
-  // 'allowed_origins' => ['https://192.168.1.107:3000'],
+  // 'allowed_origins' => ['https://192.168.1.107:8000'],
   // 'allowed_methods' => ['*'],
   // 'allowed_headers' => ['*'],
   'supports_credentials' => true,

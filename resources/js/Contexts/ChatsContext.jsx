@@ -74,6 +74,8 @@ export const ChatsContext = ({ children }) => {
   }, [currentChat]);
 
   useEffect(() => {
+    console.log(window.Echo);
+
     window.Echo.join("online")
       .here((users) => {
         setOnlineUsers(users);

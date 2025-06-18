@@ -16,10 +16,12 @@ import { useGetGroups, useGetNotifications } from "@/TanStackQurey/Querys";
 import { MdLogout, MdLogin } from "react-icons/md";
 import SideBarButton from "@/Components/Shared/SideBarButton";
 import { IoHome } from "react-icons/io5";
+import { useUserContext } from "@/Contexts/UserContext";
 export default function Authenticated({ children }) {
   const { auth } = usePage().props;
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
+  const { groups, isLoadingGroups } = useUserContext();
   const [showFollowerContainer, setShowFollowerContainer] = useState(false);
   const [showNotificationsForm, setShowNotificationsForm] = useState(false);
   const [showGroupContainer, setShowGroupContainer] = useState(false);
@@ -31,7 +33,7 @@ export default function Authenticated({ children }) {
     isLoading: LoadingNotifications,
     refetch: refetchNotifications,
   } = useGetNotifications();
-  const { data: groups, isLoading: loadingGroups } = useGetGroups();
+
   const hideAll = () => {
     setShowFollowerContainer(false);
     setShowGroupContainer(false);
@@ -92,11 +94,12 @@ export default function Authenticated({ children }) {
                     setShowFollowerContainer(!showFollowerContainer);
                   }}
                   show={showFollowerContainer}
+                  classes={"flex justify-center items-center"}
                 >
                   <FaUserGroup className="text-gray-400 text-lg w-[20px] h-[20px] relative" />
                 </MenuButton>
                 <MenuButton
-                  classes="relative"
+                  classes="relative flex justify-center items-center"
                   event={() => {
                     setShowNotificationsForm(!showNotificationsForm);
                   }}
@@ -114,22 +117,26 @@ export default function Authenticated({ children }) {
                     setShowGroupContainer(!showGroupContainer);
                   }}
                   show={showGroupContainer}
+                  classes={"flex justify-center items-center"}
                 >
                   <MdGroups2 className="text-gray-400 text-lg w-[20px] h-[20px]" />
                 </MenuButton>
                 <MenuButton
                   event={() => {
+                    hideAll();
                     router.get(route("chats"));
                   }}
                   show={false}
+                  classes={"flex justify-center items-center"}
                 >
                   <PiChatsCircle className="text-gray-400 text-lg w-[20px] h-[20px]" />
                 </MenuButton>
                 <button
                   onClick={() => {
+                    hideAll();
                     router.reload();
                   }}
-                  className="text-gray-400"
+                  className="text-gray-400 flex justify-center items-center"
                 >
                   <IoReloadOutline />
                 </button>
@@ -250,7 +257,7 @@ export default function Authenticated({ children }) {
           groups={groups.groups}
           showGroupContainer={showGroupContainer}
           setShowGroupContainer={setShowGroupContainer}
-          isLoading={loadingGroups}
+          isLoading={isLoadingGroups}
         />
       )}
 
@@ -259,7 +266,10 @@ export default function Authenticated({ children }) {
           <div className="flex flex-col justify-start items-start min-w-full h-fit">
             <SideBarButton
               // show={showFollowerContainer}
-              event={() => router.get("/")}
+              event={() => {
+                router.get("/");
+                hideAll();
+              }}
               text="Home"
             >
               <IoHome className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />
@@ -292,7 +302,10 @@ export default function Authenticated({ children }) {
             </SideBarButton>
 
             <SideBarButton
-              event={() => router.get(route("chats"))}
+              event={() => {
+                router.get(route("chats"));
+                hideAll();
+              }}
               text="Chats"
             >
               <PiChatsCircle className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />

@@ -111,12 +111,12 @@ const ChatForm = () => {
     setChosenFiles((prev) => [...prev, { file: file, url: url }]);
   };
   return (
-    <div className="flex relative w-full justify-between items-center bg-gray-900 p-4 border-t-[1px] border-solid border-gray-700 ]">
+    <div className="flex relative w-full justify-between items-center bg-gray-900 md:p-4 p-2 border-t-[1px] border-solid border-gray-700 ">
       <ChatFormAttachmentContainer
         attachments={chosenFiles}
         setAttachments={setChosenFiles}
       />
-      <div className=" relative flex justify-between items-center w-full bg-gray-700 rounded-md max-sm:h-[50px] px-2">
+      <div className="relative flex justify-between items-center w-full bg-gray-700 rounded-md h-[40px] md:h-[50px] px-2 md:flex-row ">
         <div
           className={`absolute -top-[320px] left-0 duration-200 ${
             openEmoji ? "opacity-100 visible z-10" : " opacity-0 invisible z-0"
@@ -211,7 +211,7 @@ const ChatForm = () => {
           onClick={() => newMessage()}
         >
           {isLoading ? (
-            <Spinner size="small" />
+            <Spinner size="small" theme="light" />
           ) : (
             <BiSolidSend
               className={`absolute inset-0 duration-200 w-full h-full flex justify-center items-center p-[10px] `}

@@ -140,7 +140,10 @@ const ChatInfoAttachments = ({ attachments }) => {
           >
             {audios.length > 0 ? (
               audios.map((audio, index) => (
-                <div className="flex justify-start items-center w-full h-[60px] bg-gray-700/50 rounded-md px-2 gap-2">
+                <div
+                  className="flex justify-start items-center w-full h-[60px] bg-gray-700/50 rounded-md px-2 gap-2"
+                  key={index}
+                >
                   <CustomAudioPlayer attachment={audio} controls={false} />
                 </div>
               ))

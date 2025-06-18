@@ -114,7 +114,7 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
           <h3 className="text-[15px] w-full text-nowrap overflow-hidden">
             {chatData?.name?.length > 16
               ? chatData.name.substr(0, 16) + "..."
-              : chatData.name}
+              : chatData?.name}
           </h3>
           <p className="text-[10px] text-gray-600 w-fit flex flex-col justify-center items-end">
             {chatData?.messages?.length > 0 ? (

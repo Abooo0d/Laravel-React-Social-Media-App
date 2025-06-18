@@ -168,6 +168,10 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
           name="description"
           content="This is the default description"
         />
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="upgrade-insecure-requests"
+        />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
       <div className="container mx-auto h-full">
@@ -238,7 +242,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
             />
             {isAdmin && (
               <>
-                <div className="absolute rounded-full bg-black/50 backdrop-blur-[3px] top-[50%] left-[50%]  translate-x-[-50%] duration-300 group-hover:opacity-100 opacity-0 flex justify-center items-center">
+                <div className="absolute rounded-full bg-black/50 backdrop-blur-[3px] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] duration-300 group-hover:opacity-100 opacity-0 flex justify-center items-center">
                   {!isTheAvatarChanged ? (
                     <button className="cursor-pointer z-10 overflow-hidden rounded-md relative py-2 px-2 bg-gray-50/80 hover:bg-gray-50 duration-300 text-gray-800 flex gap-2 justify-center items-center">
                       <CiCamera className="text-gray-800 w-[30px] h-[30px]" />
@@ -421,7 +425,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
               )}
               {isAdmin && (
                 <Tab.Panel className="rounded-md flex flex-col gap-4 w-full my-4">
-                  <GroupAboutForm group={group} />
+                  <GroupAboutForm group={groupData} setGroup={setGroupData} />
                   <DeleteGroupForm group={group} />
                 </Tab.Panel>
               )}

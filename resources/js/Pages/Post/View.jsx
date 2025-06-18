@@ -21,6 +21,10 @@ const View = ({ groups, notifications, auth, post }) => {
           name="description"
           content="This is the default description"
         />
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="upgrade-insecure-requests"
+        />
         <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
       </Head>
       <Authenticated

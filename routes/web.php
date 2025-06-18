@@ -101,4 +101,5 @@ Route::middleware('auth')->group(function () {
   Route::post('chat/{chat:id}/set-admin', [chatsController::class, 'ChangeRoleInChat'])->name('chat.setAdmin');
   Route::post('chat/{chat:id}/kick-out', [ChatsController::class, 'kickOut'])->name('chat.kickOut');
 });
+
 require __DIR__ . '/auth.php';
