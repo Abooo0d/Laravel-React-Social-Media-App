@@ -34,7 +34,7 @@ const CustomVideoPlayer = ({
       >
         {controls && (
           <span
-            className="absolute top-1 right-1 w-5 h-5 hover:bg-blue-700  rounded-md flex justify-center items-center bg-gray-300/20 text-gray-300 group-hover:opacity-100 opacity-0 duration-200 z-10"
+            className="absolute top-1 right-1 w-5 h-5 hover:bg-blue-700 rounded-md flex justify-center items-center bg-gray-300/20 text-gray-300 group-hover:opacity-100 opacity-0 duration-200 z-10"
             onClick={() => {
               remove();
             }}

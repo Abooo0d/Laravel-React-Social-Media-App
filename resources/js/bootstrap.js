@@ -33,6 +33,11 @@ window.Echo = new Echo({
   disableStats: true,
 });
 
+// import { Buffer } from "buffer";
+// import process from "process";
+
+// window.Buffer = Buffer;
+// window.process = process;
 // http;
 // window.Echo = new Echo({
 //   broadcaster: "pusher",

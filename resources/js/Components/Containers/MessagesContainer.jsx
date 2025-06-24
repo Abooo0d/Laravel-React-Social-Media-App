@@ -45,7 +45,7 @@ const MessagesContainer = ({ isLoading }) => {
   }, [currentChat]);
 
   return (
-    <div className="order-2 relative bg-gray-300 dark:bg-homeFeed bg-chat-pattern z-[10] bg-cover min-h-full max-h-barHeight flex-1 overflow-scroll flex flex-col justify-between items-center gap-2">
+    <div className="order-2 relative bg-gray-300 dark:bg-gray-900 bg-chat-pattern z-[10] bg-cover min-h-full md:max-h-barHeight max-h-[calc(100vh-120px)] flex-1 overflow-hidden flex flex-col justify-between items-center">
       <div className="absolute inset-0 w-full h-full bg-[rgba(17,24,39,58%)]" />
       {isLoading ? (
         <div className="flex w-full min-h-barHeight justify-center items-center">
@@ -56,9 +56,8 @@ const MessagesContainer = ({ isLoading }) => {
           {!!currentChat && <ChatInfo />}
           {!!currentChat && (
             <>
-              {/* max-h-[calc(100dvh-225px)] */}
               <div
-                className="w-full  relative p-4 overflow-auto flex flex-col-reverse flex-1"
+                className="w-full relative p-4 overflow-auto flex flex-col-reverse flex-1 max-h-[calc(100vh-225px)]"
                 ref={containerRef}
               >
                 {currentChat?.messages?.map((message, index) => (
@@ -93,3 +92,33 @@ const MessagesContainer = ({ isLoading }) => {
 };
 
 export default MessagesContainer;
+
+/**
+ *
+ *
+ *
+   {!!currentChat && (
+            <>
+               max-h-[calc(100dvh-225px)]
+              <div
+                className="w-full relative p-4 overflow-auto flex flex-col-reverse flex-1 max-h-[calc(100vh-225px)]"
+                ref={containerRef}
+              >
+                {currentChat?.messages?.map((message, index) => (
+                  <MessageCard message={message} key={index} />
+                ))}
+                {currentChat?.messages?.length >= 6 && (
+                  <>
+                    {thereIsMore ? (
+                      <Spinner size="small" ref={ref} />
+                    ) : (
+                      <div className="bg-gray-900/50 backdrop-blur-sm w-fit mx-auto text-sm text-gray-500 rounded-md py-1 px-2 cursor-default border-solid border-gray-600/50 border-[1px] mb-4">
+                        There Is No More Messages
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            </>
+          )}
+ */

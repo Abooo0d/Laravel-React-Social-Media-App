@@ -100,6 +100,8 @@ Route::middleware('auth')->group(function () {
   Route::post('/chat/{chat:id}/add-users', [ChatsController::class, 'addUsersToChat'])->name('chat.addMembers');
   Route::post('chat/{chat:id}/set-admin', [chatsController::class, 'ChangeRoleInChat'])->name('chat.setAdmin');
   Route::post('chat/{chat:id}/kick-out', [ChatsController::class, 'kickOut'])->name('chat.kickOut');
+  Route::post('/chat/{chat:id}/call', [ChatsController::class, 'ptpCall'])->name('chat.call');
+  Route::post('/chat/{chat:id}/decline-call', [ChatsController::class, 'callDecline'])->name('call.decline');
 });
 
 require __DIR__ . '/auth.php';

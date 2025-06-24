@@ -2,9 +2,12 @@ import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 import react from "@vitejs/plugin-react";
 import fs from "fs";
+import rollupNodePolyFill from "rollup-plugin-node-polyfills";
 export default defineConfig({
   define: {
     __VITE_IS_HTTPS__: true,
+    global: "globalThis",
+    "process.env": {},
   },
   plugins: [
     laravel({
@@ -13,6 +16,24 @@ export default defineConfig({
     }),
     react(),
   ],
+  resolve: {
+    alias: {
+      stream: "stream-browserify",
+      buffer: "buffer",
+      process: "process/browser",
+      events: "events",
+      util: "util",
+    },
+  },
+  optimizeDeps: {
+    include: ["buffer", "process", "stream-browserify", "events", "util"],
+  },
+  build: {
+    rollupOptions: {
+      plugins: [rollupNodePolyFill()],
+    },
+  },
+
   server: {
     host: "192.168.1.107",
     port: 3000,

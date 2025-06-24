@@ -27,8 +27,10 @@ export default {
       },
       height: {
         barHeight: "calc(100dvh - 66px)",
+        messageContainer: "calc(100dvh - 100px)",
       },
       maxHeight: {
+        messageContainer: "calc(100dvh - 80px)",
         homeFeed: "calc(100vh - 160px)",
         100: "100dvh",
         barHeight: "calc(100vh - 66px)",

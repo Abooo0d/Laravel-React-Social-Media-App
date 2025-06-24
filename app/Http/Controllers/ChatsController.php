@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Events\AddMemberToChatGroup;
+use App\Events\CallDecline;
 use App\Events\ChatCreated;
-use App\Events\ChatDeleted;
 use App\Events\ChatUpdated;
 use App\Events\MemberKickOutFormChat;
 use App\Events\MemberRoleChanged;
 use App\Events\MessageDeleted;
 use App\Events\MessageUpdated;
 use App\Events\NewMessageSent;
+use App\Events\WebRTCCallSignal;
 use App\Http\Requests\AddUsersToChatRequest;
 use App\Http\Requests\ChangeChatGroupImage;
 use App\Http\Requests\ChangeRoleForChatRequest;
@@ -471,5 +472,21 @@ class ChatsController extends Controller
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
+  }
+  public function ptpCall(Request $request, Chat $chat)
+  {
+    $room = $request->room ?? null;
+    $signal = $request->signal ?? null;
+    broadcast(new WebRTCCallSignal(
+      $chat->id,
+      auth()->id(),
+      $signal
+    ));
+    return response(['message' => 'From BackEnd']);
+  }
+  public function callDecline(Chat $chat)
+  {
+    broadcast(new CallDecline($chat));
+    return response(['message' => 'Call Decline']);
   }
 }

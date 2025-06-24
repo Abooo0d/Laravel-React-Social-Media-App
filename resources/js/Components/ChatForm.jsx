@@ -111,7 +111,7 @@ const ChatForm = () => {
     setChosenFiles((prev) => [...prev, { file: file, url: url }]);
   };
   return (
-    <div className="flex relative w-full justify-between items-center bg-gray-900 md:p-4 p-2 border-t-[1px] border-solid border-gray-700 ">
+    <div className="flex relative w-full justify-between items-center bg-gray-900 md:p-4 p-4 border-t-[1px] border-solid border-gray-700 ">
       <ChatFormAttachmentContainer
         attachments={chosenFiles}
         setAttachments={setChosenFiles}

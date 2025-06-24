@@ -24,6 +24,20 @@ const INITIAL_DATA = {
   setShowAttachmentFullView: () => {},
   showChatInfo: false,
   setShowChatInfo: () => {},
+  showVideoCallForm: false,
+  setShowVideoCallForm: () => {},
+  showAudioCallForm: false,
+  setShowAudioCallForm: () => {},
+  isCaller: false,
+  setIsCaller: () => {},
+  incomingSignal: null,
+  setIncomingSignal: () => {},
+  incomingFrom: null,
+  setIncomingFrom: () => {},
+  haveCall: false,
+  setHaveCall: () => {},
+  CallEnded: false,
+  setCallEnded: () => {},
 };
 const Context = createContext(INITIAL_DATA);
 export const ChatsContext = ({ children }) => {
@@ -39,6 +53,12 @@ export const ChatsContext = ({ children }) => {
   const [attachmentIndex, setAttachmentIndex] = useState(0);
   const [showAttachmentFullView, setShowAttachmentFullView] = useState(false);
   const [showChatInfo, setShowChatInfo] = useState(false);
+  const [showVideoCallForm, setShowVideoCallForm] = useState(false);
+  const [showAudioCallForm, setShowAudioCallForm] = useState(false);
+  const [incomingSignal, setIncomingSignal] = useState(null);
+  const [incomingFrom, setIncomingFrom] = useState(null);
+  const [isCaller, setIsCaller] = useState(false);
+  const [callEnded, setCallEnded] = useState(false);
   const { setSuccessMessage, setErrors } = useMainContext();
   useEffect(() => {
     let array = onlineUsers.map((user) => user.id);
@@ -74,8 +94,6 @@ export const ChatsContext = ({ children }) => {
   }, [currentChat]);
 
   useEffect(() => {
-    console.log(window.Echo);
-
     window.Echo.join("online")
       .here((users) => {
         setOnlineUsers(users);
@@ -279,6 +297,19 @@ export const ChatsContext = ({ children }) => {
         setCombinedChats(a);
         setErrors([message]);
       });
+
+      channel.listen("WebRTCCallSignal", (e) => {
+        if (e.from === user.id) return;
+        setIncomingSignal(e.signal);
+        setIncomingFrom(e.from);
+        setShowVideoCallForm(true);
+        console.log("Incoming Signal From The BackEnd:", e);
+      });
+
+      channel.listen("CallDecline", () => {
+        setCallEnded(true);
+      });
+
       subscribedChats.current.add(chatId);
     });
   }, [combinedChats]);
@@ -306,6 +337,18 @@ export const ChatsContext = ({ children }) => {
         setAttachmentIndex,
         showChatInfo,
         setShowChatInfo,
+        showVideoCallForm,
+        setShowVideoCallForm,
+        showAudioCallForm,
+        setShowAudioCallForm,
+        incomingSignal,
+        setIncomingSignal,
+        incomingFrom,
+        setIncomingFrom,
+        isCaller,
+        setIsCaller,
+        callEnded,
+        setCallEnded,
       }}
     >
       {children}

@@ -31,3 +31,8 @@ Broadcast::channel(
   'user.{id}',
   fn($user, $id) => (int) $user->id == (int) $id
 );
+Broadcast::channel(
+  'call.{chatId}',
+  fn($user, $chatId) =>
+  Chat::find($chatId)->users->contains($user->id)
+);

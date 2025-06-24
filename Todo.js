@@ -9,7 +9,12 @@
 // why the pdf File Come Tow Times When Selected As Attachment
 // Put The Focus On The TextInput on The CreatePostForm And THe UpdatePostForm
 // Set A Loading When Sending Invitation To Group
+//Some Request Is Not Working
+// Make Test For All The Request in The Application
 
+// Implement Ending CAlls
+// Fixing The Design Of The Call Form
+// Fixing The Design Of The Answer Form For The Video Call Form
 /************** TOday *************/
 // When New Message Comes The UnReadCount Get Still Count Even If The Chat Is Open
 // THe Text Area In The Chat Form Broken In The Small Devices
