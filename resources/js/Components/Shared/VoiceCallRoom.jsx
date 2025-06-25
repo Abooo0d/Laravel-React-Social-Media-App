@@ -177,13 +177,14 @@ const VoiceCallRoom = () => {
       }`}
     >
       <div
-        className={`relative md:max-w-[90%] md:w-[900px] max-w-[100%] max-h-[100%] h-full w-full flex flex-col justify-between items-center rounded-xl overflow-auto bg-gray-900/90 border-[1px] border-solid border-gray-700 p-1 pb-4 backdrop-blur-2xl duration-200 ${
+        className={`relative md:max-w-[90%] md:w-[900px] max-w-[100%] max-h-[100%] h-full w-full flex flex-col justify-between items-center rounded-xl overflow-auto bg-gray-900/90 border-[1px] border-solid border-gray-700 p-1 backdrop-blur-2xl duration-200 ${
           showAudioCallForm
             ? "visible opacity-100"
             : "invisible opacity-0 scale-90 "
         } `}
       >
-        <div className="w-full flex flex-1 flex-col justify-center items-center gap-2 relative rounded-md overflow-hidden bg-homeFeed border-gray-500/50 border-[1px] border-solid">
+        <div className="relative w-full flex flex-1 flex-col justify-center items-center gap-2 rounded-md overflow-hidden bg-homeFeed bg-chat-pattern bg-cover border-gray-500/50 border-[1px] border-solid">
+          <div className="absolute inset-0 bg-gray-900/50" />
           {!isVolumeOn && (
             <span className="w-8 h-8 flex justify-center items-center bg-gray-800/50 backdrop-blur-sm rounded-md p-1 absolute top-[10px] left-[10px] border-gray-500/50 border-solid border-[1px]">
               <IoVolumeMute className="text-gray-500" />
@@ -194,21 +195,30 @@ const VoiceCallRoom = () => {
               <FaMicrophoneSlash className="text-gray-500" />
             </span>
           )}
-
-          {!remoteVoice.current?.srcObject && (
-            <div className="text-gray-400 text-xl w-full absolute sm:top-[90%] top-[80%] flex justify-center items-center">
-              {isCaller ? (
-                <>{callStatus}</>
-              ) : (
-                <span>
-                  Incoming Call From{" "}
-                  <span className="block sm:inline w-full text-center text-sky-500 text-2xl">
-                    {currentChat?.name}
-                  </span>
-                </span>
+          <div className="relative flex flex-col gap-4 w-full h-full justify-center items-center">
+            <img
+              src={currentChat?.avatar_url}
+              alt="image"
+              className="w-[150px] h-[150px] rounded-full "
+            />
+            <div className="flex flex-col gap-2 absolute top-[40px] left-[50%] translate-x-[-50%]">
+              <h2 className="text-2xl text-gray-300 ">{currentChat?.name}</h2>
+              {!remoteVoice.current?.srcObject && (
+                <>
+                  {isCaller ? (
+                    <div className="text-gray-500">{callStatus}</div>
+                  ) : (
+                    <span>
+                      Incoming Call From{" "}
+                      <span className="block sm:inline w-full text-center text-sky-500 text-2xl">
+                        {currentChat?.name}
+                      </span>
+                    </span>
+                  )}
+                </>
               )}
             </div>
-          )}
+          </div>
           <audio
             ref={remoteVoice}
             autoPlay
@@ -218,71 +228,71 @@ const VoiceCallRoom = () => {
               acceptCall ? "visible opacity-100" : "invisible opacity-0"
             }`}
           />
-        </div>
-        <div className="w-full flex justify-center items-center gap-12 mt-4">
-          {isCaller || acceptCall ? (
-            <>
-              <button
-                className="w-[50px] h-[50px] rounded-full bg-red-500 text-gray-300 flex justify-center items-center"
-                onClick={() => endCall()}
-              >
-                <MdCallEnd className="w-[30px] h-[30px]" />
-              </button>
-              <button
-                className="w-[50px] h-[50px] rounded-full bg-green-600 text-gray-300 flex justify-center items-center relative"
-                onClick={() => {
-                  toggleVolume();
-                }}
-              >
-                <FaVolumeUp
-                  className={`absolute inset-0 w-full h-full p-2 duration-200 ${
-                    isVolumeOn ? "opacity-100" : " opacity-0"
-                  }`}
-                />
-                <IoVolumeMute
-                  className={`absolute inset-0 w-full h-full p-2 duration-200 ${
-                    isVolumeOn ? "opacity-0" : " opacity-100"
-                  }`}
-                />
-              </button>
-              <button
-                className="w-[50px] h-[50px] rounded-full bg-sky-600 text-gray-300 flex justify-center items-center relative"
-                onClick={() => {
-                  toggleMicrophone();
-                }}
-              >
-                <FaMicrophone
-                  className={`absolute inset-0 w-full h-full p-2 duration-200 ${
-                    isMicrophoneOn ? "opacity-100" : " opacity-0"
-                  }`}
-                />
-                <FaMicrophoneSlash
-                  className={`absolute inset-0 w-full h-full p-2 duration-200 ${
-                    isMicrophoneOn ? "opacity-0" : " opacity-100"
-                  }`}
-                />
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                className="w-[50px] h-[50px] rounded-full bg-red-600 text-gray-300 flex justify-center items-center relative"
-                onClick={() => {
-                  endCall();
-                }}
-              >
-                <MdCallEnd className="w-[30px] h-[30px]" />
-              </button>
-              <button
-                className="w-[50px] h-[50px] rounded-full bg-green-600 text-gray-300 flex justify-center items-center relative"
-                onClick={() => {
-                  answerVideoCall();
-                }}
-              >
-                <MdCall className="w-[30px] h-[30px]" />
-              </button>
-            </>
-          )}
+          <div className="w-full flex justify-center items-center gap-12 mt-4 absolute bottom-0 py-4 ">
+            {isCaller || acceptCall ? (
+              <>
+                <button
+                  className="w-[50px] h-[50px] rounded-full bg-red-500 text-gray-300 flex justify-center items-center"
+                  onClick={() => endCall()}
+                >
+                  <MdCallEnd className="w-[30px] h-[30px]" />
+                </button>
+                <button
+                  className="w-[50px] h-[50px] rounded-full bg-green-600 text-gray-300 flex justify-center items-center relative"
+                  onClick={() => {
+                    toggleVolume();
+                  }}
+                >
+                  <FaVolumeUp
+                    className={`absolute inset-0 w-full h-full p-2 duration-200 ${
+                      isVolumeOn ? "opacity-100" : " opacity-0"
+                    }`}
+                  />
+                  <IoVolumeMute
+                    className={`absolute inset-0 w-full h-full p-2 duration-200 ${
+                      isVolumeOn ? "opacity-0" : " opacity-100"
+                    }`}
+                  />
+                </button>
+                <button
+                  className="w-[50px] h-[50px] rounded-full bg-sky-600 text-gray-300 flex justify-center items-center relative"
+                  onClick={() => {
+                    toggleMicrophone();
+                  }}
+                >
+                  <FaMicrophone
+                    className={`absolute inset-0 w-full h-full p-2 duration-200 ${
+                      isMicrophoneOn ? "opacity-100" : " opacity-0"
+                    }`}
+                  />
+                  <FaMicrophoneSlash
+                    className={`absolute inset-0 w-full h-full p-2 duration-200 ${
+                      isMicrophoneOn ? "opacity-0" : " opacity-100"
+                    }`}
+                  />
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="w-[50px] h-[50px] rounded-full bg-red-600 text-gray-300 flex justify-center items-center relative"
+                  onClick={() => {
+                    endCall();
+                  }}
+                >
+                  <MdCallEnd className="w-[30px] h-[30px]" />
+                </button>
+                <button
+                  className="w-[50px] h-[50px] rounded-full bg-green-600 text-gray-300 flex justify-center items-center relative"
+                  onClick={() => {
+                    answerVideoCall();
+                  }}
+                >
+                  <MdCall className="w-[30px] h-[30px]" />
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

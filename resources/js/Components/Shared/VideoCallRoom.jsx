@@ -32,6 +32,7 @@ const VideoCallRoom = () => {
   const remoteVideo = useRef();
   const localStream = useRef(null);
   const [acceptCall, setAcceptCall] = useState(false);
+  const [showData, setShowData] = useState(true);
   const [callStatus, setCallStatus] = useState("");
 
   const MainSetup = async () => {
@@ -70,6 +71,7 @@ const VideoCallRoom = () => {
           });
       });
       createdPeer.on("stream", (remoteStream) => {
+        setShowData(false);
         remoteVideo.current.srcObject = remoteStream;
       });
       setPeer(createdPeer);
@@ -104,6 +106,7 @@ const VideoCallRoom = () => {
         });
     });
     createdPeer.on("stream", (remoteStream) => {
+      setShowData(false);
       remoteVideo.current.srcObject = remoteStream;
     });
     createdPeer.signal(incomingSignal);
@@ -145,6 +148,7 @@ const VideoCallRoom = () => {
     setShowVideoCallForm(false);
     setIsCaller(false);
     setAcceptCall(false);
+    setShowData(true);
     setCallStatus("");
   };
 
@@ -179,13 +183,15 @@ const VideoCallRoom = () => {
       }`}
     >
       <div
-        className={`relative md:max-w-[90%] md:w-[900px] max-w-[100%] max-h-[100%] h-full w-full flex flex-col justify-between items-center rounded-xl overflow-auto bg-gray-900/90 border-[1px] border-solid border-gray-700 p-1 pb-4 backdrop-blur-2xl duration-200 ${
+        className={`relative md:max-w-[90%] md:w-[900px] max-w-[100%] max-h-[100%] h-full w-full flex flex-col justify-between items-center rounded-xl overflow-auto bg-gray-900/90 border-[1px] border-solid border-gray-700 p-1 backdrop-blur-2xl duration-200 ${
           showVideoCallForm
             ? "visible opacity-100"
             : "invisible opacity-0 scale-90 "
         } `}
       >
-        <div className="w-full flex flex-1 flex-col justify-center items-center gap-2 relative rounded-md overflow-hidden bg-homeFeed border-gray-500/50 border-[1px] border-solid">
+        <div className="w-full flex flex-1 flex-col justify-center items-center gap-2 relative rounded-md overflow-hidden bg-homeFeed bg-chat-pattern bg-cover border-gray-500/50 border-[1px] border-solid">
+          <div className="absolute inset-0 bg-gray-900/50 z-0" />
+
           {!isVolumeOn && (
             <span className="w-8 h-8 flex justify-center items-center bg-gray-800/50 backdrop-blur-sm rounded-md p-1 absolute top-[10px] left-[10px] border-gray-500/50 border-solid border-[1px]">
               <IoVolumeMute className="text-gray-500" />
@@ -196,105 +202,118 @@ const VideoCallRoom = () => {
               <FaMicrophoneSlash className="text-gray-500" />
             </span>
           )}
+          {showData && (
+            <>
+              <img
+                src={currentChat?.avatar_url}
+                alt="image"
+                className="w-[120px] h-[120px] rounded-full absolute top-[20%] left-[50%] translate-x-[-50%] z-10  object-cover"
+              />
+              <div className="flex flex-col gap-2 absolute top-[40px] left-[50%] translate-x-[-50%]">
+                <h2 className="text-2xl text-gray-300 text-center">
+                  {currentChat?.name}
+                </h2>
+                <>
+                  {isCaller ? (
+                    <div className="text-gray-500">{callStatus}</div>
+                  ) : (
+                    <span className="text-gray-500">
+                      Incoming Call From{" "}
+                      <span className="block sm:inline w-full text-center text-sky-500 text-2xl">
+                        {currentChat?.name}
+                      </span>
+                    </span>
+                  )}
+                </>
+              </div>
+            </>
+          )}
           <video
             ref={localVideo}
             autoPlay
             muted
             playsInline
-            className={`h-[100px] absolute rounded-md overflow-hidden duration-300 ${
+            className={`h-[100px] absolute rounded-md overflow-hidden duration-300  ${
               acceptCall
-                ? "md:top-[20px] md:right-[20px] top-[10px] right-[10px]"
-                : "top-[5%] right-[5%] w-[90%] h-fit max-h-[80%] overflow-hidden object-cover"
+                ? "md:top-[20px] md:right-[20px] top-[10px] right-[10px] z-[10]"
+                : "bottom-[10px] right-[5%] w-[90%] h-fit max-h-[80%] overflow-hidden object-cover z-[1]"
             }`}
           />
-          {!remoteVideo.current?.srcObject && (
-            <div className="text-gray-400 text-xl w-full absolute sm:top-[90%] top-[80%] flex justify-center items-center">
-              {isCaller ? (
-                <>{callStatus}</>
-              ) : (
-                <span>
-                  Incoming Call From{" "}
-                  <span className="block sm:inline w-full text-center text-sky-500 text-2xl">
-                    {currentChat?.name}
-                  </span>
-                </span>
-              )}
-            </div>
-          )}
+
           <video
             ref={remoteVideo}
             autoPlay
             playsInline
-            muted={isVolumeOn}
-            className={`w-full h-full aspect-video duration-200 ${
+            muted={!isVolumeOn}
+            className={`w-full h-full aspect-video duration-200 absolute z-10${
               acceptCall ? "visible opacity-100" : "invisible opacity-0"
             }`}
           />
-        </div>
-        <div className="w-full flex justify-center items-center gap-12 mt-4">
-          {isCaller || acceptCall ? (
-            <>
-              <button
-                className="w-[50px] h-[50px] rounded-full bg-red-500 text-gray-300 flex justify-center items-center"
-                onClick={() => endCall()}
-              >
-                <MdCallEnd className="w-[30px] h-[30px]" />
-              </button>
-              <button
-                className="w-[50px] h-[50px] rounded-full bg-green-600 text-gray-300 flex justify-center items-center relative"
-                onClick={() => {
-                  toggleVolume();
-                }}
-              >
-                <FaVolumeUp
-                  className={`absolute inset-0 w-full h-full p-2 duration-200 ${
-                    isVolumeOn ? "opacity-100" : " opacity-0"
-                  }`}
-                />
-                <IoVolumeMute
-                  className={`absolute inset-0 w-full h-full p-2 duration-200 ${
-                    isVolumeOn ? "opacity-0" : " opacity-100"
-                  }`}
-                />
-              </button>
-              <button
-                className="w-[50px] h-[50px] rounded-full bg-sky-600 text-gray-300 flex justify-center items-center relative"
-                onClick={() => {
-                  toggleMicrophone();
-                }}
-              >
-                <FaMicrophone
-                  className={`absolute inset-0 w-full h-full p-2 duration-200 ${
-                    isMicrophoneOn ? "opacity-100" : " opacity-0"
-                  }`}
-                />
-                <FaMicrophoneSlash
-                  className={`absolute inset-0 w-full h-full p-2 duration-200 ${
-                    isMicrophoneOn ? "opacity-0" : " opacity-100"
-                  }`}
-                />
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                className="w-[50px] h-[50px] rounded-full bg-red-600 text-gray-300 flex justify-center items-center relative"
-                onClick={() => {
-                  endCall();
-                }}
-              >
-                <MdCallEnd className="w-[30px] h-[30px]" />
-              </button>
-              <button
-                className="w-[50px] h-[50px] rounded-full bg-green-600 text-gray-300 flex justify-center items-center relative"
-                onClick={() => {
-                  answerVideoCall();
-                }}
-              >
-                <MdCall className="w-[30px] h-[30px]" />
-              </button>
-            </>
-          )}
+          <div className="w-full flex justify-center items-center gap-12 mt-4 absolute bottom-0 py-4 z-[10] ">
+            {isCaller || acceptCall ? (
+              <>
+                <button
+                  className="w-[50px] h-[50px] rounded-full bg-red-500 text-gray-300 flex justify-center items-center"
+                  onClick={() => endCall()}
+                >
+                  <MdCallEnd className="w-[30px] h-[30px]" />
+                </button>
+                <button
+                  className="w-[50px] h-[50px] rounded-full bg-green-600 text-gray-300 flex justify-center items-center relative"
+                  onClick={() => {
+                    toggleVolume();
+                  }}
+                >
+                  <FaVolumeUp
+                    className={`absolute inset-0 w-full h-full p-2 duration-200 ${
+                      isVolumeOn ? "opacity-100" : " opacity-0"
+                    }`}
+                  />
+                  <IoVolumeMute
+                    className={`absolute inset-0 w-full h-full p-2 duration-200 ${
+                      isVolumeOn ? "opacity-0" : " opacity-100"
+                    }`}
+                  />
+                </button>
+                <button
+                  className="w-[50px] h-[50px] rounded-full bg-sky-600 text-gray-300 flex justify-center items-center relative"
+                  onClick={() => {
+                    toggleMicrophone();
+                  }}
+                >
+                  <FaMicrophone
+                    className={`absolute inset-0 w-full h-full p-2 duration-200 ${
+                      isMicrophoneOn ? "opacity-100" : " opacity-0"
+                    }`}
+                  />
+                  <FaMicrophoneSlash
+                    className={`absolute inset-0 w-full h-full p-2 duration-200 ${
+                      isMicrophoneOn ? "opacity-0" : " opacity-100"
+                    }`}
+                  />
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="w-[50px] h-[50px] rounded-full bg-red-600 text-gray-300 flex justify-center items-center relative"
+                  onClick={() => {
+                    endCall();
+                  }}
+                >
+                  <MdCallEnd className="w-[30px] h-[30px]" />
+                </button>
+                <button
+                  className="w-[50px] h-[50px] rounded-full bg-green-600 text-gray-300 flex justify-center items-center relative"
+                  onClick={() => {
+                    answerVideoCall();
+                  }}
+                >
+                  <MdCall className="w-[30px] h-[30px]" />
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
