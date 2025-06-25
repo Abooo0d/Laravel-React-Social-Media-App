@@ -9,6 +9,7 @@ use App\Events\ChatUpdated;
 use App\Events\MemberKickOutFormChat;
 use App\Events\MemberRoleChanged;
 use App\Events\MessageDeleted;
+use App\Events\MessageRead;
 use App\Events\MessageUpdated;
 use App\Events\NewMessageSent;
 use App\Events\WebRTCCallSignal;
@@ -99,15 +100,16 @@ class ChatsController extends Controller
 
       $now = now();
 
-      $statusRows = $unreadMessages->map(function ($message) use ($user, $now) {
-        return [
+      $statusRows = $unreadMessages->map(
+        fn($message) =>
+        [
           'message_id' => $message->id,
           'user_id' => $user->id,
           'is_read' => true,
           'created_at' => $now,
           'updated_at' => $now,
-        ];
-      })->toArray();
+        ]
+      )->toArray();
 
       if (!empty($statusRows)) {
         MessageStatus::insert($statusRows); // bulk insert
@@ -121,6 +123,21 @@ class ChatsController extends Controller
       );
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function messageRead(Message $message)
+  {
+    if ($message) {
+      $now = now();
+      $userId = auth()->id();
+      MessageStatus::create([
+        'message_id' => $message->id,
+        'user_id' => $userId,
+        'is_read' => true,
+        'created_at' => $now,
+        'updated_at' => $now,
+      ]);
+      broadcast(new MessageRead($message));
     }
   }
   public function getMoreMessages(Message $message)

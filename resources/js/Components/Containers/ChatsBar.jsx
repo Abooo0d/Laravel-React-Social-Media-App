@@ -24,7 +24,6 @@ const ChatsBar = ({ setIsLoading }) => {
       .post(route("chat.searchForChat"), { name: searchName })
       .then((data) => {
         setSearchResult(data.data.chats);
-        console.log(data.data.chats, "Abood");
         setTimeout(() => {
           setLoading(false);
         }, 500);

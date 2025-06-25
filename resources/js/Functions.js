@@ -1,6 +1,4 @@
 function formatRelativeTime(dateString) {
-  // console.log(dateString);
-
   // const date = new Date(dateString);
   // const now = new Date();
 

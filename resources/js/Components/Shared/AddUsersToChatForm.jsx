@@ -66,7 +66,6 @@ const AddUsersToChatForm = ({ showForm, setShowForm }) => {
         users: addedUsers.map((user) => user.id),
       })
       .then((data) => {
-        console.log(data);
         setCurrentChat((prev) => ({
           ...prev,
           users: data.data.chat.users,

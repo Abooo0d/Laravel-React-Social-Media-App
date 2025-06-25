@@ -28,6 +28,7 @@ const ChatInfoForm = () => {
     showChatInfo,
     setShowChatInfo,
     setCombinedChats,
+    LeaveChannel,
   } = useChatsContext();
   const [showMembers, setShowMembers] = useState(false);
   const { setSuccessMessage, setErrors } = useMainContext();
@@ -40,7 +41,7 @@ const ChatInfoForm = () => {
 
   useEffect(() => {
     let att = currentChat?.messages?.filter(
-      (message) => message.attachments.length > 0
+      (message) => message?.attachments.length > 0
     );
     let allFiles = [];
     att?.map((me) => {
@@ -101,6 +102,7 @@ const ChatInfoForm = () => {
         setCombinedChats((prev) =>
           prev.filter((chat) => chat.id !== currentChat?.id)
         );
+        LeaveChannel(currentChat.id);
         setCurrentChat(null);
         setShowChatInfo(false);
       })
@@ -116,6 +118,7 @@ const ChatInfoForm = () => {
           setCombinedChats((prev) =>
             prev.filter((c) => c.id !== currentChat.id)
           );
+          LeaveChannel(currentChat.id);
           setCurrentChat(null);
           setShowChatInfo(false);
           setSuccessMessage(data.data.message);

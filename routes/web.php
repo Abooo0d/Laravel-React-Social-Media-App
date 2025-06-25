@@ -85,6 +85,7 @@ Route::middleware('auth')->group(function () {
   Route::get('/chats', [ChatsController::class, 'index'])->name('chats');
   Route::post('/chats', [ChatsController::class, 'getChat'])->name('getChat');
   Route::post('/chat/new_message/{chat:id}', [chatsController::class, 'newMessage'])->name('newMessage');
+  Route::post('/chat/read-message/{message:id}', [ChatsController::class, 'messageRead'])->name('readMessage');
   Route::get('/chat/get_more_messages/{message:id}', [ChatsController::class, 'getMoreMessages'])->name('getMoreMessages');
   Route::post('/chat/search', [ChatsController::class, 'searchForChat'])->name('chat.searchForChat');
   Route::get('/chat/download/{attachment}', [ChatsController::class, 'downloadAttachment'])->name('chat.download');

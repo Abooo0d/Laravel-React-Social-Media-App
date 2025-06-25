@@ -1,6 +1,7 @@
 import axiosClient from "@/AxiosClient/AxiosClient";
 import { useChatsContext } from "@/Contexts/ChatsContext";
 import { useMainContext } from "@/Contexts/MainContext";
+import { useUserContext } from "@/Contexts/UserContext";
 import React, { useState } from "react";
 import { FaLock, FaLockOpen } from "react-icons/fa";
 import { HiDotsVertical } from "react-icons/hi";
@@ -17,6 +18,7 @@ const ChatInfoMenu = ({ swtShowChatInfo }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [muteStatus, setMuteStatus] = useState(currentChat?.status?.muted);
   const [blockStatus, setBlockStatus] = useState(currentChat?.status?.blocked);
+  const { user } = useUserContext();
   const muteChat = () => {
     axiosClient
       .post(route("chat.mute", currentChat?.id), {
@@ -45,7 +47,6 @@ const ChatInfoMenu = ({ swtShowChatInfo }) => {
         block: !blockStatus,
       })
       .then((data) => {
-        console.log(data);
         setSuccessMessage(data.data.message);
         setCurrentChat((prev) => ({
           ...prev,
@@ -111,10 +112,12 @@ const ChatInfoMenu = ({ swtShowChatInfo }) => {
                 </>
               )}
             </button>
-            <button className="duration-300 flex gap-2 justify-between items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left">
-              <span className="flex-1">Leave</span>
-              <MdLogout className="w-4 h-4" />
-            </button>
+            {currentChat?.owner !== user.id && (
+              <button className="duration-300 flex gap-2 justify-between items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left">
+                <span className="flex-1">Leave</span>
+                <MdLogout className="w-4 h-4" />
+              </button>
+            )}
           </>
         ) : (
           <>

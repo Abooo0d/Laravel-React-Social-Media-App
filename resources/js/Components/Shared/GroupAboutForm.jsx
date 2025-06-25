@@ -37,7 +37,6 @@ const GroupAboutForm = ({ group, setGroup }) => {
       },
       {
         onSuccess: () => {
-          console.log("Updated successfully");
           setGroup({
             ...group,
             name: groupName,
@@ -94,7 +93,6 @@ const GroupAboutForm = ({ group, setGroup }) => {
       <PrimaryButton
         classes="w-fit px-4 py-2 ml-auto mr-4"
         event={() => {
-          console.log("Abood");
           submit();
         }}
       >

@@ -24,7 +24,6 @@ const ChangeChatGroupName = ({ showForm, setShowForm }) => {
           name: name,
         })
         .then((data) => {
-          console.log(data);
           setSuccessMessage(data.data.message);
           setCurrentChat((prev) => ({ ...prev, name: name }));
           setShowForm(false);

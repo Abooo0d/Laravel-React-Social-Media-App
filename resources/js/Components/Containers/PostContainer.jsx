@@ -60,7 +60,12 @@ const PostContainer = ({ posts, classes, children, isLoading, refetch }) => {
                   )}
                 </>
               ) : (
-                <div className="text-gray-600 text-sm">No Posts To Show</div>
+                <>
+                  <HomeLoader />
+                  <div className="text-gray-600 text-sm pb-4">
+                    No Posts To Show
+                  </div>
+                </>
               )}
             </>
           )}

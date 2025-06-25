@@ -48,7 +48,7 @@ class PostController extends Controller
       /** @var UploadedFile[] $attachments */
       $attachments = $data['attachments'] ?? [];
       foreach ($attachments as $attachment) {
-        $path = $attachment->store("attachments/{$post->id}", 'public');
+        $path = $attachment->store("PostAttachments/{$post->id}", 'public');
         $files[] = $attachment;
         PostAttachments::create([
           'post_id' => $post->id,

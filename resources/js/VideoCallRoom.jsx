@@ -106,19 +106,11 @@ const VideoCallRoom = () => {
         });
     });
     createdPeer.on("stream", (remoteStream) => {
-      console.log("Stream");
       remoteVideo.current.srcObject = remoteStream;
     });
     createdPeer.signal(incomingSignal);
     setPeer(createdPeer);
   };
-
-  // const declineCall = () => {
-  //   endCall();
-  //   axiosClient.post(route("call.decline", currentChat?.id)).then((data) => {
-  //     console.log(data);
-  //   });
-  // };
 
   const toggleMicrophone = () => {
     if (!localStream.current) return;
@@ -135,11 +127,7 @@ const VideoCallRoom = () => {
   };
   const endCall = () => {
     if (currentChat?.id) {
-      axiosClient
-        .post(route("call.decline", currentChat?.id), {})
-        .then((data) => {
-          console.log(data);
-        });
+      axiosClient.post(route("call.decline", currentChat?.id), {});
     }
     if (peer) peer.destroy();
     setPeer(null);

@@ -40,15 +40,18 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
     refetch,
     isLoading: loadingPosts,
   } = useGetPostsForUser(auth.user.id);
+
   useEffect(() => {
     let messages = [];
     Object.keys(errors).map((key) => messages.push(errors[key]));
     setErrors(messages);
   }, [errors]);
+
   useEffect(() => {
     if (flash?.success) setSuccessMessage(flash.success);
     if (flash?.error) setErrors([flash.error]);
   }, [flash]);
+
   useEffect(() => {
     if (!auth?.user) {
       router.get(route("login"));

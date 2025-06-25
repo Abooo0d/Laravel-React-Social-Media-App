@@ -110,6 +110,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
     });
     setIsTheAvatarChanged(false);
   };
+
   const handelCoverChange = (e) => {
     try {
       const file = e.target.files[0];
@@ -126,6 +127,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
       console.log(error);
     }
   };
+
   const resetCoverImage = () => {
     setCoverImage("");
     setData({
@@ -146,6 +148,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
     setIsTheCoverChanged(false);
     refetch();
   };
+
   function requestJoin() {
     axiosClient
       .post(route("group.join", groupData))

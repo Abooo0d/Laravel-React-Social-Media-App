@@ -110,7 +110,7 @@ export const useGetPostsForUser = (userId) => {
     queryKey: [QUERY_KEYS.GET_POSTS_FOR_USER],
     queryFn: () =>
       axiosClient
-        .get(route("postsForGroup", userId))
+        .get(route("postsForUser", userId))
         .then(({ data }) => {
           return data;
         })

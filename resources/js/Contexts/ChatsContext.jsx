@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useUserContext } from "./UserContext";
 import { useRef } from "react";
 import { useMainContext } from "./MainContext";
+import axiosClient from "@/AxiosClient/AxiosClient";
 
 const INITIAL_DATA = {
   onlineUsers: [],
@@ -38,6 +39,7 @@ const INITIAL_DATA = {
   setHaveCall: () => {},
   CallEnded: false,
   setCallEnded: () => {},
+  LeaveChannel: () => {},
 };
 const Context = createContext(INITIAL_DATA);
 export const ChatsContext = ({ children }) => {
@@ -45,7 +47,7 @@ export const ChatsContext = ({ children }) => {
   const subscribedChats = useRef(new Set());
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [onlineUsersIds, setOnlineUsersIds] = useState([]);
-  const [currentChat, setCurrentChat] = useState({});
+  const [currentChat, setCurrentChat] = useState(null);
   const [allChats, setAllChats] = useState([]);
   const [groupChats, setGroupChats] = useState([]);
   const [combinedChats, setCombinedChats] = useState();
@@ -59,7 +61,13 @@ export const ChatsContext = ({ children }) => {
   const [incomingFrom, setIncomingFrom] = useState(null);
   const [isCaller, setIsCaller] = useState(false);
   const [callEnded, setCallEnded] = useState(false);
+  const currentChatRef = useRef(currentChat);
   const { setSuccessMessage, setErrors } = useMainContext();
+
+  const LeaveChannel = (chatId) => {
+    window.Echo.leave(`private-chat.${chatId}`);
+  };
+
   useEffect(() => {
     let array = onlineUsers.map((user) => user.id);
     setOnlineUsersIds(array);
@@ -91,6 +99,7 @@ export const ChatsContext = ({ children }) => {
         return a.is_group ? -1 : 1;
       });
     });
+    currentChatRef.current = currentChat;
   }, [currentChat]);
 
   useEffect(() => {
@@ -137,7 +146,7 @@ export const ChatsContext = ({ children }) => {
     userChannel.listen("MemberKickOutFormChat", (e) => {
       let chatId = e.chat_id;
       let message = e.message;
-      if (currentChat.id == chatId) {
+      if (currentChatRef.current.id == chatId) {
         setCurrentChat(null);
       }
       setCombinedChats((prev) => prev.filter((c) => c.id !== chatId));
@@ -145,7 +154,6 @@ export const ChatsContext = ({ children }) => {
     });
 
     userChannel.listen(".GroupDeleted", (e) => {
-      console.log(e);
       const groupSlug = e.slug;
 
       const groupId = e.group_id;
@@ -168,51 +176,118 @@ export const ChatsContext = ({ children }) => {
         "NewMessageSent",
         (e) => {
           const message = e.message;
-          // 1. Update combinedChats
-          setCombinedChats((prevChats) =>
-            prevChats.map((chat) => {
-              if (chat.id === message.chat_id) {
-                // Avoid duplicates
-                const alreadyExists = chat.messages.some(
-                  (msg) => msg.id === message.id
-                );
-                if (alreadyExists) return chat;
-                return {
-                  ...chat,
-                  messages: [
-                    { ...message, my_status: false },
-                    ...chat.messages,
-                  ],
-                  last_message: message.body,
-                  last_message_id: message.id,
-                  last_message_date: message.created_at,
-                };
-              }
-              return chat;
-            })
-          );
-          // 2. Update currentChat (if it's the same chat)
-          setCurrentChat((prevChat) => {
-            if (prevChat?.id !== message.chat_id) return prevChat;
-            const alreadyExists = prevChat.messages.some(
-              (msg) => msg.id === message.id
+          console.log(message.chat_id == currentChatRef.current?.id);
+          if (message.chat_id == currentChatRef.current?.id) {
+            axiosClient.post(route("readMessage", message.id));
+            setCurrentChat((prevChat) => {
+              // if (prevChat?.id !== message.chat_id) return prevChat;
+              // const alreadyExists = prevChat.messages.some(
+              //   (msg) => msg.id === message.id
+              // );
+              // if (alreadyExists) return prevChat;
+              return {
+                ...prevChat,
+                messages: [message, ...prevChat.messages],
+                last_message: message.body,
+                last_message_id: message.id,
+                last_message_date: message.created_at,
+              };
+            });
+          } else {
+            setCombinedChats((prevChats) =>
+              prevChats.map((chat) => {
+                if (chat.id === message.chat_id) {
+                  // Avoid duplicates
+                  const alreadyExists = chat.messages.some(
+                    (msg) => msg.id === message.id
+                  );
+                  if (alreadyExists) return chat;
+                  return {
+                    ...chat,
+                    messages: [
+                      { ...message, my_status: false },
+                      ...chat.messages,
+                    ],
+                    last_message: message.body,
+                    last_message_id: message.id,
+                    last_message_date: message.created_at,
+                  };
+                }
+                return chat;
+              })
             );
-            if (alreadyExists) return prevChat;
-            return {
-              ...prevChat,
-              messages: [message, ...prevChat.messages],
-              last_message: message.body,
-              last_message_id: message.id,
-              last_message_date: message.created_at,
-            };
-          });
+          }
+          // // 1. Update combinedChats
+
+          // setCombinedChats((prevChats) =>
+          //   prevChats.map((chat) => {
+          //     if (chat.id === message.chat_id) {
+          //       // Avoid duplicates
+          //       const alreadyExists = chat.messages.some(
+          //         (msg) => msg.id === message.id
+          //       );
+          //       if (alreadyExists) return chat;
+          //       return {
+          //         ...chat,
+          //         messages: [
+          //           { ...message, my_status: false },
+          //           ...chat.messages,
+          //         ],
+          //         last_message: message.body,
+          //         last_message_id: message.id,
+          //         last_message_date: message.created_at,
+          //       };
+          //     }
+          //     return chat;
+          //   })
+          // );
+          // // 2. Update currentChat (if it's the same chat)
+          // setCurrentChat((prevChat) => {
+          //   // axiosClient.post(route("readMessage", message.id));
+          //   if (prevChat?.id !== message.chat_id) return prevChat;
+          //   const alreadyExists = prevChat.messages.some(
+          //     (msg) => msg.id === message.id
+          //   );
+          //   if (alreadyExists) return prevChat;
+          //   return {
+          //     ...prevChat,
+          //     messages: [message, ...prevChat.messages],
+          //     last_message: message.body,
+          //     last_message_id: message.id,
+          //     last_message_date: message.created_at,
+          //   };
+          // });
         },
         [chatId]
       );
+      channel.listen("MessageRead", (e) => {
+        let newMessage = { ...e.message, is_read: true };
+        if (newMessage.chat_id == currentChatRef.current.id) {
+          setCurrentChat((prev) => ({
+            ...prev,
+            messages: prev.messages.map((me) =>
+              me.id == newMessage.id ? newMessage : me
+            ),
+          }));
+        } else {
+          setCombinedChats((prev) =>
+            prev.map((chat) =>
+              chat.id == newMessage.chat_id
+                ? {
+                    ...chat,
+                    messages: prev.messages.map((me) =>
+                      me.id == newMessage.id ? newMessage : me
+                    ),
+                  }
+                : chat
+            )
+          );
+        }
+      });
 
       channel.listen("MessageUpdated", (e) => {
         const newMessage = e.message;
-        if (message.chat_id == currentChat?.id) {
+        if (message.chat_id == currentChatRef.current?.id) {
           setCurrentChat((prev) => ({
             ...prev,
             messages: prev.messages.map((message) => {
@@ -237,7 +312,7 @@ export const ChatsContext = ({ children }) => {
 
       channel.listen("MessageDeleted", (e) => {
         let deletedMessageData = e;
-        if (deletedMessageData.chat_id == currentChat?.id) {
+        if (deletedMessageData.chat_id == currentChatRef.current?.id) {
           setCurrentChat((prev) => ({
             ...prev,
             messages: prev.messages.filter(
@@ -262,7 +337,6 @@ export const ChatsContext = ({ children }) => {
 
       channel.listen("ChatUpdated", (e) => {
         let updatedChatData = e.chat;
-        console.log(updatedChatData);
 
         if (updatedChatData.id == currentChat?.id) {
           let c = {
@@ -303,7 +377,6 @@ export const ChatsContext = ({ children }) => {
         setIncomingSignal(e.signal);
         setIncomingFrom(e.from);
         setShowVideoCallForm(true);
-        console.log("Incoming Signal From The BackEnd:", e);
       });
 
       channel.listen("CallDecline", () => {
@@ -349,6 +422,7 @@ export const ChatsContext = ({ children }) => {
         setIsCaller,
         callEnded,
         setCallEnded,
+        LeaveChannel,
       }}
     >
       {children}

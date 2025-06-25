@@ -32,13 +32,12 @@ const MessageCard = ({ message }) => {
   const updateMessage = () => {
     if (newMessage !== "")
       axiosClient
-        .post(route("chat.updateMessage", message.id), { body: newMessage })
+        .post(route("chat.updateMessage", message?.id), { body: newMessage })
         .then(() => {
           let mes = currentChat.messages;
           let newMes = mes.map((m) =>
-            m.id !== message.id ? m : { ...m, body: newMessage, edited: true }
+            m.id !== message?.id ? m : { ...m, body: newMessage, edited: true }
           );
-          console.log(newMes);
           setCurrentChat((prev) => ({
             ...prev,
             messages: newMes,
@@ -50,26 +49,27 @@ const MessageCard = ({ message }) => {
           setShowUpdateForm(false);
         });
   };
+
   return (
     <div
       className={`w-full flex gap-1 flex-col justify-end relative ${
-        message.user.id != user.id ? "items-start" : " items-end"
+        message?.user.id != user.id ? "items-start" : " items-end"
       }`}
     >
-      {message.user.id == user.id && (
+      {message?.user.id == user.id && (
         <MessageMenu message={message} setShowUpdateForm={setShowUpdateForm} />
       )}
       <div
         className={`flex items-center justify-end gap-4 w-full
         ${
-          message.user.id != user.id
+          message?.user.id != user.id
             ? "justify-start flex-row-reverse"
             : " justify-end flex-row"
         }`}
       >
         <div
           className={`backdrop-blur-sm relative w-fit p-2 rounded-md text-gray-400 word-wrap cursor-default max-w-[80%] ove flex justify-center items-start flex-col break-all  ${
-            message.user.id != user.id
+            message?.user.id != user.id
               ? "bg-[rgba(46,59,78,100%)]"
               : "bg-gray-800 pr-8"
           }`}
@@ -106,23 +106,25 @@ const MessageCard = ({ message }) => {
               </button>
             </div>
           ) : (
-            <MarkdownRenderer content={message.body}>
-              {message.body}
+            <MarkdownRenderer content={message?.body}>
+              {message?.body}
               {message?.status}
             </MarkdownRenderer>
           )}
           <div className={`flex justify-start items-center gap-2 ml-auto  `}>
             <span className="text-gray-400 text-[8px]">
-              {message.created_at}
+              {message?.created_at}
             </span>
-            {message.edited && <span className="text-[10px]">edited</span>}
+            {message?.edited && <span className="text-[10px]">edited</span>}
             {!currentChat.is_group && (
               <>
                 {message?.is_read != "group" && (
                   <>
-                    {message.user.id == user.id && (
+                    {message?.user.id == user.id && (
                       <IoCheckmarkDoneSharp
-                        className={`${message.user.id != user.id && "hidden"} ${
+                        className={`${
+                          message?.user.id != user.id && "hidden"
+                        } ${
                           !!message?.is_read ? "text-blue-500" : "text-gray-600"
                         }`}
                       />
@@ -134,14 +136,14 @@ const MessageCard = ({ message }) => {
           </div>
           <div
             className={`absolute bottom-0 ${
-              message.user.id != user.id
+              message?.user.id != user.id
                 ? "left-[-10px] w-[20px] h-[20px] border-[10px] border-solid border-transparent border-b-[rgba(46,59,78,100%)] z-10"
                 : "right-[-10px] w-[20px] h-[20px] border-[10px] border-solid border-transparent border-b-gray-800 z-10"
             }`}
           />
         </div>
         <img
-          src={message.user.avatar_url}
+          src={message?.user.avatar_url}
           className="w-[30px] h-[30px] rounded-full mt-auto"
         />
       </div>

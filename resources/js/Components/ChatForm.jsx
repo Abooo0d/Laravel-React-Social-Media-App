@@ -38,6 +38,7 @@ const ChatForm = () => {
     });
   };
   const textareaRef = useRef(null);
+
   const newMessage = () => {
     if (message !== "" || chosenFiles.length > 0) {
       const files = chosenFiles?.map((file) => {
@@ -52,7 +53,7 @@ const ChatForm = () => {
       });
       setIsLoading(true);
       axiosClient
-        .post(route("newMessage", currentChat), formData, {
+        .post(route("newMessage", currentChat?.id), formData, {
           onUploadProgress: (progressEvent) => {
             const progress = Math.round(
               (progressEvent.loaded / progressEvent.total) * 100
@@ -73,14 +74,12 @@ const ChatForm = () => {
           let message = err?.response?.data?.message;
           setErrors([message]);
         });
+      console.log("1", currentChat);
+
       handleInput();
     }
   };
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "40px";
-    }
-  }, []);
+
   const handleInput = () => {
     const textarea = textareaRef.current;
     if (textarea) {
@@ -100,13 +99,22 @@ const ChatForm = () => {
         console.log(err);
       });
   };
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "40px";
+    }
+  }, []);
+
   useEffect(() => {
     handleInput();
   }, [message]);
+
   useEffect(() => {
     if (message == "" && chosenFiles.length == 0) setShowRecorder(true);
     else setShowRecorder(false);
   }, [message, chosenFiles]);
+
   const AudioFileReady = (file, url) => {
     setChosenFiles((prev) => [...prev, { file: file, url: url }]);
   };
