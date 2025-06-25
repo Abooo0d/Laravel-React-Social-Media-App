@@ -180,11 +180,6 @@ export const ChatsContext = ({ children }) => {
           if (message.chat_id == currentChatRef.current?.id) {
             axiosClient.post(route("readMessage", message.id));
             setCurrentChat((prevChat) => {
-              // if (prevChat?.id !== message.chat_id) return prevChat;
-              // const alreadyExists = prevChat.messages.some(
-              //   (msg) => msg.id === message.id
-              // );
-              // if (alreadyExists) return prevChat;
               return {
                 ...prevChat,
                 messages: [message, ...prevChat.messages],
@@ -217,46 +212,6 @@ export const ChatsContext = ({ children }) => {
               })
             );
           }
-          // // 1. Update combinedChats
-
-          // setCombinedChats((prevChats) =>
-          //   prevChats.map((chat) => {
-          //     if (chat.id === message.chat_id) {
-          //       // Avoid duplicates
-          //       const alreadyExists = chat.messages.some(
-          //         (msg) => msg.id === message.id
-          //       );
-          //       if (alreadyExists) return chat;
-          //       return {
-          //         ...chat,
-          //         messages: [
-          //           { ...message, my_status: false },
-          //           ...chat.messages,
-          //         ],
-          //         last_message: message.body,
-          //         last_message_id: message.id,
-          //         last_message_date: message.created_at,
-          //       };
-          //     }
-          //     return chat;
-          //   })
-          // );
-          // // 2. Update currentChat (if it's the same chat)
-          // setCurrentChat((prevChat) => {
-          //   // axiosClient.post(route("readMessage", message.id));
-          //   if (prevChat?.id !== message.chat_id) return prevChat;
-          //   const alreadyExists = prevChat.messages.some(
-          //     (msg) => msg.id === message.id
-          //   );
-          //   if (alreadyExists) return prevChat;
-          //   return {
-          //     ...prevChat,
-          //     messages: [message, ...prevChat.messages],
-          //     last_message: message.body,
-          //     last_message_id: message.id,
-          //     last_message_date: message.created_at,
-          //   };
-          // });
         },
         [chatId]
       );
@@ -372,11 +327,17 @@ export const ChatsContext = ({ children }) => {
         setErrors([message]);
       });
 
-      channel.listen("WebRTCCallSignal", (e) => {
+      channel.listen("VideoCallSignal", (e) => {
         if (e.from === user.id) return;
         setIncomingSignal(e.signal);
         setIncomingFrom(e.from);
         setShowVideoCallForm(true);
+      });
+      channel.listen("VoiceCallSignal", (e) => {
+        if (e.from === user.id) return;
+        setIncomingSignal(e.signal);
+        setIncomingFrom(e.from);
+        setShowAudioCallForm(true);
       });
 
       channel.listen("CallDecline", () => {

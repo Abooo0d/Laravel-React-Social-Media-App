@@ -90,7 +90,10 @@ const ChatInfo = () => {
               </div>
               <div
                 className=" text-gray-400 w-8 h-8 p-1.5 flex justify-center items-center cursor-pointer duration-200 hover:bg-gray-800/50 rounded-md"
-                onClick={() => setShowAudioCallForm(true)}
+                onClick={() => {
+                  setShowAudioCallForm(true);
+                  setIsCaller(true);
+                }}
               >
                 <IoCall className="w-full h-full" />
               </div>

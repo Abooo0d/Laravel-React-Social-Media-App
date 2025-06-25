@@ -8,7 +8,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class WebRTCCallSignal implements ShouldBroadcast
+class VideoCallSignal implements ShouldBroadcast
 {
   use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -16,8 +16,8 @@ class WebRTCCallSignal implements ShouldBroadcast
    * Create a new event instance.
    */
   public $chatId;
-  public $from;
   public $signal;
+  public $from;
   public function __construct($chatId, $from, $signal)
   {
     $this->chatId = $chatId;

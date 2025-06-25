@@ -12,6 +12,8 @@ use App\Events\MessageDeleted;
 use App\Events\MessageRead;
 use App\Events\MessageUpdated;
 use App\Events\NewMessageSent;
+use App\Events\VideoCallSignal;
+use App\Events\VoiceCallSignal;
 use App\Events\WebRTCCallSignal;
 use App\Http\Requests\AddUsersToChatRequest;
 use App\Http\Requests\ChangeChatGroupImage;
@@ -490,11 +492,10 @@ class ChatsController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
-  public function ptpCall(Request $request, Chat $chat)
+  public function videoCall(Request $request, Chat $chat)
   {
-    $room = $request->room ?? null;
     $signal = $request->signal ?? null;
-    broadcast(new WebRTCCallSignal(
+    broadcast(new VideoCallSignal(
       $chat->id,
       auth()->id(),
       $signal
@@ -505,5 +506,15 @@ class ChatsController extends Controller
   {
     broadcast(new CallDecline($chat));
     return response(['message' => 'Call Decline']);
+  }
+  public function voiceCall(Request $request, Chat $chat)
+  {
+    $signal = $request->signal ?? null;
+    broadcast(new VoiceCallSignal(
+      $chat->id,
+      auth()->id(),
+      $signal
+    ));
+
   }
 }

@@ -3,14 +3,14 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import { useState } from "react";
 import SimplePeer from "simple-peer";
-import axiosClient from "./AxiosClient/AxiosClient";
-import { useChatsContext } from "./Contexts/ChatsContext";
+import axiosClient from "../../AxiosClient/AxiosClient";
+import { useChatsContext } from "../../Contexts/ChatsContext";
 import { MdCallEnd, MdCall } from "react-icons/md";
 import { IoVolumeMute } from "react-icons/io5";
 import { FaVolumeUp } from "react-icons/fa";
 import { FaMicrophone, FaMicrophoneSlash } from "react-icons/fa";
 import { IoIosCall } from "react-icons/io";
-import { useMainContext } from "./Contexts/MainContext";
+import { useMainContext } from "../../Contexts/MainContext";
 const VideoCallRoom = () => {
   const {
     currentChat,
@@ -62,8 +62,7 @@ const VideoCallRoom = () => {
       });
       createdPeer.on("signal", (signal) => {
         axiosClient
-          .post(route("chat.call", currentChat?.id), {
-            room: currentChat?.id,
+          .post(route("chat.videoCall", currentChat?.id), {
             signal: signal,
           })
           .then(() => {
@@ -97,8 +96,7 @@ const VideoCallRoom = () => {
     });
     createdPeer.on("signal", (signal) => {
       axiosClient
-        .post(route("chat.call", currentChat?.id), {
-          room: currentChat?.id,
+        .post(route("chat.videoCall", currentChat?.id), {
           signal: signal,
         })
         .then(() => {
