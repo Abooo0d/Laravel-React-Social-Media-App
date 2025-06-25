@@ -202,13 +202,15 @@ const VoiceCallRoom = () => {
               className="w-[150px] h-[150px] rounded-full "
             />
             <div className="flex flex-col gap-2 absolute top-[40px] left-[50%] translate-x-[-50%]">
-              <h2 className="text-2xl text-gray-300 ">{currentChat?.name}</h2>
+              <h2 className="text-2xl text-gray-300 text-center">
+                {currentChat?.name}
+              </h2>
               {!remoteVoice.current?.srcObject && (
                 <>
                   {isCaller ? (
                     <div className="text-gray-500">{callStatus}</div>
                   ) : (
-                    <span>
+                    <span className="text-gray-500">
                       Incoming Call From{" "}
                       <span className="block sm:inline w-full text-center text-sky-500 text-2xl">
                         {currentChat?.name}
