@@ -13,7 +13,7 @@ import { useMainContext } from "@/Contexts/MainContext";
 import ChatFormAttachmentContainer from "./Shared/ChatFormAttachmentContainer";
 import AudioRecorder from "./AudioRecorder";
 const ChatForm = () => {
-  const { currentChat } = useChatsContext();
+  const { currentChat, setCurrentChat } = useChatsContext();
   const { user } = useUserContext();
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -51,6 +51,30 @@ const ChatForm = () => {
       files.forEach((file) => {
         formData.append("attachments[]", file);
       });
+      let localAttachments = chosenFiles.map((file) => ({
+        created_at: "",
+        id: "",
+        mime: file.file.type,
+        name: file.file.name,
+        size: file.file.size,
+        url: file.url,
+      }));
+      const newMessage = {
+        body: message,
+        id: "new",
+        user: {
+          id: user.id,
+          name: user.name,
+          username: user.username,
+          avatar_url: user.avatar_url,
+        },
+        created_at: "now",
+        attachments: localAttachments,
+        chat_id: currentChat.id,
+        is_read: false,
+        my_status: true,
+      };
+
       setIsLoading(true);
       axiosClient
         .post(route("newMessage", currentChat?.id), formData, {
@@ -67,6 +91,10 @@ const ChatForm = () => {
           setOpenEmoji(false);
           setUploadingProgress(0);
           setChosenFiles([]);
+          setCurrentChat((prev) => ({
+            ...prev,
+            messages: [newMessage, ...prev.messages],
+          }));
         })
         .catch((err) => {
           setIsLoading(false);
@@ -74,7 +102,6 @@ const ChatForm = () => {
           let message = err?.response?.data?.message;
           setErrors([message]);
         });
-      console.log("1", currentChat);
 
       handleInput();
     }

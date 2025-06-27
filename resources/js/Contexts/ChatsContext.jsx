@@ -175,20 +175,32 @@ export const ChatsContext = ({ children }) => {
       channel.listen(
         "NewMessageSent",
         (e) => {
-          const message = e.message;
-          console.log(message.chat_id == currentChatRef.current?.id);
+          let message = e.message;
+          if (message.user.id == user.id) {
+            message = {
+              ...message,
+              my_status: true,
+            };
+          }
           if (message.chat_id == currentChatRef.current?.id) {
             axiosClient.post(route("readMessage", message.id));
+
             setCurrentChat((prevChat) => {
               return {
                 ...prevChat,
-                messages: [message, ...prevChat.messages],
+                messages: prevChat.messages.map((me) =>
+                  me.user.name == message.user.name && me.id == "new"
+                    ? message
+                    : me
+                ),
                 last_message: message.body,
                 last_message_id: message.id,
                 last_message_date: message.created_at,
               };
             });
           } else {
+            console.log("ABood");
+
             setCombinedChats((prevChats) =>
               prevChats.map((chat) => {
                 if (chat.id === message.chat_id) {
@@ -216,7 +228,13 @@ export const ChatsContext = ({ children }) => {
         [chatId]
       );
       channel.listen("MessageRead", (e) => {
-        let newMessage = { ...e.message, is_read: true };
+        let newMessage = e.message;
+        if (newMessage.user.id == user.id) {
+          newMessage = {
+            ...newMessage,
+            my_status: true,
+          };
+        }
         if (newMessage.chat_id == currentChatRef.current.id) {
           setCurrentChat((prev) => ({
             ...prev,

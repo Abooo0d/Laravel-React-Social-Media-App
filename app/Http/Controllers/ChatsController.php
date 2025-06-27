@@ -188,6 +188,7 @@ class ChatsController extends Controller
         'is_read' => true
       ]);
       $chat->update(['last_message_id' => $message->id]);
+      $message->refresh();
       broadcast(new NewMessageSent($message));
       return response(['message' => new MessageResource($message)], 200);
     } catch (e) {
