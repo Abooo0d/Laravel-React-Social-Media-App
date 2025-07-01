@@ -10,17 +10,20 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CallDecline implements ShouldBroadcast
+class ReadAllMessages implements ShouldBroadcast
 {
   use Dispatchable, InteractsWithSockets, SerializesModels;
 
   /**
    * Create a new event instance.
    */
-  public $chat;
-  public function __construct($chat)
+  public $chatId;
+  public $userId;
+  public function __construct($chatId, $userId)
   {
-    $this->chat = $chat;
+    $this->chatId = $chatId;
+    $this->userId = $userId;
+
   }
 
   /**
@@ -31,13 +34,15 @@ class CallDecline implements ShouldBroadcast
   public function broadcastOn(): array
   {
     return [
-      new PrivateChannel("chat.{$this->chat->id}"),
+      // new PrivateChannel('chat.' . $this->chatId),
+      new PrivateChannel("chat.{$this->chatId}")
     ];
   }
   public function broadcastWith()
   {
     return [
-      'message' => 'Call Declined'
+      'chat_id' => $this->chatId,
+      'user_id' => $this->userId
     ];
   }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AIController;
 use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HomeController;
@@ -49,7 +50,6 @@ Route::middleware('auth')->group(function () {
   Route::get('/post/download/{attachment}', [PostController::class, 'downloadAttachment'])->name('post.download');
   Route::post('/post/{post}/reaction', [PostController::class, 'postReaction'])->name('post.reaction');
   Route::post('/post/{post}/comment', [PostController::class, 'postCommentCreate'])->name('post.commentCreate');
-  Route::post('/post/aiPost/post', [PostController::class, 'aiPost'])->name('post.aiPost');
   Route::post('/post/Abood/post', [PostController::class, 'Abood'])->name('Abood');
 });
 Route::get('/public/post/{post:id}', [PostController::class, 'publicView'])->name('post.publicView');
@@ -104,6 +104,11 @@ Route::middleware('auth')->group(function () {
   Route::post('/chat/{chat:id}/video-call', [ChatsController::class, 'videoCall'])->name('chat.videoCall');
   Route::post('/chat/{chat:id}/voice-call', [ChatsController::class, 'voiceCall'])->name('chat.voiceCall');
   Route::post('/chat/{chat:id}/decline-call', [ChatsController::class, 'callDecline'])->name('call.decline');
+});
+Route::middleware('auth')->group(function () {
+  Route::get('/ai-chats', [AIController::class, 'index'])->name('aiChats');
+  Route::post('/post/aiPost/post', [AIController::class, 'aiPost'])->name('post.aiPost');
+
 });
 
 require __DIR__ . '/auth.php';

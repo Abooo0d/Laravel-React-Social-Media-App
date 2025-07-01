@@ -62,6 +62,7 @@ export const ChatsContext = ({ children }) => {
   const [isCaller, setIsCaller] = useState(false);
   const [callEnded, setCallEnded] = useState(false);
   const currentChatRef = useRef(currentChat);
+  const combinedChatsRef = useRef(combinedChats);
   const { setSuccessMessage, setErrors } = useMainContext();
 
   const LeaveChannel = (chatId) => {
@@ -186,21 +187,30 @@ export const ChatsContext = ({ children }) => {
             axiosClient.post(route("readMessage", message.id));
 
             setCurrentChat((prevChat) => {
+              const existsIndex = prevChat.messages.findIndex(
+                (me) => me.user.name === message.user.name && me.id === "new"
+              );
+
+              let updatedMessages;
+
+              if (existsIndex !== -1) {
+                // Replace the placeholder with the real message
+                updatedMessages = [...prevChat.messages];
+                updatedMessages[existsIndex] = message;
+              } else {
+                // Prepend new message
+                updatedMessages = [message, ...prevChat.messages];
+              }
+
               return {
                 ...prevChat,
-                messages: prevChat.messages.map((me) =>
-                  me.user.name == message.user.name && me.id == "new"
-                    ? message
-                    : me
-                ),
+                messages: updatedMessages,
                 last_message: message.body,
                 last_message_id: message.id,
                 last_message_date: message.created_at,
               };
             });
           } else {
-            console.log("ABood");
-
             setCombinedChats((prevChats) =>
               prevChats.map((chat) => {
                 if (chat.id === message.chat_id) {
@@ -227,19 +237,19 @@ export const ChatsContext = ({ children }) => {
         },
         [chatId]
       );
+
       channel.listen("MessageRead", (e) => {
         let newMessage = e.message;
-        if (newMessage.user.id == user.id) {
-          newMessage = {
-            ...newMessage,
-            my_status: true,
-          };
-        }
+        let userId = e.user_id;
+        if (userId == user.id) return;
+
         if (newMessage.chat_id == currentChatRef.current.id) {
           setCurrentChat((prev) => ({
             ...prev,
             messages: prev.messages.map((me) =>
-              me.id == newMessage.id ? newMessage : me
+              me.id == newMessage.id
+                ? { ...me, is_read: true, my_status: true }
+                : me
             ),
           }));
         } else {
@@ -255,6 +265,36 @@ export const ChatsContext = ({ children }) => {
                 : chat
             )
           );
+        }
+      });
+
+      channel.listen("ReadAllMessages", (e) => {
+        const chatId = e.chat_id;
+        const userId = e.user_id;
+        if (userId == user.id) return;
+
+        if (chatId == currentChatRef.current?.id) {
+          setCurrentChat((prev) => ({
+            ...prev,
+            messages: currentChatRef.current.messages.map((me) => ({
+              ...me,
+              is_read: true,
+            })),
+          }));
+        } else {
+          setCombinedChats((prevChats) => {
+            combinedChatsRef.current.map((chat) => {
+              chat.id == chatId
+                ? {
+                    ...chat,
+                    messages: chat.messages.map((me) => ({
+                      ...me,
+                      is_read: true,
+                    })),
+                  }
+                : chat;
+            });
+          });
         }
       });
 
@@ -348,22 +388,24 @@ export const ChatsContext = ({ children }) => {
       channel.listen("VideoCallSignal", (e) => {
         if (e.from === user.id) return;
         setIncomingSignal(e.signal);
-        setIncomingFrom(e.from);
+        setIncomingFrom(e.chat_id);
         setShowVideoCallForm(true);
       });
+
       channel.listen("VoiceCallSignal", (e) => {
         if (e.from === user.id) return;
         setIncomingSignal(e.signal);
-        setIncomingFrom(e.from);
+        setIncomingFrom(e.chat_id);
         setShowAudioCallForm(true);
       });
 
-      channel.listen("CallDecline", () => {
+      channel.listen("CallEnded", () => {
         setCallEnded(true);
       });
 
       subscribedChats.current.add(chatId);
     });
+    combinedChatsRef.current = combinedChats;
   }, [combinedChats]);
 
   return (

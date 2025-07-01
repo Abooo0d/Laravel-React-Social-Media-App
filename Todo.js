@@ -12,15 +12,16 @@
 //Some Request Is Not Working
 // Make Test For All The Request in The Application
 
-// Implement Ending CAlls
-// Fixing The Design Of The Call Form
-// Fixing The Design Of The Answer Form For The Video Call Form
 /************** TOday *************/
-// When New Message Comes The UnReadCount Get Still Count Even If The Chat Is Open
-// THe Text Area In The Chat Form Broken In The Small Devices
+// The Read When Opining A Chat The Al lTHe Messages Get Marked As Is_read = true
 /************** Working On *************/
 
 /************** Done *************/
+// Implement Ending CAlls
+// Fixing The Design Of The Answer Form For The Video Call Form
+// When New Message Comes The UnReadCount Get Still Count Even If The Chat Is Open
+// THe Text Area In The Chat Form Broken In The Small Devices
+// Fixing The Design Of The Call Form
 // when creating a group you have to reload the b=page or re get the groups
 // When Updating The GroupName Adn The About The Data In The View Don`t Get Updated
 // Add Function To Delete A group

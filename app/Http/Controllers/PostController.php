@@ -305,23 +305,6 @@ class PostController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
-  public function aiPost(Request $request)
-  {
-    try {
-      $data = $request->get('message');
-      $message = Gemini::geminiFlash()->generateContent("Generate a creative and engaging social media post based on the following idea: '{$data}'.
-        Make it friendly, relatable, and around 5-10 sentences. If relevant, include a question or call to action at the end to boost engagement.
-        Avoid hashtags and keep the tone casual.");
-      // $result = OpenAI::chat()->create([
-      //   'model' => 'gpt-4o-mini',
-      //   'messages' => [
-      //     ['role' => 'user', 'content' => $data],
-      //   ],
-      // ]);
-      return response(['message' => $message->candidates[0]->content->parts[0]->text]);
-    } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
-    }
-  }
+
 
 }

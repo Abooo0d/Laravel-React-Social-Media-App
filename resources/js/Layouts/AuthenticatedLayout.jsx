@@ -5,6 +5,7 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link, router, usePage } from "@inertiajs/react";
 import NotificationsBar from "@/Components/Containers/NotificationsBar";
 import { IoMenu, IoReloadOutline } from "react-icons/io5";
+import { BsStars } from "react-icons/bs";
 import { FaUserGroup } from "react-icons/fa6";
 import MenuButton from "@/Components/Shared/MenuButton";
 import { IoMdNotifications } from "react-icons/io";
@@ -130,6 +131,16 @@ export default function Authenticated({ children }) {
                   classes={"flex justify-center items-center"}
                 >
                   <PiChatsCircle className="text-gray-400 text-lg w-[20px] h-[20px]" />
+                </MenuButton>
+                <MenuButton
+                  event={() => {
+                    hideAll();
+                    router.get(route("aiChats"));
+                  }}
+                  show={false}
+                  classes={"flex justify-center items-center"}
+                >
+                  <BsStars className="text-gray-400 text-lg w-[20px] h-[20px]" />
                 </MenuButton>
                 <button
                   onClick={() => {
@@ -303,12 +314,21 @@ export default function Authenticated({ children }) {
 
             <SideBarButton
               event={() => {
-                router.get(route("chats"));
                 hideAll();
+                router.get(route("chats"));
               }}
               text="Chats"
             >
               <PiChatsCircle className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />
+            </SideBarButton>
+            <SideBarButton
+              event={() => {
+                hideAll();
+                router.get(route("aiChats"));
+              }}
+              text="AI Chat"
+            >
+              <BsStars className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />
             </SideBarButton>
             <SideBarButton event={() => router.reload()} text="Reload">
               <IoReloadOutline className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />

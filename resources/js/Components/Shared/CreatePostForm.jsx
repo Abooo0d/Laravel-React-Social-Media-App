@@ -1,16 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { HiMiniXMark } from "react-icons/hi2";
-import { useForm } from "@inertiajs/react";
-import { isImage } from "@/Functions";
 import ImageFullView from "./ImageFullView";
 import PostPreview from "./PostPreview";
 import CreatePostPostAttachments from "./CreatePostPostAttachments";
 import { SecondaryButton, PrimaryButton } from "./Buttons";
 import { SiOpenai } from "react-icons/si";
+import { BsStars } from "react-icons/bs";
+
 import PopupCard from "./PopupCard";
-import "./index.css";
 import { useUserContext } from "@/Contexts/UserContext";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import Spinner from "./Spinner";
@@ -188,7 +185,7 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
               {loadingAi ? (
                 <Spinner size="small " />
               ) : (
-                <SiOpenai className="absolute w-[25px] h-[25px] top-[5px] left-[5px]" />
+                <BsStars className=" w-[20px] h-[20px]" />
               )}
             </PrimaryButton>
             <textarea

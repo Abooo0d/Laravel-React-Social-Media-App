@@ -1,5 +1,5 @@
 import Notification from "@/Components/Shared/Notification";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 const INITIAL_DATA = {
   errors: [],

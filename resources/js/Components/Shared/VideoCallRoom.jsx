@@ -17,6 +17,7 @@ const VideoCallRoom = () => {
     showVideoCallForm,
     setShowVideoCallForm,
     incomingSignal,
+    incomingFrom,
     isCaller,
     setIsCaller,
     setIncomingFrom,
@@ -63,7 +64,7 @@ const VideoCallRoom = () => {
       });
       createdPeer.on("signal", (signal) => {
         axiosClient
-          .post(route("chat.videoCall", currentChat?.id), {
+          .post(route("chat.videoCall", currentChat), {
             signal: signal,
           })
           .then(() => {
@@ -98,7 +99,7 @@ const VideoCallRoom = () => {
     });
     createdPeer.on("signal", (signal) => {
       axiosClient
-        .post(route("chat.videoCall", currentChat?.id), {
+        .post(route("chat.videoCall", incomingFrom), {
           signal: signal,
         })
         .then(() => {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\AddMemberToChatGroup;
 use App\Events\CallDecline;
+use App\Events\CallEnded;
 use App\Events\ChatCreated;
 use App\Events\ChatUpdated;
 use App\Events\MemberKickOutFormChat;
@@ -12,6 +13,7 @@ use App\Events\MessageDeleted;
 use App\Events\MessageRead;
 use App\Events\MessageUpdated;
 use App\Events\NewMessageSent;
+use App\Events\ReadAllMessages;
 use App\Events\VideoCallSignal;
 use App\Events\VoiceCallSignal;
 use App\Events\WebRTCCallSignal;
@@ -55,7 +57,7 @@ class ChatsController extends Controller
         ->orderBy('last_message_id', 'desc')
         ->get();
       return Inertia::render(
-        'Chats',
+        'Chats/View',
         [
           'groupsChat' => $chats ? ChatResource::collection($chats) : [],
           "allChats" => ChatResource::collection($allChats)
@@ -116,6 +118,7 @@ class ChatsController extends Controller
       if (!empty($statusRows)) {
         MessageStatus::insert($statusRows); // bulk insert
       }
+      broadcast(new ReadAllMessages(chatId: $chat->id, userId: auth()->id()));
 
       return response(
         [
@@ -139,7 +142,8 @@ class ChatsController extends Controller
         'created_at' => $now,
         'updated_at' => $now,
       ]);
-      broadcast(new MessageRead($message));
+      $message->refresh();
+      broadcast(new MessageRead($message, $userId))->toOthers();
     }
   }
   public function getMoreMessages(Message $message)
@@ -505,7 +509,7 @@ class ChatsController extends Controller
   }
   public function callDecline(Chat $chat)
   {
-    broadcast(new CallDecline($chat));
+    broadcast(new CallEnded($chat));
     return response(['message' => 'Call Decline']);
   }
   public function voiceCall(Request $request, Chat $chat)

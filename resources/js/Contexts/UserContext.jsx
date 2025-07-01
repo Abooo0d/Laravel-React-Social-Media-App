@@ -16,7 +16,7 @@ export const UserContext = ({ children }) => {
     isLoading: isLoadingGroups,
   } = useGetGroups();
   const [user, setUser] = useState({});
-  const [groups, setGroups] = useState(data);
+  const [groups, setGroups] = useState(data); 
   useEffect(() => {
     setGroups(data);
   }, [data]);

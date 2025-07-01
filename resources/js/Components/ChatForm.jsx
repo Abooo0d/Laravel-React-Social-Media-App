@@ -102,7 +102,6 @@ const ChatForm = () => {
           let message = err?.response?.data?.message;
           setErrors([message]);
         });
-
       handleInput();
     }
   };
@@ -114,6 +113,7 @@ const ChatForm = () => {
       textarea.style.height = `${textarea.scrollHeight}px`;
     }
   };
+
   const sendLike = () => {
     axiosClient
       .post(route("newMessage", currentChat), {
@@ -146,12 +146,12 @@ const ChatForm = () => {
     setChosenFiles((prev) => [...prev, { file: file, url: url }]);
   };
   return (
-    <div className="flex relative w-full justify-between items-center bg-gray-900 md:p-4 p-4 border-t-[1px] border-solid border-gray-700 ">
+    <div className="flex relative w-full justify-between items-start bg-gray-900 md:p-4 p-4 border-t-[1px] border-solid border-gray-700 ">
       <ChatFormAttachmentContainer
         attachments={chosenFiles}
         setAttachments={setChosenFiles}
       />
-      <div className="relative flex justify-between items-center w-full bg-gray-700 rounded-md h-[40px] md:h-[50px] px-2 md:flex-row ">
+      <div className="relative flex justify-between items-start w-full bg-gray-700 rounded-md min-h-[40px] px-2 md:flex-row ">
         <div
           className={`absolute -top-[320px] left-0 duration-200 ${
             openEmoji ? "opacity-100 visible z-10" : " opacity-0 invisible z-0"

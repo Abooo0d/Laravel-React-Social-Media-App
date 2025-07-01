@@ -2,8 +2,6 @@
 
 namespace App\Events;
 
-use App\Http\Resources\MessageResource;
-use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -12,19 +10,17 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MessageRead implements ShouldBroadcast
+class CallEnded implements ShouldBroadcast
 {
   use Dispatchable, InteractsWithSockets, SerializesModels;
 
   /**
    * Create a new event instance.
    */
-  public $message;
-  public $userId;
-  public function __construct(Message $message, $userId)
+  public $chat;
+  public function __construct($chat)
   {
-    $this->message = new MessageResource($message);
-    $this->userId = $userId;
+    $this->chat = $chat;
   }
 
   /**
@@ -35,14 +31,14 @@ class MessageRead implements ShouldBroadcast
   public function broadcastOn(): array
   {
     return [
-      new PrivateChannel('chat.' . $this->message->chat_id)
+      new PrivateChannel("chat.{$this->chat->id}"),
     ];
   }
   public function broadcastWith()
   {
     return [
-      "message" => $this->message,
-      'user_id' => $this->userId
+      'chat_id' => $this->chat->id,
+      'message' => 'Call Declined'
     ];
   }
 }

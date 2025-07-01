@@ -22,11 +22,11 @@ export default defineConfig({
       buffer: "buffer",
       process: "process/browser",
       events: "events",
-      util: "util",
+      // util: "util",
     },
   },
   optimizeDeps: {
-    include: ["buffer", "process", "stream-browserify", "events", "util"],
+    include: ["buffer", "process", "stream-browserify", "events"],
   },
   build: {
     rollupOptions: {
@@ -48,6 +48,8 @@ export default defineConfig({
         "https://192.168.1.107:3000",
         "https://192.168.1.107:6001",
         "https://192.168.1.107:8000",
+        "http://192.168.1.107:8000",
+        "https://127.0.0.1:8000",
 
         "wss://192.168.1.107:443",
         "wss://192.168.1.107:444",

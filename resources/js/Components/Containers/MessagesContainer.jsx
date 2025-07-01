@@ -5,14 +5,13 @@ import MessageCard from "../Shared/MessageCard";
 import { useChatsContext } from "@/Contexts/ChatsContext";
 import Spinner from "../Shared/Spinner";
 import { useInView } from "react-intersection-observer";
-import { useGetMoreMessages } from "@/TanStackQurey/Querys";
 import axiosClient from "@/AxiosClient/AxiosClient";
-import AttachmentFullView from "../Shared/AttachmentFullView";
 const MessagesContainer = ({ isLoading }) => {
   const containerRef = useRef();
-  const [ref, inView, entry] = useInView();
+  const [ref, inView] = useInView();
   const { currentChat, setCurrentChat } = useChatsContext();
   const [thereIsMore, setThereIsMore] = useState(true);
+
   const getMore = () => {
     axiosClient
       .get(
@@ -33,13 +32,13 @@ const MessagesContainer = ({ isLoading }) => {
       });
   };
 
-  const {} = useGetMoreMessages();
   useEffect(() => {
     if (!thereIsMore) return;
     if (inView) {
       getMore();
     }
   }, [inView]);
+
   useEffect(() => {
     setThereIsMore(true);
   }, [currentChat]);
@@ -92,33 +91,3 @@ const MessagesContainer = ({ isLoading }) => {
 };
 
 export default MessagesContainer;
-
-/**
- *
- *
- *
-   {!!currentChat && (
-            <>
-               max-h-[calc(100dvh-225px)]
-              <div
-                className="w-full relative p-4 overflow-auto flex flex-col-reverse flex-1 max-h-[calc(100vh-225px)]"
-                ref={containerRef}
-              >
-                {currentChat?.messages?.map((message, index) => (
-                  <MessageCard message={message} key={index} />
-                ))}
-                {currentChat?.messages?.length >= 6 && (
-                  <>
-                    {thereIsMore ? (
-                      <Spinner size="small" ref={ref} />
-                    ) : (
-                      <div className="bg-gray-900/50 backdrop-blur-sm w-fit mx-auto text-sm text-gray-500 rounded-md py-1 px-2 cursor-default border-solid border-gray-600/50 border-[1px] mb-4">
-                        There Is No More Messages
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-            </>
-          )}
- */
