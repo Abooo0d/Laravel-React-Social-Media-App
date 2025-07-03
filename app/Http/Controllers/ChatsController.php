@@ -48,12 +48,15 @@ class ChatsController extends Controller
         ->user()
         ->chats()
         ->where('is_group', true)
+        ->where('withAI', false)
         ->with('users', 'messages')
         ->orderBy('last_message_id', "desc")
         ->get();
-      $allChats = auth()->user()
+      $allChats = auth()
+        ->user()
         ->chats()
         ->where('is_group', false)
+        ->where('withAI', false)
         ->orderBy('last_message_id', 'desc')
         ->get();
       return Inertia::render(

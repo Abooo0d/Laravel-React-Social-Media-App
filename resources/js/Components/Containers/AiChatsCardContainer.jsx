@@ -1,12 +1,22 @@
 import React from "react";
 import AIChatCard from "../Shared/AIChatCard";
+import { useAIContext } from "@/Contexts/AIContext";
 
-const AiChatsCardContainer = ({ chats, show, setShow }) => {
+const AiChatsCardContainer = ({ setShow }) => {
+  const { AIChats } = useAIContext();
   return (
     <div>
-      {chats.map((chat) => (
-        <AIChatCard chat={chat} show={show} setShow={setShow} />
-      ))}
+      {AIChats?.length > 0 ? (
+        <>
+          {AIChats.map((chat, index) => (
+            <AIChatCard chat={chat} setShow={setShow} key={index} />
+          ))}
+        </>
+      ) : (
+        <div className="w-full text-gray-500 text-center p-4">
+          No Chats In The History Yet
+        </div>
+      )}
     </div>
   );
 };

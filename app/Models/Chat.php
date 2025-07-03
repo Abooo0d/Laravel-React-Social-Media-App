@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Chat extends Model
 {
-  protected $fillable = ['last_message_id', 'last_message', 'last_message_date', 'name', 'is_group', 'owner', 'avatar_path'];
+  protected $fillable = ['last_message_id', 'last_message', 'last_message_date', 'name', 'is_group', 'owner', 'avatar_path', 'withAI'];
 
   use HasFactory;
   public function users()
@@ -20,10 +20,16 @@ class Chat extends Model
   {
     return $this->hasMany(Message::class)
       ->where('deleted', '0')
+      ->where('from', '')
       ->orderBy('created_at', 'desc')
       ->limit(20);
   }
-
+  public function AImessages()
+  {
+    return $this->hasMany(Message::class)
+      ->orderBy('created_at', 'desc')
+      ->limit(20);
+  }
   public function unreadMessagesCountFor($userId)
   {
     return $this->messages()

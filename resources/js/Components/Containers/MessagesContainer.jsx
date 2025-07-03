@@ -42,7 +42,7 @@ const MessagesContainer = ({ isLoading }) => {
   useEffect(() => {
     setThereIsMore(true);
   }, [currentChat]);
-
+  const abood = (abood4) => {};
   return (
     <div className="order-2 relative bg-gray-300 dark:bg-gray-900 bg-chat-pattern z-[10] bg-cover min-h-full md:max-h-barHeight max-h-[calc(100vh-120px)] flex-1 overflow-hidden flex flex-col justify-between items-center">
       <div className="absolute inset-0 w-full h-full bg-[rgba(17,24,39,58%)]" />

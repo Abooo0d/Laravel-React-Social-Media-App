@@ -43,6 +43,7 @@ export default {
       },
       animation: {
         scaleUp: "scale-up-hor-center 0.4s ease-in-out both",
+        messageHeight: "messageHeight 0.2s ease-in-out both",
       },
       keyframes: {
         "scale-up-hor-center": {
@@ -51,6 +52,14 @@ export default {
           },
           "100%": {
             transform: "scaleX(1)",
+          },
+        },
+        messageHeight: {
+          "0% ": {
+            height: 0,
+          },
+          "100%": {
+            height: "auto",
           },
         },
       },

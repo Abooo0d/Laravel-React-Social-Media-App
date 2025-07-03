@@ -17,7 +17,8 @@ class ChatResource extends JsonResource
   {
     $user_id = !(bool) $this->is_group ? $this->users()->where(function ($q) {
       $q->where('user_id', '!=', auth()->id());
-    })->first()->id : null;
+    })->first()?->id : null;
+
     $image = '';
     $data = '';
     if (!(bool) $this->is_group) {

@@ -166,7 +166,6 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
       </Head>
       <div className="container mx-auto ">
         <div className="max-h-[350px] w-full relative">
-          s
           <div className="relative max-h-[350px] w-full group">
             <img
               src={

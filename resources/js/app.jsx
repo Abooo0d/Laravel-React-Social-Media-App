@@ -18,6 +18,7 @@ import { UserContext } from "./Contexts/UserContext";
 import { ChatsContext } from "./Contexts/ChatsContext";
 import { StrictMode } from "react";
 import { QueryProvider } from "./TanStackQurey/QueryProvider";
+import { AIContext } from "./Contexts/AIContext";
 
 const appName = import.meta.env.APP_NAME || "Laravel";
 
@@ -35,9 +36,11 @@ createInertiaApp({
         <UserContext>
           <MainContext>
             <ChatsContext>
-              <StrictMode>
-                <App {...props} />
-              </StrictMode>
+              <AIContext>
+                <StrictMode>
+                  <App {...props} />
+                </StrictMode>
+              </AIContext>
             </ChatsContext>
           </MainContext>
         </UserContext>

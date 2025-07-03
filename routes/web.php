@@ -108,6 +108,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
   Route::get('/ai-chats', [AIController::class, 'index'])->name('aiChats');
   Route::post('/post/aiPost/post', [AIController::class, 'aiPost'])->name('post.aiPost');
+  Route::post('/ai-chat/new-message', [AIController::class, 'newMessage'])->name('AIChat.newMessage');
 
 });
 
