@@ -17,6 +17,7 @@ const AiChatMessagesContainer = () => {
               message={message}
               key={index}
               show={!(index >= currentAIChat.messages.length - 1)}
+              isLast={index === currentAIChat.messages.length - 1}
             />
           ))}
         </>

@@ -145,6 +145,7 @@ class PostController extends Controller
         Notification::send($admins, new DeletePostInGroupNotification($postOwner, $group));
       }
       $post->delete();
+      // return response(['message' => 'Post Deleted'], 200);
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }

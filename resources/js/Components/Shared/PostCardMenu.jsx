@@ -51,7 +51,7 @@ const PostCardMenu = ({
   };
   return (
     <>
-      <div className="relative">
+      <div className="relative z-[10]">
         <button
           className={`w-10 h-10 rounded-md cursor-pointer flex justify-center items-center border-[1px] border-solid p-1 duration-200 ${
             openMenu

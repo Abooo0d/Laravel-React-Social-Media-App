@@ -54,6 +54,7 @@ class AIController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
+
   public function newMessage(Request $request)
   {
     $data = $request->validate([
@@ -156,5 +157,6 @@ class AIController extends Controller
       );
     }
     return response(['message' => new AIMessageResource($aiMessage)]);
+
   }
 }

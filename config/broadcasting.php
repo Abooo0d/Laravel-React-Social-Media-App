@@ -61,9 +61,12 @@ return [
         'cluster' => env('PUSHER_APP_CLUSTER'),
         'host' => env('PUSHER_HOST') ?: 'api-' . env('PUSHER_APP_CLUSTER', 'mt1') . '.pusher.com',
         'port' => env('PUSHER_PORT', 6001),
-        'scheme' => 'https',
-        'encrypted' => true,
-        'useTLS' => true,
+        'scheme' => 'http',
+        'encrypted' => false,
+        'useTLS' => false,
+        // 'scheme' => 'https',
+        // 'encrypted' => true,
+        // 'useTLS' => true,
 
       ],
       'client_options' => [

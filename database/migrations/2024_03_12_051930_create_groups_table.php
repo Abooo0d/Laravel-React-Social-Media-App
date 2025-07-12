@@ -20,7 +20,7 @@ return new class extends Migration {
       $table->text('about')->nullable();
       $table->foreignId('user_id')->constrained('users');
       $table->timestamp('deleted_at')->nullable();
-      $table->foreignId('deleted_by')->nullable()->constrained('users');
+      $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
       $table->timestamps();
     });
   }

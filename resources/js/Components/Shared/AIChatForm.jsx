@@ -4,12 +4,14 @@ import { BiSolidSend } from "react-icons/bi";
 import { FaFile } from "react-icons/fa";
 import MarkdownRenderer from "./MarkdownRenderer";
 import { useAIContext } from "@/Contexts/AIContext";
+import { useMainContext } from "@/Contexts/MainContext";
 
 const AIChatForm = () => {
   const [prompt, setPrompt] = useState("");
   const textareaRef = useRef(null);
-  const { currentAIChat, setCurrentAIChat, setIsLoading } = useAIContext();
-
+  const { currentAIChat, setCurrentAIChat, setIsLoading, setAIChats } =
+    useAIContext();
+  const { setErrors } = useMainContext();
   const handleInput = () => {
     const textarea = textareaRef.current;
     if (textarea) {
@@ -18,8 +20,7 @@ const AIChatForm = () => {
     }
   };
   const newMessage = () => {
-    console.log(currentAIChat);
-
+    if (!prompt) return;
     let newMe = {
       body: prompt,
       id: "",
@@ -45,7 +46,11 @@ const AIChatForm = () => {
         // console.log(data.data.chat);
         const chat = data.data?.chat;
         if (!!chat) {
-          setCurrentAIChat(chat);
+          setCurrentAIChat((prev) => ({
+            ...chat,
+            messages: [...prev.messages],
+          }));
+          setAIChats((prev) => [chat, ...prev]);
         } else {
           setCurrentAIChat((prev) => {
             return {
@@ -72,7 +77,7 @@ const AIChatForm = () => {
   return (
     <>
       <div
-        className={`absolute bottom-[135px] left-0 w-full h-[50px] bg-gradient-to-t from-homeFeed via-homeFeed/80 to-transparent duration-200 `}
+        className={`absolute bottom-[134px] left-0 w-full h-[50px] bg-gradient-to-t from-homeFeed via-homeFeed/80 to-transparent duration-200 `}
       />
       <div className="w-full flex justify-center items-center mb-4">
         <div className="w-full max-w-[90%] min-h-[80px] rounded-lg bg-gray-900/50 backdrop-blur-sm border-solid border-[1px] border-gray-500/50 flex flex-col justify-start items-start px-4 py-2 duration-200">

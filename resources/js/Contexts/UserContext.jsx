@@ -15,8 +15,9 @@ export const UserContext = ({ children }) => {
     refetch: refetchGroups,
     isLoading: isLoadingGroups,
   } = useGetGroups();
+
   const [user, setUser] = useState({});
-  const [groups, setGroups] = useState(data); 
+  const [groups, setGroups] = useState(data);
   useEffect(() => {
     setGroups(data);
   }, [data]);

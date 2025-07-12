@@ -57,7 +57,7 @@ const SubCommentsSection = ({ show, comments, post, comment, setComment }) => {
         }`}
       >
         {comments.map((comment, index) => (
-          <>
+          <React.Fragment key={index}>
             <SubCommentCard
               key={index}
               comment={comment}
@@ -66,7 +66,7 @@ const SubCommentsSection = ({ show, comments, post, comment, setComment }) => {
             {comments.length > 1 && index < comments.length - 1 && (
               <div className="w-[80%] h-[1px] bg-gray-700/20" />
             )}
-          </>
+          </React.Fragment>
         ))}
       </div>
     </div>

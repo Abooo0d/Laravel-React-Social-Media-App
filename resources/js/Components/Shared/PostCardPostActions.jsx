@@ -46,7 +46,7 @@ const PostCardPostActions = ({ post, setPost, setShowCommentSection }) => {
           className="flex justify-center items-center relative text-gray-400 rounded-lg cursor-pointer duration-200 h-[40px] flex-1 bg-gray-900"
           onClick={sendReaction}
         >
-          <div className="relative mr-2">
+          <div className="relative mr-2 ">
             <AiFillLike
               className={`absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-xl duration-300 ${
                 post.user_has_reaction

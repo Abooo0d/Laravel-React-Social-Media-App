@@ -12,6 +12,7 @@ const HomeFeed = ({ posts, loading, refetch }) => {
     <div className="order-2 bg-gray-300 dark:bg-homeFeed lg:min-h-full min-h-[500px] max-h-barHeight flex-1 overflow-scroll">
       <PostContainer
         posts={allPosts}
+        AllPostsData={posts?.posts?.data}
         classes="px-4"
         isLoading={loading}
         refetch={refetch}

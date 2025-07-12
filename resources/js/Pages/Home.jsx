@@ -1,3 +1,4 @@
+import axiosClient from "@/AxiosClient/AxiosClient";
 import HomeFeed from "@/Components/Containers/HomeFeed";
 import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";

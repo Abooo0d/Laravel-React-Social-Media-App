@@ -346,6 +346,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
                     posts={allPosts}
                     refetch={refetch}
                     isLoading={loadingPosts}
+                    AllPostsData={posts?.posts?.data}
                   >
                     {group.status && (
                       <CreatePost

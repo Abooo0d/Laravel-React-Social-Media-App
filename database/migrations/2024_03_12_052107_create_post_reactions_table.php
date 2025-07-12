@@ -12,9 +12,9 @@ return new class extends Migration {
   {
     Schema::create('post_reactions', function (Blueprint $table) {
       $table->id();
-      $table->foreignId('post_id')->constrained('posts');
+      $table->foreignId('post_id')->constrained('posts')->onDelete('cascade');
       $table->string('type');
-      $table->foreignId('user_id')->constrained('users');
+      $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
       $table->timestamp('created_at')->nullable();
     });
   }

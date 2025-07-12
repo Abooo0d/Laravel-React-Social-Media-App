@@ -12,8 +12,8 @@ return new class extends Migration {
   {
     Schema::create('group_users', function (Blueprint $table) {
       $table->id();
-      $table->foreignId('user_id')->constrained('users');
-      $table->foreignId('group_id')->constrained('groups');
+      $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+      $table->foreignId('group_id')->constrained('groups')->onDelete('cascade');
       $table->foreignId('created_by')->constrained('users');
       $table->string('status', 25); // approved | pending
       $table->string('role'); // admin | user

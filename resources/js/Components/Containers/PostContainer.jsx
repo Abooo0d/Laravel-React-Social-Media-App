@@ -6,7 +6,14 @@ import { useUserContext } from "@/Contexts/UserContext";
 import Spinner from "../Shared/Spinner";
 import HomeLoader from "./HomeLoader";
 
-const PostContainer = ({ posts, classes, children, isLoading, refetch }) => {
+const PostContainer = ({
+  posts,
+  AllPostsData,
+  classes,
+  children,
+  isLoading,
+  refetch,
+}) => {
   const [ref, inView, entry] = useInView();
   const [allPosts, setAllPosts] = useState(posts?.data);
   const [allData, setAllData] = useState(posts);
@@ -41,30 +48,37 @@ const PostContainer = ({ posts, classes, children, isLoading, refetch }) => {
             <HomeLoader />
           ) : (
             <>
-              {allPosts?.length > 0 ? (
+              {AllPostsData?.length > 0 ? (
                 <>
-                  {allPosts.map((post, index) => (
-                    <PostCard
-                      post={post}
-                      currentUser={user}
-                      key={index}
-                      refetch={refetch}
-                    />
-                  ))}
-                  {allData?.meta?.current_page < allData?.meta?.last_page ? (
-                    <Spinner ref={ref} />
+                  {allPosts?.length > 0 ? (
+                    <>
+                      {allPosts.map((post, index) => (
+                        <PostCard
+                          post={post}
+                          currentUser={user}
+                          key={index}
+                          refetch={refetch}
+                        />
+                      ))}
+                      {allData?.meta?.current_page <
+                      allData?.meta?.last_page ? (
+                        <Spinner ref={ref} />
+                      ) : (
+                        <div className="text-gray-600 text-sm pb-4">
+                          No More Posts
+                        </div>
+                      )}
+                    </>
                   ) : (
-                    <div className="text-gray-600 text-sm pb-4">
-                      No More Posts
-                    </div>
+                    <>
+                      <HomeLoader />
+                    </>
                   )}
                 </>
               ) : (
                 <>
+                  <div className="text-gray-600 text-sm">No Posts To Show</div>
                   <HomeLoader />
-                  <div className="text-gray-600 text-sm pb-4">
-                    No Posts To Show
-                  </div>
                 </>
               )}
             </>

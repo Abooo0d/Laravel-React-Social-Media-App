@@ -66,6 +66,17 @@ pre {
     line-height: 1.6;
   }
 }
+.messageCard {
+  animation: show 2000ms ease;
+}
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 100;
+  }
+}
 /* In your CSS file */
 .custom-range {
   -webkit-appearance: none;

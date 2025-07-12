@@ -76,7 +76,7 @@ const CommentCard = ({ currentComment, post, setPost }) => {
             <img
               src={comment.user.avatar_url}
               alt="user_image"
-              className=" rounded-full w-[40px] h-[40px] "
+              className=" rounded-full w-[40px] h-[40px] object-cover"
             />
             <div className="flex flex-col  justify-start items-start gap-1">
               <h3 className="text-gray-400">{comment.user.name}</h3>

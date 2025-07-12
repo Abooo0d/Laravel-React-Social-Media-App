@@ -15,7 +15,13 @@ return new class extends Migration {
       $table->string('name')->nullable();
       $table->boolean('is_group')->default(false);
       $table->string('avatar_path', 1024)->nullable();
+      $table->string('last_message')->nullable();
+      $table->string('last_message_id')->nullable();
+      $table->string('last_message_date')->nullable();
+      $table->integer('owner')->nullable();
+      $table->boolean('withAI')->default(false);
       $table->timestamps();
+
     });
   }
 

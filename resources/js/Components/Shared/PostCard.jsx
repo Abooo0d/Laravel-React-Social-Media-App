@@ -33,7 +33,7 @@ const PostCard = ({ post, currentUser, refetch }) => {
         className={`max-w-[700px] w-full dark:bg-gray-900 bg-gray-200 rounded-lg pt-4 pb-0 lg:px-6 px-4 flex flex-col duration-500 shadow-md`}
       >
         <div className="flex justify-between items-center">
-          <PostOwnerInfo post={localPost} user={localPost.user} />
+          <PostOwnerInfo post={localPost} />
           <PostCardMenu
             post={localPost}
             refetch={refetch}

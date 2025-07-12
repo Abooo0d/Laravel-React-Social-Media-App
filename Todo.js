@@ -11,10 +11,23 @@
 // Set A Loading When Sending Invitation To Group
 //Some Request Is Not Working
 // Make Test For All The Request in The Application
-
+// fix the Design of the post card
+// fix the design of the Create Post Form When Adding Images
 /************** TOday *************/
 // The Read When Opining A Chat The Al lTHe Messages Get Marked As Is_read = true
 /************** Working On *************/
+
+// in laravel in the post comment migration  public function up(): void
+// {
+//   Schema::create('post_comments', function (Blueprint $table) {
+//     $table->id();
+//     $table->foreignId('post_id')->constrained('posts')->onDelete('cascade');
+//     $table->text('comment');
+//     $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+//     $table->bigInteger('parent_id')->unsigned()->nullable();
+//     $table->timestamps();
+//   });
+// } the comment it self it is for a post ad it can be for a anouther comment as a sub comment when i want  to delete the relation prevent me to deletewhat i can do for that  and here is the errro message i am having from the backend  "SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`social_media`.`post_comments_reactions`, CONSTRAINT `post_comments_reactions_post_comments_id_foreign` FOREIGN KEY (`post_comments_id`) REFERENCES `post_comments` (`id`)) (Connection: mysql, SQL: delete from `post_comments` where `id` = 1)"
 
 /************** Done *************/
 // Implement Ending CAlls

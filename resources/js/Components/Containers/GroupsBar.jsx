@@ -59,9 +59,9 @@ const GroupsBar = ({
               <Spinner size="large" />
             ) : (
               <>
-                {groupData.length > 0 ? (
+                {groupData?.length > 0 ? (
                   <>
-                    {groupData.map((group, index) => (
+                    {groupData?.map((group, index) => (
                       <GroupeCard
                         data={group}
                         key={index}

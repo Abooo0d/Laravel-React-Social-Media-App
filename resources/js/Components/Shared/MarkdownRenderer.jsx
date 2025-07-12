@@ -19,7 +19,7 @@ const MarkdownRenderer = ({ content }) => {
           const match = /language-(\w+)/.exec(className || "");
           return !inline && match ? (
             <SyntaxHighlighter
-              style={coldarkDark}
+              style={atomDark}
               language={match?.[1] || "text"}
               PreTag="div"
               className="rounded-lg text-sm"

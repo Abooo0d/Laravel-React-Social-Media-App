@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Resources\UserResource;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -37,6 +38,7 @@ class AuthenticatedSessionController extends Controller
     return redirect()->intended(RouteServiceProvider::HOME);
   }
 
+
   /**
    * Destroy an authenticated session.
    */
@@ -50,4 +52,5 @@ class AuthenticatedSessionController extends Controller
 
     return redirect('/login');
   }
+
 }

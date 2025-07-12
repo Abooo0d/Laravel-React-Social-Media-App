@@ -285,7 +285,11 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
             <Tab.Panels className="rounded-md">
               <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
                 <div className=" dark:bg-homeFeed rounded-md">
-                  <PostContainer posts={allPosts} refetch={refetch}>
+                  <PostContainer
+                    posts={allPosts}
+                    refetch={refetch}
+                    AllPostsData={posts?.posts?.data}
+                  >
                     <CreatePost
                       user={user}
                       setPosts={setAllPosts}

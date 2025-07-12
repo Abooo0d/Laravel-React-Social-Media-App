@@ -13,7 +13,7 @@ import { MdGroups2 } from "react-icons/md";
 import FollowersBar from "@/Components/Containers/FollowersBar";
 import GroupsBar from "@/Components/Containers/GroupsBar";
 import { PiChatsCircle } from "react-icons/pi";
-import { useGetGroups, useGetNotifications } from "@/TanStackQurey/Querys";
+import { useGetNotifications } from "@/TanStackQurey/Querys";
 import { MdLogout, MdLogin } from "react-icons/md";
 import SideBarButton from "@/Components/Shared/SideBarButton";
 import { IoHome } from "react-icons/io5";
@@ -28,7 +28,7 @@ export default function Authenticated({ children }) {
   const [showGroupContainer, setShowGroupContainer] = useState(false);
   const [notificationsCount, setNotificationsCount] = useState(0);
   const [currentUser, setCurrentUser] = useState(auth?.user);
-  const [followers, setFollowers] = useState(auth?.user.friends);
+  const [followers, setFollowers] = useState(auth?.user?.friends);
   const {
     data: notifications,
     isLoading: LoadingNotifications,

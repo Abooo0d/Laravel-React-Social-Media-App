@@ -104,6 +104,8 @@ export const ChatsContext = ({ children }) => {
   }, [currentChat]);
 
   useEffect(() => {
+    if (!user?.id) return;
+
     window.Echo.join("online")
       .here((users) => {
         setOnlineUsers(users);
@@ -118,10 +120,11 @@ export const ChatsContext = ({ children }) => {
           })
         );
       });
-  }, []);
+  }, [user?.id]);
 
   useEffect(() => {
     if (!user?.id) return;
+
     const userChannel = window.Echo.private(`user.${user?.id}`);
 
     userChannel.listen("ChatCreated", (e) => {
@@ -168,6 +171,10 @@ export const ChatsContext = ({ children }) => {
   }, [user?.id]);
 
   useEffect(() => {
+    // if (combinedChats == 0) return;
+    if (!(!!combinedChats && combinedChats?.length > 0)) return;
+    console.log("Abood");
+
     combinedChats?.forEach((chat) => {
       const chatId = chat?.id;
       if (subscribedChats.current.has(chatId)) return;

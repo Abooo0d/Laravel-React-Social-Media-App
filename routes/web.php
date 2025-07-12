@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AIController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HomeController;
@@ -111,5 +112,8 @@ Route::middleware('auth')->group(function () {
   Route::post('/ai-chat/new-message', [AIController::class, 'newMessage'])->name('AIChat.newMessage');
 
 });
+Route::post('/login-mobile', [AuthenticatedSessionController::class, 'storeMobile']);
+
+
 
 require __DIR__ . '/auth.php';
