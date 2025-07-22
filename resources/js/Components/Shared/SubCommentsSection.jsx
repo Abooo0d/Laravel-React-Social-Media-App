@@ -45,7 +45,9 @@ const SubCommentsSection = ({ show, comments, post, comment, setComment }) => {
           onChange={(e) => setNewComment(e.target.value)}
         ></textarea>
         <SecondaryButton
-          classes={"px-2 py-1.5 absolute top-[5px] right-[5px]"}
+          classes={
+            "px-2 py-1.5 absolute top-[5px] right-[5px] bg-transparent border-none"
+          }
           event={() => createComment()}
         >
           <BiSolidSend className="text-gray-400" />

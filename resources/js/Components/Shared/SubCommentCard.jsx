@@ -8,7 +8,6 @@ import { useUserContext } from "@/Contexts/UserContext";
 import SubCommentCardMenu from "./SubCommentCardMenu";
 import { PrimaryButton, SecondaryButton } from "./Buttons";
 import { useMainContext } from "@/Contexts/MainContext";
-``;
 const SubCommentCard = ({ comment, setMainComment }) => {
   const [editing, setEditing] = useState(false);
   const [currentComment, setCurrentComment] = useState(comment);

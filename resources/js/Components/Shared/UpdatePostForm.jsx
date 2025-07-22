@@ -176,7 +176,6 @@ export default function UpdatePostForm({
             </SecondaryButton>
           </div>
           <PostOwnerInfo post={post} user={user} />
-          {/* <div className="flex flex-col gap-2 bg-red-500"> */}
           <textarea
             className="bg-gray-800 flex-1 w-full rounded-md outline-none border-none focus:outline-none focus:border-none ring-0 focus:ring-0 text-gray-300 resize-none min-h-[80px] max-h-[150px] "
             ref={inputRef}
@@ -188,16 +187,6 @@ export default function UpdatePostForm({
               setFinalPost({ ...finalPost, body: e.target.value });
             }}
           ></textarea>
-          {/* <div className="w-full max-h-[400px] flex flex-col gap-2 h-full"> */}
-          {/* <CKEditor
-              editor={ClassicEditor}
-              data={postData.body}
-              onChange={(event, editor) => {
-                setPostData({ ...postData, body: editor.getData() });
-                setFinalPost({ ...finalPost, body: editor.getData() });
-              }}
-            /> */}
-
           <UpdatePostPostAttachments
             post={postData}
             setImage={setImage}

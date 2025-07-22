@@ -76,6 +76,7 @@ class PostController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
+
   public function update(UpdatePostRequest $request, Post $post)
   {
     DB::beginTransaction();

@@ -12,8 +12,8 @@ import { useUserContext } from "@/Contexts/UserContext";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import Spinner from "./Spinner";
 import { useMainContext } from "@/Contexts/MainContext";
+import { formatDate } from "date-fns";
 const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
-  let myFile;
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState("");
   const [showPost, setShowPost] = useState(false);
@@ -56,6 +56,8 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
         finalFiles.forEach((file) => {
           formData.append("attachments[]", file);
         });
+        console.log(formData);
+
         axiosClient
           .post(route("post.create"), formData)
           .then((data) => {
@@ -117,6 +119,7 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
       setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
     }
   };
+
   const aiPost = () => {
     if (post.body == "") return;
     setLoadingAi(true);
@@ -198,33 +201,6 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
                 setPost((prev) => ({ ...prev, body: e.target.value }));
               }}
             ></textarea>
-            {/* <CKEditor
-              editor={ClassicEditor}
-              data={post.body}
-              config={{
-                toolbar: [
-                  "heading", // Heading dropdown
-                  "|", // Separator
-                  "bold", // Bold
-                  "italic", // Italic
-                  "|", // Separator
-                  "link", // Link
-                  "blockquote", // Block quote
-                  "|", // Separator
-                  "bulletedList", // Bulleted list
-                  "numberedList", // Numbered list
-                  "|", // Separator
-                  "outdent", // Outdent
-                  "indent", // Indent
-                  "|", // Separator
-                  "undo", // Undo
-                  "redo", // Redo
-                ],
-              }}
-              onChange={(event, editor) => {
-                setPost({ ...post, body: editor.getData() });
-              }}
-            /> */}
           </div>
           <CreatePostPostAttachments
             post={post}

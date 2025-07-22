@@ -27,7 +27,7 @@ class StorePostRequest extends FormRequest
     return [
       'body' => ['nullable', "string", 'required_without:attachments'],
       'attachments' => ['array', 'nullable', 'max:10', 'required_without:body'],
-      'attachment.*' => ['file', 'max:1024000'],
+      'attachments.*' => ['file', 'max:1024000'],
       // 'attachments' => ['array', 'max:10'],
       // 'attachments.*' => [
       //   'file',

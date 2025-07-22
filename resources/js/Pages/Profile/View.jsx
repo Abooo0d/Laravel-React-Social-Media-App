@@ -14,6 +14,8 @@ import ProfilePhotosFullView from "@/Components/Shared/ProfilePhotosFullView";
 import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
 
 const View = ({ auth, user, posts, isFriend, photos }) => {
+  console.log(posts);
+
   const [imageIndex, setImageIndex] = useState(0);
   const [showImage, setShowImage] = useState(false);
   const { setSuccessMessage, setErrors } = useMainContext();
@@ -124,10 +126,7 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
             <Tab.Panels className=" py-2 rounded-md">
               <Tab.Panel className="rounded-md flex flex-col gap-1 w-full">
                 <div className="bg-homeFeed rounded-md">
-                  <PostContainer
-                    posts={posts}
-                    AllPostsData={posts?.posts?.data}
-                  />
+                  <PostContainer posts={posts} AllPostsData={posts?.data} />
                 </div>
               </Tab.Panel>
               <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">

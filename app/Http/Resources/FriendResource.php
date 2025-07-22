@@ -40,8 +40,12 @@ class FriendResource extends JsonResource
       'name' => $friendUser->name,
       'username' => $friendUser->username,
       'email' => $friendUser->email,
-      'cover_url' => $friendUser->cover_path ? Storage::url($friendUser->cover_path) : asset('images/default_cover_image.jpg'),
-      'avatar_url' => $friendUser->avatar_path ? Storage::url($friendUser->avatar_path) : asset('images/default_avatar_image.png'),
+      'cover_url' => $friendUser->cover_path
+        ? asset(Storage::url($friendUser->cover_path))
+        : asset('images/default_cover_image.jpg'),
+      'avatar_url' => $friendUser->avatar_path
+        ? asset(Storage::url($friendUser->avatar_path))
+        : asset('images/default_avatar_image.png')
     ];
   }
 }

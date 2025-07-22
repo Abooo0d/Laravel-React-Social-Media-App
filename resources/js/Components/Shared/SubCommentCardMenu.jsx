@@ -11,7 +11,6 @@ const SubCommentCardMenu = ({
   setComment,
   setEditing,
 }) => {
-  const [, setShowForm] = useState(false);
   const { setSuccessMessage } = useMainContext();
   const onDelete = () => {
     if (window.confirm("Are You Sure To Delete This Comment!?")) {
@@ -46,7 +45,6 @@ const SubCommentCardMenu = ({
       >
         <button
           onClick={() => {
-            setShowForm(true);
             setOpenMenu(false);
             setEditing(true);
           }}

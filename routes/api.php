@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\AIController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\AuthUserMobileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +32,16 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::post('/logout-mobile', [AuthUserMobileController::class, 'logoutMobile']);
 });
 
+Route::middleware('auth')->group(function () {
+  Route::get('my-profile', [ProfileController::class, 'myProfileMobile'])->name('profile.myProfile');
+  Route::get('/profile/{user:username}', [ProfileController::class, 'ProfileMobile'])->name('profile.view');
+  Route::post('/profile/change_images', [ProfileController::class, 'changeImages'])->name('profile.changeImages');
+  Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+  Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+  Route::get('profile/posts/{user:id}', [ProfileController::class, 'getPostsForUser'])->name('postsForUser');
+  Route::get('/profile/download/{user:id}/{type}', [ProfileController::class, 'downloadImage'])->name('download.userImage');
+});
+
 Route::middleware('auth:sanctum')->group(function () {
   Route::get('/get-posts', [HomeController::class, 'getPosts']);
   Route::get('/get-groups', [HomeController::class, 'getGroups']);
@@ -52,6 +64,12 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::delete('/comment/{comment}', [PostController::class, 'DeleteComment']);
   Route::put('/comment/{comment}', [PostController::class, 'EditComment']);
   Route::post('/comment/{comment}/reaction', [PostController::class, 'CommentReaction']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+  Route::get('/ai-chats', [AIController::class, 'index']);
+  Route::post('/post/aiPost/post', [AIController::class, 'aiPost']);
+  Route::post('/ai-chat/new-message', [AIController::class, 'newMessage']);
 });
 
 Route::middleware('guest')->group(function () {

@@ -24,8 +24,12 @@ class GroupResource extends JsonResource
       'auto_approval' => $this->auto_approval,
       'about' => $this->about,
       'description' => Str::words($this->about, 20, '...'),
-      'thumbnail_url' => $this->thumbnail_path ? Storage::url($this->thumbnail_path) : asset('images/default_group_avatar_image.png'),
-      'cover_url' => $this->cover_path ? Storage::url($this->cover_path) : asset('images/default_cover_image.jpg'),
+      'thumbnail_url' => $this->thumbnail_path
+        ? asset(Storage::url($this->thumbnail_path))
+        : asset('images/default_group_avatar_image.png'),
+      'cover_url' => $this->cover_path
+        ? asset(Storage::url($this->cover_path))
+        : asset('images/default_cover_image.jpg'),
       'created_at' => $this->created_at,
       'owner' => $this->user_id,
       'role' => $this->currentUserGroups?->role,

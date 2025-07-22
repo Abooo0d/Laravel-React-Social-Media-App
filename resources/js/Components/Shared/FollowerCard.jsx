@@ -1,7 +1,5 @@
-import { useMainContext } from "@/Contexts/MainContext";
 import { Link } from "@inertiajs/react";
 import React from "react";
-
 const FollowerCard = ({ data, setShowFollowerContainer }) => {
   return (
     <Link

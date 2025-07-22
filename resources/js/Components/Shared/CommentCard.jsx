@@ -17,6 +17,7 @@ const CommentCard = ({ currentComment, post, setPost }) => {
     ...currentComment,
     comment: currentComment.comment.replace(/<br\s*\/?>/gi, "\n"),
   });
+
   const { user } = useUserContext();
   const { setSuccessMessage, setErrors } = useMainContext();
   const [showSubComments, setShowSubComments] = useState(false);

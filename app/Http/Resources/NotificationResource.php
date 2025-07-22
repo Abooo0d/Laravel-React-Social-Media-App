@@ -28,7 +28,9 @@ class NotificationResource extends JsonResource
       'actor' => [
         'id' => $user?->id,
         'name' => $user?->name,
-        'avatar_url' => $user && $user->avatar_path ? Storage::url($user->avatar_path) : asset(path: 'images/default_avatar_image.png'),
+        'avatar_url' => $user && $user->avatar_path
+          ? asset(Storage::url($user->avatar_path))
+          : asset(path: 'images/default_avatar_image.png'),
       ]
     ];
   }
