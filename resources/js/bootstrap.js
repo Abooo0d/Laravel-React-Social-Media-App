@@ -43,7 +43,7 @@ window.Echo = new Echo({
 //   broadcaster: "pusher",
 //   key: import.meta.env.VITE_PUSHER_APP_KEY, // must match PUSHER_APP_KEY
 //   cluster: "mt1",
-//   wsHost: "192.168.1.107", // or your IP if you're testing on another device
+//   wsHost: "192.168.1.109", // or your IP if you're testing on another device
 //   wsPort: 6001,
 //   forceTLS: false,
 //   encrypted: false,
@@ -53,7 +53,7 @@ window.Echo = new Echo({
 //   broadcaster: "pusher",
 //   key: import.meta.env.VITE_PUSHER_APP_KEY,
 //   cluster: "mt1",
-//   wsHost: "192.168.1.107",
+//   wsHost: "192.168.1.109",
 //   wsPort: 6001,
 //   forceTLS: false,
 //   encrypted: false,

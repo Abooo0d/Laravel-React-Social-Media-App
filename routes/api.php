@@ -32,14 +32,14 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::post('/logout-mobile', [AuthUserMobileController::class, 'logoutMobile']);
 });
 
-Route::middleware('auth')->group(function () {
-  Route::get('my-profile', [ProfileController::class, 'myProfileMobile'])->name('profile.myProfile');
-  Route::get('/profile/{user:username}', [ProfileController::class, 'ProfileMobile'])->name('profile.view');
-  Route::post('/profile/change_images', [ProfileController::class, 'changeImages'])->name('profile.changeImages');
-  Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-  Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-  Route::get('profile/posts/{user:id}', [ProfileController::class, 'getPostsForUser'])->name('postsForUser');
-  Route::get('/profile/download/{user:id}/{type}', [ProfileController::class, 'downloadImage'])->name('download.userImage');
+Route::middleware('auth:sanctum')->group(function () {
+  Route::get('my-profile', [ProfileController::class, 'myProfileMobile']);
+  Route::get('/profile/{user:username}', [ProfileController::class, 'ProfileMobile']);
+  Route::post('/profile/change_images', [ProfileController::class, 'changeImages']);
+  Route::patch('/profile', [ProfileController::class, 'update']);
+  Route::delete('/profile', [ProfileController::class, 'destroy']);
+  Route::get('profile/posts/{user:username}', [ProfileController::class, 'getPostsForUserMobile']);
+  Route::get('/profile/download/{user:id}/{type}', [ProfileController::class, 'downloadImage']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {

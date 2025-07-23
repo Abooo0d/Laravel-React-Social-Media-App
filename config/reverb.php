@@ -29,10 +29,10 @@ return [
   'servers' => [
 
     'reverb' => [
-      'host' => env('REVERB_HOST', '192.168.1.107'),
+      'host' => env('REVERB_HOST', '192.168.1.109'),
       'port' => env('REVERB_PORT', 6001),
       'path' => env('REVERB_SERVER_PATH', default: ''),
-      'hostname' => env('REVERB_HOST', '192.168.1.107'),
+      'hostname' => env('REVERB_HOST', '192.168.1.109'),
       'options' => [
         'tls' => [
           'local_cert' => base_path("127.0.0.1+2.pem"),

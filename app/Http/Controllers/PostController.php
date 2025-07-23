@@ -44,6 +44,9 @@ class PostController extends Controller
     try {
       $data = $request->validated();
       $user = $request->user();
+      /**
+       * @var Post $post
+       */
       $post = Post::create($data);
       /** @var UploadedFile[] $attachments */
       $attachments = $data['attachments'] ?? [];

@@ -160,9 +160,11 @@ export default function UpdatePostForm({
       }));
     }
   };
+
   useEffect(() => {
     handleInput();
   }, [postData]);
+
   return (
     <>
       <PopupCard showForm={showForm}>

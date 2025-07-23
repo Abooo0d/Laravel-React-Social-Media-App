@@ -63,34 +63,10 @@ class ProfileController extends Controller
       if (!$userId) {
         return response(['message' => 'Some Thing Went Wrong'], 400);
       }
-      if ($user->id === Auth::id())
-        return Redirect::route('profile.myProfile', $user->slug);
-      $posts = Post::PostsForTimeLine($user->id)
-        ->where('user_id', $user->id)
-        ->latest()
-        ->paginate(15);
-      if ($request->wantsJson()) {
-        return response([
-          'posts' => PostResource::collection($posts)
-        ]);
-      }
-      $posts_ids = $user->posts($user->id)
-        ->pluck('id')
-        ->toArray();
-      $photos = PostAttachments::whereIn('post_id', $posts_ids)
-        ->where('mime', 'like', 'image/%')
-        ->get();
-
-      $notifications = Auth::user()
-        ->notifications()
-        ->paginate(20);
       $isFriend = auth()->user()->isFriend($user->id);
       return response([
         'user' => new UserResource($user),
-        'posts' => PostResource::collection($posts),
         'isFriend' => $isFriend,
-        'notifications' => $notifications,
-        'photos' => PostAttachmentResource::collection($photos)
       ], 200);
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
@@ -155,6 +131,38 @@ class ProfileController extends Controller
             'total' => $posts->total(),
           ]
         ]
+      ], 200);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function getPostsForUserMobile(User $user)
+  {
+    try {
+      $posts = Post::PostsForTimeLine($user->id)
+        ->where('user_id', $user->id)
+        ->latest()
+        ->paginate(15);
+      $posts_ids = $user->posts($user->id)->pluck('id')->toArray();
+      $photos = PostAttachments::whereIn('post_id', $posts_ids)
+        ->where('mime', 'like', 'image/%')->get();
+      return response([
+        'posts' => [
+          'data' => PostResource::collection($posts),
+          'links' => [
+            'first' => $posts->url(1),
+            'last' => $posts->url($posts->lastPage()),
+            'prev' => $posts->previousPageUrl(),
+            'next' => $posts->nextPageUrl(),
+          ],
+          'meta' => [
+            'current_page' => $posts->currentPage(),
+            'last_page' => $posts->lastPage(),
+            'per_page' => $posts->perPage(),
+            'total' => $posts->total(),
+          ]
+        ],
+        'photos' => PostAttachmentResource::collection($photos)
       ], 200);
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
