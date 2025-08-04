@@ -35,8 +35,8 @@ return [
       'hostname' => env('REVERB_HOST', '192.168.1.109'),
       'options' => [
         'tls' => [
-          'local_cert' => base_path("127.0.0.1+2.pem"),
-          'local_pk' => base_path('127.0.0.1+2-key.pem'),
+          'local_cert' => base_path("ssl/192.168.1.109+1.pem"),
+          'local_pk' => base_path('ssl/192.168.1.109+1-key.pem'),
           'passphrase' => env('REVERB_SSL_PASSPHRASE', null),
           'verify_peer' => false,
           'verify_peer_name' => false

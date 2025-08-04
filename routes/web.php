@@ -115,5 +115,4 @@ Route::middleware('auth')->group(function () {
 Route::post('/login-mobile', [AuthenticatedSessionController::class, 'storeMobile']);
 
 
-
 require __DIR__ . '/auth.php';

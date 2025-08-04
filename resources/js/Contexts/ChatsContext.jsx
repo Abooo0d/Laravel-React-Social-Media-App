@@ -173,7 +173,6 @@ export const ChatsContext = ({ children }) => {
   useEffect(() => {
     // if (combinedChats == 0) return;
     if (!(!!combinedChats && combinedChats?.length > 0)) return;
-    console.log("Abood");
 
     combinedChats?.forEach((chat) => {
       const chatId = chat?.id;

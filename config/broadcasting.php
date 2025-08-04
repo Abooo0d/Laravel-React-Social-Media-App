@@ -40,7 +40,7 @@ return [
         'port' => env('REVERB_PORT', 6001),
         'scheme' => env('REVERB_SCHEME', 'https'),
         'useTLS' => env('REVERB_SCHEME', 'https') === 'https',
-        'encrypted' => true,
+        'encrypted' => false,
       ],
       'client_options' => [
         'verify' => false,
@@ -61,9 +61,9 @@ return [
         'cluster' => env('PUSHER_APP_CLUSTER'),
         'host' => env('PUSHER_HOST') ?: 'api-' . env('PUSHER_APP_CLUSTER', 'mt1') . '.pusher.com',
         'port' => env('PUSHER_PORT', 6001),
-        'scheme' => 'http',
-        'encrypted' => false,
-        'useTLS' => false,
+        'scheme' => env('PUSHER_SCHEME', 'http'), // <-- Use env variable here
+        'encrypted' => env('PUSHER_SCHEME', 'http') === 'https', // <-- Set dynamically
+        'useTLS' => env('PUSHER_SCHEME', 'http') === 'https',
         // 'scheme' => 'https',
         // 'encrypted' => true,
         // 'useTLS' => true,

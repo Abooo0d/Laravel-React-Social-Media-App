@@ -21,7 +21,7 @@ const UserFriendRequestCard = ({ request }) => {
       <img
         src={request.avatar_url || "/images/default_avatar_image.png"}
         alt=""
-        className="absolute top-[20%] left-[10%] w-[90px] max-h-[90px] object-cover rounded-full border-[1px] border-solid border-gray-500/50"
+        className="absolute top-[20%] left-[10%] w-[90px] max-h-[90px] h-full object-cover rounded-full border-[1px] border-solid border-gray-500/50"
       />
       <img
         src={request.cover_url || "/images/default_cover_image.png"}

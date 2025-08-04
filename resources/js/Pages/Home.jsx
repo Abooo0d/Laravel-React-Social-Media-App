@@ -36,13 +36,8 @@ const Home = ({ auth }) => {
   return (
     <>
       <Head>
-        <title>Social media Laravel + React</title>
-        <meta
-          head-key="description"
-          name="description"
-          content="This is the default description"
-        />
-        <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
+        <title>Chatter</title>
+        <link rel="icon" type="image/svg+xml" href="/Logo_ico.ico" />
       </Head>
       <div className="flex min-h-[calc(100vh-66px)] max-h-[calc(100vh-66px)] overflow-hidden bg-gray-900">
         <HomeFeed loading={loadingPosts} posts={posts} refetch={refetch} />

@@ -5,7 +5,7 @@ import fs from "fs";
 import rollupNodePolyFill from "rollup-plugin-node-polyfills";
 export default defineConfig({
   define: {
-    // __VITE_IS_HTTPS__: true,
+    __VITE_IS_HTTPS__: true,
     global: "globalThis",
     "process.env": {},
   },
@@ -37,41 +37,15 @@ export default defineConfig({
   server: {
     host: "192.168.1.109",
     port: 3000,
-    // https: {
-    //   key: fs.readFileSync("./ssl/192.168.1.109-key.pem"),
-    //   cert: fs.readFileSync("./ssl/192.168.1.109.pem"),
-    // },
+    https: {
+      key: fs.readFileSync("./ssl/192.168.1.109+1-key.pem"),
+      cert: fs.readFileSync("./ssl/192.168.1.109+1.pem"),
+    },
     cors: {
       origin: [
-        "https://192.168.1.109:3000",
-        "http://192.168.1.109:3000",
         "https://192.168.1.109:8000",
-        "http://192.168.1.109:8000",
-
-        "wss://192.168.1.109:443",
-        "wss://192.168.1.109:444",
-        "wss://192.168.1.109:3000",
-        "wss://192.168.1.109:6001",
-
-        "https://myproject.tes:443",
-        "https://myproject.test:444",
-        "https://myproject.test:3000",
-        "https://myproject.test:6001",
-
-        "https://127.0.0.1:443",
-        "https://127.0.0.1:444",
-        "https://127.0.0.1:3000",
-        "https://127.0.0.1:6001",
-
-        "wss://127.0.0.1:443",
-        "wss://127.0.0.1:444",
-        "wss://127.0.0.1:6001",
-        "wss://127.0.0.1:3000",
-
-        "wss://myproject.test:443",
-        "wss://myproject.test:444",
-        "wss://myproject.test:3000",
-        "wss://myproject.test:6001",
+        "https://192.168.1.109:3000",
+        "https://192.168.1.109:6001",
       ],
       credentials: true,
     },

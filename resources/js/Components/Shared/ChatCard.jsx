@@ -88,7 +88,7 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
         <img
           src={chatData?.avatar_url}
           alt="user"
-          className="w-[40px] h-[40px] min-w-[40px] rounded-full"
+          className="w-[40px] h-[40px] min-w-[40px] rounded-full object-cover"
         />
         {online && (
           <span className="absolute top-0 right-0 w-[10px] h-[10px] rounded-full bg-green-500 backdrop-blur-md animate-pulse" />

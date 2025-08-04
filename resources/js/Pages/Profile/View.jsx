@@ -53,17 +53,8 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
   return (
     <>
       <Head>
-        <title>Social media Laravel + React</title>
-        <meta
-          head-key="description"
-          name="description"
-          content="This is the default description"
-        />
-        <meta
-          httpEquiv="Content-Security-Policy"
-          content="upgrade-insecure-requests"
-        />
-        <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
+        <title>Chatter</title>
+        <link rel="icon" type="image/svg+xml" href="/Logo_ico.ico" />
       </Head>
       <div className="container mx-auto ">
         <div className="max-h-[350px] w-full relative">

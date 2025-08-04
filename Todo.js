@@ -1,5 +1,5 @@
 /********** T o Start The Laravel Process Over Https */
-// symfony serve --allow-all-ip --port=8000 --p12=mycert.p12
+//  symfony serve --allow-all-ip --port=8000 --p12=./ssl/mycert.p12
 /********** To Start The Laralve Project Over Https  */
 // php artisan serve --host 192.168.1.109
 /************** YetTo Fix *************/
@@ -135,3 +135,39 @@
 // PostPreview // 600
 
 //Delete Post Must Return THe Group Page Instate Of The PublicPotView
+
+/**
+ *
+ *
+ * "https://192.168.1.109:3000",
+        "http://192.168.1.109:3000",
+        "https://192.168.1.109:8000",
+        "http://192.168.1.109:8000",
+        "ws://192.168.1.109:6001",
+        "ws://192.168.1.109:6001",
+
+        "wss://192.168.1.109:443",
+        "wss://192.168.1.109:444",
+        "wss://192.168.1.109:3000",
+        "wss://192.168.1.109:6001",
+
+        "wss://myproject.tes:443",
+        "https://myproject.test:444",
+        "https://myproject.test:3000",
+        "https://myproject.test:6001",
+
+        "https://127.0.0.1:443",
+        "https://127.0.0.1:444",
+        "https://127.0.0.1:3000",
+        "https://127.0.0.1:6001",
+
+        "wss://127.0.0.1:443",
+        "wss://127.0.0.1:444",
+        "wss://127.0.0.1:6001",
+        "wss://127.0.0.1:3000",
+
+        "wss://myproject.test:443",
+        "wss://myproject.test:444",
+        "wss://myproject.test:3000",
+        "wss://myproject.test:6001",
+ */

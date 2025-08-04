@@ -50,13 +50,8 @@ function Chats({ auth, groupsChat, allChats }) {
   return (
     <>
       <Head>
-        <title>Social media Laravel + React</title>
-        <meta
-          head-key="description"
-          name="description"
-          content="This is the default description"
-        />
-        <link rel="icon" type="image/svg+xml" href="/images.jpeg" />
+        <title>Chatter</title>
+        <link rel="icon" type="image/svg+xml" href="/Logo_ico.ico" />
       </Head>
       <div className="flex min-h-barHeight overflow-hidden">
         <MessagesContainer isLoading={isLoading} />

@@ -29,12 +29,6 @@ return [
 
   'max_age' => 0,
 
-  // 'supports_credentials' => false,
-
-  // 'paths' => ['api/*', 'sanctum/csrf-cookie', '*'],
-  // 'allowed_origins' => ['http://192.168.1.109:8000'],
-  // 'allowed_methods' => ['*'],
-  // 'allowed_headers' => ['*'],
   'supports_credentials' => true,
 
 ];

@@ -18,6 +18,8 @@ window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 import Echo from "laravel-echo";
 
 import Pusher from "pusher-js";
+
+Pusher.logToConsole = true;
 window.Pusher = Pusher;
 
 window.Echo = new Echo({
@@ -25,43 +27,10 @@ window.Echo = new Echo({
   key: import.meta.env.VITE_PUSHER_APP_KEY,
   cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
   wsHost: import.meta.env.VITE_PUSHER_HOST,
-  wssHost: import.meta.env.VITE_PUSHER_HOST,
+  wssHost: import.meta.env.VITE_PUSHER_HOST, // Keep for robustness, but if scheme is http, ws will be used
   wsPort: import.meta.env.VITE_PUSHER_PORT,
   wssPort: import.meta.env.VITE_PUSHER_PORT,
-  forceTLS: true,
-  encrypted: true,
+  forceTLS: import.meta.env.VITE_PUSHER_SCHEME === "https", // <-- Dynamic based on env
+  encrypted: import.meta.env.VITE_PUSHER_SCHEME === "https", // <-- Dynamic based on env
   disableStats: true,
 });
-
-// import { Buffer } from "buffer";
-// import process from "process";
-
-// window.Buffer = Buffer;
-// window.process = process;
-// http;
-// window.Echo = new Echo({
-//   broadcaster: "pusher",
-//   key: import.meta.env.VITE_PUSHER_APP_KEY, // must match PUSHER_APP_KEY
-//   cluster: "mt1",
-//   wsHost: "192.168.1.109", // or your IP if you're testing on another device
-//   wsPort: 6001,
-//   forceTLS: false,
-//   encrypted: false,
-//   enabledTransports: ["ws"],
-// });
-// window.Echo = new Echo({
-//   broadcaster: "pusher",
-//   key: import.meta.env.VITE_PUSHER_APP_KEY,
-//   cluster: "mt1",
-//   wsHost: "192.168.1.109",
-//   wsPort: 6001,
-//   forceTLS: false,
-//   encrypted: false,
-//   enabledTransports: ["ws"],
-//   disableStats: true,
-//   wsOptions: {
-//     transports: ["websocket"],
-//     upgrade: false,
-//     rejectUnauthorized: false,
-//   },
-// });

@@ -144,7 +144,7 @@ const MessageCard = ({ message }) => {
         </div>
         <img
           src={message?.user.avatar_url}
-          className="w-[30px] h-[30px] rounded-full mt-auto"
+          className="w-[30px] h-[30px] rounded-full mt-auto object-cover"
         />
       </div>
       <span className="text-xs text-gray-500 opacity-50">Delivered</span>
