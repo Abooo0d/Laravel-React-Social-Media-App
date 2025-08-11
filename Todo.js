@@ -176,3 +176,4 @@ if (true) {
 } else {
   console.log("amjad");
 }
+x == 1 ? console.log("ABood") : console.log("amjad");

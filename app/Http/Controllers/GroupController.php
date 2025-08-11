@@ -365,7 +365,7 @@ class GroupController extends Controller
           $groupUser->role = $data['role'];
           $groupUser->save();
           $admin = User::where('id', Auth::id())->first();
-          $groupUser->user->notify(new GroupUsersActionNotification($admin, $group, 'ChangeRole', $data['role'], Auth::id()));
+          $groupUser->user->notify(new GroupUsersActionNotification($admin, $group, 'ChangeRole', $data['role']));
           return redirect()->back()->with('success', 'Role Changed Successfully');
         }
       }
@@ -392,7 +392,7 @@ class GroupController extends Controller
       if ($groupUser) {
         $groupUser->delete();
         $admin = User::where('id', Auth::id())->first();
-        $groupUser->user->notify(new GroupUsersActionNotification($admin, $group, 'KickOut', userId: Auth::id()));
+        $groupUser->user->notify(new GroupUsersActionNotification($admin, $group, 'KickOut'));
         return redirect()->back()->with('success', 'Member Kicked Out Successfully');
       }
     } catch (e) {

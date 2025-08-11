@@ -18,7 +18,7 @@ class GroupUsersActionNotification extends Notification
   /**
    * Create a new notification instance.
    */
-  public function __construct(public User $admin, public Group $group, public string $action, public string $role = '', public $userId)
+  public function __construct(public User $admin, public Group $group, public string $action, public string $role = '')
   {
     //
   }
@@ -55,7 +55,7 @@ class GroupUsersActionNotification extends Notification
       'message' => $message,
       'link' => route('group.profile', $this->group->slug),
       // 'actor' => ['name' => $this->group->name, 'avatar' => Storage::url($this->group->thumbnail_path)]
-      'actor' => $this->userId
+      'actor' => $this->admin->id
     ];
   }
 

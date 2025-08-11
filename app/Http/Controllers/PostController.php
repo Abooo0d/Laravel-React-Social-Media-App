@@ -10,7 +10,7 @@ use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use App\Models\Group;
-use App\Models\post;
+use App\Models\Post;
 use App\Models\PostAttachments;
 use App\Models\PostComments;
 use App\Models\PostCommentsReactions;
@@ -24,7 +24,6 @@ use App\Notifications\PostReactionNotification;
 use App\Notifications\UpdateCommentNotification;
 use App\Notifications\UpdatePostInGroupNotification;
 use App\Notifications\CreatePostInGroupNotification;
-use Gemini\Laravel\Facades\Gemini;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
@@ -48,6 +47,7 @@ class PostController extends Controller
        * @var Post $post
        */
       $post = Post::create($data);
+
       /** @var UploadedFile[] $attachments */
       $attachments = $data['attachments'] ?? [];
       foreach ($attachments as $attachment) {

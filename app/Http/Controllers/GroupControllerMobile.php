@@ -306,7 +306,7 @@ class GroupControllerMobile extends Controller
       }
       $groupUser->status = GroupUserStatusEnum::APPROVED->value;
       $groupUser->save();
-      $groupUser->user->notify(new RequestActionNotification($group, 'approved'));
+      $groupUser->user->notify(new RequestActionNotification($group, 'approved', auth()->id()));
       return response(['message' => "The User Have Been Approved"], 200);
 
     } catch (e) {
@@ -326,7 +326,7 @@ class GroupControllerMobile extends Controller
       if ($groupUser) {
         $groupUser->status = GroupUserStatusEnum::REJECTED->value;
         $groupUser->save();
-        $groupUser->user->notify(new RequestActionNotification($group, 'rejected'));
+        $groupUser->user->notify(new RequestActionNotification($group, 'rejected', auth()->id()));
         return response(['message' => 'User Have Been Rejected'], 200);
       }
       return response(['message' => 'There Is An Error In The Request'], 400);
