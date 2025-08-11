@@ -70,9 +70,7 @@ const PostContainer = ({
                       )}
                     </>
                   ) : (
-                    <>
-                      <HomeLoader />
-                    </>
+                    <HomeLoader />
                   )}
                 </>
               ) : (

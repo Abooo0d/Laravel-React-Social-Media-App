@@ -56,8 +56,6 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
         finalFiles.forEach((file) => {
           formData.append("attachments[]", file);
         });
-        console.log(formData);
-
         axiosClient
           .post(route("post.create"), formData)
           .then((data) => {

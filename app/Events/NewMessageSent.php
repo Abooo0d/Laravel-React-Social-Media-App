@@ -37,4 +37,8 @@ class NewMessageSent implements ShouldBroadcast
       'message' => $this->message,
     ];
   }
+  public function failed(\Throwable $exception)
+  {
+    \Log::error('Broadcast failed: ' . $exception->getMessage());
+  }
 }

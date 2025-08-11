@@ -171,3 +171,8 @@
         "wss://myproject.test:3000",
         "wss://myproject.test:6001",
  */
+if (true) {
+  console.log("ABood");
+} else {
+  console.log("amjad");
+}

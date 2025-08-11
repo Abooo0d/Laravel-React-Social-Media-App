@@ -40,7 +40,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Str;
 use \Illuminate\Http\UploadedFile;
 
-class GroupController extends Controller
+class GroupControllerMobile extends Controller
 {
   public function index(Request $request, Group $group)
   {
@@ -51,30 +51,16 @@ class GroupController extends Controller
         ->orderBy('users.name')
         ->where('group_id', $group->id)
         ->get();
-      $posts = Post::PostsForTimeLine(Auth::id())
-        ->where('group_id', $group->id)
-        ->latest()
-        ->paginate(perPage: 15);
-      $posts_ids = Post::where('group_id', $group->id)->pluck('id')->toArray();
-      $photos = PostAttachments::whereIn('post_id', $posts_ids)->where('mime', 'like', 'image/%')->get();
-      if ($request->wantsJson()) {
-        return response([
-          'posts' => PostResource::collection($posts)
-        ]);
-      }
-      return Inertia::render('Group/View', [
+      return response([
         'group' => new GroupResource(resource: $group),
         'requests' => UserResource::collection($group->requestUsers()->get()),
         'users' => GroupUserResource::collection($users),
         'isAdmin' => $group->isAdmin(Auth::id()),
-        'photos' => PostAttachmentResource::collection($photos),
-        'posts' => [],
-      ]);
+      ], 200);
     } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+      return response(['error', 'Some Thing Wrong Happened'], 405);
     }
   }
-
   public function getPostsForGroup(Group $group)
   {
     try {
@@ -82,6 +68,8 @@ class GroupController extends Controller
         ->where('group_id', $group->id)
         ->latest()
         ->paginate(perPage: 15);
+      $posts_ids = Post::where('group_id', $group->id)->pluck('id')->toArray();
+      $photos = PostAttachments::whereIn('post_id', $posts_ids)->where('mime', 'like', 'image/%')->get();
       return response([
         'posts' => [
           'data' => PostResource::collection($posts),
@@ -97,10 +85,11 @@ class GroupController extends Controller
             'per_page' => $posts->perPage(),
             'total' => $posts->total(),
           ]
-        ]
+        ],
+        'photos' => PostAttachmentResource::collection($photos),
       ], 200);
     } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+      return response(['error', 'Some Thing Wrong Happened'], 405);
     }
   }
   public function store(StoreGroupRequest $request)
@@ -317,7 +306,7 @@ class GroupController extends Controller
       }
       $groupUser->status = GroupUserStatusEnum::APPROVED->value;
       $groupUser->save();
-      $groupUser->user->notify(new RequestActionNotification($group, 'approved', Auth::id()));
+      $groupUser->user->notify(new RequestActionNotification($group, 'approved'));
       return response(['message' => "The User Have Been Approved"], 200);
 
     } catch (e) {
@@ -337,7 +326,7 @@ class GroupController extends Controller
       if ($groupUser) {
         $groupUser->status = GroupUserStatusEnum::REJECTED->value;
         $groupUser->save();
-        $groupUser->user->notify(new RequestActionNotification($group, 'rejected', Auth::id()));
+        $groupUser->user->notify(new RequestActionNotification($group, 'rejected'));
         return response(['message' => 'User Have Been Rejected'], 200);
       }
       return response(['message' => 'There Is An Error In The Request'], 400);
@@ -365,7 +354,7 @@ class GroupController extends Controller
           $groupUser->role = $data['role'];
           $groupUser->save();
           $admin = User::where('id', Auth::id())->first();
-          $groupUser->user->notify(new GroupUsersActionNotification($admin, $group, 'ChangeRole', $data['role'], Auth::id()));
+          $groupUser->user->notify(new GroupUsersActionNotification($admin, $group, 'ChangeRole', $data['role']));
           return redirect()->back()->with('success', 'Role Changed Successfully');
         }
       }
@@ -392,7 +381,7 @@ class GroupController extends Controller
       if ($groupUser) {
         $groupUser->delete();
         $admin = User::where('id', Auth::id())->first();
-        $groupUser->user->notify(new GroupUsersActionNotification($admin, $group, 'KickOut', userId: Auth::id()));
+        $groupUser->user->notify(new GroupUsersActionNotification($admin, $group, 'KickOut'));
         return redirect()->back()->with('success', 'Member Kicked Out Successfully');
       }
     } catch (e) {

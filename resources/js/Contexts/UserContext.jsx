@@ -10,14 +10,17 @@ const INITIAL_DATA = {
 };
 const Context = createContext(INITIAL_DATA);
 export const UserContext = ({ children }) => {
+  const [user, setUser] = useState({});
+  const [groups, setGroups] = useState([]);
   const {
     data,
     refetch: refetchGroups,
     isLoading: isLoadingGroups,
-  } = useGetGroups();
+  } = useGetGroups(user);
+  useEffect(() => {
+    refetchGroups();
+  }, [user]);
 
-  const [user, setUser] = useState({});
-  const [groups, setGroups] = useState(data);
   useEffect(() => {
     setGroups(data);
   }, [data]);

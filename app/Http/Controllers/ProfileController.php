@@ -194,6 +194,18 @@ class ProfileController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
+  public function update_mobile(ProfileUpdateRequest $request)
+  {
+    $user = $request->user();
+    $user->fill($request->validated());
+
+    if ($user->isDirty('email')) {
+      $user->email_verified_at = null;
+    }
+
+    $user->save();
+    return response(['message' => 'Data Changed Successfully', 'user' => new UserResource($user)]);
+  }
   public function destroy(Request $request)
   {
     try {
@@ -214,6 +226,23 @@ class ProfileController extends Controller
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
+  }
+  public function destroy_mobile(Request $request)
+  {
+    $request->validateWithBag('userDeletion', [
+      'password' => ['required', 'current_password'],
+    ]);
+
+    $user = $request->user();
+
+    Auth::logout();
+
+    $user->delete();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return response(['message' => 'Account Deleted Successfully']);
   }
   public function changeImages(Request $request, User $user)
   {
@@ -271,6 +300,64 @@ class ProfileController extends Controller
       return redirect()->back()->with('success', $message);
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function changeImagesMobile(Request $request, User $user)
+  {
+    try {
+      $message = '';
+      $data = $request->validate([
+        'coverImage' => ['nullable', 'file', 'mimes:jpg,png'],
+        'avatarImage' => ['nullable', 'file', 'mimes:jpg,png']
+      ]);
+      /**
+       * @var UploadedFile $cover
+       */
+      $cover = $data['coverImage'] ?? null;
+      /**
+       * @var UploadedFile $avatar
+       */
+      $avatar = $data['avatarImage'] ?? null;
+      $user = $request->user();
+      if ($cover) {
+        if ($user->cover_path) {
+          Storage::disk('public')->delete($user->cover_path);
+        }
+        $coverPath = $cover->store("users/{$user->id}", 'public');
+        $user->update(['cover_path' => $coverPath]);
+        $message = 'Cover Image Updated Successfully';
+      }
+      if ($avatar) {
+        if ($user->avatar_path) {
+          Storage::disk('public')->delete($user->avatar_path);
+        }
+        $avatarPath = $avatar->store("users/{$user->id}", 'public');
+        $user->update(['avatar_path' => $avatarPath]);
+        $message = 'Avatar Image Updated Successfully';
+      }
+      DB::beginTransaction();
+      $files = [];
+      $attachment = $cover ?: $avatar;
+      $post = Post::create(
+        [
+          'user_id' => $user->id,
+          'attachments' => $cover ?: $avatar,
+          'body' => $cover ? "{$user->name} Changed His Cover Image" : "{$user->name} Changed His Avatar Image"
+        ]
+      );
+      $path = $attachment->store("attachments/{$post->id}", 'public');
+      PostAttachments::create([
+        'post_id' => $post->id,
+        'name' => $attachment->getClientOriginalName(),
+        'path' => $path,
+        'mime' => $attachment->getMimeType(),
+        'size' => $attachment->getSize(),
+        'created_by' => $user->id
+      ]);
+      DB::commit();
+      return response(['message' => $message, 'user' => new UserResource($user)], 200);
+    } catch (e) {
+      return response(['error' => 'Some Thing Wrong Happened'], 402);
     }
   }
   public function downloadImage(Request $request, User $user)

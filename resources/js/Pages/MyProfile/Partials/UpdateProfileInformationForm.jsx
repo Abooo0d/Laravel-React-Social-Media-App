@@ -58,21 +58,6 @@ export default function UpdateProfileInformation({
 
           <InputError className="mt-2" message={errors.name} />
         </div>
-        <div>
-          <InputLabel htmlFor="username" value="Username" />
-
-          <TextInput
-            placeholder={"Username"}
-            id="username"
-            classes="mt-1 block w-full"
-            value={username}
-            setValue={setUsername}
-            required
-            autoComplete="name"
-          />
-
-          <InputError className="mt-2" message={errors.username} />
-        </div>
 
         <div>
           <InputLabel htmlFor="email" value="Email" />
@@ -91,7 +76,7 @@ export default function UpdateProfileInformation({
           <InputError className="mt-2" message={errors.email} />
         </div>
 
-        {mustVerifyEmail && user.email_verified_at === null && (
+        {!user?.is_verified && (
           <div>
             <p className="text-sm mt-2 text-gray-800 dark:text-gray-200">
               Your email address is unverified.

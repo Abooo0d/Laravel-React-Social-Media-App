@@ -1,12 +1,13 @@
 <?php
 
 use App\Http\Controllers\AIController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\AuthUserMobileController;
+use App\Http\Controllers\GroupControllerMobile;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,22 +34,46 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-  Route::get('my-profile', [ProfileController::class, 'myProfileMobile']);
-  Route::get('/profile/{user:username}', [ProfileController::class, 'ProfileMobile']);
-  Route::post('/profile/change_images', [ProfileController::class, 'changeImages']);
-  Route::patch('/profile', [ProfileController::class, 'update']);
-  Route::delete('/profile', [ProfileController::class, 'destroy']);
-  Route::get('profile/posts/{user:username}', [ProfileController::class, 'getPostsForUserMobile']);
-  Route::get('/profile/download/{user:id}/{type}', [ProfileController::class, 'downloadImage']);
-});
-
-Route::middleware('auth:sanctum')->group(function () {
   Route::get('/get-posts', [HomeController::class, 'getPosts']);
   Route::get('/get-groups', [HomeController::class, 'getGroups']);
   Route::get('/get-notifications', [HomeController::class, 'getNotifications']);
   Route::get('/get-chat-groups', [HomeController::class, 'getChatGroups']);
   Route::post('/notification/read/{notificationId}', [HomeController::class, 'readNotification']);
   Route::post('/notification/readAll', [HomeController::class, 'readAllNotifications']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+  Route::post('/user/search', [UserController::class, 'searchForUser']);
+  Route::post('/user/invite/{user:id}', [UserController::class, 'addFriend']);
+  Route::post('/user/acceptRequest', [UserController::class, 'acceptRequest_mobile']);
+});
+Route::middleware('auth:sanctum')->group(function () {
+  Route::get('my-profile', [ProfileController::class, 'myProfileMobile']);
+  Route::get('/profile/{user:username}', [ProfileController::class, 'ProfileMobile']);
+  Route::post('/profile/change_images', [ProfileController::class, 'changeImagesMobile']);
+  Route::patch('/profile', [ProfileController::class, 'update_mobile']);
+  Route::delete('/profile', [ProfileController::class, 'destroy_mobile']);
+  Route::post('/update-password', [PasswordController::class, 'update_mobile']);
+  Route::get('profile/posts/{user:username}', [ProfileController::class, 'getPostsForUserMobile']);
+  Route::get('/profile/download/{user:id}/{type}', [ProfileController::class, 'downloadImage']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+  Route::post('/group', [GroupControllerMobile::class, 'store']);
+  Route::get('/group/{group:slug}', [GroupControllerMobile::class, 'index']);
+  Route::post('/group/change_images', [GroupControllerMobile::class, 'changeImages']);
+  Route::post('/group/invite/{group:slug}', [GroupControllerMobile::class, 'inviteUser']);
+  Route::get('/group/accept-invitation/{token}', [GroupControllerMobile::class, 'acceptInvitation']);
+  Route::post('/group/join/{group:slug}', [GroupControllerMobile::class, 'joinGroup']);
+  Route::post('/group/approve/{group:slug}', [GroupControllerMobile::class, 'approveRequest']);
+  Route::post('/group/reject/{group:slug}', [GroupControllerMobile::class, 'reject']);
+  Route::post('/group/change-role/{group:slug}', [GroupControllerMobile::class, 'changeRole']);
+  Route::delete('/group/kick-out/{group:slug}', [GroupControllerMobile::class, 'kickOut']);
+  Route::put('/group/{group:slug}', [GroupControllerMobile::class, 'update']);
+  Route::get('/group/getPosts/{group:slug}', [GroupControllerMobile::class, 'getPostsForGroup']);
+  Route::post('/group/search', [GroupControllerMobile::class, 'searchForGroups']);
+  Route::get('/group/download/{group:id}/{type}', [GroupControllerMobile::class, 'downloadImage']);
+  Route::delete('/group/{group:slug}/destroy', [GroupControllerMobile::class, 'destroy']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {

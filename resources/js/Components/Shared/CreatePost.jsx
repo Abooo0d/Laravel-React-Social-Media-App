@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import CreatePostForm from "./CreatePostForm";
-import { useUserContext } from "@/Contexts/UserContext";
 const CreatePost = ({ groupId = null, classes, refetch }) => {
   const [showForm, setShowForm] = useState(false);
-  const { user } = useUserContext();
   return (
     <div
       className={`max-w-[700px] w-full dark:bg-gray-900 rounded-lg lg:px-6 px-4 flex flex-col duration-500  ${classes}`}

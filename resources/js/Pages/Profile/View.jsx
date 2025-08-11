@@ -83,10 +83,23 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
         </div>
         <div className="flex justify-between items-center bg-gray-900 py-4 lg:pl-[300px] md:pl-[250px] pl-[40px] max-md:pt-[50px] md:pr-8 pr-4">
           <div className="w-full flex flex-col justify-start items-start">
-            <div className="flex gap-2 justify-center items-start max-sm:flex-col max-sm:gap-0">
-              <h2 className="text-gray-300 md:text-[20px] text-[16px] mb-0">
-                {user.name}
-              </h2>
+            <div className="flex gap-2 justify-center items-start flex-col lg:flex-row max-sm:gap-0 w-full">
+              <div className="w-full flex items-center justify-between">
+                <h2 className="text-gray-300 md:text-[20px] text-[16px] mb-0">
+                  {user.name}
+                </h2>
+                {!isFriend ? (
+                  <PrimaryButton
+                    event={addFriend}
+                    classes="py-1.5 px-2 flex min-w-[100px] gap-2 text-[16px]"
+                  >
+                    Add Friend
+                    <FiUserPlus />
+                  </PrimaryButton>
+                ) : (
+                  <div className="text-gray-500 cursor-pointer">Friend.</div>
+                )}
+              </div>
               <p className=" text-gray-500 md:text-[20px] text-[16px]">
                 {user.email}
               </p>
@@ -95,17 +108,6 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
               @{user.username}
             </h2>
           </div>
-          {!isFriend ? (
-            <PrimaryButton
-              event={addFriend}
-              classes="py-1.5 px-2 flex w-[200px] gap-2"
-            >
-              Add Friend
-              <FiUserPlus />
-            </PrimaryButton>
-          ) : (
-            <div className="text-gray-500 cursor-pointer">Friend.</div>
-          )}{" "}
         </div>
         <div className="w-full h-full max-sm:pb-[55px] ">
           <Tab.Group>

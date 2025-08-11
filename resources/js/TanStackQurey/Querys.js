@@ -38,14 +38,13 @@ export const useGetNotifications = () => {
         }),
   });
 };
-export const useGetGroups = () => {
+export const useGetGroups = (user) => {
   const { setErrors } = useMainContext();
-  const { user } = useUserContext();
   return useQuery({
     queryKey: [QUERY_KEYS.GET_GROUPS],
     queryFn: () => {
       if (!user?.id) return {};
-      axiosClient
+      return axiosClient
         .get(route("getGroups"))
         .then(({ data }) => {
           return data;
@@ -56,6 +55,7 @@ export const useGetGroups = () => {
           ]);
         });
     },
+    enabled: !!user,
   });
 };
 export const useGetChatGroups = () => {

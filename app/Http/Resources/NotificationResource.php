@@ -16,7 +16,8 @@ class NotificationResource extends JsonResource
    */
   public function toArray(Request $request): array
   {
-    $user = User::find($this->data['actor_id']);
+
+    $user = User::find($this->data['actor_id'] );
     return [
       'id' => $this->id,
       'read_at' => $this->read_at,
@@ -28,7 +29,7 @@ class NotificationResource extends JsonResource
       'actor' => [
         'id' => $user?->id,
         'name' => $user?->name,
-        'avatar_url' => $user && $user->avatar_path
+        'avatar_url' => $user?->$user->avatar_path
           ? asset(Storage::url($user->avatar_path))
           : asset(path: 'images/default_avatar_image.png'),
       ]

@@ -1,7 +1,6 @@
 import React from "react";
 import { capitalizeFirstLetter } from "@/Hooks/Functions";
 import { Link } from "@inertiajs/react";
-import { useMainContext } from "@/Contexts/MainContext";
 const GroupeCard = ({ data, setShowGroupContainer }) => {
   return (
     <Link
@@ -15,8 +14,9 @@ const GroupeCard = ({ data, setShowGroupContainer }) => {
         className="absolute top-0 left-0 right-0 bottom-0 max-h-full h-full w-[100%] object-cover z-0 rounded-[10px]"
       />
       <div className="z-10 bg-black/30 backdrop-blur-sm w-[100%] h-[100%] py-2 px-4 rounded-[10px] overflow-hidden absolute inset-0 flex flex-col gap-2 justify-between items-start">
-        <div
-          className={`absolute top-[10px] right-[10px] backdrop-blur-md border-[1px] border-solid pl-[6px] px-[5px] py-[2px] rounded-sm text-gray-300 text-[10px] group-hover:opacity-100 opacity-0 duration-200
+        {!!data.status && (
+          <div
+            className={`absolute top-[10px] right-[10px] backdrop-blur-md border-[1px] border-solid pl-[6px] px-[5px] py-[2px] rounded-sm text-gray-300 text-[10px] group-hover:opacity-100 opacity-0 duration-200
         ${
           data.status === "approved"
             ? data.role === "admin"
@@ -25,11 +25,12 @@ const GroupeCard = ({ data, setShowGroupContainer }) => {
             : "bg-yellow-600/70 border-yellow-300"
         }
         `}
-        >
-          {data.status === "approved"
-            ? capitalizeFirstLetter(data.role)
-            : capitalizeFirstLetter(data.status)}
-        </div>
+          >
+            {data.status === "approved"
+              ? capitalizeFirstLetter(data.role)
+              : capitalizeFirstLetter(data.status)}
+          </div>
+        )}
         <div className="flex gap-2 w-full justify-start items-center">
           <img
             src={data.thumbnail_url || "/images/default_group_avatar_image.png"}

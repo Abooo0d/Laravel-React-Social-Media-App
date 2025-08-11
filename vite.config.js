@@ -5,7 +5,7 @@ import fs from "fs";
 import rollupNodePolyFill from "rollup-plugin-node-polyfills";
 export default defineConfig({
   define: {
-    __VITE_IS_HTTPS__: true,
+    // __VITE_IS_HTTPS__: true,
     global: "globalThis",
     "process.env": {},
   },
@@ -35,17 +35,29 @@ export default defineConfig({
   },
 
   server: {
-    host: "192.168.1.109",
+    host: "192.168.61.10",
     port: 3000,
-    https: {
-      key: fs.readFileSync("./ssl/192.168.1.109+1-key.pem"),
-      cert: fs.readFileSync("./ssl/192.168.1.109+1.pem"),
-    },
+    // https: {
+    //   key: fs.readFileSync("./ssl/192.168.1.109+1-key.pem"),
+    //   cert: fs.readFileSync("./ssl/192.168.1.109+1.pem"),
+    // },
     cors: {
       origin: [
-        "https://192.168.1.109:8000",
-        "https://192.168.1.109:3000",
-        "https://192.168.1.109:6001",
+        // "http://192.168.1.104:8000",
+        // "http://192.168.1.104:3000",
+        // "http://192.168.1.104:6001",
+
+        "http://192.168.61.10:8000",
+        "http://192.168.61.10:3000",
+        "http://192.168.61.10:6001",
+
+        // "http://192.168.1.109:8000",
+        // "http://192.168.1.109:3000",
+        // "http://192.168.1.109:6001",
+
+        // "http://192.168.61.10:8000",
+        // "http://192.168.61.10:3000",
+        // "http://192.168.61.10:6001",
       ],
       credentials: true,
     },

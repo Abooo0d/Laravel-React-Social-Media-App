@@ -109,4 +109,46 @@ class UserController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
+  public function acceptRequest_mobile(Request $request)
+  {
+    try {
+      $data = $request->validate([
+        'request_id' => ['required'],
+        'request_owner_id' => ['required']
+      ]);
+      $currentUser = Auth::user();
+      $user = User::where('id', $data['request_owner_id'])->first();
+      $friendRequest = Friends::where('id', $data['request_id'])
+        ->where('user_id', $user->id)
+        ->where('friend_id', auth()->id())
+        ->where('status', FriendsRequestEnum::PENDING->value)
+        ->first();
+      if ($friendRequest) {
+        $friendRequest->status = FriendsRequestEnum::ACCEPTED->value;
+        $friendRequest->save();
+        $user->notify(new FriendRequestNotification($currentUser, 'accept'));
+        $chat = Chat::create();
+        ChatUser::create([
+          'chat_id' => $chat->id,
+          'user_id' => $user->id,
+          'admin' => true
+        ]);
+        ChatUser::create([
+          'chat_id' => $chat->id,
+          'user_id' => Auth::id(),
+          'admin' => true
+        ]);
+        $chat->refresh();
+        $currentUser->refresh();
+        broadcast(new FriendRequestAccepted($chat, $user->id));
+        return response([
+          'message' => 'Friend Request Is Accepted',
+          'user' => new UserResource($currentUser)
+        ], 200);
+      } else
+        return response()->json(['message' => "There Is An Error With The Request"], 400);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
 }

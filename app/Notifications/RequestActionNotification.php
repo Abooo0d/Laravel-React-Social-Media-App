@@ -18,7 +18,7 @@ class RequestActionNotification extends Notification
   /**
    * Create a new notification instance.
    */
-  public function __construct(public Group $group, public string $type)
+  public function __construct(public Group $group, public string $type, public $userId)
   {
     //
   }
@@ -45,7 +45,8 @@ class RequestActionNotification extends Notification
       'type' => NotificationTypeEnum::REQUESTACTION->value,
       'message' => $message,
       'link' => route('group.profile', $this->group->slug),
-      'actor' => ['name' => $this->group->name, 'avatar' => Storage::url($this->group->thumbnail_path)]
+      'actor' => ['name' => $this->group->name, 'avatar' => Storage::url($this->group->thumbnail_path)],
+      'actor_id' => $this->userId
     ];
   }
 

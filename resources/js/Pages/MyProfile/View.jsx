@@ -252,7 +252,7 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
           </div>
         </div>
         <div className="w-full flex flex-col justify-start items-start gap-1 sm:gap-0 bg-gray-900 py-4 lg:pl-[300px] md:pl-[250px] pl-[160px]">
-          <div className="flex gap-2 justify-center items-start max-sm:flex-col max-sm:gap-0">
+          <div className="flex gap-2 justify-center items-start flex-col lg:flex-row max-sm:gap-0">
             <h2 className="text-gray-300 sm:text-lg text-[16px] mb-0">
               {user.name}
             </h2>

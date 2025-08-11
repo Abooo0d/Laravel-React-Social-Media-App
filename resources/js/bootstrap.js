@@ -19,7 +19,7 @@ import Echo from "laravel-echo";
 
 import Pusher from "pusher-js";
 
-Pusher.logToConsole = true;
+// Pusher.logToConsole = true;
 window.Pusher = Pusher;
 
 window.Echo = new Echo({
@@ -32,5 +32,5 @@ window.Echo = new Echo({
   wssPort: import.meta.env.VITE_PUSHER_PORT,
   forceTLS: import.meta.env.VITE_PUSHER_SCHEME === "https", // <-- Dynamic based on env
   encrypted: import.meta.env.VITE_PUSHER_SCHEME === "https", // <-- Dynamic based on env
-  disableStats: true,
+  disableStats: false,
 });

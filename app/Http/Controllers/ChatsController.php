@@ -196,7 +196,11 @@ class ChatsController extends Controller
       ]);
       $chat->update(['last_message_id' => $message->id]);
       $message->refresh();
-      broadcast(new NewMessageSent($message));
+      try {
+        broadcast(new NewMessageSent($message));
+      } catch (\Throwable $e) {
+        \Log::error('Broadcast failed: ' . $e->getMessage());
+      }
       return response(['message' => new MessageResource($message)], 200);
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');

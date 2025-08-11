@@ -40,12 +40,13 @@ class GroupInvitationNotification extends Notification
       'type' => NotificationTypeEnum::GROUPINVITATION->value,
       'message' => "Hi, You Have Been Invited To Join '{$this->group->name}' By '{$this->user->name}', \n This Invitation Is Valid For {$this->hours} Hours.",
       'link' => route('group.acceptInvitation', $this->token),
-      'actor' => [
-        'name' => $this->group->name,
-        'avatar' => $this->group->thumbnail_path
-          ? Storage::url($this->group->thumbnail_path)
-          : asset('images/default_group_avatar_image.png')
-      ],
+      // 'actor' => [
+      //   'name' => $this->group->name,
+      //   'avatar' => $this->group->thumbnail_path
+      //     ? Storage::url($this->group->thumbnail_path)
+      //     : asset('images/default_group_avatar_image.png')
+      // ],
+      'actor_id' => $this->user->id,
       'token' => $this->token
     ];
   }
