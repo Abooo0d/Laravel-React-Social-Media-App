@@ -354,7 +354,7 @@ class GroupControllerMobile extends Controller
           $groupUser->save();
           $admin = User::where('id', Auth::id())->first();
           $groupUser->user->notify(new GroupUsersActionNotification($admin, $group, 'ChangeRole', $data['role']));
-          return response(['success', 'Role Changed Successfully']);
+          return response(['message' => 'Role Changed Successfully'], 200);
         }
       }
 
@@ -375,13 +375,13 @@ class GroupControllerMobile extends Controller
         ->where('group_id', $group->id)
         ->first();
       if ($group->isOwner($user_id)) {
-        return redirect()->back()->with('error', 'You Can`t Kick Out The Owner Of The Group');
+        return response(['error' => 'You Can`t Kick Out The Owner Of The Group'], 403);
       }
       if ($groupUser) {
         $groupUser->delete();
         $admin = User::where('id', Auth::id())->first();
         $groupUser->user->notify(new GroupUsersActionNotification($admin, $group, 'KickOut'));
-        return response(['success' => 'Member Kicked Out Successfully'], 200);
+        return response(['message' => 'Member Kicked Out Successfully'], 200);
       }
     } catch (e) {
       return response(['error' => 'Some Thing Wrong Happened'], 405);

@@ -55,7 +55,7 @@ class GroupUsersActionNotification extends Notification
       'message' => $message,
       'link' => route('group.profile', $this->group->slug),
       // 'actor' => ['name' => $this->group->name, 'avatar' => Storage::url($this->group->thumbnail_path)]
-      'actor' => $this->admin->id
+      'actor_id' => $this->admin->id
     ];
   }
 
