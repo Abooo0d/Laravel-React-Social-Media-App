@@ -11,8 +11,8 @@ const InviteUserForm = ({ showForm, setShowForm, group }) => {
   const [name, setName] = useState("");
   const [searchResults, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState();
   const [didSearch, setDidSearch] = useState(false);
+  const [message, setMessage] = useState();
   const { data, post, get, processing, setData } = useForm({
     name: name,
   });

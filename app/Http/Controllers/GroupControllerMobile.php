@@ -110,9 +110,9 @@ class GroupControllerMobile extends Controller
         'status' => GroupUserStatusEnum::APPROVED->value,
         'role' => GroupUserRuleEnum::ADMIN->value,
       ]);
-      return redirect()->back()->with('success', 'Group Created Successfully');
+      return response(['message' => 'Group Created Successfully'], 200);
     } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Went Wrong');
+      return response(['error' => 'Some Thing Went Wrong'], 200);
     }
   }
   public function update(UpdateGroupRequest $request, Group $group)
@@ -122,10 +122,12 @@ class GroupControllerMobile extends Controller
       $user = User::where('id', AUth::id())->first();
       $admins = $group->adminUsers()->where('user_id', '!=', Auth::id())->get();
       Notification::send($admins, new GroupUpdateNotification($user, $group));
-      return redirect()->back()->with('success', 'Group updated successfully');
-
+      return response([
+        'message' => 'Group Updated Successfully',
+        'group' => new GroupResource($group)
+      ], 200);
     } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+      return response(['error' => 'Some Thing Wrong Happened'], 405);
     }
   }
   public function changeImages(Request $request)
@@ -228,7 +230,7 @@ class GroupControllerMobile extends Controller
       return response(['message' => "'{$user->name}' Was Invited Successfully"], 200);
 
     } catch (e) {
-      return response(['error' => 'Some Thing Wrong Happened']);
+      return response(['error' => 'Some Thing Wrong Happened'], 405);
     }
   }
   public function acceptInvitation(string $token)
@@ -244,9 +246,7 @@ class GroupControllerMobile extends Controller
         $message = 'This Link Is Expired!';
       }
       if ($message !== '') {
-        return inertia('Error', [
-          'message' => $message
-        ]);
+        return response(['message' => $message], 405);
       }
       $groupUser->status = GroupUserStatusEnum::APPROVED->value;
       $groupUser->token_used = Carbon::now();
@@ -282,10 +282,10 @@ class GroupControllerMobile extends Controller
         'role' => GroupUserRuleEnum::USER->value,
       ]);
       Notification::send($adminUsers, new JoinRequestNotification($group, $user, $join));
-      return response()->json([
+      return response([
         'message' => $message,
         'group' => new GroupResource($group)
-      ]);
+      ], 200);
     } catch (e) {
       return response(['error' => 'Some Thing Wrong Happened'], 405);
     }
