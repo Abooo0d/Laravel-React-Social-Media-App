@@ -142,7 +142,7 @@ class GroupControllerMobile extends Controller
         ->with('currentUserGroups')
         ->where('id', $data['group_id'])->first();
       if ($group->currentUserGroups['role'] !== 'admin') {
-        return back()->withErrors(['message' => 'You do not have permission to change images.']);
+        return response(['message' => 'You do not have permission to change images.'], 403);
       }
       /**
        * @var UploadedFile $cover
@@ -171,7 +171,6 @@ class GroupControllerMobile extends Controller
         $message = 'Thumbnail Image Updated Successfully';
       }
       DB::beginTransaction();
-      $files = [];
       $attachment = $cover ?: $thumbnail;
       $user = User::where('id', AUth::id())->first();
       $post = Post::create(
@@ -194,13 +193,13 @@ class GroupControllerMobile extends Controller
         'created_by' => $user->id,
       ]);
       DB::commit();
-
+      $group->refresh();
       $admins = $group->adminUsers()->where('user_id', '!=', Auth::id())->get();
       Notification::send($admins, new GroupUpdateNotification($user, $group, $image));
-      return redirect()->back()->with('success', $message);
+      return response(['message' => $message, 'group' => new GroupResource($group)], 200);
 
     } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+      return response(['message' => 'Some Thing Wrong Happened'], 405);
     }
   }
   public function inviteUser(InviteUserRequest $request, Group $group)
@@ -226,10 +225,10 @@ class GroupControllerMobile extends Controller
         'created_at' => '',
       ]);
       $groupUser->user->notify(new GroupInvitationNotification($group, $user, $hours, $token));
-      return redirect()->back()->with('success', "'{$user->name}' Was Invited Successfully");
+      return response(['message' => "'{$user->name}' Was Invited Successfully"], 200);
 
     } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+      return response(['error' => 'Some Thing Wrong Happened']);
     }
   }
   public function acceptInvitation(string $token)
@@ -255,10 +254,10 @@ class GroupControllerMobile extends Controller
       $adminUser = $groupUser->adminUser;
       $group = $groupUser->group;
       $adminUser->notify(new InvitationApprovedNotification($group, $groupUser->user));
-      return redirect()->back()->with('success', "You Are New A Member Of {$group->name} Group");
+      return response(['success' => "You Are New A Member Of {$group->name} Group"], 200);
 
     } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+      return response(['error' => 'Some Thing Wrong Happened'], 405);
     }
   }
   public function joinGroup(Request $request, Group $group)
@@ -288,7 +287,7 @@ class GroupControllerMobile extends Controller
         'group' => new GroupResource($group)
       ]);
     } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+      return response(['error' => 'Some Thing Wrong Happened'], 405);
     }
   }
   public function approveRequest(Request $request, Group $group)
@@ -310,7 +309,7 @@ class GroupControllerMobile extends Controller
       return response(['message' => "The User Have Been Approved"], 200);
 
     } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+      return response(['error' => 'Some Thing Wrong Happened'], 405);
     }
   }
   public function reject(Request $request, Group $group)
@@ -332,7 +331,7 @@ class GroupControllerMobile extends Controller
       return response(['message' => 'There Is An Error In The Request'], 400);
 
     } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+      return response(['error' => 'Some Thing Wrong Happened'], 405);
     }
   }
   public function changeRole(Request $request, Group $group): RedirectResponse|Response
@@ -355,14 +354,14 @@ class GroupControllerMobile extends Controller
           $groupUser->save();
           $admin = User::where('id', Auth::id())->first();
           $groupUser->user->notify(new GroupUsersActionNotification($admin, $group, 'ChangeRole', $data['role']));
-          return redirect()->back()->with('success', 'Role Changed Successfully');
+          return response(['success', 'Role Changed Successfully']);
         }
       }
 
       return response(['message' => 'there Is An Unexpected Error'], 400);
 
     } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+      return response(['error' => 'Some Thing Wrong Happened'], 405);
     }
   }
   public function kickOut(Request $request, Group $group)
@@ -382,10 +381,10 @@ class GroupControllerMobile extends Controller
         $groupUser->delete();
         $admin = User::where('id', Auth::id())->first();
         $groupUser->user->notify(new GroupUsersActionNotification($admin, $group, 'KickOut'));
-        return redirect()->back()->with('success', 'Member Kicked Out Successfully');
+        return response(['success' => 'Member Kicked Out Successfully'], 200);
       }
     } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+      return response(['error' => 'Some Thing Wrong Happened'], 405);
     }
   }
   public function searchForGroups(SearchGroupRequest $request)
@@ -394,9 +393,9 @@ class GroupControllerMobile extends Controller
       $data = $request->Validated();
       $groupsData = $request->group;
       if ($request->wantsJson())
-        return response()->json(['groups' => GroupResource::collection($groupsData)]);
+        return response(['groups' => GroupResource::collection($groupsData)], 200);
     } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+      return response(['error' => 'Some Thing Wrong Happened'], 405);
     }
   }
   public function downloadImage(Request $request, Group $group)
@@ -409,7 +408,8 @@ class GroupControllerMobile extends Controller
       $filePath = Storage::disk('public')->path($image);
       return response()->download($filePath, basename($image));
     } catch (e) {
-      return redirect()->back()->with('error', 'Something went wrong while downloading the image.');
+      return response(['error' => 'Something went wrong while downloading the image.']);
+
     }
   }
   public function destroy(Group $group)
@@ -447,7 +447,7 @@ class GroupControllerMobile extends Controller
       // DeleteGroup::dispatch($group)->delay(now()->addSeconds(2));
       return response(['message' => "Your Request Has Been Received, You Will Be Notified When The Group Is Deleted"], 200);
     } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+      return response(['error' => 'Some Thing Wrong Happened'], 405);
     }
   }
 }

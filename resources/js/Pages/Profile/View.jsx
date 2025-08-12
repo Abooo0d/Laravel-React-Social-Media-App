@@ -153,9 +153,15 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
               </Tab.Panel>
               <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
                 <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
-                  {user.friends?.map((friend, index) => (
+                  {user?.friends.length > 0 ? (
+                    <> {user.friends?.map((friend, index) => (
                     <UserFriendCard user={friend} key={index} />
-                  ))}
+                  ))}</>
+                  ) : (
+                    <div className="relative rounded-md p-3 bg-gray-900 duration-200 w-full text-center text-gray-400 cursor-default">
+                     This User Has No Friends Yet.
+                    </div>
+                  )}
                 </div>
               </Tab.Panel>
             </Tab.Panels>
