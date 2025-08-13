@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link, router, usePage } from "@inertiajs/react";
@@ -22,10 +21,12 @@ export default function Authenticated({ children }) {
   const { auth } = usePage().props;
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
+  const r = useState();
   const { groups, isLoadingGroups } = useUserContext();
   const [showFollowerContainer, setShowFollowerContainer] = useState(false);
   const [showNotificationsForm, setShowNotificationsForm] = useState(false);
   const [showGroupContainer, setShowGroupContainer] = useState(false);
+
   const [notificationsCount, setNotificationsCount] = useState(0);
   const [currentUser, setCurrentUser] = useState(auth?.user);
   const [followers, setFollowers] = useState(auth?.user?.friends);
@@ -58,6 +59,7 @@ export default function Authenticated({ children }) {
       setShowGroupContainer(false);
     }
   }, [showNotificationsForm]);
+
   useEffect(() => {
     if (!LoadingNotifications) {
       if (notifications?.notifications?.length > 0) {

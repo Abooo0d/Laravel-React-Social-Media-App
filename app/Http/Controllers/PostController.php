@@ -47,7 +47,6 @@ class PostController extends Controller
        * @var Post $post
        */
       $post = Post::create($data);
-
       /** @var UploadedFile[] $attachments */
       $attachments = $data['attachments'] ?? [];
       foreach ($attachments as $attachment) {

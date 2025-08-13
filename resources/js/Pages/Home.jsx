@@ -24,7 +24,7 @@ const Home = ({ auth }) => {
       setUser(auth.user);
     }
   }, [auth]);
-
+  let a = [1, 2, 3, 4, 5];
   useEffect(() => {
     if (!!errors || !!flash?.error) {
       let messages = [];
