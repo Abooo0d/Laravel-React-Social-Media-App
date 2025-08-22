@@ -17,6 +17,7 @@ import { MdLogout, MdLogin } from "react-icons/md";
 import SideBarButton from "@/Components/Shared/SideBarButton";
 import { IoHome } from "react-icons/io5";
 import { useUserContext } from "@/Contexts/UserContext";
+import AuthMenu from "@/Components/Shared/AuthMenu";
 export default function Authenticated({ children }) {
   const { auth } = usePage().props;
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -26,7 +27,8 @@ export default function Authenticated({ children }) {
   const [showFollowerContainer, setShowFollowerContainer] = useState(false);
   const [showNotificationsForm, setShowNotificationsForm] = useState(false);
   const [showGroupContainer, setShowGroupContainer] = useState(false);
-
+  const [showAuthMenu, setShowAuthMenu] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
   const [notificationsCount, setNotificationsCount] = useState(0);
   const [currentUser, setCurrentUser] = useState(auth?.user);
   const [followers, setFollowers] = useState(auth?.user?.friends);
@@ -40,25 +42,45 @@ export default function Authenticated({ children }) {
     setShowFollowerContainer(false);
     setShowGroupContainer(false);
     setShowNotificationsForm(false);
+    setShowAuthMenu(false);
+    setShowingNavigationDropdown(false);
   };
   useEffect(() => {
     if (showFollowerContainer) {
+      setShowOverlay(true);
       setShowGroupContainer(false);
       setShowNotificationsForm(false);
     }
   }, [showFollowerContainer]);
   useEffect(() => {
     if (showGroupContainer) {
+      setShowOverlay(true);
       setShowNotificationsForm(false);
       setShowFollowerContainer(false);
     }
   }, [showGroupContainer]);
   useEffect(() => {
     if (showNotificationsForm) {
+      setShowOverlay(true);
       setShowFollowerContainer(false);
       setShowGroupContainer(false);
     }
   }, [showNotificationsForm]);
+  useEffect(() => {
+    setShowOverlay(
+      showNotificationsForm ||
+        showGroupContainer ||
+        showFollowerContainer ||
+        showAuthMenu ||
+        showingNavigationDropdown
+    );
+  }, [
+    showNotificationsForm,
+    showGroupContainer,
+    showFollowerContainer,
+    showAuthMenu,
+    showingNavigationDropdown,
+  ]);
 
   useEffect(() => {
     if (!LoadingNotifications) {
@@ -158,54 +180,23 @@ export default function Authenticated({ children }) {
                   <IoReloadOutline />
                 </button>
               </div>
-              <div className="hidden sm:flex sm:items-center z-[100]">
-                <div className="relative ">
-                  {currentUser ? (
-                    <Dropdown>
-                      <Dropdown.Trigger>
-                        <span className="inline-flex rounded-md">
-                          <button
-                            type="button"
-                            className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
-                          >
-                            {currentUser?.name}
-                            <svg
-                              className="ms-2 -me-0.5 h-4 w-4"
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </button>
-                        </span>
-                      </Dropdown.Trigger>
-                      <Dropdown.Content>
-                        <Dropdown.Link href={route("profile.myProfile")}>
-                          Profile
-                        </Dropdown.Link>
-                        <Dropdown.Link
-                          href={route("logout")}
-                          method="post"
-                          as="button"
-                        >
-                          Log Out
-                        </Dropdown.Link>
-                      </Dropdown.Content>
-                    </Dropdown>
-                  ) : (
-                    <Link
-                      href={route("login")}
-                      className="px-4 py-2  flex justify-center items-center bg-gray-800/70 hover:bg-gray-800 text-gray-200 font-thin duration-200 border-[1px] border-solid border-gray-700 rounded-md "
-                    >
-                      Login
-                    </Link>
-                  )}
-                </div>
+              <div className="hidden sm:flex sm:items-center z-[200]">
+                {currentUser ? (
+                  <AuthMenu
+                    currentUser={currentUser}
+                    show={showAuthMenu}
+                    setShow={() => {
+                      setShowAuthMenu(!showAuthMenu);
+                    }}
+                  />
+                ) : (
+                  <Link
+                    href={route("login")}
+                    className="px-4 py-2  flex justify-center items-center bg-gray-800/70 hover:bg-gray-800 text-gray-200 font-thin duration-200 border-[1px] border-solid border-gray-700 rounded-md "
+                  >
+                    Login
+                  </Link>
+                )}
               </div>
               <div className="-me-2 flex items-center sm:hidden">
                 <button
@@ -317,7 +308,6 @@ export default function Authenticated({ children }) {
             >
               <MdGroups2 className="text-gray-400 text-lg w-[20px] h-[20px] mr-2" />
             </SideBarButton>
-
             <SideBarButton
               event={() => {
                 hideAll();
@@ -358,7 +348,16 @@ export default function Authenticated({ children }) {
             )}
           </div>
         </div>
+
         <main className="flex-[3]">{children}</main>
+        <div
+          className={`absolute top-0 left-0 min-h-[100vh] min-w-[100vw] bg-transparent ${
+            showOverlay ? "visible z-[150]" : "invisible z-0"
+          }`}
+          onClick={() => {
+            hideAll();
+          }}
+        />
       </div>
     </div>
   );

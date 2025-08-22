@@ -109,7 +109,7 @@ const AIChatForm = () => {
         className={`absolute bottom-[134px] left-0 w-full h-[50px] bg-gradient-to-t from-homeFeed via-homeFeed/80 to-transparent duration-200 `}
       />
       <div className="w-full flex justify-center items-center mb-4">
-        <div className="w-full max-w-[90%] rounded-lg bg-gray-900/50 backdrop-blur-sm border-solid border-[1px] border-gray-500/50 flex justify-start items-end px-4 py-2 duration-200">
+        <div className="w-full max-w-[90%] rounded-[30px] bg-gray-900/50 backdrop-blur-sm border-solid border-[1px] border-gray-500/50 flex justify-start items-end px-4 py-2 duration-200">
           <div className="flex justify-start items-center gap-2">
             <button className="w-[30px] h-[40px] rounded-md hover:bg-gray-900 bg-transparent hover:border-gray-500/50 border-transparent border-[1px] border-solid hover:border-solid duration-200 flex justify-center items-center text-gray-500">
               <FaFile />
@@ -123,7 +123,7 @@ const AIChatForm = () => {
             className="bg-transparent border-none outline-none ring-0 focus:ring-0 w-full max-h-[180px] duration-200 resize-none text-gray-300 overflow-auto"
           />
           <button
-            className="w-[30px] h-[40px] rounded-md hover:text-sky-500 hover:bg-gray-900 bg-transparent hover:border-gray-500/50 border-transparent border-[1px] border-solid hover:border-solid duration-200 flex justify-center items-center text-gray-500"
+            className="w-[30px] h-[40px] rounded-md hover:bg-gray-900 bg-transparent hover:border-gray-500/50 border-transparent border-[1px] border-solid hover:border-solid duration-200 flex justify-center items-center text-gray-500"
             onClick={() => {
               newMessage();
             }}

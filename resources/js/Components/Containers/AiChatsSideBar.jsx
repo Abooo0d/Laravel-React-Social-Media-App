@@ -9,7 +9,7 @@ const AiChatsSideBar = () => {
   const [showChats, setShowChats] = useState(false);
   const { setCurrentAIChat } = useAIContext();
   return (
-    <div className="relative z-[101]">
+    <div className="relative z-[100]">
       <button
         className={`p-[4px] cursor-pointer z-[101] absolute top-[100px] duration-200 backdrop-blur-lg w-[40px] h-[50px] text-sm flex justify-center items-center flex-col bg-gray-800/80 border-[1px] border-gray-600/70 border-solid rounded-r-md border-l-0 text-gray-400
               ${showChats ? "left-[270px]" : "left-[0px]"}`}
