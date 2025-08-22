@@ -15,7 +15,7 @@ const PostOwnerInfo = ({ post }) => {
           <h2 className=" flex justify-start items-center dark:text-gray-400 lg:text-[18px] text-[16px] text-gray-900 duration-200">
             {post?.user && (
               <Link
-                href={route("profile.view", post?.user?.name)}
+                href={route("profile.view", post?.user?.username)}
                 className=" hover:no-underline"
               >
                 {post?.user?.name}

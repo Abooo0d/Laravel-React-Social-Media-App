@@ -37,7 +37,7 @@ class ProfileController extends Controller
       $posts_ids = $user->posts($user->id)->pluck('id')->toArray();
       $photos = PostAttachments::whereIn('post_id', $posts_ids)->where('mime', 'like', 'image/%')->get();
       if ($user->id === Auth::id())
-        return Redirect::route('profile.myProfile', $user->slug);
+        return Redirect::route('profile.myProfile');
       if ($request->wantsJson()) {
         return response([
           'posts' => PostResource::collection($posts)

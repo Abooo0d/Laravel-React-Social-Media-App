@@ -105,7 +105,6 @@ export const ChatsContext = ({ children }) => {
 
   useEffect(() => {
     if (!user?.id) return;
-
     window.Echo.join("online")
       .here((users) => {
         setOnlineUsers(users);

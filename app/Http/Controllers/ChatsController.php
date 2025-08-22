@@ -70,6 +70,35 @@ class ChatsController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
+  public function index_mobile(Request $request)
+  {
+    try {
+      $chats = auth()
+        ->user()
+        ->chats()
+        ->where('is_group', true)
+        ->where('withAI', false)
+        ->with('users', 'messages')
+        ->orderBy('last_message_id', "desc")
+        ->get();
+      $allChats = auth()
+        ->user()
+        ->chats()
+        ->where('is_group', false)
+        ->where('withAI', false)
+        ->orderBy('last_message_id', 'desc')
+        ->get();
+      return response(
+        [
+          'groupsChat' => $chats ? ChatResource::collection($chats) : [],
+          "allChats" => ChatResource::collection($allChats)
+        ],
+        200
+      );
+    } catch (e) {
+      return response(['error' => 'Some Thing Wrong Happened'], 405);
+    }
+  }
   public function getChat(Request $request)
   {
     try {

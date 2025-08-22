@@ -3,8 +3,9 @@ import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import { Link, useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PrimaryButton } from "@/Components/Shared/Buttons";
+import { useUserContext } from "@/Contexts/UserContext";
 
 export default function UpdateProfileInformation({
   mustVerifyEmail,
@@ -12,7 +13,7 @@ export default function UpdateProfileInformation({
   className = "",
 }) {
   const user = usePage().props.auth.user;
-
+  const { setUser } = useUserContext();
   const [name, setName] = useState(user.name);
   const [username, setUsername] = useState(user.username);
   const [email, setEmail] = useState(user.email);
@@ -25,10 +26,17 @@ export default function UpdateProfileInformation({
 
   const submit = (e) => {
     e.preventDefault();
-
     patch(route("profile.update"));
   };
-
+  useEffect(() => {
+    setUser(user);
+  }, []);
+  useEffect(() => {
+    setData({
+      name: name,
+      email: email,
+    });
+  }, [name, email]);
   return (
     <section className={className}>
       <header>
@@ -47,7 +55,9 @@ export default function UpdateProfileInformation({
 
           <TextInput
             placeholder={"Name"}
-            setValue={setName}
+            setValue={(e) => {
+              setName(e);
+            }}
             id="name"
             classes="mt-1 block w-full"
             value={name}

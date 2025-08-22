@@ -11,7 +11,6 @@ const AiChatMessagesContainer = () => {
     <div className="flex justify-start items-center flex-col-reverse max-w-[90%] max-h-[calc(100vh-200px)] h-full w-full overflow-auto px-4 py-2 pb-[40px]">
       {currentAIChat?.messages?.length > 0 ? (
         <>
-          {isLoading && <AISpinner />}
           {currentAIChat.messages.map((message, index) => (
             <AIMessageCard
               message={message}

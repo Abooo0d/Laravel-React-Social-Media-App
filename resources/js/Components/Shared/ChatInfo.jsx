@@ -15,8 +15,8 @@ const ChatInfo = () => {
     setIsCaller,
   } = useChatsContext();
   const { onlineUsersIds } = useChatsContext();
-  const { user } = useUserContext();
   const [online, setOnline] = useState();
+  const { user } = useUserContext();
   const showUsers = () => {
     let users = [];
     if (currentChat?.users?.length > 3) {
@@ -38,12 +38,7 @@ const ChatInfo = () => {
   }, [onlineUsersIds]);
   return (
     <div className="w-full bg-gray-900 z-[50] md:py-2 md:px-8 py-1 px-4 gap-4 border-b-solid border-b-[1px] border-gray-600/50 backdrop-blur-md cursor-pointer flex justify-between items-center">
-      <div
-        className="flex justify-start items-center gap-4 flex-1 duration-200 rounded-md px-2"
-        // onClick={(e) => {
-        //   setShowChatInfo(true);
-        // }}
-      >
+      <div className="flex gap-2">
         <div className="relative ">
           <img
             src={currentChat?.avatar_url}

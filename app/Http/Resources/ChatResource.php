@@ -30,7 +30,7 @@ class ChatResource extends JsonResource
         : asset('images/default_avatar_image.png');
     } else
       $image = !!$this->users->firstWhere('id', '!=', auth()->id())?->avatar_path
-        ? Storage::url($this->users->firstWhere('id', '!=', auth()->id())?->avatar_path)
+        ? asset(Storage::url($this->users->firstWhere('id', '!=', auth()->id())?->avatar_path))
         : asset('images/default_avatar_image.png');
     return [
       'id' => $this->id,
@@ -41,7 +41,7 @@ class ChatResource extends JsonResource
         fn($user) => [
           'id' => $user->id,
           'name' => $user->name,
-          'avatar' => $user->avatar_path ? Storage::url($user->avatar_path) : asset('images/default_avatar_image.png'),
+          'avatar' => $user->avatar_path ? asset(Storage::url($user->avatar_path)) : asset('images/default_avatar_image.png'),
           'is_admin' => $user->pivot->admin
         ]
       ),

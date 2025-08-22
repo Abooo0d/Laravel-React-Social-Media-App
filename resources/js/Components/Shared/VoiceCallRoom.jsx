@@ -199,7 +199,7 @@ const VoiceCallRoom = () => {
             <img
               src={currentChat?.avatar_url}
               alt="image"
-              className="w-[150px] h-[150px] rounded-full "
+              className="w-[150px] h-[150px] rounded-full object-cover"
             />
             <div className="flex flex-col gap-2 absolute top-[40px] left-[50%] translate-x-[-50%]">
               <h2 className="text-2xl text-gray-300 text-center">

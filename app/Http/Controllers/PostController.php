@@ -183,7 +183,6 @@ class PostController extends Controller
         'num_of_reactions' => $reactions,
         'user_has_reaction' => $userReaction
       ]);
-
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
@@ -309,6 +308,4 @@ class PostController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
-
-
 }

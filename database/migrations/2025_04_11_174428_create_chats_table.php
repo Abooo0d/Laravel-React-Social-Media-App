@@ -21,7 +21,6 @@ return new class extends Migration {
       $table->integer('owner')->nullable();
       $table->boolean('withAI')->default(false);
       $table->timestamps();
-
     });
   }
 

@@ -12,10 +12,12 @@ use App\Models\User;
 use Gemini\Data\Content;
 use Gemini\Laravel\Facades\Gemini;
 use Illuminate\Http\Request;
+use Illuminate\Routing\ResponseFactory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Gemini\Enums\Role;
+use Response;
 
 class AIController extends Controller
 {
@@ -54,51 +56,47 @@ class AIController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
-
   public function newMessage(Request $request)
   {
-    $data = $request->validate([
-      'message' => ['required', 'string'],
-      'chat_id' => ['nullable', 'exists:chats,id']
-    ]);
-
-    $AIUser = User::firstOrCreate([
-      'email' => 'ai@assistant.local'
-    ], [
-      'name' => 'Gemini AI',
-      'password' => bcrypt(Str::random(20)) // random secure password
-    ]);
-
-    // Step 1: Find or Create Chat
-    $chatId = $data['chat_id'];
-    $chat = !!$chatId
-      ? Chat::find($chatId)
-      : Chat::create([
-        'name' => '',
-        'is_group' => false,
-        'avatar_path' => '',
-        'owner' => auth()->id(),
-        'withAI' => true
+    try {
+      $data = $request->validate([
+        'message' => ['required', 'string'],
+        'chat_id' => ['nullable', 'exists:chats,id']
       ]);
-
-    // Attach user to chat if newly created
-    if (!$chatId) {
-      ChatUser::create([
+      $AIUser = User::firstOrCreate([
+        'email' => 'ai@assistant.local'
+      ], [
+        'name' => 'Gemini AI',
+        'password' => bcrypt(Str::random(20)) // random secure password
+      ]);
+      // Step 1: Find or Create Chat
+      $chatId = $data['chat_id'];
+      $chat = !!$chatId
+        ? Chat::find($chatId)
+        : Chat::create([
+          'name' => '',
+          'is_group' => false,
+          'avatar_path' => '',
+          'owner' => auth()->id(),
+          'withAI' => true
+        ]);
+      // Attach user to chat if newly created
+      if (!$chatId) {
+        ChatUser::create([
+          'chat_id' => $chat->id,
+          'user_id' => auth()->id(),
+          'admin' => true
+        ]);
+      }
+      // Step 2: Save User Message
+      Message::create([
         'chat_id' => $chat->id,
         'user_id' => auth()->id(),
-        'admin' => true
+        'body' => $data['message']
       ]);
-    }
 
-    // Step 2: Save User Message
-    Message::create([
-      'chat_id' => $chat->id,
-      'user_id' => auth()->id(),
-      'body' => $data['message']
-    ]);
-
-    $systemPrompt = Content::parse(
-      part: <<<MARKDOWN
+      $systemPrompt = Content::parse(
+        part: <<<MARKDOWN
         You are an AI assistant. Always respond using proper Markdown formatting:
         - Use `#`, `##`, or `###` for headings
         - Use bullet points `-` or numbered lists `1.` where appropriate
@@ -106,57 +104,56 @@ class AIController extends Controller
         - Bold key concepts with **double asterisks**
         - Never skip Markdown structure, even for summaries or titles
         MARKDOWN,
-      role: Role::USER
-    );
-
-    // Step 3: Build full message history
-    $history = collect([$systemPrompt])
-      ->merge(
-        $chat
-          ->AImessages()
-          ->orderBy('created_at')
-          ->get()
-          ->map(
-            fn($msg) => Content::parse(
-              part: $msg->body,
-              role: $msg->user_id === auth()->id() ? Role::USER : Role::MODEL
-            )
-          )
-      )
-      ->toArray();
-
-    // Step 4: Send to Gemini
-    $geminiChat = Gemini::chat(model: 'gemini-2.5-flash')->startChat(history: $history);
-    $response = $geminiChat->sendMessage($data['message']);
-
-    $aiResponse = $response->text();
-    if (!$chatId) {
-      $titlePrompt = "Based on this conversation, suggest a short and clear title for the chat (max 5 words):\n\n\"{$data['message']}\"\n\nResponse:\n\"{$aiResponse}\"";
-      $titleResponse = Gemini::chat(model: 'gemini-2.5-flash')
-        ->sendMessage($titlePrompt);
-
-      $title = trim($titleResponse->text());
-
-      $chat->update(['name' => $title ?? '']);
-    }
-
-    // Step 5: Save AI Response
-    $aiMessage = Message::create([
-      'chat_id' => $chat->id,
-      'user_id' => $AIUser->id,
-      'body' => $aiResponse,
-      'from' => 'AI'
-    ]);
-    if (!$chatId) {
-
-      return response(
-        [
-          'message' => new AIMessageResource($aiMessage),
-          'chat' => new AIChatResource($chat)
-        ]
+        role: Role::USER
       );
+      // Step 3: Build full message history
+      $history = collect([$systemPrompt])
+        ->merge(
+          $chat
+            ->AImessages()
+            ->orderBy('created_at')
+            ->get()
+            ->map(
+              fn($msg) => Content::parse(
+                part: $msg->body,
+                role: $msg->user_id === auth()->id() ? Role::USER : Role::MODEL
+              )
+            )
+        )
+        ->toArray();
+      // Step 4: Send to Gemini
+      try {
+        $geminiChat = Gemini::chat('gemini-2.5-flash')->startChat($history);
+        $response = $geminiChat->sendMessage($data['message']);
+        $aiResponse = $response->text();
+        if (!$chatId) {
+          $titlePrompt = "Based on this conversation, suggest a short and clear title for the chat (max 5 words):\n\n\"{$data['message']}\"\n\nResponse:\n\"{$aiResponse}\"";
+          $titleResponse = Gemini::chat('gemini-2.5-flash')
+            ->sendMessage($titlePrompt);
+          $title = trim($titleResponse->text());
+          $chat->update(['name' => $title ?? '']);
+        }
+      } catch (\Throwable $th) {
+        return response(['error', 'SomeThing Went Wrong'], 403);
+      }
+      // Step 5: Save AI Response
+      $aiMessage = Message::create([
+        'chat_id' => $chat->id,
+        'user_id' => $AIUser->id,
+        'body' => $aiResponse,
+        'from' => 'AI'
+      ]);
+      if (!$chatId) {
+        return response(
+          [
+            'message' => new AIMessageResource($aiMessage),
+            'chat' => new AIChatResource($chat)
+          ]
+        );
+      }
+      return response(['message' => new AIMessageResource($aiMessage)]);
+    } catch (\Throwable $th) {
+      return response(['error', 'SomeThing Went Wrong'], 403);
     }
-    return response(['message' => new AIMessageResource($aiMessage)]);
-
   }
 }

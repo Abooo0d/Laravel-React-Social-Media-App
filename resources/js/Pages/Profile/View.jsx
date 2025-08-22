@@ -85,9 +85,14 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
           <div className="w-full flex flex-col justify-start items-start">
             <div className="flex gap-2 justify-center items-start flex-col lg:flex-row max-sm:gap-0 w-full">
               <div className="w-full flex items-center justify-between">
-                <h2 className="text-gray-300 md:text-[20px] text-[16px] mb-0">
-                  {user.name}
-                </h2>
+                <div className="flex flex-col">
+                  <h2 className="text-gray-300 md:text-[20px] text-[16px] mb-0">
+                    {user.name}
+                  </h2>
+                  <p className=" text-gray-500 md:text-[20px] text-[16px]">
+                    {user.email}
+                  </p>
+                </div>
                 {!isFriend ? (
                   <PrimaryButton
                     event={addFriend}
@@ -100,9 +105,6 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
                   <div className="text-gray-500 cursor-pointer">Friend.</div>
                 )}
               </div>
-              <p className=" text-gray-500 md:text-[20px] text-[16px]">
-                {user.email}
-              </p>
             </div>
             <h2 className="text-gray-500 mb-0 md:text-[20px] text-[16px]">
               @{user.username}
@@ -154,12 +156,15 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
               <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
                 <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
                   {user?.friends.length > 0 ? (
-                    <> {user.friends?.map((friend, index) => (
-                    <UserFriendCard user={friend} key={index} />
-                  ))}</>
+                    <>
+                      {" "}
+                      {user.friends?.map((friend, index) => (
+                        <UserFriendCard user={friend} key={index} />
+                      ))}
+                    </>
                   ) : (
                     <div className="relative rounded-md p-3 bg-gray-900 duration-200 w-full text-center text-gray-400 cursor-default">
-                     This User Has No Friends Yet.
+                      This User Has No Friends Yet.
                     </div>
                   )}
                 </div>

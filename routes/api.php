@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ChatsController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -100,4 +101,28 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('guest')->group(function () {
   Route::post('/login-mobile', [AuthUserMobileController::class, 'loginMobile']);
   Route::post('/signup-mobile', [AuthUserMobileController::class, 'signUpMobile']);
+});
+Route::middleware('auth:sanctum')->group(function () {
+  Route::get('/chats', [ChatsController::class, 'index_mobile']);
+  Route::post('/chats', [ChatsController::class, 'getChat']);
+  Route::post('/chat/new_message/{chat:id}', [chatsController::class, 'newMessage']);
+  Route::post('/chat/read-message/{message:id}', [ChatsController::class, 'messageRead']);
+  Route::get('/chat/get_more_messages/{message:id}', [ChatsController::class, 'getMoreMessages']);
+  Route::post('/chat/search', [ChatsController::class, 'searchForChat']);
+  Route::get('/chat/download/{attachment}', [ChatsController::class, 'downloadAttachment']);
+  Route::post('/chat/update-message/{message:id}', [ChatsController::class, 'UpdateMessage']);
+  Route::delete('/chat/delete-message/{message:id}', [ChatsController::class, 'deleteMessage']);
+  Route::post('/chat/create-groupChat', [ChatsController::class, 'createChatGroup']);
+  Route::post('/chat/{chat:id}/mute', [ChatsController::class, 'muteChat']);
+  Route::post('/chat/{chat:id}/block', [ChatsController::class, 'blockChat']);
+  Route::post('/chat/{chat:id}/leave', [ChatsController::class, 'leaveChatGroup']);
+  Route::delete('/chat/{chat:id}/delete', action: [ChatsController::class, 'deleteChat']);
+  Route::post('/chat/{chat:id}/change-image', [ChatsController::class, 'ChangeChatGroupImage']);
+  Route::post('/chat/{chat:id}/change-name', [ChatsController::class, 'ChangeChatName']);
+  Route::post('/chat/{chat:id}/add-users', [ChatsController::class, 'addUsersToChat']);
+  Route::post('chat/{chat:id}/set-admin', [chatsController::class, 'ChangeRoleInChat']);
+  Route::post('chat/{chat:id}/kick-out', [ChatsController::class, 'kickOut']);
+  Route::post('/chat/{chat:id}/video-call', [ChatsController::class, 'videoCall']);
+  Route::post('/chat/{chat:id}/voice-call', [ChatsController::class, 'voiceCall']);
+  Route::post('/chat/{chat:id}/decline-call', [ChatsController::class, 'callDecline']);
 });

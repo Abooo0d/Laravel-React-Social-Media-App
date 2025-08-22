@@ -42,7 +42,7 @@ class MessageResource extends JsonResource
         'name' => $this->user->name,
         'username' => $this->user->username,
         'avatar_url' => $this->user->avatar_path
-          ? Storage::url($this->user->avatar_path)
+          ? asset(Storage::url($this->user->avatar_path))
           : asset('images/default_avatar_image.png'),
       ],
       'edited' => (bool) $this->edited,

@@ -35,13 +35,34 @@ Route::middleware('auth')->group(function () {
 });
 // Profile Group
 Route::middleware('auth')->group(function () {
-  Route::get('my-profile', [ProfileController::class, 'myProfile'])->name('profile.myProfile');
-  Route::get('/profile/{user:username}', [ProfileController::class, 'index'])->name('profile.view');
-  Route::post('/profile/change_images', [ProfileController::class, 'changeImages'])->name('profile.changeImages');
-  Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-  Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-  Route::get('profile/posts/{user:id}', [ProfileController::class, 'getPostsForUser'])->name('postsForUser');
-  Route::get('/profile/download/{user:id}/{type}', [ProfileController::class, 'downloadImage'])->name('download.userImage');
+  Route::get(
+    'my-profile',
+    [ProfileController::class, 'myProfile']
+  )->name('profile.myProfile');
+  Route::get(
+    '/profile/{user:username}',
+    [ProfileController::class, 'index']
+  )->name('profile.view');
+  Route::post(
+    '/profile/change_images',
+    [ProfileController::class, 'changeImages']
+  )->name('profile.changeImages');
+  Route::patch(
+    '/profile',
+    [ProfileController::class, 'update']
+  )->name('profile.update');
+  Route::delete(
+    '/profile',
+    [ProfileController::class, 'destroy']
+  )->name('profile.destroy');
+  Route::get(
+    'profile/posts/{user:id}',
+    [ProfileController::class, 'getPostsForUser']
+  )->name('postsForUser');
+  Route::get(
+    '/profile/download/{user:id}/{type}',
+    [ProfileController::class, 'downloadImage']
+  )->name('download.userImage');
 });
 // Post Group
 Route::middleware('auth')->group(function () {
