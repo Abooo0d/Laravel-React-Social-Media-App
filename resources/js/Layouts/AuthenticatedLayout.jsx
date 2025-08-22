@@ -351,7 +351,7 @@ export default function Authenticated({ children }) {
 
         <main className="flex-[3]">{children}</main>
         <div
-          className={`absolute top-0 left-0 min-h-[100vh] min-w-[100vw] bg-transparent ${
+          className={`absolute top-0 left-0 min-h-[100vh] min-w-[100vw] bg-red-500 ${
             showOverlay ? "visible z-[150]" : "invisible z-0"
           }`}
           onClick={() => {
