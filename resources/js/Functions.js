@@ -87,6 +87,9 @@ const formatBytes = (bytes, decimals = 2) => {
   }
   return parseFloat(size.toFixed(dm)) + " " + sizes[i];
 };
+const getRandomFloat = (min, max) => {
+  return Math.round(Math.random() * 10 + min);
+};
 export {
   formatRelativeTime,
   isImage,
@@ -96,4 +99,5 @@ export {
   MessageIsPDF,
   isPreviewAble,
   formatBytes,
+  getRandomFloat,
 };

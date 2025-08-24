@@ -25,15 +25,12 @@ const HomeFeed = ({
         refetch={refetch}
         suggestions={suggestions}
         showSuggestions={true}
+        isLoadingSuggestions={isLoadingSuggestions}
       >
         <CreatePost
           classes="px-3 py-3 bg-gray-900"
           refetch={refetch}
           groupId=""
-        />
-        <FriendSuggestionsContainer
-          data={suggestions}
-          isLoadingSuggestions={isLoadingSuggestions}
         />
       </PostContainer>
     </div>

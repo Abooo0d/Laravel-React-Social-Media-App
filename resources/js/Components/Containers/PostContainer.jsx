@@ -5,6 +5,8 @@ import axiosClient from "@/AxiosClient/AxiosClient";
 import { useUserContext } from "@/Contexts/UserContext";
 import Spinner from "../Shared/Spinner";
 import HomeLoader from "./HomeLoader";
+import { getRandomFloat } from "@/Functions";
+import FriendSuggestionsContainer from "./FriendSuggestionsContainer";
 
 const PostContainer = ({
   posts,
@@ -15,11 +17,15 @@ const PostContainer = ({
   refetch,
   suggestions,
   showSuggestions,
+  isLoadingSuggestions,
 }) => {
   const [ref, inView, entry] = useInView();
   const [allPosts, setAllPosts] = useState(posts?.data);
   const [allData, setAllData] = useState(posts);
   const { user } = useUserContext();
+  let random = getRandomFloat(10, 20);
+  console.log(random);
+
   useEffect(() => {
     if (inView && allData?.meta?.current_page < allData?.meta?.last_page) {
       axiosClient
@@ -55,12 +61,41 @@ const PostContainer = ({
                   {allPosts?.length > 0 ? (
                     <>
                       {allPosts.map((post, index) => (
-                        <PostCard
-                          post={post}
-                          currentUser={user}
-                          key={index}
-                          refetch={refetch}
-                        />
+                        <>
+                          {index == random ? (
+                            <>
+                              {showSuggestions ? (
+                                <>
+                                  <FriendSuggestionsContainer
+                                    data={suggestions}
+                                    isLoadingSuggestions={isLoadingSuggestions}
+                                    key={index}
+                                  />
+                                  <PostCard
+                                    post={post}
+                                    currentUser={user}
+                                    key={index}
+                                    refetch={refetch}
+                                  />
+                                </>
+                              ) : (
+                                <PostCard
+                                  post={post}
+                                  currentUser={user}
+                                  key={index}
+                                  refetch={refetch}
+                                />
+                              )}
+                            </>
+                          ) : (
+                            <PostCard
+                              post={post}
+                              currentUser={user}
+                              key={index}
+                              refetch={refetch}
+                            />
+                          )}
+                        </>
                       ))}
                       {allData?.meta?.current_page <
                       allData?.meta?.last_page ? (
