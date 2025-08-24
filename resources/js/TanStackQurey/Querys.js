@@ -126,3 +126,20 @@ export const useGetPostsForUser = (userId) => {
         }),
   });
 };
+export const useGetSuggestions = () => {
+  const { setErrors } = useMainContext();
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_SUGGESTIONS],
+    queryFn: () =>
+      axiosClient
+        .get(route("getSuggestions"))
+        .then((data) => {
+          return data;
+        })
+        .catch((error) => {
+          setErrors([
+            error?.response?.data?.message || "Some Thing Went Wrong",
+          ]);
+        }),
+  });
+};

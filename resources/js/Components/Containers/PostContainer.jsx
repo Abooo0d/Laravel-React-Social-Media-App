@@ -13,6 +13,8 @@ const PostContainer = ({
   children,
   isLoading,
   refetch,
+  suggestions,
+  showSuggestions,
 }) => {
   const [ref, inView, entry] = useInView();
   const [allPosts, setAllPosts] = useState(posts?.data);

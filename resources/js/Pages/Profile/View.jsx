@@ -14,8 +14,6 @@ import ProfilePhotosFullView from "@/Components/Shared/ProfilePhotosFullView";
 import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
 
 const View = ({ auth, user, posts, isFriend, photos }) => {
-  console.log(posts);
-
   const [imageIndex, setImageIndex] = useState(0);
   const [showImage, setShowImage] = useState(false);
   const { setSuccessMessage, setErrors } = useMainContext();

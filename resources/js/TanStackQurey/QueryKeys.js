@@ -7,4 +7,5 @@ export const QUERY_KEYS = {
   GET_MORE_MESSAGES: "getMoreMessages",
   GET_POSTS_FOR_GROUP: "getPostsForGroup",
   GET_POSTS_FOR_USER: "getPostsForUser",
+  GET_SUGGESTIONS: "getSuggestions",
 };

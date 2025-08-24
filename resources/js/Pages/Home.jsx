@@ -3,13 +3,19 @@ import HomeFeed from "@/Components/Containers/HomeFeed";
 import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import { useGetPosts } from "@/TanStackQurey/Querys";
+import { useGetPosts, useGetSuggestions } from "@/TanStackQurey/Querys";
 import { Head, router, usePage } from "@inertiajs/react";
 import { useEffect } from "react";
 const Home = ({ auth }) => {
   const { setUser } = useUserContext();
   const { setSuccessMessage, setErrors } = useMainContext();
   const { data: posts, refetch, isLoading: loadingPosts } = useGetPosts();
+
+  const {
+    data: suggestions,
+    isLoading: isLoadingSuggestions,
+    refetch: refetchSugGestions,
+  } = useGetSuggestions();
 
   const { flash, errors } = usePage().props;
   useEffect(() => {
@@ -40,7 +46,13 @@ const Home = ({ auth }) => {
         <link rel="icon" type="image/svg+xml" href="/Logo_ico.ico" />
       </Head>
       <div className="flex min-h-[calc(100vh-66px)] max-h-[calc(100vh-66px)] overflow-hidden bg-gray-900">
-        <HomeFeed loading={loadingPosts} posts={posts} refetch={refetch} />
+        <HomeFeed
+          loading={loadingPosts}
+          posts={posts}
+          refetch={refetch}
+          suggestions={suggestions}
+          isLoadingSuggestions={isLoadingSuggestions}
+        />
       </div>
     </>
   );

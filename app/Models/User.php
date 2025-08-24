@@ -64,10 +64,10 @@ class User extends Authenticatable
       ]);
     });
   }
-  public function groups($user_id)
+  public function groups()
   {
     return $this->hasMany(GroupUsers::class, 'user_id')->
-      where('user_id', $user_id);
+      where('user_id', auth()->id());
   }
   public function posts($user_id)
   {

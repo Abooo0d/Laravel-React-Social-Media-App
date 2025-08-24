@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 import CreatePost from "../Shared/CreatePost";
 import PostContainer from "./PostContainer";
+import FriendSuggestionsContainer from "./FriendSuggestionsContainer";
 
-const HomeFeed = ({ posts, loading, refetch }) => {
+const HomeFeed = ({
+  posts,
+  loading,
+  refetch,
+  suggestions,
+  isLoadingSuggestions,
+}) => {
   const [allPosts, setAllPosts] = useState(posts?.posts);
   useEffect(() => {
     setAllPosts(posts?.posts);
@@ -16,11 +23,17 @@ const HomeFeed = ({ posts, loading, refetch }) => {
         classes="px-4"
         isLoading={loading}
         refetch={refetch}
+        suggestions={suggestions}
+        showSuggestions={true}
       >
         <CreatePost
           classes="px-3 py-3 bg-gray-900"
           refetch={refetch}
           groupId=""
+        />
+        <FriendSuggestionsContainer
+          data={suggestions}
+          isLoadingSuggestions={isLoadingSuggestions}
         />
       </PostContainer>
     </div>

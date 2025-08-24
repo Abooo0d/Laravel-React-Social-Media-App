@@ -42,7 +42,10 @@ class UserController extends Controller
       if ($user->id == $currentUser->id) {
         return redirect()->back()->with('error', "You Can`t Send Friend Request To Your Self");
       }
-      $follower = Friends::query()->where('user_id', Auth::id())->where('friend_id', $user->id)->first();
+      $follower = Friends::query()
+        ->where('user_id', Auth::id())
+        ->where('friend_id', $user->id)
+        ->first();
       switch ($data['type']) {
         case 'add':
           if ($follower) {
@@ -69,6 +72,32 @@ class UserController extends Controller
       }
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function addFriendFormSuggestion(Request $request, User $user)
+  {
+    try {
+      $currentUser = Auth::user();
+      if ($user->id == $currentUser->id) {
+        return redirect()->back()->with('error', "You Can`t Send Friend Request To Your Self");
+      }
+      $follower = Friends::query()
+        ->where('user_id', Auth::id())
+        ->where('friend_id', $user->id)
+        ->first();
+      if ($follower) {
+        return response(['message' => "You Are Already Friend With {$user->name}"], 403);
+      } else {
+        $follower = Friends::create([
+          'user_id' => $currentUser->id,
+          'friend_id' => $user->id,
+          'status' => FriendsRequestEnum::PENDING->value,
+        ]);
+        $user->notify(new FriendRequestNotification($currentUser, 'add'));
+        return response(['message' => "Your Request Has Been Send To {$user->name}, You Will Be Notified When Accepted"], 200);
+      }
+    } catch (e) {
+      return response(['message' => 'Some Thing Wrong Happened'], 405);
     }
   }
   public function acceptRequest(Request $request)

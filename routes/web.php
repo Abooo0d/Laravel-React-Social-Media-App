@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
   Route::get('/get-chat-groups', [HomeController::class, 'getChatGroups'])->name('getChatGroups');
   Route::post('/notification/read/{notificationId}', [HomeController::class, 'readNotification'])->name('read.notification');
   Route::post('/notification/readAll', [HomeController::class, 'readAllNotifications'])->name('read.allNotifications');
+  Route::get('/getSuggestion', [HomeController::class, 'getSuggestions'])->name('getSuggestions');
 });
 // Profile Group
 Route::middleware('auth')->group(function () {
@@ -101,6 +102,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
   Route::post('/user/search', [UserController::class, 'searchForUser'])->name('user.searchForUser');
   Route::post('/user/invite/{user:id}', [UserController::class, 'addFriend'])->name('user.addFriend');
+  Route::post('/user/add/{user:id}', [UserController::class, 'addFriendFormSuggestion'])->name('user.addFriendFormSuggestion');
   Route::post('/user/acceptRequest', [UserController::class, 'acceptRequest'])->name('user.acceptRequest');
 });
 Route::middleware('auth')->group(function () {
