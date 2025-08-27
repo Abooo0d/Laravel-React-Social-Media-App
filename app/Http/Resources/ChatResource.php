@@ -18,7 +18,6 @@ class ChatResource extends JsonResource
     $user_id = !(bool) $this->is_group ? $this->users()->where(function ($q) {
       $q->where('user_id', '!=', auth()->id());
     })->first()?->id : null;
-
     $image = '';
     $data = '';
     if (!(bool) $this->is_group) {
@@ -63,11 +62,6 @@ class ChatResource extends JsonResource
       ],
       'is_current_user_admin' => !!$this->isCurrentUserAdmin,
       'owner' => (bool) $this->owner
-      // 'last_message' => $this->last_message,
-      // 'last_message_id' => $this->last_message_id,
-      // 'last_message_date' => $this->last_message_date,
-      // 'unread_messages_count' => $this->unread_messages_count
-      // 'unread_count' => $this?->unreadMessagesCountFor(auth()->id()),
     ];
   }
 }

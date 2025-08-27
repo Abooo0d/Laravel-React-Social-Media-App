@@ -37,14 +37,14 @@ const AuthMenu = ({ currentUser, show, setShow }) => {
       >
         <Link
           href={route("profile.myProfile")}
-          className="bg-gray-800 duration-300 flex gap-2 justify-start items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
+          className="dark:bg-gray-800 bg-gray-100 duration-300 flex gap-2 justify-start items-center hover:bg-gray-200 dark:hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-500 focus:outline-none text-left"
         >
           Profile
         </Link>
         <Link
           href={route("logout")}
           method="post"
-          className="bg-gray-800 duration-300 flex gap-2 justify-start items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
+          className="dark:bg-gray-800 bg-gray-100 duration-300 flex gap-2 justify-start items-center hover:bg-gray-200 dark:hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-500 focus:outline-none text-left"
         >
           Logout
         </Link>

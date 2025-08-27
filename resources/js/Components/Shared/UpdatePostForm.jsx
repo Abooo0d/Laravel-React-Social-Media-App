@@ -170,7 +170,7 @@ export default function UpdatePostForm({
       <PopupCard showForm={showForm}>
         <div>
           <div className="flex justify-between items-center">
-            <h3 className="text-base/7 font-medium text-white mb-4">
+            <h3 className="text-base/7 font-medium dark:text-white text-gray-600 mb-4">
               Edit Post
             </h3>
             <SecondaryButton event={close} classes={" px-3 py-1.5"}>
@@ -179,7 +179,7 @@ export default function UpdatePostForm({
           </div>
           <PostOwnerInfo post={post} user={user} />
           <textarea
-            className="bg-gray-800 flex-1 w-full rounded-md outline-none border-none focus:outline-none focus:border-none ring-0 focus:ring-0 text-gray-300 resize-none min-h-[80px] max-h-[150px] "
+            className="dark:bg-gray-800 bg-gray-300 flex-1 w-full rounded-md outline-none border-none focus:outline-none focus:border-none ring-0 focus:ring-0 dark:text-gray-300 text-gray-700 resize-none min-h-[80px] max-h-[150px] "
             ref={inputRef}
             name="message"
             value={postData?.body || ""}
@@ -202,7 +202,7 @@ export default function UpdatePostForm({
             attachmentsErrors={attachmentsErrors}
           />
           <div className="mt-4 gap-2 flex justify-end items-center">
-            <button className="cursor-pointer relative inline-flex items-center gap-2 rounded-md bg-gray-800/70 hover:bg-gray-800 duration-200 py-1.5 px-3 border-[1px] border-gray-700 border-solid text-sm/6 font-semibold text-white  focus:outline-none ">
+            <button className="cursor-pointer relative inline-flex items-center gap-2 rounded-md bg-gray-400/50 hover:bg-gray-400/80 text-gray-600 dark:bg-gray-800/70 dark:hover:bg-gray-800 dark:text-gray-200 duration-200 py-1.5 px-3 border-[1px] dark:border-gray-700 border-gray-400 border-solid text-sm/6 font-semibold focus:outline-none ">
               Add Files
               <input
                 type="file"
@@ -215,7 +215,7 @@ export default function UpdatePostForm({
               />
             </button>
             <button
-              className="inline-flex items-center gap-2 rounded-md bg-gray-700/70 hover:bg-gray-700 duration-200 py-1.5 px-3 text-sm/6 font-semibold text-white focus:outline-none border-[1px] border-solid border-gray-700"
+              className="inline-flex items-center gap-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-600 dark:bg-gray-700/70 dark:hover:bg-gray-700 dark:text-gray-200 duration-200 py-1.5 px-3 text-sm/6 font-semibold focus:outline-none border-[1px] border-solid dark:border-gray-700 border-gray-400"
               onClick={() => {
                 handelSubmit();
               }}

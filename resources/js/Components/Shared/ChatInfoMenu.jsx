@@ -66,30 +66,30 @@ const ChatInfoMenu = ({ swtShowChatInfo }) => {
   return (
     <>
       <div
-        className=" text-gray-400 w-8 h-8 p-1.5 flex justify-center items-center cursor-pointer duration-200 hover:bg-gray-800/50 rounded-md"
+        className=" text-gray-400 w-8 h-8 p-1.5 flex justify-center items-center cursor-pointer duration-200 dark:hover:bg-gray-800/50 hover:bg-gray-300/50 rounded-md"
         onClick={() => setShowMenu(!showMenu)}
       >
         <HiDotsVertical className="w-full h-full" />
       </div>
       <div
-        className={`w-36 h-10 top-[40px] right-[65px] rounded-md overflow-hidden min-h-fit absolute bg-gray-800 duration-200 z-10 max-w-[250px]  ${
+        className={`w-36 h-10 top-[50px] right-[30px] rounded-md overflow-hidden min-h-fit absolute dark:bg-gray-800 bg-gray-200 duration-200 z-10 max-w-[250px]  ${
           showMenu ? "opacity-100 visible" : "opacity-0 invisible "
         }`}
       >
         {currentChat.is_group ? (
           <>
             <button
-              className=" duration-300 flex gap-2 justify-between items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
+              className=" duration-300 flex gap-2 justify-between items-center dark:hover:bg-gray-700 hover:bg-gray-400/50 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-600 focus:outline-none text-left"
               onClick={() => {
                 swtShowChatInfo(true);
                 setShowMenu(false);
               }}
             >
-              <span className="flex-1">Info</span>
+              <span className="flex-1 text-gray-600 dark:text-white">Info</span>
               <IoInformationCircleSharp className="w-4 h-4" />
             </button>
             <button
-              className=" duration-300 flex gap-2 justify-between items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
+              className=" duration-300 flex gap-2 justify-between items-center dark:hover:bg-gray-700 hover:bg-gray-400/50 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-600 focus:outline-none text-left"
               onClick={() => {
                 muteChat();
               }}
@@ -107,8 +107,10 @@ const ChatInfoMenu = ({ swtShowChatInfo }) => {
               )}
             </button>
             {currentChat?.owner !== user.id && (
-              <button className="duration-300 flex gap-2 justify-between items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left">
-                <span className="flex-1">Leave</span>
+              <button className="duration-300 flex gap-2 justify-between items-center dark:hover:bg-gray-700 hover:bg-gray-400/50 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-600 focus:outline-none text-left">
+                <span className="flex-1 text-gray-600 dark:text-white">
+                  Leave
+                </span>
                 <MdLogout className="w-4 h-4" />
               </button>
             )}
@@ -116,17 +118,17 @@ const ChatInfoMenu = ({ swtShowChatInfo }) => {
         ) : (
           <>
             <button
-              className=" duration-300 flex gap-2 justify-between items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
+              className=" duration-300 flex gap-2 justify-between items-center dark:hover:bg-gray-700 hover:bg-gray-400/50 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-600 focus:outline-none text-left"
               onClick={() => {
                 swtShowChatInfo(true);
                 setShowMenu(false);
               }}
             >
-              <span className="flex-1">Info</span>
+              <span className="flex-1 text-gray-600 dark:text-white">Info</span>
               <IoInformationCircleSharp className="w-4 h-4" />
             </button>
             <button
-              className=" duration-300 flex gap-2 justify-between items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
+              className=" duration-300 flex gap-2 justify-between items-center dark:hover:bg-gray-700 hover:bg-gray-400/50 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-600 focus:outline-none text-left"
               onClick={() => {
                 muteChat();
               }}
@@ -144,7 +146,7 @@ const ChatInfoMenu = ({ swtShowChatInfo }) => {
               )}
             </button>
             <button
-              className="duration-300 flex gap-2 justify-between items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium text-white focus:outline-none text-left"
+              className="duration-300 flex gap-2 justify-between items-center hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-600 focus:outline-none text-left"
               onClick={() => {
                 blockChat();
               }}

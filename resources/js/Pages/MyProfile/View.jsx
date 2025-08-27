@@ -251,9 +251,9 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
             </div>
           </div>
         </div>
-        <div className="w-full flex flex-col justify-start items-start gap-1 sm:gap-0 bg-gray-900 py-4 lg:pl-[300px] md:pl-[250px] pl-[160px]">
+        <div className="w-full flex flex-col justify-start items-start gap-1 sm:gap-0 dark:bg-gray-900 bg-gray-200 py-4 lg:pl-[300px] md:pl-[250px] pl-[160px]">
           <div className="flex gap-2 justify-center items-start flex-col lg:flex-row max-sm:gap-0">
-            <h2 className="text-gray-300 sm:text-lg text-[16px] mb-0">
+            <h2 className="dark:text-gray-300 text-gray-600 sm:text-lg text-[16px] mb-0">
               {user.name}
             </h2>
             <p className=" text-gray-500 sm:text-lg text-[16px]">
@@ -266,7 +266,7 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
         </div>
         <div className="w-full h-full max-sm:pb-[55px] ">
           <Tab.Group>
-            <Tab.List className="md:px-[40px] px-[20px] flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
+            <Tab.List className="md:px-[40px] px-[20px] flex p-1 gap-5 dark:bg-gray-900 bg-gray-200 rounded-b-md border-t-solid dark:border-t-gray-700 border-gray-300 border-t-[1px]">
               <CustomTab text="Posts" />
               <CustomTab text="Photos" />
               <CustomTab text="Friends" />
@@ -285,14 +285,14 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
                       user={user}
                       setPosts={setAllPosts}
                       posts={allPosts}
-                      classes="px-3 py-3 bg-homeFeed "
+                      classes="px-3 py-3 "
                       refetch={refetch}
                     />
                   </PostContainer>
                 </div>
               </Tab.Panel>
               <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
-                <div className="relative rounded-md mb-2 bg-gray-900 duration-200 flex flex-row gap-4 flex-wrap p-4">
+                <div className="relative rounded-md mb-2 dark:bg-gray-900 bg-gray-300 duration-200 flex flex-row gap-4 flex-wrap p-4">
                   {photos.length > 0 ? (
                     photos.map((photo, index) => (
                       <img
@@ -307,7 +307,7 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
                       />
                     ))
                   ) : (
-                    <div className="relative rounded-md p-3 bg-gray-900 duration-200 w-full text-center text-gray-400 cursor-default">
+                    <div className="relative rounded-md p-3 dark:bg-gray-900 bg-gray-300 duration-200 w-full text-center dark:text-gray-400 text-gray-600 cursor-default">
                       There Is No Photos
                     </div>
                   )}
@@ -322,26 +322,26 @@ const View = ({ auth, mustVerifyEmail, status, photos }) => {
               </Tab.Panel>
               <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
                 {auth.user.friends.length > 0 ? (
-                  <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
+                  <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-300 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
                     {auth.user.friends?.map((friend, index) => (
                       <UserFriendCard user={friend} key={index} />
                     ))}
                   </div>
                 ) : (
-                  <div className="w-full text-center text-gray-500 py-8 dark:bg-gray-900 rounded-md">
+                  <div className="w-full text-center dark:text-gray-500 py-8 dark:bg-gray-900 bg-gray-300 text-gray-600 rounded-md">
                     You Don`t Have Any Friends Yet.
                   </div>
                 )}
               </Tab.Panel>
               <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
                 {auth.user?.pending_requests.length > 0 ? (
-                  <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2">
+                  <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-300 duration-200 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2">
                     {auth.user.pending_requests?.map((request, index) => (
                       <UserFriendRequestCard request={request} key={index} />
                     ))}
                   </div>
                 ) : (
-                  <div className="w-full text-center text-gray-500 py-8 dark:bg-gray-900 rounded-md">
+                  <div className="w-full text-center dark:text-gray-500 py-8 dark:bg-gray-900 bg-gray-300 text-gray-600 rounded-md">
                     There Is No Pending Requests
                   </div>
                 )}

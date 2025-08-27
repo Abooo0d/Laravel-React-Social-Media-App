@@ -6,7 +6,7 @@ import { HiMiniXMark } from "react-icons/hi2";
 const ChatFormAttachmentContainer = ({ attachments, setAttachments }) => {
   return (
     <div
-      className={`absolute z-[100] bottom-[calc(100%+10px)] left-[10px] bg-gray-800 rounded-md border-[1px] border-solid border-gray-500 flex flex-col justify-start items-start gap-2 py-2 px-4 max-sm:p-2 w-[300px] max-h-[350px] overflow-hidden
+      className={`absolute z-[100] bottom-[calc(100%+10px)] left-[10px] dark:bg-gray-800 bg-gray-200 rounded-md border-[1px] border-solid dark:border-gray-500 border-gray-300 flex flex-col justify-start items-start gap-2 py-2 px-4 max-sm:p-2 w-[300px] max-h-[350px] overflow-hidden
         ${
           attachments.length > 0
             ? "opacity-100 visible z-100"
@@ -14,7 +14,7 @@ const ChatFormAttachmentContainer = ({ attachments, setAttachments }) => {
         }`}
     >
       <div className="flex justify-between items-center w-full">
-        <h2 className="m-0 text-lg text-gray-300 cursor-default">
+        <h2 className="m-0 text-lg dark:text-gray-300 text-gray-600 cursor-default">
           Attachments
         </h2>
         <PrimaryButton
@@ -23,7 +23,7 @@ const ChatFormAttachmentContainer = ({ attachments, setAttachments }) => {
             setAttachments([]);
           }}
         >
-          <HiMiniXMark className="w-5 h-5 text-gray-200" />
+          <HiMiniXMark className="w-5 h-5 dark:text-gray-200 text-gray-600" />
         </PrimaryButton>
       </div>
       <div className="flex max-h-[300px] min-w-[272px] max-w-[272px] overflow-auto">

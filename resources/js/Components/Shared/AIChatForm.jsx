@@ -57,7 +57,6 @@ const AIChatForm = () => {
       .then((data) => {
         const chat = data?.data?.chat;
         const comingMessage = data?.data?.message;
-        console.log(data.data);
 
         if (!!chat) {
           setCurrentAIChat((prev) => ({

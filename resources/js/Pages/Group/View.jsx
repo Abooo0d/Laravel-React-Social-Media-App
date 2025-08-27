@@ -268,12 +268,12 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
             )}
           </div>
         </div>
-        <div className="w-full flex justify-between items-start gap-4 bg-gray-900 py-4 px-8">
+        <div className="w-full flex justify-between items-start gap-4 dark:bg-gray-900 bg-gray-200 py-4 px-8">
           <div className="flex justify-start items-start flex-col w-full">
             <div className="w-full flex justify-between items-center">
-              <h2 className=" max-md:pl-4 text-gray-300 text-2xl font-semibold max-md:text-[16px] relative">
+              <h2 className=" max-md:pl-4 dark:text-gray-300 text-gray-600 text-2xl font-semibold max-md:text-[16px] relative">
                 {groupData.name}
-                <span className="absolute bottom-0 left-0 w-[40%] h-[3px] bg-gray-300 rounded-full" />
+                <span className="absolute bottom-0 left-0 w-[40%] h-[3px] dark:bg-gray-300 bg-gray-600 rounded-full" />
                 {/* <span className="absolute bottom-[-7px] left-0 w-[10%] h-[3px] bg-gray-300 rounded-full" /> */}
               </h2>
               <div className="flex justify-start items-center gap-4">
@@ -311,19 +311,21 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
               </div>
             </div>
             {group?.about.length > 0 && (
-              <div className="bg-gray-900 border-ys-[1px] border-y-gray-700 border-y-solid w-full h-fit ">
-                <h2 className="text-lg w-fit text-gray-400 font-semibold pt-4 relative">
+              <div className="dark:bg-gray-900 bg-gray-200 border-ys-[1px] border-y-gray-700 border-y-solid w-full h-fit ">
+                <h2 className="text-lg w-fit dark:text-gray-400 text-gray-700 font-semibold pt-4 relative">
                   About This Group
-                  <span className="absolute bottom-0 left-0 w-[40%] h-[2px] bg-gray-400 rounded-full" />
+                  <span className="absolute bottom-0 left-0 w-[40%] h-[2px] dark:bg-gray-400 bg-gray-700 rounded-full" />
                 </h2>
-                <p className="w-full text-gray-400 pb-2">{group?.about}</p>
+                <p className="w-full dark:text-gray-400 text-gray-700 pb-2">
+                  {group?.about}
+                </p>
               </div>
             )}
           </div>
         </div>
         <div className="w-full h-full max-sm:pb-[55px] ">
           <Tab.Group>
-            <Tab.List className="md:px-[40px] px-[20px] flex p-1 gap-5 dark:bg-gray-900 bg-gray-100 rounded-b-md border-t-solid border-t-gray-700 border-t-[1px]">
+            <Tab.List className="md:px-[40px] px-[20px] flex p-1 gap-5 dark:bg-gray-900 bg-gray-200 rounded-b-md border-t-solid dark:border-t-gray-700 border-gray-300 border-t-[1px]">
               <CustomTab text="Posts" />
               <CustomTab text="Photos" />
               {isCurrentUserJoined && <CustomTab text="Members" />}
@@ -345,7 +347,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
                         setPosts={setAllPosts}
                         posts={allPosts}
                         groupId={group.id}
-                        classes="bg-homeFeed px-3 py-3"
+                        classes=" px-3 py-3"
                         refetch={refetch}
                       />
                     )}
@@ -354,14 +356,14 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
               </Tab.Panel>
 
               <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
-                <div className="relative rounded-md mb-2 bg-gray-900 duration-200 flex flex-row gap-4 flex-wrap p-4">
+                <div className="relative rounded-md mb-2 dark:bg-gray-900 bg-gray-300 duration-200 flex flex-row gap-4 flex-wrap p-4">
                   {photos.length > 0 ? (
                     photos.map((photo, index) => (
                       <img
                         src={photo.url}
                         key={index}
                         alt=""
-                        className="object-cover flex-1 min-w-[250px] max-h-[150px] rounded-md cursor-pointer border-gray-700/20 border-[1px] border-solid hover:border-gray-700 duration-200"
+                        className="object-cover flex-1 min-w-[250px] max-h-[150px] rounded-md cursor-pointer dark:border-gray-700/20 border-gray-400/20 border-[1px] border-solid dark:hover:border-gray-700 hover:border-gray-400 duration-200"
                         onClick={() => {
                           setImageIndex(index);
                           setShowImage(true);
@@ -384,7 +386,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
               </Tab.Panel>
               {isCurrentUserJoined && (
                 <Tab.Panel className="rounded-md  gap-1 w-full h-full mt-4">
-                  <div className="relative rounded-md p-3 mb-2 h-full dark:bg-gray-900 bg-gray-100 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
+                  <div className="relative rounded-md p-3 mb-2 h-full dark:bg-gray-900 bg-gray-300 duration-200 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
                     {users.map((user, index) => (
                       <UserMemberCard
                         member={user}
@@ -399,7 +401,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
               {isAdmin && (
                 <Tab.Panel className="rounded-md flex flex-col gap-1 w-full mt-4">
                   {requestsData.length > 0 ? (
-                    <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-100 duration-200 grid grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
+                    <div className="relative rounded-md p-3 mb-2 dark:bg-gray-900 bg-gray-300 duration-200 grid grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
                       {requestsData.map((request, index) => (
                         <UserRequestCard
                           request={request}
@@ -412,7 +414,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
                       ))}
                     </div>
                   ) : (
-                    <div className="relative rounded-md p-3 bg-gray-900 duration-200 w-full text-center text-gray-400 cursor-default">
+                    <div className="relative rounded-md p-3 dark:bg-gray-900 bg-gray-300 duration-200 w-full text-center dark:text-gray-400 text-gray-600 cursor-default">
                       There Is No Requests
                     </div>
                   )}

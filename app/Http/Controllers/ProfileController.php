@@ -56,22 +56,7 @@ class ProfileController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
-  public function ProfileMobile(Request $request, User $user)
-  {
-    try {
-      $userId = Auth::id();
-      if (!$userId) {
-        return response(['message' => 'Some Thing Went Wrong'], 400);
-      }
-      $isFriend = auth()->user()->isFriend($user->id);
-      return response([
-        'user' => new UserResource($user),
-        'isFriend' => $isFriend,
-      ], 200);
-    } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
-    }
-  }
+
   public function myProfile(Request $request)
   {
     try {
@@ -91,23 +76,7 @@ class ProfileController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
-  public function myProfileMobile(Request $request)
-  {
-    try {
-      $user = User::query()->where('id', Auth::id())->first();
-      $posts_ids = $user->posts($user->id)->pluck('id')->toArray();
-      $photos = PostAttachments::whereIn('post_id', $posts_ids)
-        ->where('mime', 'like', 'image/%')
-        ->get();
-      $notifications = Auth::user()->notifications()->paginate(20);
-      return response([
-        'notifications' => $notifications,
-        'photos' => PostAttachmentResource::collection($photos)
-      ]);
-    } catch (e) {
-      return response(['message' => 'Some Thing Went Wrong'], 400);
-    }
-  }
+
   public function getPostsForUser(User $user)
   {
     try {
@@ -136,38 +105,7 @@ class ProfileController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
-  public function getPostsForUserMobile(User $user)
-  {
-    try {
-      $posts = Post::PostsForTimeLine($user->id)
-        ->where('user_id', $user->id)
-        ->latest()
-        ->paginate(15);
-      $posts_ids = $user->posts($user->id)->pluck('id')->toArray();
-      $photos = PostAttachments::whereIn('post_id', $posts_ids)
-        ->where('mime', 'like', 'image/%')->get();
-      return response([
-        'posts' => [
-          'data' => PostResource::collection($posts),
-          'links' => [
-            'first' => $posts->url(1),
-            'last' => $posts->url($posts->lastPage()),
-            'prev' => $posts->previousPageUrl(),
-            'next' => $posts->nextPageUrl(),
-          ],
-          'meta' => [
-            'current_page' => $posts->currentPage(),
-            'last_page' => $posts->lastPage(),
-            'per_page' => $posts->perPage(),
-            'total' => $posts->total(),
-          ]
-        ],
-        'photos' => PostAttachmentResource::collection($photos)
-      ], 200);
-    } catch (e) {
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
-    }
-  }
+
   public function edit(Request $request)
   {
     try {
@@ -194,18 +132,7 @@ class ProfileController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
-  public function update_mobile(ProfileUpdateRequest $request)
-  {
-    $user = $request->user();
-    $user->fill($request->validated());
 
-    if ($user->isDirty('email')) {
-      $user->email_verified_at = null;
-    }
-
-    $user->save();
-    return response(['message' => 'Data Changed Successfully', 'user' => new UserResource($user)]);
-  }
   public function destroy(Request $request)
   {
     try {
@@ -227,23 +154,7 @@ class ProfileController extends Controller
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
   }
-  public function destroy_mobile(Request $request)
-  {
-    $request->validateWithBag('userDeletion', [
-      'password' => ['required', 'current_password'],
-    ]);
 
-    $user = $request->user();
-
-    Auth::logout();
-
-    $user->delete();
-
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-
-    return response(['message' => 'Account Deleted Successfully']);
-  }
   public function changeImages(Request $request, User $user)
   {
     try {
@@ -298,6 +209,99 @@ class ProfileController extends Controller
       ]);
       DB::commit();
       return redirect()->back()->with('success', $message);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+
+  public function downloadImage(Request $request, User $user)
+  {
+    try {
+      $image = $request->type === 'cover' ? $user->cover_path : $user->avatar_path;
+
+      if (!$image || !Storage::disk('public')->exists($image)) {
+        return back()->with('error', 'Image not found.');
+      }
+
+      $filePath = Storage::disk('public')->path($image);
+      return response()->download($filePath, basename($image));
+    } catch (\Exception $e) {
+      return back()->with('error', 'Something went wrong while downloading the image.');
+    }
+  }
+  public function ProfileMobile(Request $request, User $user)
+  {
+    try {
+      $userId = Auth::id();
+      if (!$userId) {
+        return response(['message' => 'Some Thing Went Wrong'], 400);
+      }
+      $isFriend = auth()->user()->isFriend($user->id);
+      return response([
+        'user' => new UserResource($user),
+        'isFriend' => $isFriend,
+      ], 200);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function myProfileMobile(Request $request)
+  {
+    try {
+      $user = User::query()->where('id', Auth::id())->first();
+      $posts_ids = $user->posts($user->id)->pluck('id')->toArray();
+      $photos = PostAttachments::whereIn('post_id', $posts_ids)
+        ->where('mime', 'like', 'image/%')
+        ->get();
+      $notifications = Auth::user()->notifications()->paginate(20);
+      return response([
+        'notifications' => $notifications,
+        'photos' => PostAttachmentResource::collection($photos)
+      ]);
+    } catch (e) {
+      return response(['message' => 'Some Thing Went Wrong'], 400);
+    }
+  }
+  public function update_mobile(ProfileUpdateRequest $request)
+  {
+    $user = $request->user();
+    $user->fill($request->validated());
+
+    if ($user->isDirty('email')) {
+      $user->email_verified_at = null;
+    }
+
+    $user->save();
+    return response(['message' => 'Data Changed Successfully', 'user' => new UserResource($user)]);
+  }
+  public function getPostsForUserMobile(User $user)
+  {
+    try {
+      $posts = Post::PostsForTimeLine($user->id)
+        ->where('user_id', $user->id)
+        ->latest()
+        ->paginate(15);
+      $posts_ids = $user->posts($user->id)->pluck('id')->toArray();
+      $photos = PostAttachments::whereIn('post_id', $posts_ids)
+        ->where('mime', 'like', 'image/%')->get();
+      return response([
+        'posts' => [
+          'data' => PostResource::collection($posts),
+          'links' => [
+            'first' => $posts->url(1),
+            'last' => $posts->url($posts->lastPage()),
+            'prev' => $posts->previousPageUrl(),
+            'next' => $posts->nextPageUrl(),
+          ],
+          'meta' => [
+            'current_page' => $posts->currentPage(),
+            'last_page' => $posts->lastPage(),
+            'per_page' => $posts->perPage(),
+            'total' => $posts->total(),
+          ]
+        ],
+        'photos' => PostAttachmentResource::collection($photos)
+      ], 200);
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
@@ -360,19 +364,21 @@ class ProfileController extends Controller
       return response(['error' => 'Some Thing Wrong Happened'], 402);
     }
   }
-  public function downloadImage(Request $request, User $user)
+  public function destroy_mobile(Request $request)
   {
-    try {
-      $image = $request->type === 'cover' ? $user->cover_path : $user->avatar_path;
+    $request->validateWithBag('userDeletion', [
+      'password' => ['required', 'current_password'],
+    ]);
 
-      if (!$image || !Storage::disk('public')->exists($image)) {
-        return back()->with('error', 'Image not found.');
-      }
+    $user = $request->user();
 
-      $filePath = Storage::disk('public')->path($image);
-      return response()->download($filePath, basename($image));
-    } catch (\Exception $e) {
-      return back()->with('error', 'Something went wrong while downloading the image.');
-    }
+    Auth::logout();
+
+    $user->delete();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return response(['message' => 'Account Deleted Successfully']);
   }
 }

@@ -25,7 +25,7 @@ const UserRequestCard = ({ request, group, setRequestsData }) => {
       });
   };
   return (
-    <div className="group relative min-w-[300px] bg-gray-700/30 backdrop-blur-sm rounded-[8px] border-[1px] border-solid border-gray-500/50 flex flex-col justify-between items-center cursor-pointer duration-200 hover:bg-gray-600/50 hover:border-gray-500 overflow-hidden drop-shadow-2xl">
+    <div className="group relative min-w-[300px] dark:bg-gray-700/30 bg-gray-200 backdrop-blur-sm rounded-[8px] border-[1px] border-solid dark:border-gray-500/50 border-gray-400 flex flex-col justify-between items-center cursor-pointer duration-200 hover:bg-gray-600/50 hover:border-gray-500 overflow-hidden drop-shadow-2xl">
       <img
         src={request.avatar_url || "/images/default_avatar_image.png"}
         alt=""
@@ -41,10 +41,10 @@ const UserRequestCard = ({ request, group, setRequestsData }) => {
           className="flex flex-col justify-start items-start w-full"
           href={route("profile.view", request.name)}
         >
-          <h3 className="text-gray-300 font-bold mt-1 w-full text-left px-4">
+          <h3 className="dark:text-gray-300 text-gray-600 font-bold mt-1 w-full text-left px-4">
             {request.username}
           </h3>
-          <h3 className="text-gray-400 mb-2 w-full text-left px-4 text-[13px] -mt-1">
+          <h3 className="dark:text-gray-400 text-gray-700 mb-2 w-full text-left px-4 text-[13px] -mt-1">
             {request.email}
           </h3>
         </Link>

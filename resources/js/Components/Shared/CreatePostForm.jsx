@@ -190,7 +190,7 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
               )}
             </PrimaryButton>
             <textarea
-              className="bg-gray-800 flex-1 w-full rounded-md outline-none border-none focus:outline-none focus:border-none ring-0 focus:ring-0 text-gray-300 resize-none h-auto min-h-[40px] max-h-[150px] "
+              className="dark:bg-gray-800 bg-gray-300 flex-1 w-full rounded-md outline-none border-none focus:outline-none focus:border-none ring-0 focus:ring-0 dark:text-gray-300 text-gray-700 resize-none min-h-[80px] max-h-[150px] "
               ref={inputRef}
               name="message"
               value={post.body}

@@ -7,7 +7,7 @@ const PostCardPostBody = ({ post }) => {
   return (
     <>
       {post.body && (
-        <div className="post-content text-gray-400">
+        <div className="post-content dark:text-gray-400 text-gray-600">
           <MarkdownRenderer content={post.body}>{post.body}</MarkdownRenderer>
         </div>
         // <Disclosure>

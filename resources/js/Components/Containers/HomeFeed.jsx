@@ -20,18 +20,14 @@ const HomeFeed = ({
       <PostContainer
         posts={allPosts}
         AllPostsData={posts?.posts?.data}
-        classes="px-4"
+        classes="px-2 md:px-4 "
         isLoading={loading}
         refetch={refetch}
         suggestions={suggestions}
         showSuggestions={true}
         isLoadingSuggestions={isLoadingSuggestions}
       >
-        <CreatePost
-          classes="px-3 py-3 bg-gray-900"
-          refetch={refetch}
-          groupId=""
-        />
+        <CreatePost classes="px-3 py-3" refetch={refetch} groupId="" />
       </PostContainer>
     </div>
   );

@@ -73,7 +73,7 @@ const CreateGroupForm = ({ showForm, setShowForm }) => {
       <h2 className="text-gray-400 mb-2">About The Group:</h2>
       <textarea
         placeholder="Your comment"
-        className="flex-1 px-2 py-1 bg-gray-700/50 text-gray-400 placeholder:text-gray-500 resize-none overflow-scroll h-[80px] border-gray-800 rounded-md outline-none focus:border-gray-600 ring-0 focus:ring-0 duration-200 cursor-pointer w-[calc(100%-30px)] ml-4"
+        className="flex-1 px-2 py-1 dark:bg-gray-700/50 bg-gray-300 dark:text-gray-400 text-gray-600 placeholder:text-gray-500 resize-none overflow-scroll h-[80px] dark:border-gray-800 border-gray-400 rounded-md outline-none dark:focus:border-gray-600 focus:border-gray-400 ring-0 focus:ring-0 duration-200 cursor-pointer w-[calc(100%-30px)] ml-4"
         value={groupAbout}
         onChange={(e) => setGroupAbout(e.target.value)}
       ></textarea>

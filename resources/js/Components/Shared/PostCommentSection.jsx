@@ -31,7 +31,7 @@ const PostCommentSection = ({ show, post, setPost, currentUser }) => {
   return (
     <>
       <div
-        className={`flex justify-start items-center flex-col gap-4 max-h-[500px] overflow-auto border-gray-800 border-t-[2px] border-solid py-2 ${
+        className={`flex justify-start items-center flex-col gap-4 max-h-[500px] overflow-auto dark:border-gray-800 border-gray-300 border-t-[2px] border-solid py-2 ${
           show ? "visible opacity-100 h-fit" : "invisible opacity-0 h-0"
         }`}
       >
@@ -56,14 +56,13 @@ const PostCommentSection = ({ show, post, setPost, currentUser }) => {
             );
           })
         ) : (
-          <div className="w-full text-gray-600 text-center pt-4">
-            {" "}
+          <div className="w-full dark:text-gray-600 text-gray-400 text-center pt-4">
             No Comments On This Post
           </div>
         )}
       </div>
       <div
-        className={`flex justify-between items-start gap-2 pt-2 w-full duration-200 text-gray-400 border-t-[1px] border-solid border-gray-700 mt-0 overflow-hidden  ${
+        className={`flex justify-between items-start gap-2 pt-2 w-full duration-200 text-gray-400 border-t-[1px] border-solid dark:border-gray-700 border-gray-300 mt-0 overflow-hidden  ${
           show ? "visible opacity-100 h-[100px]" : "invisible opacity-0 h-[0px]"
         }`}
       >
@@ -75,7 +74,7 @@ const PostCommentSection = ({ show, post, setPost, currentUser }) => {
         <div className="relative flex-1 flex justify-center items-center">
           <textarea
             placeholder="Your comment"
-            className="flex-1 px-2 py-1 bg-gray-700/50 text-gray-400 placeholder:text-gray-600 resize-none overflow-scroll h-[80px] border-gray-800 rounded-md outline-none focus:border-gray-600 ring-0 focus:ring-0 duration-200 cursor-pointer"
+            className="flex-1 px-2 py-1 bg-gray-200 hover:bg-gray-300/40 text-gray-700 placeholder:text-gray-500 border-gray-300 hover:border-gray-300 focus:border-gray-300 dark:bg-gray-700/50 dark:text-gray-400 dark:placeholder:text-gray-600 resize-none overflow-scroll h-[80px] dark:border-gray-800 rounded-md outline-none dark:focus:border-gray-600 ring-0 focus:ring-0 duration-200 cursor-pointer"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           ></textarea>
@@ -85,7 +84,7 @@ const PostCommentSection = ({ show, post, setPost, currentUser }) => {
             }
             event={() => createComment()}
           >
-            <BiSolidSend className="text-gray-400" />
+            <BiSolidSend className="dark:text-gray-400 text-gray-600" />
           </SecondaryButton>
         </div>
       </div>

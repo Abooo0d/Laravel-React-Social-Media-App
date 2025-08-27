@@ -38,8 +38,8 @@ const NotificationCard = ({
       className={` rounded-lg px-4 py-2 flex gap-4 justify-start items-center duration-200
         ${
           notification.read_at
-            ? "bg-gray-900/40"
-            : "bg-gray-800 hover:bg-gray-800/70"
+            ? "dark:bg-gray-900/40 bg-gray-200/20"
+            : "dark:bg-gray-800 bg-gray-400 dark:hover:bg-gray-800/70 hover:bg-gray-400/50"
         }`}
       href={notification.link}
       onClick={() => {
@@ -56,7 +56,7 @@ const NotificationCard = ({
           alt="user Image"
           className="w-[50px] h-[50px] object-cover rounded-full "
         />
-        <span className="absolute w-[30px] h-[30px] flex justify-center items-center -bottom-[5px] -right-[5px] text-gray-300 bg-gray-800/80 backdrop-blur-lg p-[5px] rounded-full border-[2px] border-gray-700 border-solid">
+        <span className="absolute w-[30px] h-[30px] flex justify-center items-center -bottom-[5px] -right-[5px] dark:text-gray-300 text-gray-500 dark:bg-gray-800/80 bg-gray-300 backdrop-blur-lg p-[5px] rounded-full border-[2px] dark:border-gray-700 border-gray-400 border-solid">
           {Icon() == "like" ? (
             <AiFillLike className="w-full h-full" />
           ) : Icon() == "post" ? (
@@ -72,7 +72,7 @@ const NotificationCard = ({
           )}
         </span>
       </div>
-      <p className="text-gray-300 text-[14px]">
+      <p className="dark:text-gray-300 text-gray-600 text-[14px]">
         {notification.message}
         <br />
         <span className="text-gray-500 text-[13px]">{Message()}</span>

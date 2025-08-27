@@ -37,13 +37,13 @@ const ChatInfo = () => {
     setOnline(onlineUsersIds.includes(currentChat.user_id));
   }, [onlineUsersIds]);
   return (
-    <div className="w-full bg-gray-900 z-[50] md:py-2 md:px-8 py-1 px-4 gap-4 border-b-solid border-b-[1px] border-gray-600/50 backdrop-blur-md cursor-pointer flex justify-between items-center">
+    <div className="w-full dark:bg-gray-900 bg-white z-[50] md:py-2 md:px-8 py-1 px-4 gap-4 border-b-solid border-b-[1px] border-gray-600/50 backdrop-blur-md cursor-pointer flex justify-between items-center">
       <div className="flex gap-2">
         <div className="relative ">
           <img
             src={currentChat?.avatar_url}
             alt="chat_image"
-            className="md:w-[50px] md:h-[50px] md:min-w-[50px] md:min-h-[40px] w-[40px] h-[40px] min-w-[40px] min-h-[40px] rounded-full object-cover border-solid border-[1px] border-gray-600"
+            className="md:w-[50px] md:h-[50px] md:min-w-[50px] md:min-h-[40px] w-[40px] h-[40px] min-w-[40px] min-h-[40px] rounded-full object-cover border-solid border-[1px] dark:border-gray-600 border-gray-300"
           />
           {online && (
             <span className="absolute top-0 right-0 w-[15px] h-[15px] rounded-full bg-green-500 backdrop-blur-md animate-pulse" />
@@ -52,17 +52,17 @@ const ChatInfo = () => {
         <div className="flex justify-between items-center w-full">
           <div className="flex flex-col">
             <div className="flex justify-start items-center w-full gap-6">
-              <h2 className="text-gray-400 md:text-xl text-lg cursor-default">
+              <h2 className="dark:text-gray-400 text-gray-600 md:text-xl text-lg cursor-default">
                 {currentChat?.name}
               </h2>
               <div className="flex justify-end items-center gap-2 w-[40px]">
                 {currentChat.status?.muted && (
-                  <span className="w-6 h-6 flex justify-center items-center bg-gray-800 rounded-md p-1">
+                  <span className="w-6 h-6 flex justify-center items-center dark:bg-gray-800 bg-gray-300 rounded-md p-1">
                     <IoVolumeMute className="w-6 h-6 text-gray-500" />
                   </span>
                 )}
                 {currentChat.status?.blocked && (
-                  <span className="w-6 h-6 flex justify-center items-center bg-gray-800 rounded-md p-1">
+                  <span className="w-6 h-6 flex justify-center items-center dark:bg-gray-800 bg-gray-300 rounded-md p-1">
                     <TbLock className="w-6 h-6 text-gray-500" />
                   </span>
                 )}

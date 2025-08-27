@@ -75,7 +75,7 @@ const InviteUserForm = ({ showForm, setShowForm, group }) => {
             setValue={setName}
           />
           <span
-            className="absolute top-[6px] right-[24px] px-2 py-2 z-[10] w-[30px] h-[30px] flex justify-center items-center bg-gray-800 hover:bg-gray-800 text-gray-200 font-thin duration-200 border-[1px] border-solid border-gray-700 rounded-md cursor-pointer"
+            className="absolute top-[6px] right-[24px] px-2 py-2 z-[10] w-[30px] h-[30px] flex justify-center items-center dark:bg-gray-800 bg-gray-300 dark:hover:bg-gray-800 hoer:bg-gray-400 dark:text-gray-200 text-gray-600 font-thin duration-200 border-[1px] border-solid dark:border-gray-700 border-gray-400 rounded-md cursor-pointer"
             onClick={search}
           >
             <IoSearchOutline className={`absolute duration-200 `} />

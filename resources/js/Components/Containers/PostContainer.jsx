@@ -24,7 +24,6 @@ const PostContainer = ({
   const [allData, setAllData] = useState(posts);
   const { user } = useUserContext();
   let random = getRandomFloat(10, 20);
-  console.log(random);
 
   useEffect(() => {
     if (inView && allData?.meta?.current_page < allData?.meta?.last_page) {
@@ -49,7 +48,7 @@ const PostContainer = ({
     <>
       <>
         <div
-          className={`flex flex-col gap-3 w-full h-full items-center ${classes} pt-4`}
+          className={`flex flex-col gap-3 w-full h-full items-center ${classes} pt-2 md:pt-4`}
         >
           {children}
           {isLoading ? (

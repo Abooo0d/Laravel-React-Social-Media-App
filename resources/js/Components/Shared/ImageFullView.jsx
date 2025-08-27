@@ -37,32 +37,36 @@ const ImageFullView = ({
   };
   return (
     <div
-      className={`fixed inset-0 z-[800] w-screen overflow-y-auto flex min-h-full items-center justify-center p-4 bg-gray-950/60 backdrop-blur-sm duration-200 ${
+      className={`fixed inset-0 z-[800] w-screen overflow-y-auto flex min-h-full items-center justify-center p-4 dark:bg-gray-950/60 bg-gray-100/40 backdrop-blur-sm duration-200 ${
         show ? `visible opacity-100` : `invisible opacity-0 scale-[95%]`
       }`}
     >
-      <div className="animate-scaleUp h-full  w-full rounded-lg relative flex justify-between items-center bg-gray-900/60 border-solid border-[1px] border-gray-700 backdrop-blur-md p-4">
+      <div className="animate-scaleUp h-full  w-full rounded-lg relative flex justify-between items-center dark:bg-gray-900/60 bg-gray-300/60 border-solid border-[1px] dark:border-gray-700 border-gray-400 backdrop-blur-md p-4">
         <div className="absolute top-[30px] right-[12px] h-20 flex justify-center items-center gap-2 flex-col z-[100]">
           <SecondaryButton
             classes="py-1.5 px-3 right-0"
             event={() => setShowImage(false)}
           >
-            <RiArrowGoBackFill className="w-5 h-5 text-gray-200" />
+            <RiArrowGoBackFill className="w-5 h-5 dark:text-gray-200 text-gray-600" />
           </SecondaryButton>
           {update && (
             <>
-              {attachmentId !== 0 && (
-                <a
-                  href={route("post.download", attachmentId ?? 0)}
-                  className="no-underline"
-                >
-                  <SecondaryButton
-                    classes="relative py-1.5 px-3"
-                    event={() => {}}
-                  >
-                    <GoDownload className="w-5 h-5 text-gray-200" />
-                  </SecondaryButton>
-                </a>
+              {attachmentId && (
+                <>
+                  {attachmentId !== 0 && (
+                    <a
+                      // href={route("post.download", attachmentId ?? 0)}
+                      className="no-underline"
+                    >
+                      <SecondaryButton
+                        classes="relative py-1.5 px-3"
+                        event={() => {}}
+                      >
+                        <GoDownload className="w-5 h-5 dark:text-gray-200 text-gray-600" />
+                      </SecondaryButton>
+                    </a>
+                  )}
+                </>
               )}
             </>
           )}

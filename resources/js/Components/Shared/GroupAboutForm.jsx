@@ -63,16 +63,18 @@ const GroupAboutForm = ({ group, setGroup }) => {
     }
   };
   return (
-    <div className="w-full flex flex-col gap-2 bg-gray-900 px-8 py-4 rounded-md">
-      <h2 className="text-gray-400 mb-2">Group Name:</h2>
+    <div className="w-full flex flex-col gap-2 dark:bg-gray-900 bg-gray-200 px-8 py-4 rounded-md">
+      <h2 className="dark:text-gray-400 text-gray-600 mb-2">Group Name:</h2>
       <TextInput
         placeholder="Group Name"
-        classes=" w-[calc(100%-30px)] font-lg ml-4 bg-gray-800"
+        classes=" w-[calc(100%-30px)] font-lg ml-4"
         value={groupName}
         setValue={setGroupName}
       />
       <div className="flex justify-start items-center gap-4 my-4 h-[50px]">
-        <h2 className="text-gray-400 mb-2">Auto Approval:</h2>
+        <h2 className="dark:text-gray-400 text-gray-600 mb-2">
+          Auto Approval:
+        </h2>
         <Switch
           checked={autoApproval}
           onChange={setAutoApproval}
@@ -81,12 +83,14 @@ const GroupAboutForm = ({ group, setGroup }) => {
           <span className="size-4 translate-x-1 rounded-full bg-white transition group-data-[checked]:translate-x-6" />
         </Switch>
       </div>
-      <h2 className="text-gray-400 mb-2">About The Group:</h2>
+      <h2 className="dark:text-gray-400 text-gray-600 mb-2">
+        About The Group:
+      </h2>
       <textarea
         ref={textareaRef}
         placeholder="Your comment"
         onInput={handleInput}
-        className="flex-1 bg-gray-800 outline-none border-none focus:outline-none rounded-md focus:border-none ring-0 focus:ring-0 text-gray-300 resize-none h-auto min-h-[40px] max-h-[150px] "
+        className="flex-1 dark:bg-gray-800 bg-gray-300 outline-none border-none focus:outline-none rounded-md focus:border-non  e ring-0 focus:ring-0 dark:text-gray-300 text-gray-600 resize-none h-auto min-h-[40px] max-h-[150px] "
         value={groupAbout}
         onChange={(e) => setGroupAbout(e.target.value)}
       ></textarea>

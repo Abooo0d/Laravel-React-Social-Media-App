@@ -37,9 +37,9 @@ const GroupeCard = ({ data, setShowGroupContainer }) => {
             alt="groupeThumbnailImage"
             className="w-[50px] h-[50px] rounded-full object-cover"
           />
-          <h3 className="font-bold text-md dark:text-gray-200">{data.name}</h3>
+          <h3 className="font-bold text-md text-gray-200 ">{data.name}</h3>
         </div>
-        <p className=" text-gray-700 text-[14px] dark:text-gray-400 h-[100%] max-h-[40px] overflow-hidden">
+        <p className=" text-[14px] text-gray-300 h-[100%] max-h-[40px] overflow-hidden z-10">
           {data.description}
         </p>
       </div>

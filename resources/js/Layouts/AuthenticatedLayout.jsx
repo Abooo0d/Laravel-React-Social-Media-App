@@ -99,9 +99,9 @@ export default function Authenticated({ children }) {
     <div className="min-h-screen bg-gray-300/80 dark:bg-homeFeed">
       <nav className="relative bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex">
-              <div className="shrink-0 flex items-center">
+          <div className="flex justify-between h-16 max-w-[100vw]">
+            <div className="flex justify-center items-center">
+              <div className="shrink-0 flex ite ms-center">
                 <Link
                   href="/"
                   onClick={() => {
@@ -110,7 +110,7 @@ export default function Authenticated({ children }) {
                 >
                   <img
                     src="/Logo.png"
-                    className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
+                    className="block h-9 w-auto fill-current"
                   />
                   {/* <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" /> */}
                 </Link>
@@ -135,7 +135,7 @@ export default function Authenticated({ children }) {
                   show={showNotificationsForm}
                 >
                   {notificationsCount > 0 && (
-                    <span className="w-4 h-4 bg-red-500/40 border-[1px] border-solid border-red-500 backdrop-blur-sm absolute top-[-5px] right-0 text-[12px] flex justify-center items-center rounded-md text-gray-300  p-0">
+                    <span className="w-4 h-4 bg-red-500/40 border-[1px] border-solid border-red-500 backdrop-blur-sm absolute top-[-5px] right-0 text-[12px] flex justify-center items-center rounded-md dark:text-gray-300 text-gray-700 p-0">
                       {notificationsCount}
                     </span>
                   )}
@@ -180,7 +180,7 @@ export default function Authenticated({ children }) {
                   <IoReloadOutline />
                 </button>
               </div>
-              <div className="hidden sm:flex sm:items-center z-[200]">
+              <div className="hidden sm:flex sm:items-center z-[8]">
                 {currentUser ? (
                   <AuthMenu
                     currentUser={currentUser}
@@ -198,7 +198,7 @@ export default function Authenticated({ children }) {
                   </Link>
                 )}
               </div>
-              <div className="-me-2 flex items-center sm:hidden">
+              <div className=" flex items-center sm:hidden ">
                 <button
                   onClick={() =>
                     setShowingNavigationDropdown(
@@ -270,7 +270,7 @@ export default function Authenticated({ children }) {
       )}
 
       <div className="flex justify-between items-start">
-        <div className="flex flex-col justify-between items-start h-full flex-1 max-w-[200px] bg-gray-900 min-h-barHeight max-md:hidden border-solid border-r-[1px] border-gray-500/50">
+        <div className="flex flex-col justify-between items-start h-full flex-1 max-w-[200px] dark:bg-gray-900 bg-white min-h-barHeight max-md:hidden border-solid border-r-[1px] dark:border-gray-500/50 border-gray-400">
           <div className="flex flex-col justify-start items-start min-w-full h-fit">
             <SideBarButton
               // show={showFollowerContainer}
@@ -352,7 +352,7 @@ export default function Authenticated({ children }) {
         <main className="flex-[3]">{children}</main>
         <div
           className={`absolute top-0 left-0 min-h-[100vh] min-w-[100vw] bg-transparent ${
-            showOverlay ? "visible z-[150]" : "invisible z-0"
+            showOverlay ? "visible z-[7]" : "invisible z-0"
           }`}
           onClick={() => {
             hideAll();

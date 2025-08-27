@@ -43,16 +43,16 @@ const ChatsBar = ({ setIsLoading }) => {
 
   return (
     <div className="relative z-[101]">
-      <div className=" max-h-barHeight h-full w-[270px] lg:flex hidden flex-col gap-2 py-2 bg-gray-900 px-2 border-r-solid border-r-gray-500/50 border-r-[1px]">
-        <h2 className="block max-lg-hidden text-xl font-bold dark:text-gray-300 pl-4 pt-2 cursor-default">
+      <div className=" max-h-barHeight h-full w-[270px] lg:flex hidden flex-col gap-2 py-2 dark:bg-gray-900 bg-white px-2 border-r-solid dark:border-r-gray-500/50 border-r-gray-300 border-r-[1px]">
+        <h2 className="block max-lg-hidden text-xl font-bold dark:text-gray-300 text-gray-600 pl-4 pt-2 cursor-default">
           My Chats:
         </h2>
-        <div className="flex justify-between items-center bg-gray-700 rounded-md mt-1 ">
+        <div className="flex justify-between items-center dark:bg-gray-700 bg-gray-300 rounded-md mt-1 ">
           <input
             type="text"
             name="search"
             placeholder="Type To Search"
-            className="bg-transparent flex-1 text-gray-400 outline-none ring-0 border-none hover:ring-0 focus:ring-0 max-w-[190px]"
+            className="bg-transparent flex-1 dark:text-gray-400 text-gray-600 outline-none ring-0 border-none hover:ring-0 focus:ring-0 max-w-[190px]"
             value={searchName}
             onChange={(e) => setSearchName(e.target.value)}
           />

@@ -30,14 +30,14 @@ const NotificationsBar = ({
   return (
     <div className="relative z-[200]">
       <div
-        className={`flex flex-col max-h-[500px] absolute md:top-[96px] top-[-10px] w-[400px] max-w-[90%] right-[50%] translate-x-[50%] md:left-[0px] z-[100] overflow-hidden rounded-xl md:rounded-l-none bg-gray-900/60 border-[1px] border-solid border-gray-500/50 backdrop-blur-md duration-200 ${
+        className={`flex flex-col max-h-[500px] absolute md:top-[96px] top-[-10px] w-[400px] max-w-[90%] right-[50%] translate-x-[50%] md:left-[0px] z-[100] overflow-hidden rounded-xl md:rounded-l-none dark:bg-gray-900/60 bg-gray-300/50 border-[1px] border-solid dark:border-gray-500/50 border-l-0 border-gray-400 backdrop-blur-md duration-200 ${
           showNotificationsForm
             ? "visible opacity-100"
             : "invisible opacity-0 scale-90 "
         } `}
       >
-        <div className="w-full flex justify-between items-center bg-gray-800 px-2 h-[48px]">
-          <h2 className="text-gray-400 bg-gray-800 w-fit py-3 px-4 lg:text-xl font-bold cursor-default max-h-full">
+        <div className="w-full flex justify-between items-center dark:bg-gray-800 bg-gray-300 px-2 h-[48px]">
+          <h2 className="dark:text-gray-400 text-gray-600 dark:bg-gray-800 bg-gray-300 w-fit py-3 px-4 lg:text-xl font-bold cursor-default max-h-full">
             Notifications:
           </h2>
           <PrimaryButton

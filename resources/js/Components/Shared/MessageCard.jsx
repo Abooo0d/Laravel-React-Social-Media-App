@@ -68,10 +68,10 @@ const MessageCard = ({ message }) => {
         }`}
       >
         <div
-          className={`backdrop-blur-sm relative w-fit p-2 rounded-md text-gray-400 word-wrap cursor-default max-w-[80%] ove flex justify-center items-start flex-col break-all  ${
+          className={`backdrop-blur-sm relative w-fit p-2 rounded-md dark:text-gray-400 text-gray-600 word-wrap cursor-default max-w-[80%] ove flex justify-center items-start flex-col break-all  ${
             message?.user.id != user.id
-              ? "bg-[rgba(46,59,78,100%)]"
-              : "bg-gray-800 pr-8"
+              ? "dark:bg-[rgba(46,59,78,100%)] bg-gray-400"
+              : "dark:bg-gray-800 pr-8 bg-gray-300"
           }`}
         >
           {message?.attachments.length > 0 && (
@@ -112,7 +112,7 @@ const MessageCard = ({ message }) => {
             </MarkdownRenderer>
           )}
           <div className={`flex justify-start items-center gap-2 ml-auto  `}>
-            <span className="text-gray-400 text-[8px]">
+            <span className="dark:text-gray-400 text-gray-600 text-[8px]">
               {message?.created_at}
             </span>
             {message?.edited && <span className="text-[10px]">edited</span>}
@@ -137,8 +137,8 @@ const MessageCard = ({ message }) => {
           <div
             className={`absolute bottom-0 ${
               message?.user.id != user.id
-                ? "left-[-10px] w-[20px] h-[20px] border-[10px] border-solid border-transparent border-b-[rgba(46,59,78,100%)] z-10"
-                : "right-[-10px] w-[20px] h-[20px] border-[10px] border-solid border-transparent border-b-gray-800 z-10"
+                ? "left-[-10px] w-[20px] h-[20px] border-[10px] border-solid border-transparent dark:border-b-[rgba(46,59,78,100%)] border-b-gray-400 z-10"
+                : "right-[-10px] w-[20px] h-[20px] border-[10px] border-solid border-transparent dark:border-b-gray-800 border-b-gray-300 z-10"
             }`}
           />
         </div>

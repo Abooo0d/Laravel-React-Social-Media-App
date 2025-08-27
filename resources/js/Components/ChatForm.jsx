@@ -146,12 +146,12 @@ const ChatForm = () => {
     setChosenFiles((prev) => [...prev, { file: file, url: url }]);
   };
   return (
-    <div className="flex relative w-full justify-between items-start bg-gray-900 md:p-4 p-4 border-t-[1px] border-solid border-gray-700 ">
+    <div className="flex relative w-full justify-between items-start dark:bg-gray-900 bg-white md:p-4 p-4 border-t-[1px] border-solid dark:border-gray-700 border-gray-300 ">
       <ChatFormAttachmentContainer
         attachments={chosenFiles}
         setAttachments={setChosenFiles}
       />
-      <div className="relative flex justify-between items-start w-full bg-gray-700 rounded-md min-h-[40px] px-2 md:flex-row ">
+      <div className="relative flex justify-between items-end w-full dark:bg-gray-700 bg-gray-300 rounded-md min-h-[40px] px-2 md:flex-row ">
         <div
           className={`absolute -top-[320px] left-0 duration-200 ${
             openEmoji ? "opacity-100 visible z-10" : " opacity-0 invisible z-0"
@@ -172,8 +172,8 @@ const ChatForm = () => {
           /> */}
         </div>
         <span
-          className={`w-[30px] h-[30px] text-gray-400 flex justify-center items-center hover:bg-gray-800/50 rounded-md duration-200 cursor-pointer
-          ${openEmoji && "bg-gray-800/50"}
+          className={`w-[30px] h-[30px] mb-1 dark:text-gray-400 text-gray-600 flex justify-center items-center dark:hover:bg-gray-800/50 hover:bg-gray-400/50 rounded-md duration-200 cursor-pointer
+          ${openEmoji && "dark:bg-gray-800/50 bg-gray-400/50"}
           `}
         >
           <BsFillEmojiSmileFill
@@ -185,7 +185,7 @@ const ChatForm = () => {
         {chosenFiles.length > 0 && (
           <>
             {!!uploadingProgress && (
-              <div className="absolute top-[-10px] left-0 w-full h-[5px] bg-gray-800 flex justify-start items-center rounded-full overflow-hidden">
+              <div className="absolute top-[-10px] left-0 w-full h-[5px] dark:bg-gray-800 bg-gray-300 flex justify-start items-center rounded-full overflow-hidden">
                 <span
                   className={`absolute top-0 left-0 h-full bg-blue-700 duration-500 max-w-full`}
                   style={{
@@ -197,7 +197,7 @@ const ChatForm = () => {
           </>
         )}
         <textarea
-          className="flex-1 bg-transparent outline-none border-none focus:outline-none focus:border-none ring-0 focus:ring-0 text-gray-300 resize-none h-auto min-h-[40px] max-h-[150px] "
+          className="flex-1 bg-transparent outline-none border-none focus:outline-none focus:border-none ring-0 focus:ring-0 dark:text-gray-300 text-gray-600 resize-none h-auto min-h-[40px] max-h-[150px] "
           ref={textareaRef}
           onChange={(e) => {
             setMessage(e.target.value);
@@ -208,12 +208,12 @@ const ChatForm = () => {
         <div className="flex h-[40px] justify-center items-center max-sm:flex-col">
           <div className="flex">
             <span
-              className="relative w-[30px] h-[30px] text-gray-400 flex justify-center items-center hover:bg-gray-800/50 rounded-md duration-200"
+              className="relative w-[30px] h-[30px] dark:text-gray-400 text-gray-600 flex justify-center items-center dark:hover:bg-gray-800/50 hover:bg-gray-400/50 rounded-md duration-200"
               onClick={() => sendLike()}
             >
               <AiFillLike />
             </span>
-            <span className="relative w-[30px] h-[30px] text-gray-400 flex justify-center items-center hover:bg-gray-800/50 rounded-md duration-200">
+            <span className="relative w-[30px] h-[30px] dark:text-gray-400 text-gray-600 flex justify-center items-center dark:hover:bg-gray-800/50 hover:bg-gray-400/50 rounded-md duration-200">
               <FiPaperclip />
               <input
                 type="file"
@@ -223,7 +223,7 @@ const ChatForm = () => {
                 className="absolute inset-0 opacity-0 cursor-pointer z-[10]"
               />
             </span>
-            <span className="relative w-[30px] h-[30px] text-gray-400 flex justify-center items-center hover:bg-gray-800/50 rounded-md duration-200">
+            <span className="relative w-[30px] h-[30px] dark:text-gray-400 text-gray-600 flex justify-center items-center dark:hover:bg-gray-800/50 hover:bg-gray-400/50 rounded-md duration-200">
               <FaImage />
               <input
                 type="file"

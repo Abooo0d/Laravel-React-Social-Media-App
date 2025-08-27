@@ -93,7 +93,7 @@ export default function Register() {
               hidePassword={hidePassword}
             />
             <span
-              className="absolute top-[6px] right-[6px] px-2 py-2 z-[10] w-[30px] h-[30px] flex justify-center items-center bg-gray-800 hover:bg-gray-800 text-gray-200 font-thin duration-200 border-[1px] border-solid border-gray-700 rounded-md cursor-pointer"
+              className="absolute top-[6px] right-[6px] px-2 py-2 z-[10] w-[30px] h-[30px] flex justify-center items-center bg-gray-300 hover:bg-gray-400/50 text-gray-800 border-gray-400 dark:bg-gray-800 dark:hover:bg-gray-800 dark:text-gray-200 font-thin duration-200 border-[1px] border-solid dark:border-gray-700 rounded-md cursor-pointer"
               onClick={() => {
                 setHidePassword((prev) => {
                   return !prev;
@@ -133,7 +133,7 @@ export default function Register() {
               hidePassword={hideConfirm}
             />
             <span
-              className="absolute top-[6px] right-[6px] px-2 py-2 z-[10] w-[30px] h-[30px] flex justify-center items-center bg-gray-800 hover:bg-gray-800 text-gray-200 font-thin duration-200 border-[1px] border-solid border-gray-700 rounded-md cursor-pointer"
+              className="absolute top-[6px] right-[6px] px-2 py-2 z-[10] w-[30px] h-[30px] flex justify-center items-center bg-gray-300 hover:bg-gray-400/50 text-gray-800 border-gray-400 dark:bg-gray-800 dark:hover:bg-gray-800 dark:text-gray-200 font-thin duration-200 border-[1px] border-solid dark:border-gray-700 rounded-md cursor-pointer"
               onClick={() => {
                 setHideConfirm((prev) => {
                   return !prev;

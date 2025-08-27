@@ -25,7 +25,7 @@ const MessageAttachment = ({
 
   return (
     <div
-      className={`relative rounded-md overflow-hidden flex justify-start items-enter cursor-pointer duration-200 border-transparent border-[1px] border-solid hover:border-gray-500 hover:scale-105 group
+      className={`relative rounded-md overflow-hidden flex justify-start items-enter cursor-pointer duration-200 border-transparent border-[1px] border-solid dark:hover:border-gray-500 border-gray-500 hover:scale-105 group
     ${
       MessageIsAudio(attachment)
         ? "w-60 h-20"
@@ -38,13 +38,13 @@ const MessageAttachment = ({
         : "w-240h-20"
     }`}
     >
-      <span className="absolute top-1 right-7 w-5 h-5 rounded-md flex justify-center items-center bg-gray-300/20 text-gray-300 group-hover:opacity-100 opacity-0 duration-200">
+      <span className="absolute top-1 right-7 w-5 h-5 rounded-md flex justify-center items-center dark:bg-gray-300/20 bg-gray-600/50 text-gray-300  group-hover:opacity-100 opacity-0 duration-200">
         {index}
       </span>
       {MessageIsImage(attachment) && (
         <>
           <span
-            className="absolute top-1 right-1 w-5 h-5  rounded-md flex justify-center items-center bg-gray-300/20 text-gray-300 group-hover:opacity-100 opacity-0 duration-200 z-10"
+            className="absolute top-1 right-1 w-5 h-5  rounded-md flex justify-center items-center dark:bg-gray-300/20 bg-gray-600/50 text-gray-300 group-hover:opacity-100 opacity-0 duration-200 z-10"
             onClick={() => {
               RemoveAttachment();
             }}

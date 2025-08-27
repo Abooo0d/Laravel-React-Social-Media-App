@@ -3,7 +3,7 @@ import React from "react";
 const FollowerCard = ({ data, setShowFollowerContainer }) => {
   return (
     <Link
-      className={`relative min-h-[80px] w-full duration-200 hover:bg-gray-300 dark:hover:bg-gray-700 cursor-pointer bg-gray-100 dark:bg-gray-800 rounded-[10px] group overflow-hidden group border-[1px] border-solid border-gray-500/50 hover:border-gray-600`}
+      className={`relative min-h-[80px] w-full duration-200 hover:bg-gray-700 cursor-pointer bg-gray-800 rounded-[10px] group overflow-hidden group border-[1px] border-solid border-gray-500/50`}
       href={route("profile.view", data.username)}
       onClick={() => setShowFollowerContainer(false)}
     >
@@ -19,7 +19,7 @@ const FollowerCard = ({ data, setShowFollowerContainer }) => {
             alt="follower-img"
             className="w-[60px] h-[60px] rounded-full object-cover duration-200"
           />
-          <h3 className="font-bold text-md dark:text-gray-200">{data.name}</h3>
+          <h3 className="font-bold text-md text-gray-300">{data.name}</h3>
         </div>
       </div>
     </Link>

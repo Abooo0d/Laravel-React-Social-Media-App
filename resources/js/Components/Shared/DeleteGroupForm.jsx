@@ -42,7 +42,7 @@ export default function DeleteGroupForm({ group }) {
       });
   };
   return (
-    <div className="w-full flex flex-col gap-8 bg-gray-900 px-8 py-4 rounded-md p-6">
+    <div className="w-full flex flex-col gap-8 dark:bg-gray-900 bg-gray-200 px-8 py-4 rounded-md p-6">
       <header>
         <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
           Delete Group

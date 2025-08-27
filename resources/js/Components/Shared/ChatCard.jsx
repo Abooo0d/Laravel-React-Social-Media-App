@@ -70,7 +70,7 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
 
   return (
     <div
-      className="min-h-[50px] w-[250px] relative flex items-center justify-start gap-2 py-2 px-4 text-gray-400 duration-200 rounded-md hover:bg-gray-800/60 cursor-pointer"
+      className="min-h-[50px] w-[250px] relative flex items-center justify-start gap-2 py-2 px-4 text-gray-400 duration-200 rounded-md dark:hover:bg-gray-800/60 hover:bg-gray-300 cursor-pointer"
       onClick={() => {
         setShow(false);
         getChat();

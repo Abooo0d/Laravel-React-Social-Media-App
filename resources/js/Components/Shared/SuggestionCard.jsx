@@ -7,8 +7,6 @@ import { useMainContext } from "@/Contexts/MainContext";
 import { useState } from "react";
 
 const SuggestionCard = ({ suggestion }) => {
-  console.log(suggestion);
-
   const { setErrors, setSuccessMessage } = useMainContext();
   const [added, setAdded] = useState(suggestion.is_friend);
   const addFriend = () => {
@@ -23,7 +21,7 @@ const SuggestionCard = ({ suggestion }) => {
       });
   };
   return (
-    <div className="w-[200px] h-[290px] bg-gray-800/50 overflow-hidden cursor-pointer rounded-md flex flex-col justify-start items-start border-[1px] border-solid border-gray-600/50 duration-200 hover:bg-gray-800">
+    <div className="w-[200px] h-[290px] dark:bg-gray-800/50 bg-gray-300 overflow-hidden cursor-pointer rounded-md flex flex-col justify-start items-start border-[1px] border-solid dark:border-gray-600/50 border-gray-400 duration-200 dark:hover:bg-gray-800 hover:bg-gray-400/40">
       <Link
         href={route("profile.view", suggestion.username)}
         className="w-full h-full"
@@ -33,7 +31,9 @@ const SuggestionCard = ({ suggestion }) => {
           className="w-full min-h-[180px] max-h-[180px] rounded-md rounded-b-none object-cover"
         />
         <div className="py-2 px-4 max-h-[50px] min-h-[50px]">
-          <h2 className="text-gray-300 mb-0">{suggestion.name}</h2>
+          <h2 className="dark:text-gray-300 text-gray-600 mb-0">
+            {suggestion.name}
+          </h2>
           <h2 className="text-gray-500 text-[12px] m-0">
             @{suggestion.username}
           </h2>
@@ -41,7 +41,7 @@ const SuggestionCard = ({ suggestion }) => {
       </Link>
       <div className="flex w-full max-h-[60px] min-h-[60px] gap-2 px-2 py-3 text-[14px]">
         {added ? (
-          <div className="w-full flex text-gray-400 justify-center items-center gap-2">
+          <div className="w-full flex dark:text-gray-400 text-gray-600 justify-center items-center gap-2">
             Friend Added <FiUserPlus />
           </div>
         ) : (

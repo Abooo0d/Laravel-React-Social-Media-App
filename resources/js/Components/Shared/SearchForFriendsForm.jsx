@@ -59,10 +59,15 @@ const SearchForFriendsForm = ({ showForm, setShowForm }) => {
       >
         <HiMiniXMark className="w-5 h-5 text-gray-200" />
       </SecondaryButton>
-      <div as="h3" className="text-base/7 font-medium text-white mb-4">
+      <div
+        as="h3"
+        className="text-base/7 font-medium dark:text-white text-gray-600 mb-4"
+      >
         Add Friends
       </div>
-      <h2 className="text-gray-400 mb-2">Search For Friends</h2>
+      <h2 className="dark:text-gray-400 text-gray-600 mb-2">
+        Search For Friends
+      </h2>
       <div className="relative w-full">
         <TextInput
           placeholder="Name Or Email:"
@@ -71,7 +76,7 @@ const SearchForFriendsForm = ({ showForm, setShowForm }) => {
           setValue={setName}
         />
         <span
-          className="absolute top-[6px] right-[24px] px-2 py-2 z-[10] w-[30px] h-[30px] flex justify-center items-center bg-gray-800 hover:bg-gray-800 text-gray-200 font-thin duration-200 border-[1px] border-solid border-gray-700 rounded-md cursor-pointer"
+          className="absolute top-[6px] right-[24px] px-2 py-2 z-[10] w-[30px] h-[30px] flex justify-center items-center dark:bg-gray-800 dark:hover:bg-gray-800 dark:text-gray-200 bg-gray-200 hover:bg-gray-300 text-gray-600 font-thin duration-200 border-[1px] border-solid dark:border-gray-700 border-gray-400 rounded-md cursor-pointer"
           onClick={search}
         >
           <IoSearchOutline className={`absolute duration-200 `} />

@@ -30,7 +30,7 @@ const PostAttachmentCard = ({
             classes="absolute top-[10px] right-[10px] py-1.5 px-3 h-[40px]"
             event={() => onDelete(attachment, index, update)}
           >
-            <HiMiniXMark className="w-5 h-5 " />
+            <HiMiniXMark className="w-5 h-5 dark:text-gray-300 text-gray-600" />
           </SecondaryButton>
           <SecondaryButton
             event={() => {}}
@@ -38,14 +38,16 @@ const PostAttachmentCard = ({
               "absolute right-[60px] top-[10px] px-3 py-1.5 h-[40px] cursor-default"
             }
           >
-            {index + 1}
+            <span className="dark:text-gray-300 text-gray-600">
+              {index + 1}
+            </span>
           </SecondaryButton>
           {attachment.file && (
             <SecondaryButton
               event={() => {}}
               classes="px-3 py-1.5 absolute top-[10px] right-[100px] h-[40px]"
             >
-              new
+              <span className="dark:text-gray-300 text-gray-600">new</span>
             </SecondaryButton>
           )}
           {attachment.isDeleted && (

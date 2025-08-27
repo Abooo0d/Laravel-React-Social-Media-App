@@ -10,7 +10,6 @@ import { useChatsContext } from "@/Contexts/ChatsContext";
 import { useMainContext } from "@/Contexts/MainContext";
 import { useUserContext } from "@/Contexts/UserContext";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-// import VideoCallRoom from "@/Components/Shared/VideoCallRoom";
 import { Head, router, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 function Chats({ auth, groupsChat, allChats }) {
