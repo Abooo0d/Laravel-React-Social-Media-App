@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import CreatePost from "../Shared/CreatePost";
 import PostContainer from "./PostContainer";
 import FriendSuggestionsContainer from "./FriendSuggestionsContainer";
+import HomeLoader from "./HomeLoader";
+import ProfileLoader from "./ProfileLoader";
 
 const HomeFeed = ({
   posts,
