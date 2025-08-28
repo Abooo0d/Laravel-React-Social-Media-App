@@ -70,7 +70,7 @@ const PostCardMenu = ({
         >
           <Link
             href={route("post.publicView", post)}
-            className="bg-gray-300 duration-300 flex gap-2 justify-start items-center hover:bg-gray-400 dark:hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-600 focus:outline-none text-left"
+            className="bg-gray-300 dark:bg-gray-800 duration-300 flex gap-2 justify-start items-center hover:bg-gray-400 dark:hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-600 focus:outline-none text-left"
           >
             <CiGlobe className="w-[17px] h-[17px]" />
             View Post
@@ -79,7 +79,7 @@ const PostCardMenu = ({
             onClick={() => {
               copyToClipBoard();
             }}
-            className="bg-gray-300 duration-300 flex gap-2 justify-start items-center hover:bg-gray-400 dark:hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-600 focus:outline-none text-left"
+            className="bg-gray-300 dark:bg-gray-800 duration-300 flex gap-2 justify-start items-center hover:bg-gray-400 dark:hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-600 focus:outline-none text-left"
           >
             <FaRegClipboard className="w-[17px] h-[17px]" />
             Copy Link

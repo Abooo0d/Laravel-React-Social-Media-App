@@ -74,7 +74,7 @@ const PostCommentSection = ({ show, post, setPost, currentUser }) => {
         <div className="relative flex-1 flex justify-center items-center">
           <textarea
             placeholder="Your comment"
-            className="flex-1 px-2 py-1 bg-gray-200 hover:bg-gray-300/40 text-gray-700 placeholder:text-gray-500 border-gray-300 hover:border-gray-300 focus:border-gray-300 dark:bg-gray-700/50 dark:text-gray-400 dark:placeholder:text-gray-600 resize-none overflow-scroll h-[80px] dark:border-gray-800 rounded-md outline-none dark:focus:border-gray-600 ring-0 focus:ring-0 duration-200 cursor-pointer"
+            className="flex-1 px-2 py-1 bg-gray-200 hover:bg-gray-300/40 text-gray-700 placeholder:text-gray-500 border-gray-300 hover:border-gray-300 focus:border-gray-300 dark:bg-gray-700/50 dark:hover:bg-gray-800 dark:hover:border-gray-600 dark:text-gray-400 dark:placeholder:text-gray-600 resize-none overflow-scroll h-[80px] dark:border-gray-800 rounded-md outline-none dark:focus:border-gray-600 ring-0 focus:ring-0 duration-200 cursor-pointer"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           ></textarea>

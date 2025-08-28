@@ -70,7 +70,7 @@ const PostAttachmentCard = ({
         );
       })}
       {isImage(attachment.file ? attachment.file : attachment) ? (
-        <div className="w-full h-full max-h-[500px]">
+        <div className="w-full h-full max-h-[500px] flex justify-center items-center">
           <img
             key={index}
             src={attachment.url}
