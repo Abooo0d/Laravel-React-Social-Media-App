@@ -50,7 +50,7 @@ const PostCardMenu = ({
   };
   return (
     <>
-      <div className="relative z-[8]">
+      <div className="relative z-0">
         <button
           className={`w-10 h-10 rounded-md cursor-pointer flex justify-center items-center border-[1px] border-solid p-1 duration-200 ${
             openMenu
@@ -90,14 +90,14 @@ const PostCardMenu = ({
                 setShowForm(true);
                 setOpenMenu(false);
               }}
-              className="bg-gray-300 duration-300 flex gap-2 justify-start items-center hover:bg-gray-400 dark:hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-600 focus:outline-none text-left"
+              className="bg-gray-300 dark:bg-gray-800 duration-300 flex gap-2 justify-start items-center hover:bg-gray-400 dark:hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-600 focus:outline-none text-left"
             >
               <RiEditBoxLine className="w-[17px] h-[17px]" /> Edit Post
             </button>
           )}
           {showDelete() && (
             <button
-              className="bg-gray-300 duration-300 flex gap-2 justify-start items-center hover:bg-gray-400 dark:hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-600 focus:outline-none text-left"
+              className="bg-gray-300 dark:bg-gray-800 duration-300 flex gap-2 justify-start items-center hover:bg-gray-400 dark:hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-600 focus:outline-none text-left"
               onClick={() => onDelete()}
             >
               <MdDeleteOutline className="w-[17px] h-[17px]" />

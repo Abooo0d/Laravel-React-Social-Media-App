@@ -19,7 +19,7 @@ const CreatePostPostAttachments = ({
       {post.attachments && post.attachments.length > 0 ? (
         <>
           <div
-            className={`w-full lg:min-h-[300px] min-h-[200px] overflow-hidden grid gap-3 mt-4
+            className={`w-full lg:min-h-[300px] min-h-[200px] overflow-hidden grid gap-3 mt-4 back
                               ${
                                 post.attachments.length === 1
                                   ? ` grid-cols-1`

@@ -32,7 +32,7 @@ const AuthMenu = ({ currentUser, show, setShow }) => {
       </button>
       <div
         className={`w-[200px] rounded-md overflow-hidden flex flex-col justify-start items-start absolute top-[70px] right-[30px] duration-300 z-[300] ${
-          show ? "visible z-100 opacity-100" : "invisible z-0 opacity-0"
+          show ? "visible z-[10] opacity-100" : "invisible z-0 opacity-0"
         }`}
       >
         <Link

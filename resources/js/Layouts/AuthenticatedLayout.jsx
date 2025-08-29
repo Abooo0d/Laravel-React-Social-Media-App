@@ -180,7 +180,7 @@ export default function Authenticated({ children }) {
                   <IoReloadOutline />
                 </button>
               </div>
-              <div className="hidden sm:flex sm:items-center z-[8]">
+              <div className="hidden sm:flex sm:items-center z-[10]">
                 {currentUser ? (
                   <AuthMenu
                     currentUser={currentUser}
@@ -230,7 +230,12 @@ export default function Authenticated({ children }) {
               </div>
             </div>
             <div className="mt-3 space-y-1">
-              <ResponsiveNavLink href={route("profile.myProfile")}>
+              <ResponsiveNavLink
+                href={route("profile.myProfile")}
+                event={() => {
+                  setShowingNavigationDropdown(false);
+                }}
+              >
                 Profile
               </ResponsiveNavLink>
               <ResponsiveNavLink
@@ -269,7 +274,7 @@ export default function Authenticated({ children }) {
         />
       )}
 
-      <div className="flex justify-between items-start">
+      <div className="flex justify-between items-start z-[10]">
         <div className="flex flex-col justify-between items-start h-full flex-1 max-w-[200px] dark:bg-gray-900 bg-white min-h-barHeight max-md:hidden border-solid border-r-[1px] dark:border-gray-500/50 border-gray-400">
           <div className="flex flex-col justify-start items-start min-w-full h-fit">
             <SideBarButton
@@ -349,15 +354,17 @@ export default function Authenticated({ children }) {
           </div>
         </div>
 
-        <main className="flex-[3]">{children}</main>
-        <div
-          className={`absolute top-0 left-0 min-h-[100vh] min-w-[100vw] bg-transparent ${
-            showOverlay ? "visible z-[7]" : "invisible z-0"
-          }`}
-          onClick={() => {
-            hideAll();
-          }}
-        />
+        <main className="flex-[3] relative">
+          <div
+            className={`absolute top-0 left-0 min-h-[100vh] min-w-[100vw] bg-transparent ${
+              showOverlay ? "visible z-[1]" : "invisible z-0"
+            }`}
+            onClick={() => {
+              hideAll();
+            }}
+          />
+          {children}
+        </main>
       </div>
     </div>
   );
