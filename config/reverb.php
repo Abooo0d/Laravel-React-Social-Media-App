@@ -33,15 +33,15 @@ return [
       'port' => env('REVERB_PORT', 6001),
       'path' => env('REVERB_SERVER_PATH', default: ''),
       'hostname' => env('REVERB_HOST', '0.0.0.0'),
-      // 'options' => [
-      //   'tls' => [
-      //     'local_cert' => base_path("ssl/192.168.1.109+1.pem"),
-      //     'local_pk' => base_path('ssl/192.168.1.109+1-key.pem'),
-      //     'passphrase' => env('REVERB_SSL_PASSPHRASE', null),
-      //     'verify_peer' => false,
-      //     'verify_peer_name' => false
-      //   ],
-      // ],
+      'options' => [
+        'tls' => [
+          'local_cert' => base_path("ssl/cert.pem"),
+          'local_pk' => base_path('ssl/cert.key'),
+          'passphrase' => env('REVERB_SSL_PASSPHRASE', null),
+          'verify_peer' => false,
+          'verify_peer_name' => false
+        ],
+      ],
       'max_request_size' => env('REVERB_MAX_REQUEST_SIZE', 10_000),
       'scaling' => [
         'enabled' => env('REVERB_SCALING_ENABLED', false),

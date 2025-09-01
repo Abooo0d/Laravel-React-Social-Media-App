@@ -2,9 +2,10 @@ import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 import react from "@vitejs/plugin-react";
 import rollupNodePolyFill from "rollup-plugin-node-polyfills";
+import fs from "fs";
 export default defineConfig({
   define: {
-    // __VITE_IS_HTTPS__: true,
+    __VITE_IS_HTTPS__: true,
     global: "globalThis",
     "process.env": {},
   },
@@ -35,17 +36,21 @@ export default defineConfig({
 
   server: {
     host: "192.168.1.106",
-    // host: "192.168.102.10",
+    // host: "192.168.205.10",
     port: 3000,
-    // https: {
-    //   key: fs.readFileSync("./ssl/192.168.1.109+1-key.pem"),
-    //   cert: fs.readFileSync("./ssl/192.168.1.109+1.pem"),
-    // },
+    https: {
+      key: fs.readFileSync("./ssl/cert.key"),
+      cert: fs.readFileSync("./ssl/cert.pem"),
+    },
     cors: {
       origin: [
-        "http://192.168.1.106:8000",
-        "http://192.168.1.106:3000",
-        "http://192.168.1.106:6001",
+        // "http://192.168.205.10:8000",
+        // "http://192.168.205.10:3000",
+        // "http://192.168.205.10:6001",
+
+        "https://192.168.1.106:8000",
+        "https://192.168.1.106:3000",
+        "https://192.168.1.106:6001",
 
         // "http://192.168.102.10:8000",
         // "http://192.168.102.10:3000",

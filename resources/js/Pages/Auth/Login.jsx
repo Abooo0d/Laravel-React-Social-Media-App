@@ -10,6 +10,7 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { Switch } from "@headlessui/react";
 import { PrimaryButton } from "@/Components/Shared/Buttons";
 import { useMainContext } from "@/Contexts/MainContext";
+import axiosClient from "@/AxiosClient/AxiosClient";
 export default function Login({ status, canResetPassword }) {
   const { setUser } = useUserContext();
   const [hidePassword, setHidePassword] = useState(true);
@@ -28,13 +29,14 @@ export default function Login({ status, canResetPassword }) {
     };
   }, []);
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
     post(route("login"), {
       onError: (error) => {
         setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
       },
     });
+    // await axiosClient.get("/sanctum/csrf-cookie");
   };
 
   useEffect(() => {

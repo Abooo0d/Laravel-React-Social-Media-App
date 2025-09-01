@@ -117,7 +117,7 @@ const AttachmentFullView = () => {
                           : MessageIsPDF(attachments[attachmentIndex])
                           ? "w-40 h-60 max-h-[80%] max-w-[70%]"
                           : MessageIsImage(attachments[attachmentIndex])
-                          ? "w-96 h-96 max-h-[80%] max-w-[70%]"
+                          ? "max-h-[80%] max-w-[70%] w-full h-full"
                           : "w-80 h-20 max-h-[80%] max-w-[70%]"
                       }`}
                 >

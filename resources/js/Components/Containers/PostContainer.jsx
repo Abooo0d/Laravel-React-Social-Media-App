@@ -68,7 +68,7 @@ const PostContainer = ({
                                   <FriendSuggestionsContainer
                                     data={suggestions}
                                     isLoadingSuggestions={isLoadingSuggestions}
-                                    key={index}
+                                    key={(index, "a")}
                                   />
                                   <PostCard
                                     post={post}

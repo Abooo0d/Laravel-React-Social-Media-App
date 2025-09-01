@@ -39,7 +39,6 @@ const VoiceCallRoom = () => {
       video: false,
     });
     localStream.current = stream;
-
     if (isCaller) {
       setCallStatus("Calling ...");
       setAcceptCall(true);
