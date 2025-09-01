@@ -105,7 +105,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
   Route::get('/chats', [ChatsController::class, 'index_mobile']);
   Route::post('/chats', [ChatsController::class, 'getChat']);
-  Route::post('/chat/new_message/{chat:id}', [chatsController::class, 'newMessage']);
+  Route::post('/chat/new_message/{chat:id}', [ChatsController::class, 'newMessage']);
   Route::post('/chat/read-message/{message:id}', [ChatsController::class, 'messageRead']);
   Route::get('/chat/get_more_messages/{message:id}', [ChatsController::class, 'getMoreMessages']);
   Route::post('/chat/search', [ChatsController::class, 'searchForChat']);

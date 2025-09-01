@@ -31,7 +31,7 @@ const View = ({ auth, chats }) => {
         <title>Chatter</title>
         <link rel="icon" type="image/svg+xml" href="/Logo_ico.ico" />
       </Head>
-      <div className="flex min-h-barHeight overflow-hidden">
+      <div className="flex min-h-barHeight max-h-barHeight overflow-hidden">
         <AIChatContainer />
         <AiChatsSideBar />
       </div>

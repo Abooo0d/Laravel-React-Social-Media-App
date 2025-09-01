@@ -44,7 +44,7 @@ const MessagesContainer = ({ isLoading }) => {
   }, [currentChat]);
   const abood = (abood4) => {};
   return (
-    <div className="order-2 relative bg-gray-300 dark:bg-gray-900 dark:bg-chat-pattern z-[10] bg-cover min-h-full md:max-h-barHeight max-h-[calc(100vh-120px)] flex-1 overflow-hidden flex flex-col justify-between items-center">
+    <div className="order-2 relative bg-gray-300 dark:bg-gray-900 dark:bg-chat-pattern z-[10] bg-cover min-h-full md:max-h-barHeight flex-1 overflow-hidden flex flex-col justify-between items-center">
       <div className="absolute inset-0 w-full h-full dark:bg-[rgba(17,24,39,58%)] bg-white/50" />
       {isLoading ? (
         <div className="flex w-full min-h-barHeight justify-center items-center">

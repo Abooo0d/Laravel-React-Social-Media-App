@@ -5,7 +5,7 @@ import { useAIContext } from "@/Contexts/AIContext";
 const AiChatsCardContainer = ({ setShow }) => {
   const { AIChats } = useAIContext();
   return (
-    <div>
+    <div className="flex flex-col-reverse overflow-auto max-h-[450px]">
       {AIChats?.length > 0 ? (
         <>
           {AIChats.map((chat, index) => (

@@ -354,7 +354,7 @@ export default function Authenticated({ children }) {
           </div>
         </div>
 
-        <main className="flex-[3] relative">
+        <main className="flex-[3] relative max-h-barHeight overflow-hidden">
           <div
             className={`absolute top-0 left-0 min-h-[100vh] min-w-[100vw] bg-transparent ${
               showOverlay ? "visible z-[1]" : "invisible z-0"

@@ -8,7 +8,7 @@ const AiChatMessagesContainer = () => {
   const { currentAIChat, isLoading } = useAIContext();
   const { user } = useUserContext();
   return (
-    <div className="flex justify-start items-center flex-col-reverse max-w-[90%] max-h-[calc(100vh-200px)] h-full w-full overflow-auto px-4 py-2 pb-[40px]">
+    <div className="flex justify-start items-center flex-col-reverse max-w-[90%] max-h-[calc(100vh-150px)] h-full w-full overflow-auto px-4 py-2 pb-[40px]">
       {currentAIChat?.messages?.length > 0 ? (
         <>
           {currentAIChat.messages.map((message, index) => (

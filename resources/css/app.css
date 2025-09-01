@@ -37,7 +37,10 @@ main {
     background-color: theme("colors.gray.900/50") !important;
   }
 }
-
+/* * {
+  border: #ff000088 solid 1px;
+  visibility: visible;
+} */
 /* Light mode */
 @media (prefers-color-scheme: light) {
   pre {
