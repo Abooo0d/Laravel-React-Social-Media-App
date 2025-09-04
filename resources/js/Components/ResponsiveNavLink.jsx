@@ -1,3 +1,4 @@
+import { Inertia } from "@inertiajs/inertia";
 import { Link } from "@inertiajs/react";
 
 export default function ResponsiveNavLink({
@@ -5,12 +6,16 @@ export default function ResponsiveNavLink({
   className = "",
   event,
   children,
+  href,
   ...props
 }) {
   return (
     <Link
-      {...props}
-      onClick={event}
+      onClick={() => {
+        event();
+        Inertia.visit(href);
+      }}
+      // {...props}
       className={`w-full flex items-start ps-3 pe-4 py-2 border-l-4 ${
         active
           ? "border-indigo-400 dark:border-indigo-600 text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/50 focus:text-indigo-800 dark:focus:text-indigo-200 focus:bg-indigo-100 dark:focus:bg-indigo-900 focus:border-indigo-700 dark:focus:border-indigo-300"

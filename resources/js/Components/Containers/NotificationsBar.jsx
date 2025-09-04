@@ -14,6 +14,19 @@ const NotificationsBar = ({
   refetch,
 }) => {
   const [notificationsCount, setNotificationsCount] = useState(0);
+  const [isReading, setIsReading] = useState(false);
+  const readAllNotifications = () => {
+    setIsReading(true);
+    axiosClient
+      .post(route("read.allNotifications"))
+      .then(() => {
+        setIsReading(false);
+      })
+      .catch(() => {
+        setIsReading(false);
+      });
+    refetch();
+  };
   useEffect(() => {
     if (!isLoading) {
       if (notifications.length > 0) {
@@ -43,11 +56,10 @@ const NotificationsBar = ({
           <PrimaryButton
             classes="py-2 px-2 "
             event={() => {
-              axiosClient.post(route("read.allNotifications"));
-              refetch();
+              readAllNotifications();
             }}
           >
-            <BiShowAlt />
+            {isReading ? <Spinner size={"small"} /> : <BiShowAlt />}
           </PrimaryButton>
         </div>
         <div

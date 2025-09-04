@@ -216,7 +216,7 @@ export default function Authenticated({ children }) {
         <div
           className={`absolute top-[100%] left-[0px] bg-gray-900/80 w-full backdrop-blur-md duration-200 border-b-[1px] border-solid border-gray-700 ${
             showingNavigationDropdown
-              ? " opacity-100 visible z-[200] "
+              ? " opacity-100 visible z-[200]"
               : " opacity-0 invisible z-[0] "
           }`}
         >
@@ -231,20 +231,21 @@ export default function Authenticated({ children }) {
             </div>
             <div className="mt-3 space-y-1">
               <ResponsiveNavLink
-                href={route("profile.myProfile")}
                 event={() => {
                   setShowingNavigationDropdown(false);
                 }}
+                href={route("profile.myProfile")}
               >
                 Profile
               </ResponsiveNavLink>
-              <ResponsiveNavLink
-                method="post"
+
+              <Link
                 href={route("logout")}
-                as="button"
+                method="post"
+                className=" duration-300 flex gap-2 justify-start items-center hover:bg-gray-200 dark:hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-500 focus:outline-none text-left"
               >
-                Log Out
-              </ResponsiveNavLink>
+                Logout
+              </Link>
             </div>
           </div>
         </div>
@@ -354,9 +355,9 @@ export default function Authenticated({ children }) {
           </div>
         </div>
 
-        <main className="flex-[3] relative max-h-barHeight overflow-hidden">
+        <main className="flex-[3] relative max-h-barHeight">
           <div
-            className={`absolute top-0 left-0 min-h-[100vh] min-w-[100vw] bg-transparent ${
+            className={`absolute top-0 left-0 min-h-full min-w-full bg-transparent ${
               showOverlay ? "visible z-[1]" : "invisible z-0"
             }`}
             onClick={() => {
