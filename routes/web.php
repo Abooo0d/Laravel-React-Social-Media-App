@@ -137,5 +137,6 @@ Route::middleware('auth')->group(function () {
 
 });
 Route::post('/login-mobile', [AuthenticatedSessionController::class, 'storeMobile']);
-
+SitemapGenerator::create('https://chatter.website')
+  ->writeToFile(public_path('sitemap.xml'));
 require __DIR__ . '/auth.php';
