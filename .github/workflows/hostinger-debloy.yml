@@ -45,7 +45,7 @@ jobs:
             cd domains/chatter.website
             php artisan down
             git pull
-            composer i --no-interaction -q --no-progress
+            ~/bin/composer install --no-dev --optimize-autoloader
             php artisan migrate --force
             php artisan optimize
             php artisan up
