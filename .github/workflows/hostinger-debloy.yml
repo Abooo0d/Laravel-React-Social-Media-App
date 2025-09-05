@@ -18,7 +18,9 @@ jobs:
         run: |
           cp .env.example .env
       - name: Install composer Dependencies
-        run: ~/bin/composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: |
+          cd domains/chatter.website
+          ~/bin/composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Install node dependencies
         run: npm ci
       - name: build npm and generate key
