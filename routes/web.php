@@ -8,10 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use Spatie\Sitemap\SitemapGenerator;
 
 /*
 |--------------------------------------------------------------------------
@@ -137,6 +134,4 @@ Route::middleware('auth')->group(function () {
 
 });
 Route::post('/login-mobile', [AuthenticatedSessionController::class, 'storeMobile']);
-SitemapGenerator::create('https://chatter.website')
-  ->writeToFile(public_path('sitemap.xml'));
 require __DIR__ . '/auth.php';
