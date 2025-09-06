@@ -25,7 +25,7 @@ jobs:
         run: npm ci
       - name: build npm and generate key
         run: |
-          php artisan key:generate
+          php artisan key:generate --ansi
           npm run build
       - name: Directory Permissions
         run: chmod 755 -R storage bootstrap/cache
