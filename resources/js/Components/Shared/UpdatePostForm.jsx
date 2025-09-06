@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { HiMiniXMark } from "react-icons/hi2";
 import PostOwnerInfo from "./PostOwnerInfo";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
 import PostPreview from "./PostPreview";
 import ImageFullView from "./ImageFullView";
 import UpdatePostPostAttachments from "./UpdatePostPostAttachments";
