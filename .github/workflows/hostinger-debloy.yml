@@ -63,6 +63,6 @@ jobs:
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
       - name: Copy Build Files To Target Server
         run: |
-          rsync -r -e "ssh -p ${{ secrets.SSH_PORT }}" \
+          rsync -avz -e "ssh -i <(echo '${{ secrets.SSH_KEY }}') -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no" \
             ${{ github.workspace }}/public/build/ \
             ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/domains/chatter.website/public/build
