@@ -18,6 +18,12 @@ jobs:
         run: |
           cp .env.example .env
           echo "BROADCAST_DRIVER=log" >> .env
+          echo "APP_ENV=testing" >> .env
+          echo "APP_KEY=" >> .env
+          echo "CACHE_DRIVER=file" >> .env
+          echo "SESSION_DRIVER=file" >> .env
+          echo "QUEUE_CONNECTION=sync" >> .env
+          echo "LOG_CHANNEL=stack" >> .env
       - name: Install composer Dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
