@@ -17,6 +17,7 @@ jobs:
       - name: setup environment variables
         run: |
           cp .env.example .env
+          echo "BROADCAST_DRIVER=log" >> .env
       - name: Install composer Dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
