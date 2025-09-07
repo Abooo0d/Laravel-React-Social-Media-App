@@ -51,8 +51,8 @@ const PostCard = ({ post, currentUser, refetch }) => {
           setImageIndex={setImageIndex}
         />
         <PostCardPostActions
-          post={localPost}
-          setPost={setLocalPost}
+          localPost={localPost}
+          setLocalPost={setLocalPost}
           setShowCommentSection={setShowCommentSection}
         />
         <PostCommentSection

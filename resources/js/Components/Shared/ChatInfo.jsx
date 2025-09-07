@@ -37,7 +37,7 @@ const ChatInfo = () => {
     setOnline(onlineUsersIds.includes(currentChat.user_id));
   }, [onlineUsersIds]);
   return (
-    <div className="w-full dark:bg-gray-900 bg-white z-[50] md:py-2 md:px-8 py-1 px-4 gap-4 border-b-solid border-b-[1px] border-gray-600/50 backdrop-blur-md cursor-pointer flex justify-between items-center">
+    <div className="w-full dark:bg-gray-900 bg-white z-[2] md:py-2 md:px-8 py-1 px-4 gap-4 border-b-solid border-b-[1px] border-gray-600/50 backdrop-blur-md cursor-pointer flex justify-between items-center">
       <div className="flex gap-2">
         <div className="relative ">
           <img

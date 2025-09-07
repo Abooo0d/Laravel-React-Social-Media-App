@@ -8,6 +8,7 @@ import { TbLock } from "react-icons/tb";
 const ChatCard = ({ chat, setShow, setIsLoading }) => {
   const { setCurrentChat, onlineUsersIds } = useChatsContext();
   const [chatData, setChatData] = useState(chat);
+
   const [unreadCount, setUnreadCount] = useState(0);
   const [online, setOnline] = useState(
     !!onlineUsersIds.includes(chatData?.user_id)
@@ -132,9 +133,11 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
         </div>
         {chatData?.messages?.length > 0 ? (
           <p className="text-gray-600 text-sm">
-            {chatData?.messages[0]?.body?.length > 25
-              ? chatData?.messages[0]?.body?.substr(0, 25) + "..."
-              : chatData?.messages[0]?.body}
+            {!!chatData?.messages[0]?.body
+              ? chatData?.messages[0]?.body?.length > 25
+                ? chatData?.messages[0]?.body?.substr(0, 25) + "..."
+                : chatData?.messages[0]?.body
+              : "attachment"}
           </p>
         ) : (
           <p className="text-gray-600 text-sm">New Chat</p>

@@ -50,7 +50,7 @@ class HomeController extends Controller
         //   })
         //   ->latest()
         //   ->paginate(15);
-        $posts = Post::latest()->paginate(15);
+        $posts = Post::latest()->paginate(20);
 
       } else
         return redirect()->back()->with('error', 'Some Thing Wrong Happened');
@@ -134,37 +134,42 @@ class HomeController extends Controller
   public function getSuggestions()
   {
     $myId = auth()->id();
-
     // --- 1) Get my friends IDs ---
     $friendIds = auth()->user()->all_friends->map(function ($friend) use ($myId) {
       return $friend->user_id === $myId ? $friend->friend_id : $friend->user_id;
     })->unique()->values()->toArray();
-    // --- 2) Friends of Friends ---
-    $friendsOfFriends = User::whereHas('sentFriendRequests', function ($q) use ($friendIds) {
-      $q->whereIn('friend_id', $friendIds);
-    })
-      ->orWhereHas('receivedFriendRequests', function ($q) use ($friendIds) {
-        $q->whereIn('user_id', $friendIds);
-      })
+
+    // Get all users except you and your friends
+    $suggested = User::where('id', '!=', $myId)
+      ->whereNot('username', 'gemini-ai')
       ->whereNotIn('id', $friendIds)
       ->get();
-    // --- 3) Shared Group Members ---
-    $groupIds = auth()->user()->groups()->pluck('group_id')->toArray();
 
-    $sharedGroupUsers = User::whereHas('groups', function ($q) use ($groupIds) {
-      $q->whereIn('group_id', $groupIds);
-    })
-      ->whereNotIn('id', $friendIds)  // not already my friend
-      ->get();
-    // --- 4) Merge & Filter ---
-    $suggestions = $friendsOfFriends
-      ->where('id', '!=', auth()->id())
-      ->merge($sharedGroupUsers)  // combine both
-      ->unique('id')              // remove duplicates
-      ->shuffle()                 // randomize
-      ->take(10);                 // limit to 10 suggestions
+    // // --- 2) Friends of Friends ---
+    // $friendsOfFriends = User::whereHas('sentFriendRequests', function ($q) use ($friendIds) {
+    //   $q->whereIn('friend_id', $friendIds);
+    // })
+    //   ->orWhereHas('receivedFriendRequests', function ($q) use ($friendIds) {
+    //     $q->whereIn('user_id', $friendIds);
+    //   })
+    //   ->whereNotIn('id', $friendIds)
+    //   ->get();
+    // // --- 3) Shared Group Members ---
+    // $groupIds = auth()->user()->groups()->pluck('group_id')->toArray();
+    // $sharedGroupUsers = User::whereHas('groups', function ($q) use ($groupIds) {
+    //   $q->whereIn('group_id', $groupIds);
+    // })
+    //   ->whereNotIn('id', $friendIds)  // not already my friend
+    //   ->get();
+    // // --- 4) Merge & Filter ---
+    // $suggestions = $friendsOfFriends
+    //   ->where('id', '!=', auth()->id())
+    //   ->merge($sharedGroupUsers)  // combine both
+    //   ->unique('id')              // remove duplicates
+    //   ->shuffle()                 // randomize
+    //   ->take(10);                 // limit to 10 suggestions
     return response([
-      'users' => FriendSuggestionResource::collection($suggestions)
+      'users' => FriendSuggestionResource::collection($suggested)
     ]);
   }
 }

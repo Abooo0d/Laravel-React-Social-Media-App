@@ -27,7 +27,7 @@ const MessageMenu = ({ message, setShowUpdateForm }) => {
         <HiDotsVertical />
       </div>
       <div
-        className={`w-40 h-10 top-[10px] rounded-md overflow-hidden min-h-fit absolute right-[80px] dark:bg-[rgba(12,36,51,100%)] bg-gray-300 duration-200 z-10 max-w-[100px] border-gray-300 border-[1px] border-solid  ${
+        className={`w-40 h-10 top-[10px] rounded-md overflow-hidden min-h-fit absolute right-[80px] dark:bg-[rgba(12,36,51,100%)] bg-gray-300 duration-200 z-10 max-w-[100px] border-gray-300 dark:border-gray-800 border-[1px] border-solid  ${
           showMenu ? "opacity-100 visible" : "opacity-0 invisible "
         }`}
       >

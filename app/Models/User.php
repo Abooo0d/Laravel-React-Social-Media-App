@@ -106,7 +106,8 @@ class User extends Authenticatable
       ->where('friend_id', Auth::id())
       ->orWhere('user_id', Auth::id())
       ->Where('friend_id', $user_id)
-      ->exists();
+      ->limit(1)
+      ->get();
   }
   public function comingRequests()
   {

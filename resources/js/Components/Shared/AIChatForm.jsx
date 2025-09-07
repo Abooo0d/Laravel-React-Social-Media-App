@@ -104,9 +104,9 @@ const AIChatForm = () => {
   }, []);
   return (
     <>
-      {/* <div
-        className={`absolute bottom-[134px] left-0 w-full h-[50px] bg-gradient-to-t from-homeFeed via-homeFeed/80 to-transparent duration-200 `}
-      /> */}
+      <div
+        className={`absolute bottom-[70px] left-0 w-full h-[80px] bg-gradient-to-t from-homeFeed via-homeFeed/60 to-transparent duration-200 `}
+      />
       <div className="w-full flex justify-center items-center mb-4">
         <div className="w-full max-w-[90%] rounded-[30px] bg-gray-900/50 backdrop-blur-sm border-solid border-[1px] border-gray-500/50 flex justify-start items-end px-4 py-2 duration-200">
           <div className="flex justify-start items-center gap-2">

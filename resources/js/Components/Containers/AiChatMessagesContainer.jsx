@@ -5,10 +5,10 @@ import { useUserContext } from "@/Contexts/UserContext";
 import AISpinner from "../Shared/AISpinner";
 
 const AiChatMessagesContainer = () => {
-  const { currentAIChat, isLoading } = useAIContext();
+  const { currentAIChat } = useAIContext();
   const { user } = useUserContext();
   return (
-    <div className="flex justify-start items-center flex-col-reverse max-w-[90%] max-h-[calc(100vh-150px)] h-full w-full overflow-auto px-4 py-2 pb-[40px]">
+    <div className="flex justify-start items-center flex-col-reverse max-w-[90%] flex-1 h-full w-full overflow-auto px-4 py-2 pb-[40px]">
       {currentAIChat?.messages?.length > 0 ? (
         <>
           {currentAIChat.messages.map((message, index) => (

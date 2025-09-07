@@ -33,7 +33,7 @@ class ProfileController extends Controller
       $posts = Post::PostsForTimeLine($user->id)
         ->where('user_id', $user->id)
         ->latest()
-        ->paginate(15);
+        ->paginate(20);
       $posts_ids = $user->posts($user->id)->pluck('id')->toArray();
       $photos = PostAttachments::whereIn('post_id', $posts_ids)->where('mime', 'like', 'image/%')->get();
       if ($user->id === Auth::id())
@@ -44,7 +44,8 @@ class ProfileController extends Controller
         ]);
       }
       $notifications = Auth::user()->notifications()->paginate(20);
-      $isFriend = auth()->user()->isFriend($user->id);
+      $isFriend = auth()->user()->isFriend($user->id)[0]->status;
+      // dd($isFriend);
       return Inertia::render('Profile/View', [
         'user' => new UserResource($user),
         'posts' => PostResource::collection($posts),

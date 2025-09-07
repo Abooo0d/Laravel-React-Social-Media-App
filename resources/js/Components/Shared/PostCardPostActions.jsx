@@ -3,7 +3,20 @@ import React from "react";
 import { FaRegCommentDots } from "react-icons/fa";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { useMainContext } from "@/Contexts/MainContext";
-const PostCardPostActions = ({ post, setPost, setShowCommentSection }) => {
+import { useState } from "react";
+import { useEffect } from "react";
+const PostCardPostActions = ({
+  localPost,
+  setLocalPost,
+  setShowCommentSection,
+}) => {
+  const [post, setPost] = useState(localPost);
+  console.log(localPost.num_of_reactions);
+
+  useEffect(() => {
+    setPost(localPost);
+  }, [localPost]);
+
   const { setErrors } = useMainContext();
   const sendReaction = () => {
     axiosClient
@@ -11,7 +24,7 @@ const PostCardPostActions = ({ post, setPost, setShowCommentSection }) => {
         reaction: "like",
       })
       .then(({ data }) => {
-        setPost({
+        setLocalPost({
           ...post,
           user_has_reaction: data.user_has_reaction,
           num_of_reactions: data.num_of_reactions,
@@ -49,21 +62,21 @@ const PostCardPostActions = ({ post, setPost, setShowCommentSection }) => {
           <div className="relative mr-2 ">
             <AiFillLike
               className={`absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-xl duration-300 ${
-                post.user_has_reaction
+                !!post.user_has_reaction
                   ? "opacity-100 visible"
                   : "scale-50 opacity-0 invisible"
               }`}
             />
             <AiOutlineLike
               className={`absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-xl duration-300 ${
-                post.user_has_reaction
+                !!post.user_has_reaction
                   ? "scale-50 opacity-0 invisible"
                   : "opacity-100 visible"
               }`}
             />
           </div>
           <span className="w-[60px] lg:text-[16px] text-sm">
-            {post.user_has_reaction ? "Liked" : "Like"}
+            {!!post.user_has_reaction ? "Liked" : "Like"}
           </span>
         </button>
         <button

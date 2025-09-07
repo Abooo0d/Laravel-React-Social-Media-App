@@ -121,6 +121,7 @@
 
 // export default CustomAudioPlayer;
 
+import { formatBytes } from "@/Functions";
 import React, { useEffect, useRef, useState } from "react";
 import { FaPause, FaPlay } from "react-icons/fa6";
 import { HiMiniXMark } from "react-icons/hi2";
@@ -183,7 +184,7 @@ const CustomAudioPlayer = ({
     : `${window.location.origin}${attachment.url}`;
 
   return (
-    <div className="flex gap-2 h-20 min-w-60 justify-center items-start flex-1 px-2 flex-col relative">
+    <div className="flex h-20 min-w-60 justify-center items-start flex-1 px-2 flex-col relative">
       {controls && (
         <span
           className="absolute top-1 right-1 w-5 h-5 hover:bg-blue-700 rounded-md flex justify-center items-center bg-gray-300/20 text-gray-300 group-hover:opacity-100 opacity-0 duration-200 z-10"
@@ -201,12 +202,6 @@ const CustomAudioPlayer = ({
         src={audioSrc}
         preload="metadata"
       />
-
-      <h3 className="text-gray-300 text-[12px]">
-        {attachment.file
-          ? attachment.file.name?.substring(0, 25) + "..."
-          : attachment.name?.substring(0, 25) + "..."}
-      </h3>
 
       <div className="flex justify-start items-center gap-2 w-full">
         <button
@@ -244,6 +239,19 @@ const CustomAudioPlayer = ({
 
         <span className="text-xs text-gray-400 min-w-[40px] text-right">
           {formatTime(currentTime)} / {formatTime(duration)}
+        </span>
+      </div>
+      <h3 className="text-gray-300 text-[12px]">
+        {attachment.file
+          ? attachment.file.name?.substring(0, 35) + "..."
+          : attachment.name?.substring(0, 35) + "..."}
+      </h3>
+      <div className="flex w-full justify-between items-center">
+        <span className="text-gray-600 text-[12px]">
+          {formatBytes(attachment.size)}
+        </span>
+        <span className="text-gray-600 text-[12px]">
+          {attachment.mime.split(".")[0]}
         </span>
       </div>
     </div>

@@ -36,7 +36,6 @@ export default function Login({ status, canResetPassword }) {
         setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
       },
     });
-    // await axiosClient.get("/sanctum/csrf-cookie");
   };
 
   useEffect(() => {

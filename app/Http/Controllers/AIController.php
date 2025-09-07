@@ -36,7 +36,6 @@ class AIController extends Controller
         // ->where('withAI', true)
         ->orderBy('last_message_id', 'desc')
         ->get();
-      // dd($chats);
       return Inertia::render('AIChats/View', [
         'chats' => AIChatResource::collection($chats)
       ]);
@@ -94,7 +93,6 @@ class AIController extends Controller
         'user_id' => auth()->id(),
         'body' => $data['message']
       ]);
-
       $systemPrompt = Content::parse(
         part: <<<MARKDOWN
         You are an AI assistant. Always respond using proper Markdown formatting:

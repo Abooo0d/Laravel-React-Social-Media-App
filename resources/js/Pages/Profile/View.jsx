@@ -7,11 +7,12 @@ import PostContainer from "@/Components/Containers/PostContainer";
 import UserFriendCard from "@/Components/Shared/UserFriendCard";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import { useMainContext } from "@/Contexts/MainContext";
-import { PrimaryButton } from "@/Components/Shared/Buttons";
+import { PrimaryButton, SecondaryButton } from "@/Components/Shared/Buttons";
 import { FiUserPlus } from "react-icons/fi";
 import { useUserContext } from "@/Contexts/UserContext";
 import ProfilePhotosFullView from "@/Components/Shared/ProfilePhotosFullView";
 import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
+import { IoPersonRemoveOutline } from "react-icons/io5";
 
 const View = ({ auth, user, posts, isFriend, photos }) => {
   const [imageIndex, setImageIndex] = useState(0);
@@ -100,7 +101,15 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
                     <FiUserPlus />
                   </PrimaryButton>
                 ) : (
-                  <div className="text-gray-500 cursor-pointer">Friend.</div>
+                  <div>
+                    <SecondaryButton
+                      event={addFriend}
+                      classes="py-1.5 px-2 flex min-w-[100px] gap-2 text-[16px]"
+                    >
+                      Cancel Request
+                      <IoPersonRemoveOutline />
+                    </SecondaryButton>
+                  </div>
                 )}
               </div>
             </div>

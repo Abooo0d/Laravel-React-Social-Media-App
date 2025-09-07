@@ -5,6 +5,7 @@ import { GoDownload } from "react-icons/go";
 import { FaAngleLeft, FaAngleRight, FaFile } from "react-icons/fa";
 import CustomAudioPlayer from "./CustomAudioPlayer";
 import {
+  formatBytes,
   isPreviewAble,
   MessageIsAudio,
   MessageIsImage,
@@ -108,17 +109,17 @@ const AttachmentFullView = () => {
             {showAttachmentFullView && (
               <div className="relative h-full flex justify-center items-center flex-1 max-w-[80%]">
                 <div
-                  className={`relative rounded-md overflow-hidden flex justify-start items-enter cursor-pointer duration-200 border-transparent border-[1px] border-solid hover:border-gray-500 hover:scale-105 group
+                  className={`relative rounded-md overflow-hidden flex justify-center items-center cursor-pointer duration-200 border-transparent border-[1px] border-solid hover:border-gray-500 hover:scale-105 group
                       ${
                         MessageIsAudio(attachments[attachmentIndex])
                           ? "w-80 h-20 max-w-[70%]"
                           : MessageIsVideo(attachments[attachmentIndex])
                           ? "w-80 h-80 max-w-[70%]"
                           : MessageIsPDF(attachments[attachmentIndex])
-                          ? "w-40 h-60 max-h-[80%] max-w-[70%]"
+                          ? "w-[400px] h-[600px] max-h-[80%] max-w-[70%]"
                           : MessageIsImage(attachments[attachmentIndex])
                           ? "max-h-[80%] max-w-[70%] w-full h-full"
-                          : "w-80 h-20 max-h-[80%] max-w-[70%]"
+                          : "w-80 h-40 max-h-[80%] max-w-[70%]"
                       }`}
                 >
                   {MessageIsImage(attachments[attachmentIndex]) && (
@@ -143,19 +144,29 @@ const AttachmentFullView = () => {
                   {MessageIsPDF(attachments[attachmentIndex]) && (
                     <iframe
                       src={attachments[attachmentIndex].url}
-                      className="min-w-20 min-h-40 overflow-hidden"
+                      className="flex-1 h-full overflow-hidden"
                     ></iframe>
                   )}
                   {!isPreviewAble(attachments[attachmentIndex]) && (
                     <>
                       {/* <span className="absolute top-1 right-1 w-5 h-5  rounded-md flex justify-center items-center bg-gray-300/20 text-gray-300 group-hover:opacity-100 opacity-0 duration-200 z-10"></span> */}
-                      <div className="w-full h-full  flex justify-between items-center gap-2 p-2">
-                        <span className="min-w-10 h-10 rounded-md flex justify-center items-center bg-gray-600 text-gray-300">
+                      <div className="w-full h-full flex flex-row justify-center items-center gap-2 p-2">
+                        <span className="w-20 h-20 rounded-md text-[40px] flex justify-center items-center bg-gray-600 text-gray-300">
                           <FaFile />
                         </span>
-                        <h3 className="flex-1 text-[15px] text-gray-400 break-all">
-                          {attachments[attachmentIndex]?.name}
-                        </h3>
+                        <div className="flex flex-col w-fit  items-start justify-center">
+                          <h3 className="flex-1 text-lg text-gray-400 break-all">
+                            {attachments[attachmentIndex]?.name}
+                          </h3>
+                          <div className="flex flex-col w-full justify-between items-start">
+                            <span className="text-gray-600 text-sm">
+                              {formatBytes(attachments[attachmentIndex].size)}
+                            </span>
+                            <span className="text-gray-600 text-sm">
+                              {attachments[attachmentIndex].mime.split(".")[0]}
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </>
                   )}

@@ -181,7 +181,10 @@ class ChatsController extends Controller
   public function getMoreMessages(Message $message)
   {
     try {
+      // $messages = $message->chat->messages->where('created_at', '<', $message->created_at)
+
       $messages = Message::where('created_at', '<', $message->created_at)
+        ->where('chat_id', '=', $message->chat_id)
         ->orderBy('created_at', 'desc')
         ->limit(20)
         ->get();

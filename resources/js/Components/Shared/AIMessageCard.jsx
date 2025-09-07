@@ -6,6 +6,8 @@ const AIMessageCard = React.memo(({ message, show, isLast }) => {
   const [height, setHeight] = useState(0);
   useEffect(() => {
     if (messageRef.current) {
+      console.log(messageRef.current.scrollHeight);
+
       const scrollHeight = messageRef.current.scrollHeight;
       setHeight(scrollHeight);
     }

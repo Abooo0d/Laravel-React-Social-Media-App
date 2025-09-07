@@ -22,10 +22,10 @@ class PostResource extends JsonResource
       'user' => new UserResource($this->user),
       'attachments' => PostAttachmentResource::collection($this->attachments),
       'group' => new GroupResource($this->group),
-      'num_of_reactions' => $this->reactions_count,
+      'num_of_reactions' => $this->reactions->count(),
       'user_has_reaction' => $this->reactions->count() > 0,
       'comments' => CommentResource::collection($this->comments),
-      'num_of_comments' => $this->comments_count,
+      'num_of_comments' => $this->comments->count(),
       'latest5Comments' => CommentResource::collection($this->latest5Comments),
     ];
   }

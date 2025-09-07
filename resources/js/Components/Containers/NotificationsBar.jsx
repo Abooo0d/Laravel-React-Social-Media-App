@@ -21,6 +21,10 @@ const NotificationsBar = ({
       .post(route("read.allNotifications"))
       .then(() => {
         setIsReading(false);
+        // notifications.map((notify) => ({
+        //   ...notify,
+        //   read_at: "now",
+        // }));
       })
       .catch(() => {
         setIsReading(false);
