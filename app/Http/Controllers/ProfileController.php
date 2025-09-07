@@ -44,8 +44,7 @@ class ProfileController extends Controller
         ]);
       }
       $notifications = Auth::user()->notifications()->paginate(20);
-      $isFriend = auth()->user()->isFriend($user->id)[0]->status;
-      // dd($isFriend);
+      $isFriend = auth()->user()->isFriend($user->id);
       return Inertia::render('Profile/View', [
         'user' => new UserResource($user),
         'posts' => PostResource::collection($posts),

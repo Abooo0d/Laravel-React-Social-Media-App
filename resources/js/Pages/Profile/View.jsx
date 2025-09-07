@@ -92,7 +92,23 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
                     {user.email}
                   </p>
                 </div>
-                {!isFriend ? (
+                {!!isFriend[0]?.status ? (
+                  <>
+                    {isFriend[0]?.status == "pending" ? (
+                      <div>
+                        <SecondaryButton
+                          event={addFriend}
+                          classes="py-1.5 px-2 flex min-w-[100px] gap-2 text-[16px]"
+                        >
+                          Cancel Request
+                          <IoPersonRemoveOutline />
+                        </SecondaryButton>
+                      </div>
+                    ) : (
+                      <p className="text-gray-600">Friend.</p>
+                    )}
+                  </>
+                ) : (
                   <PrimaryButton
                     event={addFriend}
                     classes="py-1.5 px-2 flex min-w-[100px] gap-2 text-[16px]"
@@ -100,16 +116,6 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
                     Add Friend
                     <FiUserPlus />
                   </PrimaryButton>
-                ) : (
-                  <div>
-                    <SecondaryButton
-                      event={addFriend}
-                      classes="py-1.5 px-2 flex min-w-[100px] gap-2 text-[16px]"
-                    >
-                      Cancel Request
-                      <IoPersonRemoveOutline />
-                    </SecondaryButton>
-                  </div>
                 )}
               </div>
             </div>

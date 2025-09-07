@@ -11,7 +11,6 @@ const PostCardPostActions = ({
   setShowCommentSection,
 }) => {
   const [post, setPost] = useState(localPost);
-  console.log(localPost.num_of_reactions);
 
   useEffect(() => {
     setPost(localPost);

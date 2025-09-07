@@ -16,7 +16,7 @@ const FriendSuggestionsContainer = ({ data, isLoadingSuggestions }) => {
       <h2 className="dark:text-gray-300 text-gray-600 pb-2 h-[30px]">
         People You May Know
       </h2>
-      <div className="w-full h-[306px] py-1 flex justify-start items-center gap-2 rounded-md overflow-hidden px-4">
+      <div className="w-full h-[306px] py-1 flex justify-start items-center gap-2 rounded-md overflow-auto px-4">
         {suggestions?.map((suggestion, index) => (
           <SuggestionCard suggestion={suggestion} key={index} />
         ))}
