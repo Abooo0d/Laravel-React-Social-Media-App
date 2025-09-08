@@ -14,11 +14,9 @@ class GenerateMissingAvatars extends Command
   public function handle()
   {
     $users = User::get();
-
     foreach ($users as $user) {
       $avatar = Avatar::create($user->name)->toBase64();
-
-      $imageName = 'users/' . $user->id . '.png';
+      $imageName = "users/{$user->id}/" . 'avatar.png';
       Storage::disk('public')->put(
         $imageName,
         base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $avatar))

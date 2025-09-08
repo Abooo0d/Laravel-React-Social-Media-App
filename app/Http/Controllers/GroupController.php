@@ -168,7 +168,13 @@ class GroupController extends Controller
         if ($group->cover_path) {
           Storage::disk('public')->delete($group->cover_path);
         }
-        $coverPath = $cover->store("groups/{$group->id}", 'public');
+        // Get the uploaded file extension
+        $extension = $cover->getClientOriginalExtension();
+        // Define custom file path like users/5/avatar.png
+        $coverPath = "groups/{$group->id}/cover.{$extension}";
+        // Save file
+        $cover->storeAs("groups/{$group->id}", "cover.{$extension}", 'public');
+        // Update user
         $group->update(['cover_path' => $coverPath]);
         $message = 'Cover Changed Image Updated Successfully';
       }
@@ -177,8 +183,14 @@ class GroupController extends Controller
         if ($group->thumbnail_path) {
           Storage::disk('public')->delete($group->thumbnail_path);
         }
-        $thumbnail_path = $thumbnail->store("groups/{$group->id}", 'public');
-        $group->update(['thumbnail_path' => $thumbnail_path]);
+        // Get the uploaded file extension
+        $extension = $thumbnail->getClientOriginalExtension();
+        // Define custom file path like users/5/avatar.png
+        $thumbnailPath = "groups/{$group->id}/thumbnail.{$extension}";
+        // Save file
+        $thumbnail->storeAs("groups/{$group->id}", "thumbnail.{$extension}", 'public');
+        // Update user
+        $group->update(['cover_path' => $thumbnailPath]);
         $message = 'Thumbnail Image Updated Successfully';
       }
       DB::beginTransaction();

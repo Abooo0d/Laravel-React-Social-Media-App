@@ -179,14 +179,29 @@ class ProfileController extends Controller
         $coverPath = $cover->store("users/{$user->id}", 'public');
         $user->update(['cover_path' => $coverPath]);
         $message = 'Cover Image Updated Successfully';
+        // Get the uploaded file extension
+        $extension = $cover->getClientOriginalExtension();
+        // Define custom file path like users/5/avatar.png
+        $coverPath = "users/{$user->id}/cover.{$extension}";
+        // Save file
+        $cover->storeAs("users/{$user->id}", "cover.{$extension}", 'public');
+        // Update user
+        $user->update(['cover_path' => $coverPath]);
+        $message = 'Cover Updated Successfully';
       }
       if ($avatar) {
         if ($user->avatar_path) {
           Storage::disk('public')->delete($user->avatar_path);
         }
-        $avatarPath = $avatar->store("users/{$user->id}", 'public');
+        // Get the uploaded file extension
+        $extension = $avatar->getClientOriginalExtension();
+        // Define custom file path like users/5/avatar.png
+        $avatarPath = "users/{$user->id}/avatar.{$extension}";
+        // Save file
+        $avatar->storeAs("users/{$user->id}", "avatar.{$extension}", 'public');
+        // Update user
         $user->update(['avatar_path' => $avatarPath]);
-        $message = 'Avatar Image Updated Successfully';
+        $message = 'Avatar Updated Successfully';
       }
       DB::beginTransaction();
       $files = [];
