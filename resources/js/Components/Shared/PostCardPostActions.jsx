@@ -19,7 +19,7 @@ const PostCardPostActions = ({
   const { setErrors } = useMainContext();
   const sendReaction = () => {
     axiosClient
-      .post(route("post.reaction", post), {
+      .post(route("post.reaction", post.id), {
         reaction: "like",
       })
       .then(({ data }) => {

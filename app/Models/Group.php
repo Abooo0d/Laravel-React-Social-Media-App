@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use PHPUnit\Framework\Constraint\Operator;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -60,5 +61,13 @@ class Group extends Model
   {
     return $this->belongsToMany(User::class, 'group_users')
       ->wherePivot('status', GroupUserStatusEnum::PENDING->value);
+  }
+  protected static function booted()
+  {
+    static::creating(function ($group) {
+      if (empty($group->uuid)) {
+        $group->uuid = (string) Str::uuid(); // or Str::orderedUuid() if you prefer sequential-ish UUIDs
+      }
+    });
   }
 }

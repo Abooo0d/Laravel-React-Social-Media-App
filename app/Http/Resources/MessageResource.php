@@ -38,7 +38,7 @@ class MessageResource extends JsonResource
       'attachments' => MessageAttachmentResource::collection($this->attachments),
       'created_at' => $this?->created_at->format('M:d - H:i'),
       'user' => [
-        'id' => $this->user->id,
+        'id' => $this->user->uuid,
         'name' => $this->user->name,
         'username' => $this->user->username,
         'avatar_url' => $this->user->avatar_path
@@ -47,7 +47,7 @@ class MessageResource extends JsonResource
       ],
       'edited' => (bool) $this->edited,
       'deleted' => (bool) $this->deleted,
-      'chat_id' => $this->chat_id,
+      'chat_id' => $this->uuid,
       'is_read' => $this->isGroup ? 'group' : $unRead?->is_read,
       'my_status' => (bool) $this->status()
     ];

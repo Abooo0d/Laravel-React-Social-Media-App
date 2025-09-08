@@ -25,9 +25,9 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
     }));
 
     setIsLoading(true);
-    let props = !!isGroup
-      ? { is_group: !!isGroup, chat_id: chatData.id }
-      : { is_group: !!isGroup, chat_id: chatData.id };
+    console.log(chatData.id);
+
+    let props = { is_group: !!isGroup, chat_id: chatData.id };
     if (window.location.pathname == "/chats") {
       axiosClient
         .post(route("getChat"), props)

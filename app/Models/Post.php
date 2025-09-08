@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Post extends Model
 {
@@ -16,6 +17,7 @@ class Post extends Model
     'user_id',
     'group_id'
   ];
+
   public function user()
   {
     return $this->belongsTo(User::class);
@@ -58,5 +60,13 @@ class Post extends Model
           $query->where('user_id', $userId);
         }
       ]);
+  }
+  protected static function booted()
+  {
+    static::creating(function ($post) {
+      if (empty($post->uuid)) {
+        $post->uuid = (string) Str::uuid(); // or Str::orderedUuid() if you prefer sequential-ish UUIDs
+      }
+    });
   }
 }

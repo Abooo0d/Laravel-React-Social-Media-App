@@ -11,7 +11,7 @@ const PostCommentSection = ({ show, post, setPost, currentUser }) => {
   const { setSuccessMessage, setErrors } = useMainContext();
   const createComment = () => {
     axiosClient
-      .post(route("post.commentCreate", post), {
+      .post(route("post.commentCreate", post.id), {
         comment: comment,
         parent_id: null,
       })

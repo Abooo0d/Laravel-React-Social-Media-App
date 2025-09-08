@@ -4,7 +4,7 @@ const FollowerCard = ({ data, setShowFollowerContainer }) => {
   return (
     <Link
       className={`relative min-h-[80px] w-full duration-200 hover:bg-gray-700 cursor-pointer bg-gray-800 rounded-[10px] group overflow-hidden group border-[1px] border-solid border-gray-500/50`}
-      href={route("profile.view", data.username)}
+      href={route("profile.view", data.friend_id)}
       onClick={() => setShowFollowerContainer(false)}
     >
       <img

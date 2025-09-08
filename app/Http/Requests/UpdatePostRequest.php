@@ -17,7 +17,7 @@ class UpdatePostRequest extends StorePostRequest
   public function authorize(): bool
   {
     // dd($this->input());
-    $post = Post::where('id', $this->input('id'))->where('user_id', Auth::id())->first();
+    $post = Post::where('uuid', $this->input('id'))->where('user_id', Auth::id())->first();
     return !!$post;
   }
 

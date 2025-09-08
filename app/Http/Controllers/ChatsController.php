@@ -103,12 +103,12 @@ class ChatsController extends Controller
   {
     try {
       $data = $request->validate([
-        'chat_id' => ['nullable', 'exists:chats,id'],
+        'chat_id' => ['nullable', 'exists:chats,uuid'],
         'is_group' => ['nullable', 'boolean']
       ]);
       $user = Auth::user();
       $chat_id = $data['chat_id'] ?? null;
-      $chat = Chat::find($chat_id);
+      $chat = Chat::where('uuid', $chat_id)->first();
       if (!$chat) {
         return response()->json([
           'message' => 'Chat not found'

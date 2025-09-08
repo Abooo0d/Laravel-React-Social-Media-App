@@ -25,8 +25,8 @@ class NewMessageRequest extends FormRequest
   {
     return [
       'body' => ['nullable', 'string', 'required_without:attachments',],
-      'chat_id' => ['required', 'exists:chats,id'],
-      'user_id' => ['required', 'exists:users,id'],
+      'chat_id' => ['required', 'exists:chats,uuid'],
+      'user_id' => ['required', 'exists:users,uuid'],
       'attachments' => ['array', 'nullable', 'max:10', 'required_without:body'],
       'attachments.*' => ['file', 'max:20480']
     ];

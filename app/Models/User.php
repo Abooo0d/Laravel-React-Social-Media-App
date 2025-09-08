@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -124,5 +125,13 @@ class User extends Authenticatable
   public function AIChats()
   {
     return $this->belongsToMany(Chat::class, 'chat_users')->where('withAI', 1)->withTimestamps();
+  }
+  protected static function booted()
+  {
+    static::creating(function ($user) {
+      if (empty($user->uuid)) {
+        $user->uuid = (string) Str::uuid(); // or Str::orderedUuid() if you prefer sequential-ish UUIDs
+      }
+    });
   }
 }

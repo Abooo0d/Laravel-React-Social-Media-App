@@ -7,7 +7,7 @@ const ChatMemberCard = ({ user }) => {
   return (
     <div className="w-full flex justify-start gap-4 items-center relative hover:bg-gray-800/50 duration-200 rounded-md px-2 py-2">
       <Link
-        href={route("profile.view", user?.name)}
+        href={route("profile.view", user?.id)}
         className="flex-1 flex justify-center items-center gap-4"
       >
         <img src={user.avatar} alt="" className="w-12 h-12 rounded-full" />

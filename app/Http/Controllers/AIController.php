@@ -60,7 +60,7 @@ class AIController extends Controller
     try {
       $data = $request->validate([
         'message' => ['required', 'string'],
-        'chat_id' => ['nullable', 'exists:chats,id']
+        'chat_id' => ['nullable', 'exists:chats,uuid']
       ]);
       $AIUser = User::firstOrCreate([
         'email' => 'ai@assistant.local'
@@ -71,7 +71,7 @@ class AIController extends Controller
       // Step 1: Find or Create Chat
       $chatId = $data['chat_id'];
       $chat = !!$chatId
-        ? Chat::find($chatId)
+        ? Chat::where('uuid', $chatId)->first()
         : Chat::create([
           'name' => '',
           'is_group' => false,

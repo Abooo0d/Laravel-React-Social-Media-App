@@ -43,7 +43,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
     data: posts,
     refetch,
     isLoading: loadingPosts,
-  } = useGetPostsForGroup(group.id);
+  } = useGetPostsForGroup(group.slug);
 
   const { setData, post } = useForm({
     coverImage: null,
@@ -440,7 +440,7 @@ const View = ({ auth, group, requests, users, isAdmin, photos }) => {
         setShowImage={setShowProfileImage}
         image={profileImage}
         downloadUrl={route("download.groupImage", {
-          group: group.id,
+          group: group.slug,
           type: imageType,
         })}
       />

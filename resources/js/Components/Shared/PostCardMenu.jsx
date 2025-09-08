@@ -30,7 +30,7 @@ const PostCardMenu = ({
   };
   const onDelete = () => {
     if (window.confirm("Are You Sure To Delete This Post")) {
-      router.delete(route("post.delete", post), {
+      router.delete(route("post.delete", post.id), {
         data: post,
         onSuccess: () => {
           setOpenMenu(false);
@@ -46,7 +46,9 @@ const PostCardMenu = ({
     }
   };
   const copyToClipBoard = () => {
-    navigator.clipboard.writeText(route("post.publicView", post));
+    let a = route("post.publicView", post.id);
+
+    navigator.clipboard.writeText(a);
   };
   return (
     <>
@@ -69,7 +71,7 @@ const PostCardMenu = ({
           }`}
         >
           <Link
-            href={route("post.publicView", post)}
+            href={route("post.publicView", post.id)}
             className="bg-gray-300 dark:bg-gray-800 duration-300 flex gap-2 justify-start items-center hover:bg-gray-400 dark:hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-600 focus:outline-none text-left"
           >
             <CiGlobe className="w-[17px] h-[17px]" />

@@ -24,7 +24,7 @@ const SuggestionCard = ({ suggestion }) => {
   return (
     <div className="w-[200px] min-w-[200px] h-[290px] dark:bg-gray-800/50 bg-gray-300 overflow-hidden cursor-pointer rounded-md flex flex-col justify-start items-start border-[1px] border-solid dark:border-gray-600/50 border-gray-400 duration-200 dark:hover:bg-gray-800 hover:bg-gray-400/40">
       <Link
-        href={route("profile.view", suggestion.username)}
+        href={route("profile.view", suggestion.id)}
         className="w-full h-full"
       >
         <img

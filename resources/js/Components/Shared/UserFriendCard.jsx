@@ -4,7 +4,7 @@ import React, { useState } from "react";
 const UserFriendCard = ({ user, setShowForm = () => {} }) => {
   return (
     <Link
-      href={route("profile.view", user.username)}
+      href={route("profile.view", user.id)}
       onClick={() => setShowForm(false)}
     >
       <div className="group relative dark:bg-gray-700/30 bg-gray-200 backdrop-blur-sm rounded-[8px] border-[1px] border-solid border-gray-500/50 flex flex-col justify-between items-center cursor-pointer duration-200 dark:hover:bg-gray-600/50 hover:bg-gray-200/50 dark:hover:border-gray-500 overflow-hidden drop-shadow-2xl">

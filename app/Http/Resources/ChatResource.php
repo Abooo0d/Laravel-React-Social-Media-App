@@ -32,7 +32,7 @@ class ChatResource extends JsonResource
         ? asset(Storage::url($this->users->firstWhere('id', '!=', auth()->id())?->avatar_path))
         : asset('images/default_avatar_image.png');
     return [
-      'id' => $this->id,
+      'id' => $this->uuid,
       'name' => (bool) $this->is_group
         ? $this->name
         : $this->users->firstWhere('id', '!=', auth()->id())?->name,

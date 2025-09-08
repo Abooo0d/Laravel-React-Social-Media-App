@@ -28,7 +28,7 @@ const UserMemberCard = ({ member, isAdmin, group }) => {
         <div className="flex justify-between items-center w-full pr-4">
           <Link
             className="flex flex-col justify-start items-start w-full"
-            href={route("profile.view", member.user.name)}
+            href={route("profile.view", member.user.id)}
           >
             <h3 className="dark:text-gray-300 text-gray-600 font-bold mt-1 w-full text-left px-4">
               {member.user.name}

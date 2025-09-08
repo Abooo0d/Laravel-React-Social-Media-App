@@ -18,7 +18,7 @@ class PostCommentReactionResource extends JsonResource
     return [
       'id' => $this->id,
       'user' => [
-        'id' => $this->user->id,
+        'id' => $this->user->uuid,
         'name' => $this->user->name,
         'username' => $this->user->username,
         'avatar_url' => Storage::url($this->user->avatar_path)

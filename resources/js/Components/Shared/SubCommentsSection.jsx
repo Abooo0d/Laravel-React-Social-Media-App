@@ -13,7 +13,7 @@ const SubCommentsSection = ({ show, comments, post, comment, setComment }) => {
   const [newComment, setNewComment] = useState("");
   const createComment = () => {
     axiosClient
-      .post(route("post.commentCreate", post), {
+      .post(route("post.commentCreate", post.id), {
         comment: newComment,
         parent_id: comment.id,
       })

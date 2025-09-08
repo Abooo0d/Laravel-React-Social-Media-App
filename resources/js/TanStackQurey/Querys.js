@@ -92,13 +92,13 @@ export const useGetMoreMessages = (messageId) => {
         }),
   });
 };
-export const useGetPostsForGroup = (groupId) => {
+export const useGetPostsForGroup = (groupSlug) => {
   const { setErrors } = useMainContext();
   return useQuery({
     queryKey: [QUERY_KEYS.GET_POSTS_FOR_GROUP],
     queryFn: () =>
       axiosClient
-        .get(route("postsForGroup", groupId))
+        .get(route("postsForGroup", groupSlug))
         .then(({ data }) => {
           return data;
         })

@@ -39,7 +39,7 @@ const UserRequestCard = ({ request, group, setRequestsData }) => {
       <div className="flex justify-between items-center w-full pr-4">
         <Link
           className="flex flex-col justify-start items-start w-full"
-          href={route("profile.view", request.name)}
+          href={route("profile.view", request.id)}
         >
           <h3 className="dark:text-gray-300 text-gray-600 font-bold mt-1 w-full text-left px-4">
             {request.username}

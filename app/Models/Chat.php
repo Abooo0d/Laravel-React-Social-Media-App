@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Chat extends Model
 {
@@ -46,5 +47,13 @@ class Chat extends Model
   public function isCurrentUserAdmin()
   {
     return $this->hasOne(ChatUser::class)->where('chat_id', $this->id)->where('user_id', auth()->id())->where('admin', 1);
+  }
+  protected static function booted()
+  {
+    static::creating(function ($chat) {
+      if (empty($chat->uuid)) {
+        $chat->uuid = (string) Str::uuid(); // or Str::orderedUuid() if you prefer sequential-ish UUIDs
+      }
+    });
   }
 }

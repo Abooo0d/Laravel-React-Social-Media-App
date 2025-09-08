@@ -151,7 +151,7 @@ class GroupController extends Controller
       ]);
       $group = Group::query()
         ->with('currentUserGroups')
-        ->where('id', $data['group_id'])->first();
+        ->where('uuid', $data['group_id'])->first();
       if ($group->currentUserGroups['role'] !== 'admin') {
         return back()->withErrors(['message' => 'You do not have permission to change images.']);
       }
@@ -171,9 +171,9 @@ class GroupController extends Controller
         // Get the uploaded file extension
         $extension = $cover->getClientOriginalExtension();
         // Define custom file path like users/5/avatar.png
-        $coverPath = "groups/{$group->id}/cover.{$extension}";
+        $coverPath = "groups/{$group->uuid}/cover.{$extension}";
         // Save file
-        $cover->storeAs("groups/{$group->id}", "cover.{$extension}", 'public');
+        $cover->storeAs("groups/{$group->uuid}", "cover.{$extension}", 'public');
         // Update user
         $group->update(['cover_path' => $coverPath]);
         $message = 'Cover Changed Image Updated Successfully';
@@ -186,11 +186,11 @@ class GroupController extends Controller
         // Get the uploaded file extension
         $extension = $thumbnail->getClientOriginalExtension();
         // Define custom file path like users/5/avatar.png
-        $thumbnailPath = "groups/{$group->id}/thumbnail.{$extension}";
+        $thumbnailPath = "groups/{$group->uuid}/thumbnail.{$extension}";
         // Save file
-        $thumbnail->storeAs("groups/{$group->id}", "thumbnail.{$extension}", 'public');
+        $thumbnail->storeAs("groups/{$group->uuid}", "thumbnail.{$extension}", 'public');
         // Update user
-        $group->update(['cover_path' => $thumbnailPath]);
+        $group->update(['thumbnail_path' => $thumbnailPath]);
         $message = 'Thumbnail Image Updated Successfully';
       }
       DB::beginTransaction();

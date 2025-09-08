@@ -36,7 +36,7 @@ class FriendResource extends JsonResource
       : $this->user; // You received the request
     return [
       'request_id' => $this->id,
-      'friend_id' => $friendUser->id,
+      'friend_id' => $friendUser->uuid,
       'name' => $friendUser->name,
       'username' => $friendUser->username,
       'email' => $friendUser->email,

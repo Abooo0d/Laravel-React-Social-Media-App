@@ -13,8 +13,6 @@ import { FaFile } from "react-icons/fa";
 import { useChatsContext } from "@/Contexts/ChatsContext";
 import { useUserContext } from "@/Contexts/UserContext";
 const MessageCardAttachment = ({ attachment, index, message }) => {
-  console.log(message);
-
   const { setAttachmentIndex, setShowAttachmentFullView, setMessage } =
     useChatsContext();
   const { user } = useUserContext();
