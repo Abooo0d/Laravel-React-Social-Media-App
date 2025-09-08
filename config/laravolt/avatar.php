@@ -46,13 +46,13 @@ return [
   'ascii' => false,
 
   // Image shape: circle or square
-  'shape' => 'circle',
+  'shape' => 'square',
 
   // Image width, in pixel
-  'width' => 200,
+  'width' => 300,
 
   // Image height, in pixel
-  'height' => 200,
+  'height' => 300,
 
   // Responsive SVG, height and width attributes are not added when true
   'responsive' => false,
@@ -61,10 +61,10 @@ return [
   'chars' => 2,
 
   // font size
-  'fontSize' => 48,
+  'fontSize' => 100,
 
   // convert initial letter in uppercase
-  'uppercase' => false,
+  'uppercase' => true,
 
   // Right to Left (RTL)
   'rtl' => false,

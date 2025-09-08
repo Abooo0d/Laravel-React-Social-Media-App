@@ -13,7 +13,7 @@ class GenerateMissingAvatars extends Command
 
   public function handle()
   {
-    $users = User::whereNull('avatar_path')->orWhere('avatar_path', '')->get();
+    $users = User::get();
 
     foreach ($users as $user) {
       $avatar = Avatar::create($user->name)->toBase64();
