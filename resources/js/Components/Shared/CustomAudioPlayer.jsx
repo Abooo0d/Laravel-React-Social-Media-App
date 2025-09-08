@@ -247,10 +247,10 @@ const CustomAudioPlayer = ({
           : attachment.name?.substring(0, 35) + "..."}
       </h3>
       <div className="flex w-full justify-between items-center">
-        <span className="text-gray-600 text-[12px]">
+        <span className="text-gray-400 text-[12px]">
           {formatBytes(attachment.size)}
         </span>
-        <span className="text-gray-600 text-[12px]">
+        <span className="text-gray-400 text-[12px]">
           {attachment.mime.split(".")[0]}
         </span>
       </div>

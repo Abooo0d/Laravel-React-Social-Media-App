@@ -122,12 +122,12 @@ const AIChatForm = () => {
             className="bg-transparent border-none outline-none ring-0 focus:ring-0 w-full max-h-[180px] duration-200 resize-none text-gray-300 overflow-auto"
           />
           <button
-            className="w-[30px] h-[40px] rounded-md hover:bg-gray-900 bg-transparent hover:border-gray-500/50 border-transparent border-[1px] border-solid hover:border-solid duration-200 flex justify-center items-center text-gray-500"
+            className="w-[40px] h-[40px] rounded-md hover:bg-gray-900 bg-transparent hover:border-gray-500/50 border-transparent border-[1px] border-solid hover:border-solid duration-200 flex justify-center items-center text-gray-500"
             onClick={() => {
               newMessage();
             }}
           >
-            <BiSolidSend />
+            <BiSolidSend className="text-xl" />
           </button>
         </div>
       </div>

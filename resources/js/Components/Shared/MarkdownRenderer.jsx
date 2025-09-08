@@ -39,7 +39,7 @@ const MarkdownRenderer = ({ content }) => {
               {String(children).replace(/\n$/, "")}
             </SyntaxHighlighter>
           ) : (
-            <code className=" px-1.5 py-0.5 rounded text-sm font-mono dark:bg-gray-800 bg-gray-200">
+            <code className=" px-1.5 py-0.5 rounded text-sm font-mono dark:bg-gray-800 bg-gray-200 text-gray-200">
               {children}
             </code>
           );
@@ -49,7 +49,7 @@ const MarkdownRenderer = ({ content }) => {
         pre({ node, className, children, ...props }) {
           return (
             <pre
-              className="bg-transparent rounded-md overflow-x-scroll min-h-fit"
+              className="bg-transparent rounded-md overflow-x-scroll min-h-fit text-gray-300"
               {...props}
             >
               {children}

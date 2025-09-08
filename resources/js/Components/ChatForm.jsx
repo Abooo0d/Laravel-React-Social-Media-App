@@ -240,7 +240,7 @@ const ChatForm = () => {
       <div className="relative w-[40px] h-[40px] ml-2">
         <AudioRecorder show={showRecorder} fileReady={AudioFileReady} />
         <button
-          className={`absolute top-0 right-0 flex justify-center items-center w-full h-full bg-blue-700 hover:bg-blue-600 rounded-full text-gray-300 ml-2 duration-200 ${
+          className={`absolute top-0 right-0 flex justify-center items-center w-full h-full bg-[#005A9C] hover:bg-blue-600 rounded-full text-gray-300 ml-2 duration-200 ${
             !showRecorder ? "opacity-100 visible" : "opacity-0 invisible"
           } `}
           onClick={() => newMessage()}

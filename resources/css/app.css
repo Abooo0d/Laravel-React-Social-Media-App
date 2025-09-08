@@ -145,6 +145,9 @@ pre {
 .ck.ck-content {
   max-height: 200px !important;
 }
+.message h3 {
+  color: theme("colors.gray.300") !important;
+}
 /* .custom-audio::-webkit-media-controls-panel {
   background-color: ;
 }
