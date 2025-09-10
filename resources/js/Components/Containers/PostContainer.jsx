@@ -23,8 +23,7 @@ const PostContainer = ({
   const [allPosts, setAllPosts] = useState(posts?.data);
   const [allData, setAllData] = useState(posts);
   const { user } = useUserContext();
-  let random = getRandomFloat(10, 20);
-
+  let random = 12;
   useEffect(() => {
     if (inView && allData?.meta?.current_page < allData?.meta?.last_page) {
       axiosClient
@@ -68,12 +67,12 @@ const PostContainer = ({
                                   <FriendSuggestionsContainer
                                     data={suggestions}
                                     isLoadingSuggestions={isLoadingSuggestions}
-                                    key={(index, "a")}
+                                    key={"Abood"}
                                   />
                                   <PostCard
                                     post={post}
                                     currentUser={user}
-                                    key={index}
+                                    key={index + "a"}
                                     refetch={refetch}
                                   />
                                 </>
@@ -81,7 +80,7 @@ const PostContainer = ({
                                 <PostCard
                                   post={post}
                                   currentUser={user}
-                                  key={index}
+                                  key={index + "b"}
                                   refetch={refetch}
                                 />
                               )}
@@ -90,7 +89,7 @@ const PostContainer = ({
                             <PostCard
                               post={post}
                               currentUser={user}
-                              key={index}
+                              key={index + "c"}
                               refetch={refetch}
                             />
                           )}

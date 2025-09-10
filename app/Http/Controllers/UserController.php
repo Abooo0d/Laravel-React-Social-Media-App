@@ -130,7 +130,7 @@ class UserController extends Controller
           'admin' => true
         ]);
         $chat->refresh();
-        broadcast(new FriendRequestAccepted($chat, $user->id));
+        broadcast(new FriendRequestAccepted($chat, $user->uuid));
         return redirect()->back()->with('success', "Friend Request Is Accepted");
       } else
         return response()->json(['message' => "There Is An Error With The Request"], 400);

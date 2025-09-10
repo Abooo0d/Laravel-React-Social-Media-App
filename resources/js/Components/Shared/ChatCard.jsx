@@ -25,7 +25,6 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
     }));
 
     setIsLoading(true);
-    console.log(chatData.id);
 
     let props = { is_group: !!isGroup, chat_id: chatData.id };
     if (window.location.pathname == "/chats") {

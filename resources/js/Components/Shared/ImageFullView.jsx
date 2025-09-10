@@ -49,19 +49,16 @@ const ImageFullView = ({
           >
             <RiArrowGoBackFill className="w-5 h-5 dark:text-gray-200 text-gray-600" />
           </SecondaryButton>
-          {update && (
+          {!update && (
             <>
               {attachmentId && (
                 <>
                   {attachmentId !== 0 && (
                     <a
-                      // href={route("post.download", attachmentId ?? 0)}
+                      href={route("post.download", attachmentId)}
                       className="no-underline"
                     >
-                      <SecondaryButton
-                        classes="relative py-1.5 px-3"
-                        event={() => {}}
-                      >
+                      <SecondaryButton classes="relative py-1.5 px-3">
                         <GoDownload className="w-5 h-5 dark:text-gray-200 text-gray-600" />
                       </SecondaryButton>
                     </a>

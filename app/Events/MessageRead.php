@@ -35,7 +35,7 @@ class MessageRead implements ShouldBroadcast
   public function broadcastOn(): array
   {
     return [
-      new PrivateChannel('chat.' . $this->message->chat_id)
+      new PrivateChannel('chat.' . $this->message->chat->uuid)
     ];
   }
   public function broadcastWith()

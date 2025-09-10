@@ -176,12 +176,15 @@ export const ChatsContext = ({ children }) => {
     combinedChats?.forEach((chat) => {
       const chatId = chat?.id;
       if (subscribedChats.current.has(chatId)) return;
+
       const channel = window.Echo.private(`chat.${chatId}`);
 
       channel.listen(
         "NewMessageSent",
         (e) => {
           let message = e.message;
+          console.log(message);
+
           if (message.user.id == user.id) {
             message = {
               ...message,

@@ -31,13 +31,13 @@ class CallEnded implements ShouldBroadcast
   public function broadcastOn(): array
   {
     return [
-      new PrivateChannel("chat.{$this->chat->id}"),
+      new PrivateChannel("chat.{$this->chat->uuid}"),
     ];
   }
   public function broadcastWith()
   {
     return [
-      'chat_id' => $this->chat->id,
+      'chat_id' => $this->chat->uuid,
       'message' => 'Call Declined'
     ];
   }

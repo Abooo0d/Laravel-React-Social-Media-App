@@ -38,7 +38,7 @@ const AiChatsSideBar = () => {
           New Chat
           <FaPlus />
         </button>
-        <div className="flex flex-col gap-2 flex-1 px-4 py-2">
+        <div className="flex flex-col gap-2 flex-1 px-2 py-2">
           <h2 className="block text-xl font-bold dark:text-gray-300 cursor-default ">
             History:
           </h2>

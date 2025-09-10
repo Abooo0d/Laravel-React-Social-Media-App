@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateChatGroupRequest extends FormRequest
@@ -25,8 +26,14 @@ class CreateChatGroupRequest extends FormRequest
       'chat_name' => ['required', 'string'],
       'users' => ['array', 'nullable'],
       'users[]*' => [
-        'user_id' => ['required', 'exists:users,id']
+        'user_id' => ['required', 'exists:users,uuid']
       ]
     ];
+  }
+  protected function passedValidation(): void
+  {
+    if ($this->has('users')) {
+      $this->validatedUsers = User::whereIn('uuid', $this->input('users'))->get();
+    }
   }
 }

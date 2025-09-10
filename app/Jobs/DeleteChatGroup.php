@@ -28,7 +28,7 @@ class DeleteChatGroup implements ShouldQueue
   public function handle(): void
   {
     $chat = Chat::with('messages.attachments')->findOrFail($this->chatId);
-    $chatId = $chat->id;
+    $chatId = $chat->uuid;
     $chatName = $chat->name;
     $messages = $chat->messages;
     foreach ($messages as $message) {

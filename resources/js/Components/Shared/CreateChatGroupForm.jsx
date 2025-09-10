@@ -70,6 +70,7 @@ const CreateChatGroupForm = ({ showForm, setShowForm }) => {
             users: addedUsers.map((user) => user.id),
           })
           .then(({ data }) => {
+            console.log(data);
             setGroupChats((prev) => [data.chat, ...prev]);
             setCreating(false);
             setShowForm(false);

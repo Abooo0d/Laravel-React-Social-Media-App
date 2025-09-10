@@ -463,7 +463,7 @@ class GroupController extends Controller
       );
       $usersIds = collect($members)->map(
         fn($user) =>
-        $user->id
+        $user->uuid
       )->all();
       broadcast(new GroupDeleted($group, $usersIds));
       $group->delete();

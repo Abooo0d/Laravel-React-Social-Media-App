@@ -20,7 +20,7 @@ class MemberRoleChanged implements ShouldBroadcast
   public $chatName;
   public $userId;
   public $message;
-  public function __construct(string $chatName, int $userId, string $message)
+  public function __construct(string $chatName, string $userId, string $message)
   {
     $this->chatName = $chatName;
     $this->userId = $userId;

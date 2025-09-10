@@ -33,6 +33,7 @@ use App\Models\ChatUser;
 use App\Models\Message;
 use App\Models\MessageAttachment;
 use App\Models\MessageStatus;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -150,7 +151,7 @@ class ChatsController extends Controller
       if (!empty($statusRows)) {
         MessageStatus::insert($statusRows); // bulk insert
       }
-      broadcast(new ReadAllMessages(chatId: $chat->id, userId: auth()->id()));
+      broadcast(new ReadAllMessages($chat->uuid, Auth::user()->uuid));
 
       return response(
         [
@@ -166,7 +167,7 @@ class ChatsController extends Controller
   {
     if ($message) {
       $now = now();
-      $userId = auth()->id();
+      $userId = Auth::user()->uuid;
       MessageStatus::create([
         'message_id' => $message->id,
         'user_id' => $userId,
@@ -227,13 +228,14 @@ class ChatsController extends Controller
         'is_read' => true
       ]);
       $chat->update(['last_message_id' => $message->id]);
-      $message->refresh();
+      $message->refresh()->load('chat');
+      $message = new MessageResource($message);
       try {
-        broadcast(new NewMessageSent($message));
+        broadcast(new NewMessageSent($message->toArray(request()), $chat->uuid));
       } catch (\Throwable $e) {
         \Log::error('Broadcast failed: ' . $e->getMessage());
       }
-      return response(['message' => new MessageResource($message)], 200);
+      return response(['message' => $message], 200);
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
@@ -289,19 +291,20 @@ class ChatsController extends Controller
           'is_group' => true,
           'owner' => auth()->id()
         ]);
-        $users = $data['users']; // assume this is an array
-        array_unshift($users, auth()->id());
+        $users = $request->validatedUsers->all(); // assume this is an array
+        $currentUser = Auth::user();
+        array_unshift($users, $currentUser);
         foreach ($users as $user) {
-          if ($user == auth()->id()) {
+          if ($user->uuid == $currentUser->uuid) {
             ChatUser::create([
               'chat_id' => $chat->id,
-              'user_id' => $user,
+              'user_id' => $user->id,
               'admin' => true
             ]);
           } else {
             ChatUser::create([
               'chat_id' => $chat->id,
-              'user_id' => $user,
+              'user_id' => $user->id,
             ]);
           }
         }
@@ -450,22 +453,22 @@ class ChatsController extends Controller
   {
     try {
       $data = $request->validated();
-      $users = $data['users'];
+      $users = $request->validatedUsers;
       foreach ($users as $user) {
-        $chatUser = ChatUser::where('user_id', $user)
+        $chatUser = ChatUser::where('user_id', $user->id)
           ->where('chat_id', $chat->id)
           ->first();
         if (!$chatUser) {
           ChatUser::create([
             'chat_id' => $chat->id,
-            'user_id' => $user,
+            'user_id' => $user->id,
             'admin' => false
           ]);
         }
+        broadcast(new AddMemberToChatGroup($chat, $user));
       }
       $chat->refresh();
       broadcast(new ChatUpdated($chat));
-      broadcast(new AddMemberToChatGroup($chat, $user));
       return response(
         [
           'message' => 'Users Were Added Successfully',
@@ -483,6 +486,7 @@ class ChatsController extends Controller
       $data = $request->validated();
       $role = $data['role'];
       $userId = $data['user_id'];
+      $userData = User::where('uuid', $userId)->first();
       $eventMessage = '';
       $user = ChatUser::where('user_id', $userId)
         ->where('chat_id', $chat->id)
@@ -507,7 +511,7 @@ class ChatsController extends Controller
       }
       $message = $role == 'admin' ? 'This Member Is Now Admin' : 'This user Is Now User';
       broadcast(new ChatUpdated($chat));
-      broadcast(new MemberRoleChanged($chat->name, $userId, $eventMessage));
+      broadcast(new MemberRoleChanged($chat->name, $userData->uuid, $eventMessage));
       return response(['message' => $message], 200);
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
@@ -520,16 +524,17 @@ class ChatsController extends Controller
         return response(['You Must Be Admin To make This Action'], 403);
       }
       $data = $request->validate([
-        'user_id' => ['required', 'exists:users,id']
+        'user_id' => ['required', 'exists:users,uuid']
       ]);
       $userId = $data['user_id'];
+      $user = user::where('uuid', $userId)->first();
       $chatUser = ChatUser::where('chat_id', $chat->id)
         ->where('user_id', $userId)
         ->first();
       if (!!$chatUser) {
         $chatUser->delete();
         broadcast(new ChatUpdated($chat));
-        broadcast(new MemberKickOutFormChat($chat, $userId));
+        broadcast(new MemberKickOutFormChat($chat, $user->uuid));
         return response(['message' => 'This User Is Now Kicked Out'], 200);
       }
     } catch (e) {
@@ -540,8 +545,8 @@ class ChatsController extends Controller
   {
     $signal = $request->signal ?? null;
     broadcast(new VideoCallSignal(
-      $chat->id,
-      auth()->id(),
+      $chat->uuid,
+      Auth::user()->uuid,
       $signal
     ));
     return response(['message' => 'From BackEnd']);
@@ -556,9 +561,8 @@ class ChatsController extends Controller
     $signal = $request->signal ?? null;
     broadcast(new VoiceCallSignal(
       $chat->id,
-      auth()->id(),
+      Auth::user()->uuid,
       $signal
     ));
-
   }
 }

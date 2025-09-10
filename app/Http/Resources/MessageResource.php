@@ -47,7 +47,7 @@ class MessageResource extends JsonResource
       ],
       'edited' => (bool) $this->edited,
       'deleted' => (bool) $this->deleted,
-      'chat_id' => $this->uuid,
+      'chat_id' => $this->chat->uuid,
       'is_read' => $this->isGroup ? 'group' : $unRead?->is_read,
       'my_status' => (bool) $this->status()
     ];

@@ -36,7 +36,7 @@ class Post extends Model
   }
   public function comments()
   {
-    return $this->hasMany(PostComments::class);
+    return $this->hasMany(PostComments::class)->whereNull('parent_id');
   }
   public function latest5Comments()
   {

@@ -77,7 +77,7 @@ const PostCard = ({ post, currentUser, refetch }) => {
         setImageIndex={setImageIndex}
         show={showImage}
         setShowImage={setShowImage}
-        update={true}
+        update={false}
       />
     </>
   );

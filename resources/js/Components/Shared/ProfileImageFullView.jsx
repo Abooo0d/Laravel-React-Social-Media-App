@@ -39,7 +39,6 @@ const ProfileImageFullView = ({ show, setShowImage, image, downloadUrl }) => {
           >
             <GoDownload className="w-5 h-5 text-gray-200" />
           </SecondaryButton>
-          {/* </a> */}
         </div>
         {show && (
           <div className="relative w-full h-full flex z-0">

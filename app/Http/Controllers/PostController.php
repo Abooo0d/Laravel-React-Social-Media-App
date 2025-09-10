@@ -67,7 +67,7 @@ class PostController extends Controller
         $group = Group::where('id', $data['group_id'])->first();
         $admins = $group->adminUsers()->where('user_id', '!=', Auth::id())->get();
         $postOwner = User::where('id', Auth::id())->first();
-        Notification::send($admins, new CreatePostInGroupNotification($postOwner, $group, $post->id));
+        Notification::send($admins, new CreatePostInGroupNotification($postOwner, $group, $post->uuid));
       }
       return response(['success' => 'Post Created Successfully']);
     } catch (\Throwable $e) {
@@ -113,7 +113,7 @@ class PostController extends Controller
         $group = Group::where('id', $post->group_id)->first();
         $admins = $group->adminUsers()->where('user_id', '!=', Auth::id())->get();
         $postOwner = User::where('id', Auth::id())->first();
-        Notification::send($admins, new UpdatePostInGroupNotification($postOwner, $group, $post->id));
+        Notification::send($admins, new UpdatePostInGroupNotification($postOwner, $group, $post->uuid));
       }
       DB::commit();
       return redirect()->back()->with('success', 'Post Created Successfully');
@@ -176,7 +176,7 @@ class PostController extends Controller
         $userReaction = true;
       }
       if ($postOwner->id != Auth::id()) {
-        $postOwner->notify(new PostReactionNotification($user, $post->id, $userReaction));
+        $postOwner->notify(new PostReactionNotification($user, $post->uuid, $userReaction));
       }
       $reactions = PostReactions::where('post_id', $post->id)->count();
       return response([
@@ -204,7 +204,7 @@ class PostController extends Controller
 
       $postOwner = $post->user()->first();
       if ($postOwner->id != Auth::id())
-        $postOwner->notify(new CreateCommentNotification($user, $post->id));
+        $postOwner->notify(new CreateCommentNotification($user, $post->uuid));
       if ($data['parent_id']) {
         $commentOwner = PostComments::where('id', $data['parent_id'])->first()->user;
         if ($commentOwner->id != Auth::id())
@@ -226,7 +226,7 @@ class PostController extends Controller
       $postOwner = $comment->post()->first()->user()->first();
       $user = User::where('id', Auth::id())->first();
       if ($postOwner->id != Auth::id())
-        $postOwner->notify(new UpdateCommentNotification($user, $comment->post_id));
+        $postOwner->notify(new UpdateCommentNotification($user, $comment->post->uuid));
       return new CommentResource($comment);
 
     } catch (e) {
@@ -243,7 +243,7 @@ class PostController extends Controller
       $postOwner = $comment->post()->first()->user()->first();
       $user = User::where('id', Auth::id())->first();
       if ($postOwner->id != Auth::id())
-        $postOwner->notify(new DeleteCommentNotification($user, $comment->post_id));
+        $postOwner->notify(new DeleteCommentNotification($user, $comment->post->uuid));
       return response('', 204);
 
     } catch (e) {
@@ -274,7 +274,7 @@ class PostController extends Controller
       $commentOwner = new UserResource($comment->user()->first());
       $user = User::where('id', Auth::id())->first();
       if ($commentOwner->id != Auth::id())
-        $commentOwner->notify(new CommentReactionNotification($user, $userHasReaction, $comment->post_id));
+        $commentOwner->notify(new CommentReactionNotification($user, $userHasReaction, $comment->post->uuid));
       return response([
         'num_of_reactions' => $numOfReactions,
         'user_has_reactions' => $userHasReaction

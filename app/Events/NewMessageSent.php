@@ -16,19 +16,20 @@ class NewMessageSent implements ShouldBroadcast
   use Dispatchable, InteractsWithSockets, SerializesModels;
 
   public $message;
-
+  public $uuid;
   /**
    * Create a new event instance.
    */
-  public function __construct($message)
+  public function __construct($message, $uuid)
   {
-    $this->message = new MessageResource($message);
+    $this->message = $message;
+    $this->uuid = $uuid;
   }
 
   public function broadcastOn()
   {
     return [
-      new PrivateChannel('chat.' . $this->message->chat_id)
+      new PrivateChannel("chat.{$this->uuid}")
     ];
   }
   public function broadcastWith()

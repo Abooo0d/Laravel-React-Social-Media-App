@@ -4,6 +4,7 @@ namespace App\Events;
 
 use App\Http\Resources\ChatResource;
 use App\Models\Chat;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -21,7 +22,7 @@ class AddMemberToChatGroup implements ShouldBroadcast
    */
   public $chat;
   public $user;
-  public function __construct(Chat $chat, int $user)
+  public function __construct(Chat $chat, User $user)
   {
     $this->chat = new ChatResource($chat);
     $this->user = $user;
@@ -35,7 +36,7 @@ class AddMemberToChatGroup implements ShouldBroadcast
   public function broadcastOn(): array
   {
     return [
-      new PrivateChannel("user.{$this->user}"),
+      new PrivateChannel("user.{$this->user->uuid}"),
     ];
   }
   public function broadcastWith()

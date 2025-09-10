@@ -14,7 +14,7 @@ const SuggestionCard = ({ suggestion }) => {
     axiosClient
       .post(route("user.addFriendFormSuggestion", suggestion.id))
       .then((data) => {
-        setAdded(true);
+        setAdded("pending");
         setSuccessMessage(data?.data?.message);
       })
       .catch((error) => {

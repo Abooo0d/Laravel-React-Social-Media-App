@@ -51,7 +51,7 @@ class FriendRequestNotification extends Notification
     return [
       'type' => $type,
       'message' => $message,
-      'link' => route('profile.view', $this->user->id),
+      'link' => route('profile.view', $this->user->uuid),
       // 'actor' => ['name' => $this->user->name, 'avatar' => $this->user->avatar_path ? Storage::url($this->user->avatar_path) : asset('images/default_avatar_image.png')],
       'actor_id' => $this->user->id
     ];

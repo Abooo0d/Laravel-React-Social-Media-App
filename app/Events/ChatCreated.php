@@ -20,11 +20,11 @@ class ChatCreated implements ShouldBroadcast
    * Create a new event instance.
    */
   public $chat;
-  public $userIds;
-  public function __construct(Chat $chat, $userIds)
+  public $users;
+  public function __construct(Chat $chat, $users)
   {
     $this->chat = new ChatResource($chat);
-    $this->userIds = $userIds;
+    $this->users = $users;
   }
 
   /**
@@ -34,9 +34,9 @@ class ChatCreated implements ShouldBroadcast
    */
   public function broadcastOn(): array
   {
-    return collect($this->userIds)->map(
-      fn($id) =>
-      new PrivateChannel("user.{$id}")
+    return collect($this->users)->map(
+      fn($user) =>
+      new PrivateChannel("user.{$user->uuid}")
     )->all();
   }
   public function broadcastWith()

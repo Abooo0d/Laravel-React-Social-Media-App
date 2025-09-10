@@ -127,7 +127,9 @@ const MessageCard = ({ message }) => {
                         className={`${
                           message?.user.id != user.id && "hidden"
                         } ${
-                          !!message?.is_read ? "text-blue-500" : "text-gray-600"
+                          !!message?.is_read
+                            ? "text-green-500"
+                            : "text-gray-400"
                         }`}
                       />
                     )}

@@ -33,7 +33,7 @@ class ChatUpdated implements ShouldBroadcast
   public function broadcastOn(): array
   {
     return [
-      new PrivateChannel("chat.{$this->chat->id}"),
+      new PrivateChannel("chat.{$this->chat->uuid}"),
     ];
   }
   public function broadcastWith()
