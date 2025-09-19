@@ -8,6 +8,7 @@ import { CiGlobe } from "react-icons/ci";
 import UpdatePostForm from "./UpdatePostForm";
 import { Link, router } from "@inertiajs/react";
 import { useMainContext } from "@/Contexts/MainContext";
+import { useUserContext } from "@/Contexts/UserContext";
 
 const PostCardMenu = ({
   openMenu,
@@ -16,6 +17,8 @@ const PostCardMenu = ({
   currentUser,
   refetch,
 }) => {
+  const { setRefetchPosts, setUpdatePost, setShowUpdateForm } =
+    useUserContext();
   const [showForm, setShowForm] = useState(false);
   const { setSuccessMessage, setErrors } = useMainContext();
   const showUpdate = () => {
@@ -52,7 +55,7 @@ const PostCardMenu = ({
   };
   return (
     <>
-      <div className="relative z-0">
+      <div className="relative z-10">
         <button
           className={`w-10 h-10 rounded-md cursor-pointer flex justify-center items-center border-[1px] border-solid p-1 duration-200 ${
             openMenu
@@ -66,7 +69,7 @@ const PostCardMenu = ({
           <PiDotsThreeOutlineVerticalFill className="w-5 h-5 dark:text-gray-200 text-gray-500" />
         </button>
         <div
-          className={`absolute dark:border-gray-700 border-gray-400/50 border-[1px] border-solid top-[45px] left-[-99px] w-[140px] duration-300 cursor-pointer shadow-2xl rounded-md flex flex-col justify-start items-center overflow-hidden ${
+          className={`absolute dark:border-gray-700 border-gray-400/50 border-[1px] border-solid top-[45px] left-[-99px] w-[140px] duration-300 cursor-pointer shadow-2xl rounded-md flex flex-col justify-start items-center overflow-hidden z-1 ${
             openMenu ? "opacity-100 visible" : " opacity-0 invisible"
           }`}
         >
@@ -89,7 +92,10 @@ const PostCardMenu = ({
           {showUpdate() && (
             <button
               onClick={() => {
-                setShowForm(true);
+                // setShowForm(true);
+                setShowUpdateForm(true);
+                setRefetchPosts(() => refetch());
+                setUpdatePost(post);
                 setOpenMenu(false);
               }}
               className="bg-gray-300 dark:bg-gray-800 duration-300 flex gap-2 justify-start items-center hover:bg-gray-400 dark:hover:bg-gray-700 w-full py-2 px-4 text-sm font-medium dark:text-white text-gray-600 focus:outline-none text-left"
@@ -107,14 +113,14 @@ const PostCardMenu = ({
             </button>
           )}
         </div>
-        <UpdatePostForm
+        {/* <UpdatePostForm
           refetch={refetch}
           post={post}
           setOpenMenu={setOpenMenu}
           user={post.user}
           showForm={showForm}
           setShowForm={setShowForm}
-        />
+        /> */}
       </div>
     </>
   );

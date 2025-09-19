@@ -8,29 +8,26 @@ import { SecondaryButton } from "./Buttons";
 import PopupCard from "./PopupCard";
 import { useMainContext } from "@/Contexts/MainContext";
 import axiosClient from "@/AxiosClient/AxiosClient";
-export default function UpdatePostForm({
-  post,
-  user,
-  showForm,
-  setShowForm,
-  refetch,
-}) {
+import { useUserContext } from "@/Contexts/UserContext";
+export default function UpdatePostForm({}) {
+  const { updatePost, showUpdateForm, setShowUpdateForm, refetchPosts, user } =
+    useUserContext();
   const { setSuccessMessage, setErrors } = useMainContext();
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState(false);
   const [showPost, setShowPost] = useState(false);
-  const [postData, setPostData] = useState(post);
+  const [postData, setPostData] = useState(updatePost);
   const [imageIndex, setImageIndex] = useState();
   const [attachmentsErrors, setAttachmentsErrors] = useState([]);
   const inputRef = useRef();
   const [finalPost, setFinalPost] = useState({
-    ...post,
+    ...updatePost,
     attachments: [],
     deletedFilesIds: [],
   });
 
   function close() {
-    setShowForm(false);
+    setShowUpdateForm(false);
   }
   const handleInput = () => {
     const textarea = inputRef.current;
@@ -40,15 +37,25 @@ export default function UpdatePostForm({
     }
   };
   useEffect(() => {
-    setPostData(post);
+    if (!showUpdateForm) {
+      setPostData({});
+      setFinalPost({
+        attachments: [],
+        deletedFilesIds: [],
+      });
+      setAttachmentsErrors([]);
+      setImage("");
+      setImageIndex(0);
+    }
+    setPostData(updatePost);
     setFinalPost({
-      ...post,
+      ...updatePost,
       attachments: [],
       deletedFilesIds: [],
     });
     setAttachmentsErrors([]);
     handleInput();
-  }, [showForm]);
+  }, [showUpdateForm]);
 
   const handelSubmit = () => {
     const formData = new FormData();
@@ -64,26 +71,26 @@ export default function UpdatePostForm({
     attachments.forEach((attachment) => {
       formData.append("attachments[]", attachment);
     });
-    if (post.body !== "" || post.attachments.length !== 0) {
+    if (updatePost.body !== "" || updatePost.attachments.length !== 0) {
       axiosClient
         .post(route("post.update", finalPost.id), formData)
         .then((data) => {
-          refetch();
+          refetchPosts();
           setSuccessMessage("The Post Updated Successfully");
-          setShowForm(false);
+          setShowUpdateForm(false);
         })
         .catch((err) => {
           setAttachmentsErrors([]);
-          for (const key in e) {
+          for (const key in err) {
             setAttachmentsErrors((prevErrors) => [
               ...prevErrors,
               {
                 index: key.split(".")[1],
-                message: e[key],
+                message: err[key],
               },
             ]);
           }
-          setErrors([e?.response?.data?.message || "Some Thing Went Wrong"]);
+          setErrors([err?.response?.data?.message || "Some Thing Went Wrong"]);
         });
     }
     handleInput();
@@ -165,7 +172,7 @@ export default function UpdatePostForm({
 
   return (
     <>
-      <PopupCard showForm={showForm}>
+      <PopupCard showForm={showUpdateForm}>
         <div>
           <div className="flex justify-between items-center">
             <h3 className="text-base/7 font-medium dark:text-white text-gray-600 mb-4">
@@ -175,7 +182,7 @@ export default function UpdatePostForm({
               <HiMiniXMark className="w-5 h-5 text-gray-200 " />
             </SecondaryButton>
           </div>
-          <PostOwnerInfo post={post} user={user} />
+          <PostOwnerInfo post={updatePost} user={user} />
           <textarea
             className="dark:bg-gray-800 bg-gray-300 flex-1 w-full rounded-md outline-none border-none focus:outline-none focus:border-none ring-0 focus:ring-0 dark:text-gray-300 text-gray-700 resize-none min-h-[80px] max-h-[150px] "
             ref={inputRef}

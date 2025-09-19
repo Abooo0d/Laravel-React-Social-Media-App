@@ -16,7 +16,8 @@ class PostAttachments extends Model
     'path',
     'mime',
     'size',
-    'created_by'
+    'created_by',
+    'thumbnail_path',
   ];
 
   protected static function boot()

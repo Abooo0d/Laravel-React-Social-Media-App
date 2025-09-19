@@ -21,7 +21,8 @@ class PostAttachmentResource extends JsonResource
       'url' => asset(Storage::url($this->path)),
       'size' => $this->size,
       'mime' => $this->mime,
-      'post_id' => $this->post_id
+      'post_id' => $this->post_id,
+      'thumbnail_url' => $this->thumbnail_path ? asset(Storage::url($this->thumbnail_path)) : null,
     ];
   }
 }

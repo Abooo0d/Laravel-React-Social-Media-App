@@ -1,4 +1,4 @@
-import { isImage } from "@/Functions";
+import { isImage, isVideo } from "@/Functions";
 import React from "react";
 import { FaFile } from "react-icons/fa";
 const PostCardPostAttachments = ({
@@ -34,23 +34,37 @@ const PostCardPostAttachments = ({
                             key={index}
                             src={attachment.url}
                             className="w-full h-full max-h-[400px] object-cover rounded-lg cursor-pointer"
+                            loading="lazy"
                             onClick={() => {
                               setImage(attachment.url);
                               setShowImage(true);
                               setImageIndex(index);
                             }}
                           />
+                        ) : isVideo(attachment) ? (
+                          <video
+                            key={index}
+                            src={attachment.url}
+                            className="w-full h-full max-h-[400px] object-cover rounded-lg cursor-pointer"
+                            loading="lazy"
+                            onClick={() => {
+                              setImage(attachment.url);
+                              setShowImage(true);
+                              setImageIndex(index);
+                            }}
+                            // controls
+                          />
                         ) : (
                           <div
-                            className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gray-800 flex justify-center items-center flex-col gap-4"
+                            className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gradient-to-r from-homeFeed via-gray-700 to-gray-600 flex justify-center items-center flex-col gap-4 border-gray-500 border-[1px] border-solid"
                             onClick={() => {
                               setImage("");
                               setShowImage(true);
                               setImageIndex(index);
                             }}
                           >
-                            <FaFile className="w-20 h-20 text-gray-500" />
-                            <h3 className="text-gray-500 font-bold text-xl max-w-[80%] break-words text-center">
+                            <FaFile className="w-20 h-20 text-gray-300" />
+                            <h3 className="text-gray-300 font-bold text-xl max-w-[80%] break-words text-center">
                               {attachment?.name}
                             </h3>
                           </div>
@@ -64,6 +78,7 @@ const PostCardPostAttachments = ({
                               <img
                                 key={index}
                                 src={attachment.url}
+                                loading="lazy"
                                 className="w-full h-full max-h-[400px] object-cover rounded-lg cursor-pointer"
                                 onClick={() => setImage(attachment.url)}
                               />
@@ -77,17 +92,30 @@ const PostCardPostAttachments = ({
                                 </span>
                               </div>
                             </div>
+                          ) : isVideo(attachment) ? (
+                            <video
+                              key={index}
+                              src={attachment.url}
+                              className="w-full h-full max-h-[400px] object-cover rounded-lg cursor-pointer"
+                              loading="lazy"
+                              onClick={() => {
+                                setImage(attachment.url);
+                                setShowImage(true);
+                                setImageIndex(index);
+                              }}
+                              // controls
+                            />
                           ) : (
                             <div
-                              className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gray-800 flex justify-center items-center flex-col gap-4"
+                              className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gradient-to-r from-homeFeed via-gray-700 to-gray-600 flex justify-center items-center flex-col gap-4 border-gray-500 border-[1px] border-solid"
                               onClick={() => {
                                 setImage("");
                                 setShowImage(true);
                                 setImageIndex(index);
                               }}
                             >
-                              <FaFile className="w-20 h-20 text-gray-500" />
-                              <h3 className="text-gray-500 font-bold text-xl max-w-[80%] break-words text-center">
+                              <FaFile className="w-20 h-20 text-gray-300" />
+                              <h3 className="text-gray-300 font-bold text-xl max-w-[80%] break-words text-center">
                                 {attachment?.name}
                               </h3>
                             </div>
@@ -106,6 +134,7 @@ const PostCardPostAttachments = ({
                       <img
                         key={index}
                         src={attachment.url}
+                        loading="lazy"
                         className="w-full h-full max-h-[400px] object-cover rounded-lg cursor-pointer"
                         onClick={() => {
                           setImage(attachment.url);
@@ -113,17 +142,30 @@ const PostCardPostAttachments = ({
                           setImageIndex(index);
                         }}
                       />
+                    ) : isVideo(attachment) ? (
+                      <video
+                        key={index}
+                        src={attachment.url}
+                        className="w-full h-full max-h-[400px] object-cover rounded-lg cursor-pointer"
+                        loading="lazy"
+                        onClick={() => {
+                          setImage(attachment.url);
+                          setShowImage(true);
+                          setImageIndex(index);
+                        }}
+                        // controls
+                      />
                     ) : (
                       <div
-                        className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gray-800 flex justify-center items-center flex-col gap-4"
+                        className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gradient-to-r from-homeFeed via-gray-700 to-gray-600 flex justify-center items-center flex-col gap-4 border-gray-500 border-[1px] border-solid"
                         onClick={() => {
                           setImage("");
                           setShowImage(true);
                           setImageIndex(index);
                         }}
                       >
-                        <FaFile className="w-20 h-20 text-gray-500" />
-                        <h3 className="text-gray-500 font-bold text-xl max-w-[80%] break-words text-center">
+                        <FaFile className="w-20 h-20 text-gray-300" />
+                        <h3 className="text-gray-300 font-bold text-xl max-w-[80%] break-words text-center">
                           {attachment?.name}
                         </h3>
                       </div>

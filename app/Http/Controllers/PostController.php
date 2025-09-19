@@ -24,14 +24,15 @@ use App\Notifications\PostReactionNotification;
 use App\Notifications\UpdateCommentNotification;
 use App\Notifications\UpdatePostInGroupNotification;
 use App\Notifications\CreatePostInGroupNotification;
+use App\Services\ThumbnailGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
-use Notification;
 use OpenAI\Laravel\Facades\OpenAI;
 
 class PostController extends Controller
@@ -52,7 +53,7 @@ class PostController extends Controller
       foreach ($attachments as $attachment) {
         $path = $attachment->store("PostAttachments/{$post->id}", 'public');
         $files[] = $attachment;
-        PostAttachments::create([
+        $postAttachment = PostAttachments::create([
           'post_id' => $post->id,
           'name' => $attachment->getClientOriginalName(),
           'path' => $path,
@@ -87,6 +88,7 @@ class PostController extends Controller
       $data = $request->validated();
       $user = $request->user();
       $post->update($data);
+
       $deletedFilesIds = $data['deletedFilesIds'] ?? [];
       $postAttachments = PostAttachments::query()
         ->where('post_id', $post->id)
@@ -97,6 +99,7 @@ class PostController extends Controller
       }
       /** @var UploadedFile[] $attachments */
       $attachments = $data['attachments'] ?? [];
+
       foreach ($attachments as $attachment) {
         $path = $attachment->store("attachments/{$user->id}", 'public');
         $files[] = $attachment;
@@ -109,6 +112,7 @@ class PostController extends Controller
           'created_by' => $user->id
         ]);
       }
+
       if ($post['group_id']) {
         $group = Group::where('id', $post->group_id)->first();
         $admins = $group->adminUsers()->where('user_id', '!=', Auth::id())->get();
@@ -116,13 +120,15 @@ class PostController extends Controller
         Notification::send($admins, new UpdatePostInGroupNotification($postOwner, $group, $post->uuid));
       }
       DB::commit();
+      // dd($post);
       return redirect()->back()->with('success', 'Post Created Successfully');
     } catch (\Throwable $e) {
       foreach ($files as $file) {
         Storage::disk('public')->delete($file);
       }
       DB::rollBack();
-      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    return response(['error' => 'Some Thing Wrong Happened']);
+      return redirect()->back()->with('error', 'Abood');
     }
   }
   public function downloadAttachment(PostAttachments $attachment)
@@ -211,7 +217,6 @@ class PostController extends Controller
           $commentOwner->notify(new CreateCommentNotification($user, $post->id, sub: true));
       }
       return response([new CommentResource($comment), 201]);
-
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
@@ -228,7 +233,6 @@ class PostController extends Controller
       if ($postOwner->id != Auth::id())
         $postOwner->notify(new UpdateCommentNotification($user, $comment->post->uuid));
       return new CommentResource($comment);
-
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }
@@ -245,7 +249,6 @@ class PostController extends Controller
       if ($postOwner->id != Auth::id())
         $postOwner->notify(new DeleteCommentNotification($user, $comment->post->uuid));
       return response('', 204);
-
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
     }

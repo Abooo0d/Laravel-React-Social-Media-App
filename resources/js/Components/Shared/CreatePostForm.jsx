@@ -162,11 +162,12 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
     });
   }, [chosenFiles]);
   return (
-    <div
-      className={`relative z-10 focus:outline-none delay-200 ${
-        showForm ? "visible " : "invisible"
-      }`}
-    >
+    // <div
+    //   className={`relative z-10 focus:outline-none delay-200 ${
+    //     showForm ? "visible " : "invisible"
+    //   }`}
+    // >
+    <>
       <PopupCard showForm={showForm}>
         <SecondaryButton
           event={close}
@@ -254,9 +255,10 @@ const CreatePostForm = ({ showForm, setShowForm, groupId = "", refetch }) => {
         post={post}
         setShowImage={setShowImage}
         setImageIndex={setImageIndex}
-        update={false}
+        update={true}
       />
-    </div>
+    </>
+    // </div>
   );
 };
 

@@ -57,7 +57,7 @@ const SubCommentCard = ({ comment, setMainComment }) => {
           <img
             src={currentComment.user.avatar_url}
             alt="user_image"
-            className=" rounded-full w-[40px] h-[40px] "
+            className=" rounded-full w-[40px] h-[40px] object-cover"
           />
           <div className="flex flex-col  justify-start items-start gap-1">
             <h3 className="text-gray-400">{currentComment.user.name}</h3>

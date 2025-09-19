@@ -55,10 +55,10 @@ const PostCardPostActions = ({
       </div>
       <div className="flex justify-end items-center gap-2 flex-1 w-full border-t-[2px] border-solid dark:border-gray-800 border-gray-300 pt-1">
         <button
-          className="flex justify-center items-center relative text-gray-500 dark:text-gray-400  rounded-lg cursor-pointer duration-200 h-[40px] flex-1 bg-gray-200 dark:bg-gray-900"
+          className="flex justify-center items-center text-gray-500 dark:text-gray-400 rounded-lg cursor-pointer duration-200 h-[40px] flex-1 bg-gray-200 dark:bg-gray-900"
           onClick={sendReaction}
         >
-          <div className="relative mr-2 ">
+          <div className="relative mr-2 z-0 ">
             <AiFillLike
               className={`absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-xl duration-300 ${
                 !!post.user_has_reaction
@@ -82,7 +82,7 @@ const PostCardPostActions = ({
           onClick={() => {
             setShowCommentSection((prevState) => !prevState);
           }}
-          className="flex justify-center items-center dark:text-gray-400 text-gray-500 rounded-lg cursor-pointer duration-200 h-[40px] flex-1 bg-gray-200 dark:bg-gray-900 lg:text-[16px] text-sm"
+          className="flex justify-center items-center text-gray-500 dark:text-gray-400 rounded-lg cursor-pointer duration-200 h-[40px] flex-1 bg-gray-200 dark:bg-gray-900"
         >
           <FaRegCommentDots className=" text-xl duration-200 mr-2" />
           Comment

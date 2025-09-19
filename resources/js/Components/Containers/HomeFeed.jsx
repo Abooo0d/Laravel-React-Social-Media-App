@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CreatePost from "../Shared/CreatePost";
 import PostContainer from "./PostContainer";
+import UpdatePostForm from "../Shared/UpdatePostForm";
 
 const HomeFeed = ({
   posts,
@@ -27,6 +28,7 @@ const HomeFeed = ({
         isLoadingSuggestions={isLoadingSuggestions}
       >
         <CreatePost classes="px-3 py-3" refetch={refetch} groupId="" />
+        <UpdatePostForm />
       </PostContainer>
     </div>
   );

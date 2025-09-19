@@ -3,7 +3,7 @@ import { GoDownload } from "react-icons/go";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { SecondaryButton } from "./Buttons";
 import { FaAngleRight, FaAngleLeft, FaFile } from "react-icons/fa";
-import { isImage } from "@/Functions";
+import { isImage, isVideo } from "@/Functions";
 const ImageFullView = ({
   show,
   post,
@@ -14,7 +14,8 @@ const ImageFullView = ({
 }) => {
   const [attachmentId, setAttachmentId] = useState(0);
   useEffect(() => {
-    setAttachmentId(post?.attachments[imageIndex]);
+    post?.attachments?.length > 0 &&
+      setAttachmentId(post?.attachments[imageIndex] || 0);
   }, [show]);
 
   const next = (index) => {
@@ -35,6 +36,7 @@ const ImageFullView = ({
       setAttachmentId(post?.attachments[post?.attachments?.length - 1]);
     }
   };
+
   return (
     <div
       className={`fixed inset-0 z-[800] w-screen overflow-y-auto flex min-h-full items-center justify-center p-4 dark:bg-gray-950/60 bg-gray-100/40 backdrop-blur-sm duration-200 ${
@@ -49,20 +51,18 @@ const ImageFullView = ({
           >
             <RiArrowGoBackFill className="w-5 h-5 dark:text-gray-200 text-gray-600" />
           </SecondaryButton>
-          {!update && (
+          {!!!update && (
             <>
-              {attachmentId && (
+              {(attachmentId == 0 || !!attachmentId) && (
                 <>
-                  {attachmentId !== 0 && (
-                    <a
-                      href={route("post.download", attachmentId)}
-                      className="no-underline"
-                    >
-                      <SecondaryButton classes="relative py-1.5 px-3">
-                        <GoDownload className="w-5 h-5 dark:text-gray-200 text-gray-600" />
-                      </SecondaryButton>
-                    </a>
-                  )}
+                  <a
+                    href={route("post.download", attachmentId)}
+                    className="no-underline"
+                  >
+                    <SecondaryButton classes="relative py-1.5 px-3">
+                      <GoDownload className="w-5 h-5 dark:text-gray-200 text-gray-600" />
+                    </SecondaryButton>
+                  </a>
                 </>
               )}
             </>
@@ -74,7 +74,7 @@ const ImageFullView = ({
             {imageIndex ? imageIndex + 1 : 1}
           </SecondaryButton>
         </div>
-        {post?.attachments.length > 1 && (
+        {post?.attachments?.length > 1 && (
           <SecondaryButton
             event={() => back(imageIndex)}
             classes="h-[100px] w-[35px]"
@@ -97,16 +97,29 @@ const ImageFullView = ({
                         : `invisible opacity-0 scale-75`
                     }`}
                   />
+                ) : isVideo(attachment) ? (
+                  <video
+                    key={index}
+                    src={attachment.url}
+                    className={`max-w-[90%] max-h-[90%] object-contain rounded-[10px] absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] duration-200 ${
+                      index === imageIndex
+                        ? `visible opacity-100`
+                        : `invisible opacity-0 scale-75`
+                    }`}
+                    loading="lazy"
+                    autoPlay={false}
+                    controls
+                  />
                 ) : (
                   <div
-                    className={`max-w-[90%] max-h-[90%] w-[400px] h-[400px] rounded-lg cursor-default bg-gray-800 flex justify-center items-center flex-col gap-4  absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] duration-200 ${
+                    className={`max-w-[90%] max-h-[90%] w-[400px] h-[400px] rounded-lg cursor-default bg-gradient-to-r from-homeFeed via-gray-700 to-gray-600 flex justify-center items-center flex-col gap-4  absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] duration-200 border-gray-500/50 border-[1px] border-solid ${
                       index === imageIndex
                         ? `visible opacity-100`
                         : `invisible opacity-0 scale-75`
                     }`}
                   >
-                    <FaFile className="w-20 h-20 text-gray-500" />
-                    <h3 className="text-gray-500 font-bold text-xl max-w-[80%] break-words text-center">
+                    <FaFile className="w-20 h-20 text-gray-300" />
+                    <h3 className="text-gray-300 font-bold text-xl max-w-[80%] break-words text-center">
                       {attachment?.file
                         ? attachment?.file?.name
                         : attachment?.name}
@@ -117,7 +130,7 @@ const ImageFullView = ({
             ))}
           </div>
         )}
-        {post?.attachments.length > 1 && (
+        {post?.attachments?.length > 1 && (
           <SecondaryButton
             event={() => {
               next(imageIndex);

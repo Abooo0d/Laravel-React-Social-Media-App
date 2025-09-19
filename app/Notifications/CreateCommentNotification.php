@@ -17,7 +17,7 @@ class CreateCommentNotification extends Notification
   /**
    * Create a new notification instance.
    */
-  public function __construct(public User $user, public int $postId, public bool $sub = false)
+  public function __construct(public User $user, public string $postId, public bool $sub = false)
   {
     //
   }

@@ -16,7 +16,7 @@ class PostReactionNotification extends Notification
   /**
    * Create a new notification instance.
    */
-  public function __construct(public User $user, public int $postId, public bool $reaction)
+  public function __construct(public User $user, public string $postId, public bool $reaction)
   {
     //
   }

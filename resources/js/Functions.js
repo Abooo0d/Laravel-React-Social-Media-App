@@ -41,6 +41,12 @@ function isImage(file) {
   mime = mime ? mime?.split("/") : "";
   return mime[0] && mime[0]?.toLowerCase() == "image";
 }
+function isVideo(file) {
+  file = file?.file ? file.file : file;
+  let mime = file?.mime || file?.type;
+  mime = mime ? mime?.split("/") : "";
+  return mime[0] && mime[0]?.toLowerCase() == "video";
+}
 function MessageIsImage(file) {
   file = file?.file ? file.file : file;
   let mime = file?.mime || file?.type;
@@ -93,6 +99,7 @@ const getRandomFloat = (min, max) => {
 export {
   formatRelativeTime,
   isImage,
+  isVideo,
   MessageIsImage,
   MessageIsVideo,
   MessageIsAudio,

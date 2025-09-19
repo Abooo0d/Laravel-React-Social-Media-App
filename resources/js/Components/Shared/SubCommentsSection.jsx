@@ -36,7 +36,7 @@ const SubCommentsSection = ({ show, comments, post, comment, setComment }) => {
         <img
           src={user.avatar_url}
           alt="Avatar Image"
-          className="w-[40px] h-[40px] rounded-full"
+          className="w-[40px] h-[40px] rounded-full object-cover"
         />
         <textarea
           placeholder="Your comment"

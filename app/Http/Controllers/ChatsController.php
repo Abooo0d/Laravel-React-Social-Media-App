@@ -203,21 +203,21 @@ class ChatsController extends Controller
         'chat_id' => $chat->id,
         'user_id' => auth()->id(),
         'body' => $data['body'] ?? null,
-        'attachment_path' => $data['attachment_path'] ?? null,
+        'attachment_path' =>  null,
       ]);
       $attachments = [];
       if ($files) {
         foreach ($files as $file) {
-          $directory = 'MessagesAttachments/' . Str::random(32);
-          Storage::makeDirectory($directory);
-          $model = [
+          $path = $file->store("MessagesAttachments/{$message->id}", 'public');
+          // $directory = 'MessagesAttachments/' . Str::random(32);
+          // Storage::makeDirectory($directory);
+          $attachment = MessageAttachment::create([
             'message_id' => $message->id,
             'name' => $file->getClientOriginalName(),
             'mime' => $file->getClientMimeType(),
             'size' => $file->getSize(),
-            'path' => $file->store($directory, 'public')
-          ];
-          $attachment = MessageAttachment::create($model);
+            'path' => $path
+          ]);
           $attachments[] = $attachment;
         }
         $message->attachments = $attachments;

@@ -38,6 +38,7 @@ const ChatInfoForm = () => {
   const [chatImage, setChatImage] = useState(null);
   const [showChangeGroupNameForm, setShowChangeGroupNameForm] = useState(false);
   const [showAddUsersForm, setShowAddUsersForm] = useState(false);
+  console.log(currentChat);
 
   useEffect(() => {
     let att = currentChat?.messages?.filter(
@@ -175,12 +176,13 @@ const ChatInfoForm = () => {
         </SecondaryButton>
         {currentChat?.is_group && (
           <>
-            {currentChat?.is_current_user_admin && (
-              <ChatInfoFormMenu
-                setShowChangeGroupNameForm={setShowChangeGroupNameForm}
-                setShowAddAUSersForm={setShowAddUsersForm}
-              />
-            )}
+            {currentChat?.is_current_user_admin ||
+              (currentChat?.owner && (
+                <ChatInfoFormMenu
+                  setShowChangeGroupNameForm={setShowChangeGroupNameForm}
+                  setShowAddAUSersForm={setShowAddUsersForm}
+                />
+              ))}
           </>
         )}
         <div className=" relative flex flex-col items-center justify-start pt-8 w-full z-0">

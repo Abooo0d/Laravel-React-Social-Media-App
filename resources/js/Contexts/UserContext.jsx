@@ -7,11 +7,21 @@ const INITIAL_DATA = {
   setGroup: () => {},
   refetchGroups: () => {},
   isLoadingGroups: false,
+  updatePost: {},
+  setUpdatePost: () => {},
+  showUpdateForm: false,
+  setShowUpdateForm: () => {},
+  refetchPosts: () => {},
+  setRefetchPosts: () => {},
 };
 const Context = createContext(INITIAL_DATA);
 export const UserContext = ({ children }) => {
   const [user, setUser] = useState({});
   const [groups, setGroups] = useState([]);
+  const [updatePost, setUpdatePost] = useState({});
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [refetchPosts, setRefetchPosts] = useState(() => () => {});
+
   const {
     data,
     refetch: refetchGroups,
@@ -39,6 +49,12 @@ export const UserContext = ({ children }) => {
         setGroups,
         refetchGroups,
         isLoadingGroups,
+        updatePost,
+        setUpdatePost,
+        showUpdateForm,
+        setShowUpdateForm,
+        refetchPosts,
+        setRefetchPosts,
       }}
     >
       {children}
