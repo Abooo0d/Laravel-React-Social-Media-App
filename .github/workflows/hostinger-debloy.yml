@@ -34,17 +34,17 @@ jobs:
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Clear npm cache
         run: npm cache clean --force
+
+      - name: Force install Rollup binary
+        run: npm install @rollup/rollup-linux-x64-gnu --save-dev
       - name: Install node dependencies
         run: npm ci
-
       - name: Build npm and generate key
         run: |
           php artisan key:generate --ansi
           npm run build
-
       - name: Directory Permissions
         run: chmod 755 -R storage bootstrap/cache
-
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
