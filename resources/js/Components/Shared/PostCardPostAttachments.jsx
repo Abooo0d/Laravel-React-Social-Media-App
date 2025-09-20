@@ -1,6 +1,6 @@
 import { isImage, isVideo } from "@/Functions";
 import React from "react";
-import { FaFile } from "react-icons/fa";
+import { FaFile, FaPlay } from "react-icons/fa";
 const PostCardPostAttachments = ({
   post,
   setImage,
@@ -143,18 +143,22 @@ const PostCardPostAttachments = ({
                         }}
                       />
                     ) : isVideo(attachment) ? (
-                      <video
-                        key={index}
-                        src={attachment.url}
-                        className="w-full h-full max-h-[400px] object-cover rounded-lg cursor-pointer"
-                        loading="lazy"
-                        onClick={() => {
-                          setImage(attachment.url);
-                          setShowImage(true);
-                          setImageIndex(index);
-                        }}
-                        // controls
-                      />
+                      <div className="relative w-full h-full" key={index}>
+                        <video
+                          key={index}
+                          src={attachment.url}
+                          className="w-full h-full max-h-[400px] object-cover rounded-lg cursor-pointer"
+                          loading="lazy"
+                          onClick={() => {
+                            setImage(attachment.url);
+                            setShowImage(true);
+                            setImageIndex(index);
+                          }}
+                        />
+                        <span className="absolute top-[50%] left-[50%] bg-gray-500/50 w-[100px] h-[100px] backdrop-blur-sm rounded-full flex justify-center items-center translate-x-[-50%] translate-y-[-50%] cursor-pointer text-gray-400">
+                          <FaPlay className="text-[30px] ml-2" />
+                        </span>
+                      </div>
                     ) : (
                       <div
                         className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gradient-to-r from-homeFeed via-gray-700 to-gray-600 flex justify-center items-center flex-col gap-4 border-gray-500 border-[1px] border-solid"

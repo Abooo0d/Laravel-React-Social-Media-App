@@ -48,7 +48,7 @@ class StorePostRequest extends FormRequest
           'xlsx',
           'zip',
           'pptx'
-        ])->max(512 * 1024 * 1024)
+        ])->max(100 * 1024 * 1024)
       ],
       "user_id" => ['required', 'exists:users,id'],
       'group_id' => ['nullable', 'exists:groups,id']

@@ -9,7 +9,7 @@ import {
 import React, { useEffect } from "react";
 import CustomAudioPlayer from "./CustomAudioPlayer";
 import CustomVideoPlayer from "./CustomVideoPlayer";
-import { FaFile } from "react-icons/fa";
+import { FaFile, FaPlay } from "react-icons/fa";
 import { useChatsContext } from "@/Contexts/ChatsContext";
 import { useUserContext } from "@/Contexts/UserContext";
 const MessageCardAttachment = ({ attachment, index, message }) => {
@@ -34,11 +34,17 @@ const MessageCardAttachment = ({ attachment, index, message }) => {
         />
       )}
       {MessageIsVideo(attachment) && (
-        <CustomVideoPlayer
-          attachment={attachment}
-          remove={RemoveAttachment}
-          controls={false}
-        />
+        <>
+          <video
+            key={index}
+            src={attachment.url}
+            className="w-full h-full object-cover rounded-lg cursor-pointer"
+            loading="lazy"
+          />
+          <span className="absolute top-[50%] left-[50%] bg-gray-500/50 w-[100px] h-[100px] backdrop-blur-sm rounded-full flex justify-center items-center translate-x-[-50%] translate-y-[-50%] cursor-pointer text-gray-400">
+            <FaPlay className="text-[30px] ml-2" />
+          </span>
+        </>
       )}
       {MessageIsAudio(attachment) && (
         <CustomAudioPlayer attachment={attachment} controls={false} />

@@ -23,7 +23,7 @@ const ChatForm = () => {
   const { setErrors } = useMainContext();
   const [showRecorder, setShowRecorder] = useState(true);
   const onFileChange = (ev) => {
-    let maxSize = 20 * 1024 * 1024;
+    let maxSize = 100 * 1024 * 1024;
     const files = ev.target.files;
     let updatedFiles = [];
     for (const file of files) {

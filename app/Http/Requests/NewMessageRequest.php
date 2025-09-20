@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\File;
 
 class NewMessageRequest extends FormRequest
 {
@@ -28,7 +29,28 @@ class NewMessageRequest extends FormRequest
       'chat_id' => ['required', 'exists:chats,uuid'],
       'user_id' => ['required', 'exists:users,uuid'],
       'attachments' => ['array', 'nullable', 'max:10', 'required_without:body'],
-      'attachments.*' => ['file', 'max:20480']
+      // 'attachments.*' => ['file', 'max:20480']
+      'attachments.*' => [
+        'file',
+        File::types([
+          'jpg',
+          'jpeg',
+          'png',
+          'gif',
+          'mp3',
+          'webp',
+          'wav',
+          'mp4',
+          'doc',
+          'docx',
+          'pdf',
+          'csv',
+          'xls',
+          'xlsx',
+          'zip',
+          'pptx'
+        ])->max(100 * 1024 * 1024)
+      ],
     ];
   }
 }

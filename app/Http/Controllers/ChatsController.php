@@ -197,6 +197,7 @@ class ChatsController extends Controller
   public function newMessage(NewMessageRequest $request, Chat $chat)
   {
     try {
+      // dd(auth()->id());
       $data = $request->validated();
       $files = $data['attachments'] ?? [];
       $message = Message::create([
@@ -222,6 +223,7 @@ class ChatsController extends Controller
         }
         $message->attachments = $attachments;
       }
+      // dd(auth()->id());
       MessageStatus::create([
         'message_id' => $message->id,
         'user_id' => auth()->id(),

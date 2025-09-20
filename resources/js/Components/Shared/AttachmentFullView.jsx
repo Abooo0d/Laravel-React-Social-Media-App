@@ -109,16 +109,16 @@ const AttachmentFullView = () => {
             {showAttachmentFullView && (
               <div className="relative h-full flex justify-center items-center flex-1 max-w-[80%]">
                 <div
-                  className={`relative rounded-md overflow-hidden flex justify-center items-center cursor-pointer duration-200 border-transparent border-[1px] border-solid hover:border-gray-500 hover:scale-105 group
+                  className={`relative rounded-md overflow-hidden flex justify-center items-center duration-200 border-transparent border-[1px] border-solid group
                       ${
                         MessageIsAudio(attachments[attachmentIndex])
                           ? "w-80 h-20 max-w-[70%]"
                           : MessageIsVideo(attachments[attachmentIndex])
-                          ? "w-80 h-80 max-w-[70%]"
+                          ? "max-h-full max-w-full w-full h-full"
                           : MessageIsPDF(attachments[attachmentIndex])
                           ? "w-[400px] h-[600px] max-h-[80%] max-w-[70%]"
                           : MessageIsImage(attachments[attachmentIndex])
-                          ? "max-h-[80%] max-w-[70%] w-full h-full"
+                          ? "max-h-full max-w-full w-full h-full"
                           : "w-80 h-40 max-h-[80%] max-w-[70%]"
                       }`}
                 >
@@ -132,8 +132,12 @@ const AttachmentFullView = () => {
                     </>
                   )}
                   {MessageIsVideo(attachments[attachmentIndex]) && (
-                    <CustomVideoPlayer
-                      attachment={attachments[attachmentIndex]}
+                    <video
+                      src={attachments[attachmentIndex].url}
+                      className={`max-w-[90%] max-h-[90%] object-contain rounded-[10px] absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] duration-200 `}
+                      loading="lazy"
+                      autoPlay={false}
+                      controls
                     />
                   )}
                   {MessageIsAudio(attachments[attachmentIndex]) && (

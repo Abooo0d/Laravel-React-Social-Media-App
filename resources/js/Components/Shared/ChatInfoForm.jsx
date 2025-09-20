@@ -38,7 +38,6 @@ const ChatInfoForm = () => {
   const [chatImage, setChatImage] = useState(null);
   const [showChangeGroupNameForm, setShowChangeGroupNameForm] = useState(false);
   const [showAddUsersForm, setShowAddUsersForm] = useState(false);
-  console.log(currentChat);
 
   useEffect(() => {
     let att = currentChat?.messages?.filter(
