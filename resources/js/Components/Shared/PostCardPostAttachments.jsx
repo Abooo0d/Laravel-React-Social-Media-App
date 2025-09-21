@@ -1,4 +1,4 @@
-import { isImage, isVideo } from "@/Functions";
+import { formatBytes, isImage, isVideo } from "@/Functions";
 import React from "react";
 import { FaFile, FaPlay } from "react-icons/fa";
 const PostCardPostAttachments = ({
@@ -56,7 +56,7 @@ const PostCardPostAttachments = ({
                           />
                         ) : (
                           <div
-                            className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gradient-to-r from-homeFeed via-gray-700 to-gray-600 flex justify-center items-center flex-col gap-4 border-gray-500 border-[1px] border-solid"
+                            className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gradient-to-r from-homeFeed via-gray-700 to-gray-600 flex justify-center items-center flex-col gap-4"
                             onClick={() => {
                               setImage("");
                               setShowImage(true);
@@ -107,7 +107,7 @@ const PostCardPostAttachments = ({
                             />
                           ) : (
                             <div
-                              className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gradient-to-r from-homeFeed via-gray-700 to-gray-600 flex justify-center items-center flex-col gap-4 border-gray-500 border-[1px] border-solid"
+                              className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gradient-to-r from-homeFeed via-gray-700 to-gray-600 flex justify-center items-center flex-col gap-4"
                               onClick={() => {
                                 setImage("");
                                 setShowImage(true);
@@ -161,7 +161,7 @@ const PostCardPostAttachments = ({
                       </div>
                     ) : (
                       <div
-                        className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gradient-to-r from-homeFeed via-gray-700 to-gray-600 flex justify-center items-center flex-col gap-4 border-gray-500 border-[1px] border-solid"
+                        className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gradient-to-r from-homeFeed via-gray-700 to-gray-600 flex justify-center items-center flex-col gap-4"
                         onClick={() => {
                           setImage("");
                           setShowImage(true);
@@ -169,9 +169,22 @@ const PostCardPostAttachments = ({
                         }}
                       >
                         <FaFile className="w-20 h-20 text-gray-300" />
-                        <h3 className="text-gray-300 font-bold text-xl max-w-[80%] break-words text-center">
+                        {/* <h3 className="text-gray-300 font-bold text-xl max-w-[80%] break-words text-center">
                           {attachment?.name}
-                        </h3>
+                        </h3> */}
+                        <div className="flex flex-col w-full justify-center items-center px-2">
+                          <h3 className="flex-1 text-[20px] font-bold text-gray-300 break-all">
+                            {attachment?.name}
+                          </h3>
+                          <div className="flex flex-col justify-start items-center w-[80%]">
+                            <span className="text-gray-400">
+                              {formatBytes(attachment.size)}
+                            </span>
+                            <span className="text-gray-400 ">
+                              {attachment.mime.split(".")[0]}
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     )}
                   </React.Fragment>

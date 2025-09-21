@@ -3,7 +3,7 @@ import { GoDownload } from "react-icons/go";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { SecondaryButton } from "./Buttons";
 import { FaAngleRight, FaAngleLeft, FaFile } from "react-icons/fa";
-import { isImage, isVideo } from "@/Functions";
+import { formatBytes, isImage, isVideo } from "@/Functions";
 const ImageFullView = ({
   show,
   post,
@@ -119,11 +119,31 @@ const ImageFullView = ({
                     }`}
                   >
                     <FaFile className="w-20 h-20 text-gray-300" />
-                    <h3 className="text-gray-300 font-bold text-xl max-w-[80%] break-words text-center">
+                    {/* <h3 className="text-gray-300 font-bold text-xl max-w-[80%] break-words text-center">
                       {attachment?.file
                         ? attachment?.file?.name
                         : attachment?.name}
-                    </h3>
+                    </h3> */}
+                    <div className="flex flex-col w-full justify-center items-center px-2">
+                      <h3 className="flex-1 text-[20px] font-bold text-gray-300 break-all">
+                        {!!attachment?.file
+                          ? attachment?.file?.name
+                          : attachment?.name}
+                      </h3>
+                      <div className="flex flex-col justify-start items-center w-[80%]">
+                        <span className="text-gray-400">
+                          {!!attachment?.file
+                            ? formatBytes(attachment?.file?.size)
+                            : formatBytes(attachment?.size)}
+                          s
+                        </span>
+                        <span className="text-gray-400 ">
+                          {!!attachment?.file
+                            ? attachment?.file?.type.split(".")[0]
+                            : attachment?.mime.split(".")[0]}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 )}
               </React.Fragment>

@@ -77,21 +77,26 @@ const PostContainer = ({
                                   />
                                 </>
                               ) : (
-                                <PostCard
-                                  post={post}
-                                  currentUser={user}
-                                  key={index + "b"}
-                                  refetch={refetch}
-                                />
+                                <>
+                                  {" "}
+                                  <PostCard
+                                    post={post}
+                                    currentUser={user}
+                                    key={index + "b"}
+                                    refetch={refetch}
+                                  />
+                                </>
                               )}
                             </>
                           ) : (
-                            <PostCard
-                              post={post}
-                              currentUser={user}
-                              key={index + "c"}
-                              refetch={refetch}
-                            />
+                            <>
+                              <PostCard
+                                post={post}
+                                currentUser={user}
+                                key={index + "c"}
+                                refetch={refetch}
+                              />
+                            </>
                           )}
                         </>
                       ))}

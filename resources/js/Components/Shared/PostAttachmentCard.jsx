@@ -3,7 +3,7 @@ import { SecondaryButton } from "./Buttons";
 import { HiMiniXMark } from "react-icons/hi2";
 import { FaFile } from "react-icons/fa";
 import { CiUndo } from "react-icons/ci";
-import { isVideo } from "@/Functions";
+import { formatBytes, isVideo } from "@/Functions";
 import { FaPlay } from "react-icons/fa";
 const PostAttachmentCard = ({
   index,
@@ -109,16 +109,32 @@ const PostAttachmentCard = ({
         </div>
       ) : (
         <div
-          className="w-full min-h-[200px] h-full max-h-[500px] object-cover rounded-lg cursor-pointer bg-gray-800 flex justify-center items-center flex-col gap-4"
+          // className="w-full min-h-[200px] h-full max-h-[500px] object-cover rounded-lg cursor-pointer bg-gray-800 flex justify-center items-center flex-col gap-4"
+          className="w-full min-h-[200px] h-full max-h-[400px] object-cover rounded-lg cursor-pointer bg-gradient-to-r from-homeFeed via-gray-700 to-gray-600 flex justify-center items-center flex-col gap-4"
           onClick={() => {
             setShowImage(true);
             setImageIndex(index);
           }}
         >
           <FaFile className="w-20 h-20 text-gray-500" />
-          <h3 className="text-gray-500 font-bold text-xl max-w-[80%] break-words text-center">
-            {attachment?.file ? attachment?.file?.name : attachment?.name}
-          </h3>
+          <div className="flex flex-col w-full justify-center items-center px-2">
+            <h3 className="flex-1 text-[20px] font-bold text-gray-300 break-all">
+              {!!attachment?.file ? attachment?.file?.name : attachment?.name}
+            </h3>
+            <div className="flex flex-col justify-start items-center w-[80%]">
+              <span className="text-gray-400">
+                {!!attachment?.file
+                  ? formatBytes(attachment?.file?.size)
+                  : formatBytes(attachment?.size)}
+                s
+              </span>
+              <span className="text-gray-400 ">
+                {!!attachment?.file
+                  ? attachment?.file?.type.split(".")[0]
+                  : attachment?.mime.split(".")[0]}
+              </span>
+            </div>
+          </div>
         </div>
       )}
       {attachmentsErrors?.map((error, inx) => (
