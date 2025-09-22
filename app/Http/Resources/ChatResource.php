@@ -38,7 +38,7 @@ class ChatResource extends JsonResource
         : $this->users->firstWhere('id', '!=', auth()->id())?->name,
       'users' => $this->users->map(
         fn($user) => [
-          'id' => $user->id,
+          'id' => $user->uuid,
           'name' => $user->name,
           'avatar' => $user->avatar_path ? asset(Storage::url($user->avatar_path)) : asset('images/default_avatar_image.png'),
           'is_admin' => $user->pivot->admin

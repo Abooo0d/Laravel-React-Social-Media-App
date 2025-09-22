@@ -112,7 +112,7 @@ const ImageFullView = ({
                   />
                 ) : (
                   <div
-                    className={`max-w-[90%] max-h-[90%] w-[400px] h-[400px] rounded-lg cursor-default bg-gradient-to-r from-homeFeed via-gray-700 to-gray-600 flex justify-center items-center flex-col gap-4  absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] duration-200 border-gray-500/50 border-[1px] border-solid ${
+                    className={`max-w-[90%] max-h-[90%] w-[400px] h-[400px] rounded-lg cursor-default bg-gradient-to-r from-homeFeed via-gray-700 to-gray-600 flex justify-center items-center flex-col gap-4  absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] duration-200 ${
                       index === imageIndex
                         ? `visible opacity-100`
                         : `invisible opacity-0 scale-75`

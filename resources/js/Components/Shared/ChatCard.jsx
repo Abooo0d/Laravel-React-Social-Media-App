@@ -4,6 +4,7 @@ import { MdGroups2 } from "react-icons/md";
 import { useChatsContext } from "@/Contexts/ChatsContext";
 import { IoVolumeMute } from "react-icons/io5";
 import { TbLock } from "react-icons/tb";
+import { FaFile } from "react-icons/fa";
 
 const ChatCard = ({ chat, setShow, setIsLoading }) => {
   const { setCurrentChat, onlineUsersIds } = useChatsContext();
@@ -131,12 +132,19 @@ const ChatCard = ({ chat, setShow, setIsLoading }) => {
           </p>
         </div>
         {chatData?.messages?.length > 0 ? (
-          <p className="text-gray-600 text-sm">
-            {!!chatData?.messages[0]?.body
-              ? chatData?.messages[0]?.body?.length > 25
-                ? chatData?.messages[0]?.body?.substr(0, 25) + "..."
-                : chatData?.messages[0]?.body
-              : "attachment"}
+          <p className="text-gray-600 text-sm flex gap-1 items-center">
+            {!!chatData?.messages[0]?.body ? (
+              chatData?.messages[0]?.body?.length > 25 ? (
+                chatData?.messages[0]?.body?.substr(0, 25) + "..."
+              ) : (
+                chatData?.messages[0]?.body
+              )
+            ) : (
+              <>
+                attachment
+                <FaFile className="w-4 h-4 text-gray-600" />
+              </>
+            )}
           </p>
         ) : (
           <p className="text-gray-600 text-sm">New Chat</p>

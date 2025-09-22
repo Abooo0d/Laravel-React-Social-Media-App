@@ -119,7 +119,7 @@ const AttachmentFullView = () => {
                           ? "w-[400px] h-[600px] max-h-[80%] max-w-[70%]"
                           : MessageIsImage(attachments[attachmentIndex])
                           ? "max-h-full max-w-full w-full h-full"
-                          : "w-80 h-40 max-h-[80%] max-w-[70%]"
+                          : "w-80 h-80 max-h-[80%] max-w-[70%]"
                       }`}
                 >
                   {MessageIsImage(attachments[attachmentIndex]) && (
@@ -154,19 +154,19 @@ const AttachmentFullView = () => {
                   {!isPreviewAble(attachments[attachmentIndex]) && (
                     <>
                       {/* <span className="absolute top-1 right-1 w-5 h-5  rounded-md flex justify-center items-center bg-gray-300/20 text-gray-300 group-hover:opacity-100 opacity-0 duration-200 z-10"></span> */}
-                      <div className="w-full h-full flex flex-row justify-center items-center gap-2 p-2">
-                        <span className="w-20 h-20 rounded-md text-[40px] flex justify-center items-center bg-gray-600 text-gray-300">
+                      <div className="w-full h-full flex flex-col justify-center items-center gap-2 p-2">
+                        <span className="w-60 h-60 rounded-md text-[80px] flex justify-center items-center bg-gray-600 text-gray-300">
                           <FaFile />
                         </span>
-                        <div className="flex flex-col w-fit  items-start justify-center">
+                        <div className="flex flex-col w-fit items-center justify-center">
                           <h3 className="flex-1 text-lg text-gray-400 break-all">
                             {attachments[attachmentIndex]?.name}
                           </h3>
-                          <div className="flex flex-col w-full justify-between items-start">
-                            <span className="text-gray-600 text-sm">
+                          <div className="flex flex-row w-full justify-between items-start">
+                            <span className="text-gray-600">
                               {formatBytes(attachments[attachmentIndex].size)}
                             </span>
-                            <span className="text-gray-600 text-sm">
+                            <span className="text-gray-600">
                               {attachments[attachmentIndex].mime.split(".")[0]}
                             </span>
                           </div>

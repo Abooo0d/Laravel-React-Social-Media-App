@@ -488,9 +488,9 @@ class ChatsController extends Controller
       $data = $request->validated();
       $role = $data['role'];
       $userId = $data['user_id'];
-      $userData = User::where('uuid', $userId)->first();
+      $userData = $request->validatedUsers;
       $eventMessage = '';
-      $user = ChatUser::where('user_id', $userId)
+      $user = ChatUser::where('user_id', $userData->id)
         ->where('chat_id', $chat->id)
         ->first();
       if ($user) {

@@ -78,7 +78,6 @@ const PostContainer = ({
                                 </>
                               ) : (
                                 <>
-                                  {" "}
                                   <PostCard
                                     post={post}
                                     currentUser={user}
