@@ -46,7 +46,10 @@ export default function Register() {
   return (
     <GuestLayout>
       <Head title="Register" />
-      <form onSubmit={submit}>
+      <form onSubmit={submit} className=" w-full relative px-4">
+        <h2 className=" w-full flex justify-center items-center text-gray-300 text-[24px] font-bold m-0 p-0">
+          Create New Account
+        </h2>
         <div>
           <InputLabel htmlFor="name" value="Name" />
           <TextInput

@@ -45,10 +45,10 @@ export default function Login({ status, canResetPassword }) {
   return (
     <GuestLayout>
       <Head title="Log in" />
-      {status && (
-        <div className="mb-4 font-medium text-sm text-green-600">{status}</div>
-      )}
-      <form onSubmit={submit}>
+      <form onSubmit={submit} className=" w-full pt-16 md:pt-0 relative px-4">
+        <h2 className=" w-full flex justify-center items-center text-gray-300 text-[24px] font-bold m-0 p-0">
+          welcome Back
+        </h2>
         <div>
           <InputLabel htmlFor="email" value="Email" />
           <TextInput

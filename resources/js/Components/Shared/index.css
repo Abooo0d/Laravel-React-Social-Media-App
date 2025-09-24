@@ -209,11 +209,50 @@
 .ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
   max-height: 500px;
 }
-/* * {
-  border: 1px solid rgb(255 0 0 /50%);
-  opacity: 100 !important;
-  visibility: visible !important;
+.blue {
+  background-color: #80b3f2;
 }
-body {
-  overflow: hidden;
-} */
+
+.section-title {
+  text-align: center;
+  color: white;
+  text-transform: uppercase;
+  position: absolute;
+  max-width: 80%;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  font-family: "Oswald", sans-serif;
+}
+
+h2 {
+  font-size: 3.5em;
+  font-weight: 100;
+}
+
+h3 {
+  font-size: 2em;
+  font-weight: 100;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+section {
+  height: auto;
+  min-height: 400px;
+  position: relative;
+}
+
+.separator {
+  position: absolute;
+  top: 0;
+}
+
+.separator-bottom {
+  position: absolute;
+  bottom: 0;
+}
