@@ -4,6 +4,8 @@ import { Link, useForm } from "@inertiajs/react";
 import React from "react";
 
 const UserFriendRequestCard = ({ request }) => {
+  console.log(request);
+
   const { setSuccessMessage, setErrors } = useMainContext();
   const { data, post } = useForm({
     request_id: request.request_id,
@@ -16,6 +18,11 @@ const UserFriendRequestCard = ({ request }) => {
       onError: () => {},
     });
   };
+  const rejectRequest = () => {
+    post(route("user.rejectRequest", { user: request.friend_id }));
+  };
+  // console.log(request.friend_id);
+
   return (
     <div className="group relative dark:bg-gray-700/30 bg-gray-200/30 backdrop-blur-sm rounded-[8px] border-[1px] border-solid dark:border-gray-500/50 border-gray-300  flex flex-col justify-between items-center cursor-pointer duration-200 dark:hover:bg-gray-600/50 hover:bg-gray-200/50 dark:hover:border-gray-500 overflow-hidden drop-shadow-2xl">
       <img
@@ -31,7 +38,7 @@ const UserFriendRequestCard = ({ request }) => {
       <div className="flex justify-between items-center w-full pr-4">
         <Link
           className="flex flex-col justify-start items-start w-full"
-          href={route("profile.view", request.id)}
+          href={route("profile.view", request.friend_id)}
         >
           <h3 className="dark:text-gray-300 text-gray-600 font-bold mt-1 w-full text-left px-4">
             {request.username}
@@ -49,7 +56,7 @@ const UserFriendRequestCard = ({ request }) => {
           </button>
           <button
             className="py-[5px] px-[5px] bg-red-600/40 hover:bg-red-600/70 border-[1px] border-solid border-red-400 text-gray-300 rounded-md text-[12px] duration-200 "
-            onClick={() => {}}
+            onClick={() => rejectRequest()}
           >
             Decline
           </button>

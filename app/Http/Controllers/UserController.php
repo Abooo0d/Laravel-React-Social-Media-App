@@ -46,6 +46,9 @@ class UserController extends Controller
         ->where('user_id', Auth::id())
         ->where('friend_id', $user->id)
         ->first();
+      if($follower && $follower->status == FriendsRequestEnum::REJECTED->value){
+        return redirect()->back()->with('error', "You Have Blocked {$user->name}, Unblock Him First To Send Friend Request");
+      }
       switch ($data['type']) {
         case 'add':
           if ($follower) {
@@ -178,6 +181,97 @@ class UserController extends Controller
         return response()->json(['message' => "There Is An Error With The Request"], 400);
     } catch (e) {
       return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function rejectRequest(Request $request, User $user)
+  {
+    try {
+      $currentUser = Auth::user();
+      if ($user->id == $currentUser->id) {
+        return redirect()->back()->with('error', "You Can`t Reject Friend Request From Your Self");
+      }
+      $friendRequest = Friends::query()
+        ->where('user_id', $user->id)
+        ->where('friend_id', $currentUser->id)
+        ->where('status', FriendsRequestEnum::PENDING->value)
+        ->first();
+      if ($friendRequest) {
+        $friendRequest->status = FriendsRequestEnum::REJECTED->value;
+        $friendRequest->save();
+        $user->notify(new FriendRequestNotification($currentUser, 'reject'));
+        return redirect()->back()->with('success', "Friend Request Is Accepted");
+      } else
+        return response()->json(['message' => "There Is An Error With The Request"], 400);
+    } catch (e) {
+      return redirect()->back()->with('error', 'Some Thing Wrong Happened');
+    }
+  }
+  public function cancelRequestFromSuggestion(Request $request,User $user)
+  {
+    try {
+      $currentUser = Auth::user();
+      if ($user->id == $currentUser->id) {
+        return response(['error' => "You Can`t Cancel Friend Request From Your Self"], 400);
+      }
+      $friendRequest = Friends::query()
+        ->where('user_id', $currentUser->id)
+        ->where('friend_id', $user->id)
+        ->where('status', FriendsRequestEnum::PENDING->value)
+        ->first();
+      if ($friendRequest) {
+        $friendRequest->delete();
+        return response(['message' => "Your Friend Request Has Been Canceled"], 200);
+      } else
+        return response(['error' => 'Some Thing Wrong Happened'], 400);
+    } catch (e) {
+      return response(['error' => 'Some Thing Wrong Happened'],400);
+    }
+  }
+  public function cancelRequest(Request $request,User $user)
+  {
+    try {
+      $currentUser = Auth::user();
+      if ($user->id == $currentUser->id) {
+        return response(['error' => "You Can`t Cancel Friend Request From Your Self"], 400);
+      }
+      $friendRequest = Friends::query()
+        ->where('user_id', $currentUser->id)
+        ->where('friend_id', $user->id)
+        ->where('status', FriendsRequestEnum::PENDING->value)
+        ->first();
+      if ($friendRequest) {
+        $friendRequest->delete();
+        return redirect()->back()->with('success', "Your Friend Request Has Been Canceled");
+      } else
+      return redirect()->back()->with('error', "Some Thing Wrong Happened");
+    } catch (e) {
+      return redirect()->back()->with('error', "Some Thing Wrong Happened");
+    }
+  }
+  public function unFriend(Request $request,User $user){
+    try {
+      $currentUser = Auth::user();
+      if ($user->id == $currentUser->id) {
+        return response(['error' => "You Can`t Unfriend Your Self"], 400);
+      }
+      $friendRequest = Friends::query()
+        ->where(function($q) use ($currentUser,$user){
+          $q->where('user_id', $currentUser->id)
+            ->where('friend_id', $user->id);
+        })
+        ->orWhere(function($q) use ($currentUser,$user){
+          $q->where('user_id', $user->id)
+            ->where('friend_id', $currentUser->id);
+        })
+        ->where('status', FriendsRequestEnum::ACCEPTED->value)
+        ->first();
+      if ($friendRequest) {
+        $friendRequest->delete();
+        return redirect()->back()->with('success', "You Are No Longer Friend With {$user->name}");
+      } else
+      return redirect()->back()->with('error', "Some Thing Wrong Happened");
+    } catch (e) {
+      return redirect()->back()->with('error', "Some Thing Wrong Happened");
     }
   }
 }

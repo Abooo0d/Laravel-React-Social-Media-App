@@ -45,7 +45,8 @@ class FriendRequestNotification extends Notification
     $message = match ($this->status) {
       'add' => "'{$this->user->name}' Send To You Friend Request.",
       'accept' => "'{$this->user->name}' Accepted You Friend Request.",
-      'block' => "'{$this->user->name}'Block You From His Friends.",
+      'block' => "'{$this->user->name}' Block You From His Friends.",
+      'reject' => "'{$this->user->name}' Rejected Your Friend Request.",
       default => throw new \InvalidArgumentException("Invalid status type: {$this->status}"),
     };
     return [

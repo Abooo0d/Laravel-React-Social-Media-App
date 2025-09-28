@@ -79,7 +79,11 @@ Route::middleware('auth')->group(function () {
   Route::post('/user/search', [UserController::class, 'searchForUser'])->name('user.searchForUser');
   Route::post('/user/invite/{user:uuid}', [UserController::class, 'addFriend'])->name('user.addFriend');
   Route::post('/user/add/{user:uuid}', [UserController::class, 'addFriendFormSuggestion'])->name('user.addFriendFormSuggestion');
-  Route::post('/user/acceptRequest', [UserController::class, 'acceptRequest'])->name('user.acceptRequest');
+  Route::post('/user/reject-request/{user:uuid}', [UserController::class, 'rejectRequest'])->name('user.rejectRequest');
+  Route::post('/user/accept-request', [UserController::class, 'acceptRequest'])->name('user.acceptRequest');
+  Route::post('/user/cancel-request-suggestion/{user:uuid}', [UserController::class, 'cancelRequestFromSuggestion'])->name('user.cancelRequestFromSuggestion');
+  Route::post('/user/cancel-request/{user:uuid}', [UserController::class, 'cancelRequest'])->name('user.cancelRequest');
+  Route::post('/user/unfriend/{user:uuid}', [UserController::class, 'unfriend'])->name('user.unfriend');
 });
 Route::middleware('auth')->group(function () {
   Route::get('/chats', [ChatsController::class, 'index'])->name('chats');

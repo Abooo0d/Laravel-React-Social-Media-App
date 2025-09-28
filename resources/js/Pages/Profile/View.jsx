@@ -13,6 +13,7 @@ import { useUserContext } from "@/Contexts/UserContext";
 import ProfilePhotosFullView from "@/Components/Shared/ProfilePhotosFullView";
 import ProfileImageFullView from "@/Components/Shared/ProfileImageFullView";
 import { IoPersonRemoveOutline } from "react-icons/io5";
+import { FaUserCheck } from "react-icons/fa";
 
 const View = ({ auth, user, posts, isFriend, photos }) => {
   const [imageIndex, setImageIndex] = useState(0);
@@ -47,6 +48,24 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
         setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
       },
     });
+  };
+  const cancelFriendRequest = () => {
+    post(route("user.cancelRequest", user.id), {
+      onError: (error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
+      },
+    });
+  };
+  const unFriend = () => {
+    if (window.confirm("Are You Sure You Want To Unfriend This User?")) {
+      post(route("user.unfriend", user.id), {
+        onError: (error) => {
+          setErrors([
+            error?.response?.data?.message || "Some Thing Went Wrong",
+          ]);
+        },
+      });
+    }
   };
 
   return (
@@ -97,15 +116,29 @@ const View = ({ auth, user, posts, isFriend, photos }) => {
                     {isFriend[0]?.status == "pending" ? (
                       <div>
                         <SecondaryButton
-                          event={addFriend}
+                          event={cancelFriendRequest}
                           classes="py-1.5 px-2 flex min-w-[100px] gap-2 text-[16px]"
                         >
                           Cancel Request
                           <IoPersonRemoveOutline />
                         </SecondaryButton>
                       </div>
+                    ) : isFriend[0].status == "rejected" ? (
+                      <PrimaryButton
+                        event={addFriend}
+                        classes="py-1.5 px-2 flex min-w-[100px] gap-2 text-[16px]"
+                      >
+                        Add Friend
+                        <FiUserPlus />
+                      </PrimaryButton>
                     ) : (
-                      <p className="text-gray-600">Friend.</p>
+                      <PrimaryButton
+                        event={unFriend}
+                        classes="py-1.5 px-2 flex min-w-[100px] gap-2 text-[16px]"
+                      >
+                        Friend
+                        <FaUserCheck />
+                      </PrimaryButton>
                     )}
                   </>
                 ) : (

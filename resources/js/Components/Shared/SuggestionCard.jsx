@@ -5,7 +5,7 @@ import { Link } from "@inertiajs/react";
 import axiosClient from "@/AxiosClient/AxiosClient";
 import { useMainContext } from "@/Contexts/MainContext";
 import { useState } from "react";
-
+import { IoPersonRemoveOutline } from "react-icons/io5";
 const SuggestionCard = ({ suggestion }) => {
   const { setErrors, setSuccessMessage } = useMainContext();
   const [added, setAdded] = useState(suggestion.is_friend[0]?.status ?? "");
@@ -15,6 +15,17 @@ const SuggestionCard = ({ suggestion }) => {
       .post(route("user.addFriendFormSuggestion", suggestion.id))
       .then((data) => {
         setAdded("pending");
+        setSuccessMessage(data?.data?.message);
+      })
+      .catch((error) => {
+        setErrors([error?.response?.data?.message || "Some Thing Went Wrong"]);
+      });
+  };
+  const cancelRequest = () => {
+    axiosClient
+      .post(route("user.cancelRequestFromSuggestion", suggestion.id))
+      .then((data) => {
+        setAdded("");
         setSuccessMessage(data?.data?.message);
       })
       .catch((error) => {
@@ -42,9 +53,17 @@ const SuggestionCard = ({ suggestion }) => {
       </Link>
       <div className="flex w-full max-h-[60px] min-h-[60px] gap-2 px-2 py-3 text-[14px]">
         {added == "pending" ? (
-          <div className="w-full flex dark:text-gray-400 text-gray-600 justify-center items-center gap-2">
-            Friend Added <FiUserPlus />
-          </div>
+          // <div className="w-full flex dark:text-gray-400 text-gray-600 justify-center items-center gap-2">
+          //   Friend Added <FiUserPlus />
+          // </div>
+          <PrimaryButton
+            classes="px-2 py-1.5 flex-1 flex-row gap-2"
+            event={() => {
+              cancelRequest();
+            }}
+          >
+            Cancel Request <IoPersonRemoveOutline />
+          </PrimaryButton>
         ) : (
           <>
             <PrimaryButton
