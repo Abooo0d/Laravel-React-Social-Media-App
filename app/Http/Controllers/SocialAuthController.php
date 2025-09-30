@@ -23,7 +23,7 @@ class SocialAuthController extends Controller
     $email = $socialUser->getEmail();
     // Find or create user
     $user = User::updateOrCreate(
-      [ $provider . '_id' => $socialUser->getId() ],
+      [$provider . '_id' => $socialUser->getId()],
       [
         'name' => $name,
         'email' => $email,

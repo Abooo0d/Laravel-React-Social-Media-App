@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "3197e8c1991734f42bd43561f80f4657",
+  "content-hash": "b5c26d92165e2da1cf915a1c398d7190",
   "packages": [
     {
       "name": "amphp/amp",
@@ -9654,16 +9654,16 @@
     },
     {
       "name": "laravel/telescope",
-      "version": "v5.11.3",
+      "version": "v5.13.0",
       "source": {
         "type": "git",
         "url": "https://github.com/laravel/telescope.git",
-        "reference": "7684604e104e7755b70dcacfeee06888e2470689"
+        "reference": "ad5fadb26c1e4dc2e35958e6dc36191dcf1c10d8"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/laravel/telescope/zipball/7684604e104e7755b70dcacfeee06888e2470689",
-        "reference": "7684604e104e7755b70dcacfeee06888e2470689",
+        "url": "https://api.github.com/repos/laravel/telescope/zipball/ad5fadb26c1e4dc2e35958e6dc36191dcf1c10d8",
+        "reference": "ad5fadb26c1e4dc2e35958e6dc36191dcf1c10d8",
         "shasum": ""
       },
       "require": {
@@ -9717,9 +9717,9 @@
       ],
       "support": {
         "issues": "https://github.com/laravel/telescope/issues",
-        "source": "https://github.com/laravel/telescope/tree/v5.11.3"
+        "source": "https://github.com/laravel/telescope/tree/v5.13.0"
       },
-      "time": "2025-08-21T14:25:40+00:00"
+      "time": "2025-09-30T10:03:05+00:00"
     },
     {
       "name": "mockery/mockery",
