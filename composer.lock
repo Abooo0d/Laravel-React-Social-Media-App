@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "b5c26d92165e2da1cf915a1c398d7190",
+  "content-hash": "9a27e408663c7c5222993f2f56cc6619",
   "packages": [
     {
       "name": "amphp/amp",
@@ -9651,75 +9651,6 @@
         "source": "https://github.com/laravel/sail"
       },
       "time": "2025-08-25T19:28:31+00:00"
-    },
-    {
-      "name": "laravel/telescope",
-      "version": "v5.13.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/laravel/telescope.git",
-        "reference": "ad5fadb26c1e4dc2e35958e6dc36191dcf1c10d8"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/laravel/telescope/zipball/ad5fadb26c1e4dc2e35958e6dc36191dcf1c10d8",
-        "reference": "ad5fadb26c1e4dc2e35958e6dc36191dcf1c10d8",
-        "shasum": ""
-      },
-      "require": {
-        "ext-json": "*",
-        "laravel/framework": "^8.37|^9.0|^10.0|^11.0|^12.0",
-        "php": "^8.0",
-        "symfony/console": "^5.3|^6.0|^7.0",
-        "symfony/var-dumper": "^5.0|^6.0|^7.0"
-      },
-      "require-dev": {
-        "ext-gd": "*",
-        "guzzlehttp/guzzle": "^6.0|^7.0",
-        "laravel/octane": "^1.4|^2.0|dev-develop",
-        "orchestra/testbench": "^6.40|^7.37|^8.17|^9.0|^10.0",
-        "phpstan/phpstan": "^1.10",
-        "phpunit/phpunit": "^9.0|^10.5|^11.5"
-      },
-      "type": "library",
-      "extra": {
-        "laravel": {
-          "providers": [
-            "Laravel\\Telescope\\TelescopeServiceProvider"
-          ]
-        }
-      },
-      "autoload": {
-        "psr-4": {
-          "Laravel\\Telescope\\": "src/",
-          "Laravel\\Telescope\\Database\\Factories\\": "database/factories/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "MIT"
-      ],
-      "authors": [
-        {
-          "name": "Taylor Otwell",
-          "email": "taylor@laravel.com"
-        },
-        {
-          "name": "Mohamed Said",
-          "email": "mohamed@laravel.com"
-        }
-      ],
-      "description": "An elegant debug assistant for the Laravel framework.",
-      "keywords": [
-        "debugging",
-        "laravel",
-        "monitoring"
-      ],
-      "support": {
-        "issues": "https://github.com/laravel/telescope/issues",
-        "source": "https://github.com/laravel/telescope/tree/v5.13.0"
-      },
-      "time": "2025-09-30T10:03:05+00:00"
     },
     {
       "name": "mockery/mockery",
