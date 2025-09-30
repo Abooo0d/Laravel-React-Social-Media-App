@@ -167,7 +167,7 @@ class ChatsController extends Controller
   {
     if ($message) {
       $now = now();
-      $userId = Auth::user()->uuid;
+      $userId = Auth::user()->id;
       MessageStatus::create([
         'message_id' => $message->id,
         'user_id' => $userId,

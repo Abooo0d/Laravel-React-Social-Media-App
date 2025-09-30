@@ -183,7 +183,6 @@ export const ChatsContext = ({ children }) => {
         "NewMessageSent",
         (e) => {
           let message = e.message;
-          console.log(message);
 
           if (message.user.id == user.id) {
             message = {
